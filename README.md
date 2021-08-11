@@ -1,2 +1,2 @@
-# dgboss
-Repositorio del Proyecto de Dg-Boss
+# Sistema proyecto
+Repositorio del Proyecto
