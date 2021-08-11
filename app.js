@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use(session({
-    secret:  process.env.SESSION_SECRET,
+    secret:  process.env.SESSION_SECRET || 'secret',
     resave: false,
     saveUninitialized: true,
     cookie: {
