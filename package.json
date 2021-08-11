@@ -4,7 +4,8 @@
   "description": "Repositorio del Proyecto de Dg-Boss",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
