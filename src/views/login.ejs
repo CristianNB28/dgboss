@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link type="text/css" href="/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link type="text/css" href="/css/animate.css" rel="stylesheet">
+    <link type="text/css" href="/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="loginColumns animated fadeInDown">
+        <div class="row">
+
+            <div class="col-md-6">
+                <h2 class="font-bold">Bienvenido al sistema</h2>
+                <img src="/img/LOGOTIPO_VPRINCIPAL_ATINA.png" alt="image" class="logotipo">
+            </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <form class="m-t" role="form" action="/sistema/auth" method="POST">
+                        <div class="form-group">
+                            <input 
+                                type="email"
+                                name="correo_usuario"
+                                id="correo_usuario" 
+                                class="form-control" 
+                                placeholder="Email Adress" 
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="password"
+                                name="password_usuario"
+                                id="password_usuario" 
+                                class="form-control" 
+                                placeholder="Password" 
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="btn btn-primary block full-width m-b">INGRESAR</button>
+
+                        <a href="forgot/password">
+                            <small>¿OLVIDÓ SU CLAVE?</small>
+                        </a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-8">
+                ©2020 All Rights Reserved. Grupo DgFarm C.A. Privacy and Terms
+            </div>
+        </div>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if(typeof alert != 'undefined') { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
+</body>
+</html>
