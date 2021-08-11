@@ -9503,6 +9503,22 @@ body.md-skin {
     transition: background-color 500ms linear;
     background-color: #f3f3f4;
   }
+  .font-bold {
+    position: relative;
+    bottom: -20px;
+  }
+  .ibox-content {
+    position: relative;
+    bottom: -20px;
+  }
+  hr {
+    position: relative;
+    bottom: -20px;
+  }
+  .copyright {
+    position: relative;
+    bottom: -20px;
+  }
 }
 @media (max-width: 350px) {
   .timeline-item .date {
