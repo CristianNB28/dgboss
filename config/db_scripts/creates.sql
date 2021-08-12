@@ -1,7 +1,7 @@
 /* Database */
-CREATE DATABASE dgboss;
+CREATE DATABASE sistema;
 
-USE dgboss;
+USE sistema;
 
 /* Tables */
 CREATE TABLE Usuario(
