@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 
 const maxAge = 3*24*60*60;
 const createToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET || 'secret', {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: maxAge
     });
 }
@@ -28,16 +28,16 @@ module.exports = {
     },
 /*                  POST                  */
     postLogin: async (req, res, next) => {
-        let results = await userModel.postLogin(req.body.correo_usuario);
+        let results = await userModel.postLogin(req.body.email_username);
         if (results[0] === undefined) {
             try {
-                throw new Error('Error, correo o contraseña no encontrada');
+                throw new Error('Error, correo/username o contraseña no encontrada');
             } catch (error) {
                 console.log(error);
                 res.render('login', {
                     alert: true,
                     alertTitle: 'Error',
-                    alertMessage: 'correo o contraseña no encontrada',
+                    alertMessage: 'correo/username o contraseña no encontrada',
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,

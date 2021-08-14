@@ -1,0 +1,196 @@
+<!-- Se incluye el layout de header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Gestión de Usuarios</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Gestión de Usuarios</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Agregar</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="get">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Cédula/Rif *" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Usuario</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Usuario" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Clave</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="password"
+                                                placeholder="Clave *"
+                                                class="form-control" 
+                                                name="password"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="email" 
+                                                placeholder="Email *" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                placeholder="Dirección Fiscal"
+                                                class="form-control" 
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Nombre y Apellido *" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Rol</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" name="rol">
+                                                <option selected value="0">Seleccione *</option>
+                                                <option value="1">Analista</option> 
+                                                <option value="2">Cliente</option> 
+                                                <option value="3">Ejecutivo</option>
+                                                <option value="3">Administrativo</option> 
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Confirmar</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="password"
+                                                placeholder="Confirme Clave *"
+                                                class="form-control" 
+                                                name="password"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Teléfono" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="hidden" 
+                                                placeholder="" 
+                                                class="form-control"
+                                                disabled
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                placeholder="Cargo"
+                                                class="form-control" 
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Productor</label>
+                                        <div class="col-sm-10">
+                                            <div><label> <input type="checkbox" value=""> ¿Usuario es Producto?</label></div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Admin</label>
+                                        <div class="col-sm-10">
+                                            <div><label> <input type="checkbox" value=""> ¿Usuario es Administrador?</label></div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Linea de Negocio</label>
+                                        <div class="col-sm-10">
+                                            <div><label> <input type="checkbox" value=""> Auto</label></div>
+                                            <div><label> <input type="checkbox" value=""> Patrimonial</label></div>
+                                            <div><label> <input type="checkbox" value=""> Persona</label></div>
+                                        </div>
+                                    </div>
+                                    </br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white btn-sm" type="submit">Cancel</button>
+                            <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout de footer -->
+<%- include('layouts/footer') %>

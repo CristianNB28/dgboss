@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="gray-bg">
+<body class="white-bg">
 
     <div class="loginColumns animated fadeInDown">
         <div class="row">
@@ -30,11 +30,11 @@
                     <form class="m-t" role="form" action="/sistema/auth" method="POST">
                         <div class="form-group">
                             <input 
-                                type="email"
-                                name="correo_usuario"
-                                id="correo_usuario" 
+                                type="text"
+                                name="email_username"
+                                id="email_username" 
                                 class="form-control" 
-                                placeholder="Email Adress" 
+                                placeholder="Email Adress/Username" 
                                 required
                             >
                         </div>
@@ -48,9 +48,9 @@
                                 required
                             >
                         </div>
-                        <button type="submit" class="btn btn-primary block full-width m-b">INGRESAR</button>
+                        <button type="submit" class="btn btn-color block full-width m-b ">INGRESAR</button>
 
-                        <a href="forgot/password">
+                        <a class="link-forgot-password" href="/sistema/forgot-password">
                             <small>¿OLVIDÓ SU CLAVE?</small>
                         </a>
 
