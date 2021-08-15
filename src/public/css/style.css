@@ -873,7 +873,7 @@ h5 {
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
-  background-color: #1637cf;
+  background-color: #9e9e9e;
   color: ebebeb;
 }
 .nav .open > a,
@@ -1020,11 +1020,11 @@ h5 {
   transition: all 0.4s;
 }
 ul.nav-second-level {
-  background: #1637cf;
+  background: #9e9e9e;
 }
 .nav > li.active {
   border-left: 4px solid #25282a;
-  background: #113bff;
+  background: #9e9e9e;
 }
 .nav.nav-second-level > li.active {
   border: none;
@@ -1154,11 +1154,11 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
 }
 .navbar-default .special_link a {
   background: #25282a;
-  color: ebebeb;
+  color: #ebebeb;
 }
 .navbar-default .special_link a:hover {
   background: #25282a !important;
-  color: ebebeb;
+  color: white;
 }
 .navbar-default .special_link a span.label {
   background: #ebebeb;
@@ -1180,7 +1180,7 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
   text-align: center;
   font-size: 18px;
   font-weight: 600;
-  color: ebebeb;
+  color: #ebebeb;
   display: none;
   padding: 18px 0;
 }
@@ -1221,8 +1221,8 @@ body.mini-navbar .navbar-default .nav > li > .nav-second-level li a {
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
   background: none;
-  border-color: #ebebeb #ebebeb rgba(7, 5, 5, 0);
-  border-bottom: #ebebeb;
+  border-color: #dddddd #dddddd rgba(0, 0, 0, 0);
+  border-bottom: #f3f3f4;
   border-image: none;
   border-style: solid;
   border-width: 1px;
@@ -1289,7 +1289,7 @@ body.canvas-menu .logo-element {
 }
 body.mini-navbar .nav-header {
   padding: 0;
-  background-color: #113bff;
+  background-color: #25282a;
 }
 body.canvas-menu .nav-header {
   padding: 33px 25px;
@@ -1374,7 +1374,7 @@ body.canvas-menu.mini-navbar .navbar-default .nav li .profile-element a span {
 }
 body.canvas-menu nav.navbar-static-side {
   z-index: 2001;
-  background: #1637cf;
+  background: #cdcdcd;
   height: 100%;
   position: fixed;
   display: none;
@@ -1387,7 +1387,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   margin-left: 0;
 }
 .top-navigation .navbar-nav .dropdown-menu > .active > a {
-  background: ebebeb;
+  background: white;
   color: #113bff;
   font-weight: bold;
 }
@@ -1460,7 +1460,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   padding: 40px 0 40px 0;
 }
 .navbar-toggler {
-  background-color: #113bff;
+  background-color: #cdcdcd;
   color: #ebebeb;
   padding: 6px 12px;
   font-size: 14px;
@@ -4300,7 +4300,7 @@ samp {
   padding: 12px 10px;
   margin: 0;
   border-radius: 0;
-  background: #1637cf;
+  background: #9e9e9e;
   color: #ebebeb;
   text-align: center;
   border-right: 1px solid #113bff;
@@ -4373,7 +4373,7 @@ samp {
 }
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #113bff;
+  background-color: #707271;
   font-size: 13px;
   color: #707271;
   overflow-x: hidden;
@@ -4393,7 +4393,7 @@ body.boxed-layout {
   background: url('patterns/shattered.png');
 }
 body.boxed-layout #wrapper {
-  background-color: #1637cf;
+  background-color: #9e9e9e;
   max-width: 1200px;
   margin: 0 auto;
   -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.75);
@@ -8895,7 +8895,7 @@ body.skin-2 {
 }
 .skin-2 #side-menu > li > a,
 .skin-2 .nav.nav-second-level > li > a {
-  color: #1637cf;
+  color: #9e9e9e;
 }
 .skin-2 .nav > li.active > a {
   color: #213a53;
@@ -9593,11 +9593,6 @@ body.md-skin {
   max-width: 47.499%;
 }
 
-.btn-color {
-  background-color: #113bff;
-  color: #ebebeb;
-}
-
 .link-forgot-password {
   color: #113bff;
 }
@@ -9605,4 +9600,30 @@ body.md-skin {
 .logo-element-img {
   width: 35px; 
   height: 35px;
+}
+
+.btn-menu {
+  color: #ebebeb;
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+}
+.btn-menu:hover,
+.btn-menu:focus,
+.btn-menu.focus {
+  background-color: #707271;
+  border-color: #707271;
+  color: #ebebeb;
+}
+.btn-menu.disabled,
+.btn-menu:disabled {
+  color: #ebebeb;
+  background-color: #707271;
+  border-color: #707271;
+}
+.btn-menu:not(:disabled):not(.disabled):active,
+.btn-menu:not(:disabled):not(.disabled).active,
+.show > .btn-menu.dropdown-toggle {
+  color: #ebebeb;
+  background-color: #707271;
+  border-color: #707271;
 }

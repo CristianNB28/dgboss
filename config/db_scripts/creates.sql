@@ -6,7 +6,7 @@ USE sistema;
 /* Tables */
 CREATE TABLE Usuario(
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    cedula_usuario INT,
+    cedula_usuario VARCHAR(255),
     rif_usuario VARCHAR(255),
     nombre_usuario VARCHAR(255) NOT NULL,
     username VARCHAR(255),

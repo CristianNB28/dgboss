@@ -52,7 +52,22 @@
     <!-- Toastr -->
     <script src="/js/plugins/toastr/toastr.min.js"></script>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <% if(typeof alert != 'undefined') { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+    
     <script>
     $(document).ready(function() {
     var data1 = [

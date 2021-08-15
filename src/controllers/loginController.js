@@ -1,7 +1,6 @@
 const userModel = require('../models/user');
 const jwt = require('jsonwebtoken');
-// Falta
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 const maxAge = 3*24*60*60;
 const createToken = (id) => {
@@ -45,8 +44,7 @@ module.exports = {
                 });
             }
         } else {
-            //const equals = bcrypt.compareSync(req.body.password_usuario, results.password_usuario);
-            if (req.body.password_usuario !== results[0].password_usuario) {
+            if (!(await bcrypt.compare(req.body.password_usuario, results[0].password_usuario))) {
                 try {
                     throw new Error('Error, contraseña incorrecta');
                 } catch (error) {

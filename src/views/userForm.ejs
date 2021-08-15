@@ -1,4 +1,4 @@
-<!-- Se incluye el layout de header -->
+<!-- Se incluye el layout del header -->
 <%- include('layouts/header') %>
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -22,7 +22,7 @@
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-content">
-                <form method="get">
+                <form method="POST" action="/sistema/user-management">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="ibox">
@@ -30,9 +30,12 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="text" 
+                                                type="text"
+                                                name="id_rif"
+                                                id="id_rif"
                                                 placeholder="Cédula/Rif *" 
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -40,7 +43,9 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Usuario</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="text" 
+                                                type="text"
+                                                name="username"
+                                                id="username" 
                                                 placeholder="Usuario" 
                                                 class="form-control"
                                             >
@@ -51,9 +56,11 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="password"
+                                                name="password_usuario"
+                                                id="password_usuario"
                                                 placeholder="Clave *"
                                                 class="form-control" 
-                                                name="password"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -61,9 +68,12 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="email" 
+                                                type="email"
+                                                name="email_usuario"
+                                                id="email_usuario" 
                                                 placeholder="Email *" 
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -72,6 +82,8 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
+                                                name="direccion_usuario"
+                                                id="direccion_usuario"
                                                 placeholder="Dirección Fiscal"
                                                 class="form-control" 
                                             >
@@ -86,9 +98,12 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="text" 
+                                                type="text"
+                                                name="nombre_usuario"
+                                                id="nombre_usuario"
                                                 placeholder="Nombre y Apellido *" 
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -97,10 +112,10 @@
                                         <div class="col-sm-10">
                                             <select class="form-control" name="rol">
                                                 <option selected value="0">Seleccione *</option>
-                                                <option value="1">Analista</option> 
-                                                <option value="2">Cliente</option> 
-                                                <option value="3">Ejecutivo</option>
-                                                <option value="3">Administrativo</option> 
+                                                <option value="Analista">Analista</option> 
+                                                <option value="Cliente">Cliente</option> 
+                                                <option value="Ejecutivo">Ejecutivo</option>
+                                                <option value="Administrativo">Administrativo</option> 
                                             </select>
                                         </div>
                                     </div>
@@ -109,9 +124,11 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="password"
+                                                name="password_confirm"
+                                                id="password_confirm"
                                                 placeholder="Confirme Clave *"
-                                                class="form-control" 
-                                                name="password"
+                                                class="form-control"
+                                                required 
                                             >
                                         </div>
                                     </div>
@@ -119,7 +136,9 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="text" 
+                                                type="text"
+                                                name="telefono_usuario"
+                                                id="telefono_usuario" 
                                                 placeholder="Teléfono" 
                                                 class="form-control"
                                             >
@@ -147,6 +166,8 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
+                                                name="cargo_usuario"
+                                                id="cargo_usuario"
                                                 placeholder="Cargo"
                                                 class="form-control" 
                                             >
@@ -156,23 +177,23 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Productor</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" value=""> ¿Usuario es Producto?</label></div>
+                                            <div><label> <input type="checkbox" name="productor"> ¿Usuario es Productor?</label></div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Admin</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" value=""> ¿Usuario es Administrador?</label></div>
+                                            <div><label> <input type="checkbox" name="admin"> ¿Usuario es Administrador?</label></div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Linea de Negocio</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" value=""> Auto</label></div>
-                                            <div><label> <input type="checkbox" value=""> Patrimonial</label></div>
-                                            <div><label> <input type="checkbox" value=""> Persona</label></div>
+                                            <div><label> <input type="checkbox" name="negocio" value="Auto"> Auto</label></div>
+                                            <div><label> <input type="checkbox" name="negocio" value="Patrimonial"> Patrimonial</label></div>
+                                            <div><label> <input type="checkbox" name="negocio" value="Persona"> Persona</label></div>
                                         </div>
                                     </div>
                                     </br>
@@ -183,8 +204,8 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group row">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-white btn-sm" type="submit">Cancel</button>
-                            <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                            <button class="btn btn-white btn-sm" type="submit">Cancelar</button>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
                         </div>
                     </div>
                 </form>
@@ -192,5 +213,5 @@
         </div>
     </div>
 </div>
-<!-- Se incluye el layout de footer -->
+<!-- Se incluye el layout del footer -->
 <%- include('layouts/footer') %>
