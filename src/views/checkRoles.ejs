@@ -33,12 +33,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% roles.forEach((rol) => { %>
-                    <tr>
-                        <td><%= rol.nombre_rol %></td>
-                        <td><%= rol.descripcion_rol %></td>
-                    </tr>
-                <% }) %>
+                <% if (typeof roles == 'undefined') { %>
+                    <tbody>
+                        <tr>
+                            <h5>No hay usuarios inscritos en el sistema</h5>
+                        </tr>
+                    </tbody>
+                <% } else { %>
+                    <tbody>
+                        <% roles.forEach((rol) => { %>
+                            <tr>
+                                <td><%= rol.nombre_rol %></td>
+                                <td><%= rol.descripcion_rol %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                <% } %>
                 </tbody>
             </table>
 

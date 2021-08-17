@@ -12,31 +12,12 @@ module.exports = {
     },
     getRol: async (req, res) => {
         let results = await rolModel.getRol();
-        if (results === undefined) {
-            try {
-                throw new Error('Error, No se encontraron roles inscritos en el sistema');
-            } catch (error) {
-                console.log(error);
-                res.render('checkRoles', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'No se encontraron roles inscritos en el sistema',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/roles',
-                    name: req.session.name
-                });
-            }
-        } else {
-            res.render('checkRoles',{
-                roles: results,
-                name: req.session.name 
-            });
-        }
+        res.render('checkRoles',{
+            roles: results,
+            name: req.session.name 
+        });
     },
     getUsers: async (req, res) => {
-        //let resultsRoles = await rolModel.getRol();
         let resultsUsers = await userModel.getUsers();
         res.render('users', {
             data: resultsUsers,
