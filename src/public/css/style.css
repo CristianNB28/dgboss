@@ -2128,8 +2128,8 @@ button.dim:active:before {
   text-decoration: none;
 }
 .page-item.active .page-link {
-  background-color: #1ab394;
-  border-color: #1ab394;
+  background-color: #113bff;
+  border-color: #113bff;
 }
 .page-link:focus {
   box-shadow: none;
@@ -2138,8 +2138,8 @@ button.dim:active:before {
   color: #676a6c;
 }
 .pagination .footable-page.active a {
-  background-color: #1ab394;
-  border-color: #1ab394;
+  background-color: #113bff;
+  border-color: #113bff;
   color: white;
 }
 /* TOOLTIPS */

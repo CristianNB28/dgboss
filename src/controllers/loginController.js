@@ -66,7 +66,7 @@ module.exports = {
                 res.render('login', {
                     alert: true,
                     alertTitle: 'Bienvenido',
-                    alertMessage: 'ingreso al sistema exitosamente',
+                    alertMessage: 'Ingreso al sistema exitosamente',
                     alertIcon: 'success',
                     showConfirmButton: false,
                     timer: 1500,

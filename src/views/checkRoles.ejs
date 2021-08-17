@@ -1,0 +1,50 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Gestión de Usuarios</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Gestión de Usuarios</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Roles</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+<div class="row">
+    <div class="col-lg-12">
+    <div class="ibox ">
+        <div class="ibox-title">
+            <h5>Roles</h5>
+        </div>
+        <div class="ibox-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% roles.forEach((rol) => { %>
+                    <tr>
+                        <td><%= rol.nombre_rol %></td>
+                        <td><%= rol.descripcion_rol %></td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

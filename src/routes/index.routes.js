@@ -15,7 +15,11 @@ router.post('/auth', loginController.postLogin);
 router.get('/forgot-password', loginController.getForgotPassword);
 router.get('/logout', loginController.getLogout);
 // Rutas de Gestión de Usuarios
-router.get('/user-management', userController.getUserForm);
-router.post('/user-management', userController.postUserForm);
+router.get('/user-management', requireAuth, userController.getUserForm);
+router.post('/user-management', requireAuth, userController.postUserForm);
+router.get('/roles', requireAuth, userController.getRol);
+router.get('/users', requireAuth, userController.getUsers);
+// Pagina error 404
+router.get('*', indexController.get404);
 
 module.exports = router;

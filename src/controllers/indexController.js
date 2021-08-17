@@ -6,5 +6,9 @@ module.exports = {
         res.render('index', {
             name: req.session.name
         });
+    },
+    get404:  (req, res) => {
+        res.status(404);
+        res.render('404');
     }
 }
