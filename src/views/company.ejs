@@ -1,0 +1,107 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Datos</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Datos</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Consulta de Empresa</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <div class="row">
+                    <% if (typeof company[0] == 'undefined') { %>
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <h3>No hay una empresa inscrita en el sistema</h3>
+                            </div>
+                        </div>
+                    <% } else { %>
+                    <div class="col-lg-6">
+                        <div class="ibox">
+                            <div class="form-control">
+                                <% if (typeof company[0].rif_empresa != 'undefined') { %>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                        <label class="col-sm-9 col-form-label"><%= company[0].rif_empresa %></label>
+                                    </div>
+                                <% } else { %>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                        <label class="col-sm-9 col-form-label"><%= company[0].cedula_empresa %></label>
+                                    </div>
+                                <% } %>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Dominio</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].dominio %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">País</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].pais_empresa %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">% Comisión</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].porcentaje_empresa %>%</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Teléfono</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].telefono_empresa %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Factor Retención</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].factor_retencion %></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ibox">
+                            <div class="form-control">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Nombre</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].nombre_empresa %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Email</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].correo_empresa %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Dirección</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].direccion_empresa %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Días de Comisión</label>
+                                    <label class="col-sm-9 col-form-label"><%= diasRenovacion %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Teléfono Opcional</label>
+                                    <label class="col-sm-9 col-form-label"><%= company[0].telefono_opcional %></label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

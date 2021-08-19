@@ -3,16 +3,16 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Gestión de Usuarios</h2>
+        <h2>Datos</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/sistema">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a>Gestión de Usuarios</a>
+                <a>Datos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Usuario</strong>
+                <strong>Agregar Empresa</strong>
             </li>
         </ol>
     </div>
@@ -22,7 +22,7 @@
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-content">
-                <form method="POST" action="/sistema/user-management">
+                <form method="POST" action="/sistema/add-company">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="ibox">
@@ -40,25 +40,26 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Usuario</label>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
-                                                name="username"
-                                                id="username" 
-                                                placeholder="Usuario" 
+                                                name="nombre_empresa"
+                                                id="nombre_empresa" 
+                                                placeholder="Nombre de Empresa *" 
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Clave</label>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dominio</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="password"
-                                                name="password_usuario"
-                                                id="password_usuario"
-                                                placeholder="Clave *"
+                                                type="text"
+                                                name="dominio_empresa"
+                                                id="dominio_empresa"
+                                                placeholder="Dominio de Empresa *"
                                                 class="form-control" 
                                                 required
                                             >
@@ -69,11 +70,29 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="email"
-                                                name="email_usuario"
-                                                id="email_usuario" 
+                                                name="email_empresa"
+                                                id="email_empresa" 
                                                 placeholder="Email *" 
                                                 class="form-control"
                                                 required
+                                            >
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">País</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="pais_empresa"
+                                                id="pais_empresa"
+                                                placeholder="País de Empresa *"
+                                                class="form-control"
+                                                required 
                                             >
                                         </div>
                                     </div>
@@ -82,10 +101,38 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
-                                                name="direccion_usuario"
-                                                id="direccion_usuario"
-                                                placeholder="Dirección Fiscal"
-                                                class="form-control" 
+                                                name="direccion_empresa"
+                                                id="direccion_empresa"
+                                                placeholder="Dirección Fiscal *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Comisión</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="number"
+                                                step="0.01"
+                                                name="comision_empresa"
+                                                id="comision_empresa"
+                                                placeholder="% Comisión *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Días</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="date"
+                                                name="dias_renovacion_empresa"
+                                                id="dias_renovacion_empresa" 
+                                                placeholder="Días de Renovación *" 
+                                                class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -95,40 +142,15 @@
                         <div class="col-lg-4">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
-                                                name="nombre_usuario"
-                                                id="nombre_usuario"
-                                                placeholder="Nombre y Apellido *" 
+                                                name="telefono_empresa"
+                                                id="telefono_empresa" 
+                                                placeholder="Teléfono *" 
                                                 class="form-control"
                                                 required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Rol</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" name="rol">
-                                                <option selected value="0">Seleccione *</option>
-                                                <option value="Analista">Analista</option> 
-                                                <option value="Cliente">Cliente</option> 
-                                                <option value="Ejecutivo">Ejecutivo</option>
-                                                <option value="Administrativo">Administrativo</option> 
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Confirmar</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="password"
-                                                name="password_confirm"
-                                                id="password_confirm"
-                                                placeholder="Confirme Clave *"
-                                                class="form-control"
-                                                required 
                                             >
                                         </div>
                                     </div>
@@ -137,14 +159,27 @@
                                         <div class="col-sm-10">
                                             <input 
                                                 type="text"
-                                                name="telefono_usuario"
-                                                id="telefono_usuario" 
-                                                placeholder="Teléfono" 
+                                                name="telefono_opcional"
+                                                id="telefono_opcional" 
+                                                placeholder="Teléfono Opcional" 
                                                 class="form-control"
                                             >
                                         </div>
                                     </div>
-                                    </br>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Factor Retención</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="number"
+                                                step="0.0001"
+                                                name="factor_empresa"
+                                                id="factor_empresa" 
+                                                placeholder="Factor Retención *"  
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
                                     </br>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
                                         <div class="col-sm-10">
@@ -156,47 +191,6 @@
                                             >
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="ibox">
-                                <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="cargo_usuario"
-                                                id="cargo_usuario"
-                                                placeholder="Cargo"
-                                                class="form-control" 
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Productor</label>
-                                        <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="productor"> ¿Usuario es Productor?</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Admin</label>
-                                        <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="admin"> ¿Usuario es Administrador?</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Linea de Negocio</label>
-                                        <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="negocio" value="Auto"> Auto</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="Patrimonial"> Patrimonial</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="Persona"> Persona</label></div>
-                                        </div>
-                                    </div>
-                                    </br>
                                 </div>
                             </div>
                         </div>

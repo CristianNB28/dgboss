@@ -1,6 +1,6 @@
 const userModel = require('../models/user');
 const rolUserModel = require('../models/rol_user');
-const rolModel = require('../models//rol');
+const rolModel = require('../models/rol');
 const bcrypt = require('bcryptjs');
 
 module.exports = {
