@@ -106,7 +106,7 @@ CREATE TABLE Recibo(
 );
 
 CREATE TABLE Aseguradora(
-    id_asguradora INT PRIMARY KEY AUTO_INCREMENT,
+    id_aseguradora INT PRIMARY KEY AUTO_INCREMENT,
     rif_aseguradora VARCHAR(255) NOT NULL,
     nombre_aseguradora VARCHAR(255) NOT NULL,
     direccion_aseguradora VARCHAR(255) NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE Poliza_Aseguradora_Asegurado(
     aseguradora_id INT NOT NULL,
     asegurado_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_asguradora),
+    CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
     CONSTRAINT FOREIGN KEY fk_asegurado_id(asegurado_id) REFERENCES Asegurado(id_asegurado)
 );
 

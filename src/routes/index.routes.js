@@ -25,6 +25,8 @@ router.get('/add-company', requireAuth, dataController.getCompanyForm);
 router.post('/add-company', requireAuth, dataController.postCompanyForm);
 router.get('/company', requireAuth, dataController.getCompany)
 router.get('/add-insurer', requireAuth, dataController.getInsurerForm);
+router.post('/add-insurer', requireAuth, dataController.postInsurerForm);
+router.get('/insurers', requireAuth, dataController.getInsurers);
 // Pagina error 404
 router.get('*', indexController.get404);
 
