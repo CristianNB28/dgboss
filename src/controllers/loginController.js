@@ -36,7 +36,7 @@ module.exports = {
                 res.render('login', {
                     alert: true,
                     alertTitle: 'Error',
-                    alertMessage: 'correo/username o contraseña no encontrada',
+                    alertMessage: 'Correo/username o contraseña no encontrada',
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
@@ -52,7 +52,7 @@ module.exports = {
                     res.render('login', {
                         alert: true,
                         alertTitle: 'Error',
-                        alertMessage: 'contraseña incorrecta',
+                        alertMessage: 'Contraseña incorrecta',
                         alertIcon: 'error',
                         showConfirmButton: true,
                         timer: 1500,
@@ -66,7 +66,7 @@ module.exports = {
                 res.render('login', {
                     alert: true,
                     alertTitle: 'Bienvenido',
-                    alertMessage: 'Ingreso al sistema exitosamente',
+                    alertMessage: 'Ingresó al sistema exitosamente',
                     alertIcon: 'success',
                     showConfirmButton: false,
                     timer: 1500,

@@ -86,5 +86,11 @@ module.exports = {
                 name: req.session.name
             });
         }
+    },
+/*                  PUT                  */
+/*               DELETE                  */
+    deleteInsurer: async (req, res) => {
+        await insurerModel.deleteInsurer(req.params.id);
+        res.redirect('/sistema/insurers');
     }
 }
