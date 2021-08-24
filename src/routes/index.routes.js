@@ -18,8 +18,16 @@ router.get('/logout', loginController.getLogout);
 // Rutas de Gestión de Usuarios
 router.get('/user-management', requireAuth, userController.getUserForm);
 router.post('/user-management', requireAuth, userController.postUserForm);
-router.get('/roles', requireAuth, userController.getRol);
+router.get('/add-rol', requireAuth, userController.getRolForm);
+router.post('/add-rol', requireAuth, userController.postRolForm);
+router.get('/roles', requireAuth, userController.getRoles);
 router.get('/users', requireAuth, userController.getUsers);
+router.post('/remove-rol/:id', requireAuth, userController.deleteRol);
+router.post('/remove-user/:id', requireAuth, userController.deleteUser);
+router.get('/edit-rol/:id', requireAuth, userController.putRol);
+router.post('/update-rol', requireAuth, userController.updateRol);
+router.get('/edit-user/:id', requireAuth, userController.putUser);
+router.post('/update-user', requireAuth, userController.updateUser);
 // Rutas de Datos
 router.get('/add-company', requireAuth, dataController.getCompanyForm);
 router.post('/add-company', requireAuth, dataController.postCompanyForm);

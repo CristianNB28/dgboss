@@ -12,6 +12,17 @@ module.exports = {
             });
         });
     },
+    getUser: (idUser) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM Usuario WHERE id_usuario = ?', [idUser],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postLogin: (email_username) => {
         const validateEmail = email => /\S+@\S+/.test(email);
@@ -59,5 +70,45 @@ module.exports = {
                 });
             });
         }
+    },
+/*                  PUT                  */
+    updateUser: (cedulaUsuario, rifUsuario, admin, productor, password, user) => {
+        if (cedulaUsuario === '') {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Usuario 
+                            SET cedula_usuario=?, rif_usuario=?, nombre_usuario=?, username=?, password_usuario=?, correo_usuario=?, telefono_usuario=?, direccion_usuario=?, cargo_usuario=?, productor_boolean=?, administrador_boolean=?, tipo_linea_negocio=?    
+                            WHERE id_usuario=?`, [cedulaUsuario, rifUsuario, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio, user.id_usuario], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Usuario 
+                            SET cedula_usuario=?, rif_usuario=?, nombre_usuario=?, username=?, password_usuario=?, correo_usuario=?, telefono_usuario=?, direccion_usuario=?, cargo_usuario=?, productor_boolean=?, administrador_boolean=?, tipo_linea_negocio=?    
+                            WHERE id_usuario=?`, [cedulaUsuario, rifUsuario, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio, user.id_usuario], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        }
+    },
+/*               DELETE                  */
+    deleteUser: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`DELETE FROM Usuario WHERE id_usuario=?`, [id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
     }
 }

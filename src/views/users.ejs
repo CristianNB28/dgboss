@@ -38,6 +38,8 @@
                             <th>Dirección Fiscal</th>
                             <th>Cargo</th>
                             <th>Linea de Negocio</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
                         </tr>
                         </thead>
                         <% if (typeof data == 'undefined') { %>
@@ -60,6 +62,8 @@
                             <th>Dirección Fiscal</th>
                             <th>Cargo</th>
                             <th>Linea de Negocio</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
                         </tr>
                         </tfoot>
                         </table>
@@ -148,6 +152,22 @@ $(document).ready(function(){
             {"data": "direccion_usuario"},
             {"data": "cargo_usuario"},
             {"data": "tipo_linea_negocio"},
+            {
+                "data": "",
+                "render": (data, type, row) => {
+                        return `<form class="form-inline" method="get" action="/sistema/edit-user/${row.id_usuario}">
+                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                </form>`;
+                }
+            },
+            {
+                "data": "",
+                "render": (data, type, row) => {
+                        return `<form class="form-inline" method="post" action="/sistema/remove-user/${row.id_usuario}">
+                                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                </form>`;
+                }
+            }
         ],
         buttons: [
             {extend: 'print',

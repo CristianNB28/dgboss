@@ -12,7 +12,7 @@
                 <a>Gestión de Usuarios</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Usuario</strong>
+                <strong>Editar Usuario</strong>
             </li>
         </ol>
     </div>
@@ -22,23 +22,38 @@
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-content">
-                <form method="POST" action="/sistema/user-management">
+                <form method="POST" action="/sistema/update-user">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="id_rif"
-                                                id="id_rif"
-                                                placeholder="Cédula/Rif *" 
-                                                class="form-control"
-                                                required
-                                            >
+                                    <% if ((user.cedula_usuario === null) || (user.cedula_usuario === '')) { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="rif_usuario"
+                                                    id="rif_usuario"
+                                                    value="<%= user.rif_usuario %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
                                         </div>
-                                    </div>
+                                    <% } else { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="cedula_usuario"
+                                                    id="cedula_usuario"
+                                                    value="<%= user.cedula_usuario %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } %>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Usuario</label>
                                         <div class="col-sm-10">
@@ -46,7 +61,7 @@
                                                 type="text"
                                                 name="username"
                                                 id="username" 
-                                                placeholder="Usuario" 
+                                                value="<%= user.username %>"
                                                 class="form-control"
                                             >
                                         </div>
@@ -58,7 +73,7 @@
                                                 type="password"
                                                 name="password_usuario"
                                                 id="password_usuario"
-                                                placeholder="Clave *"
+                                                value="<%= user.password_usuario %>"
                                                 class="form-control" 
                                                 required
                                             >
@@ -71,7 +86,7 @@
                                                 type="email"
                                                 name="email_usuario"
                                                 id="email_usuario" 
-                                                placeholder="Email *" 
+                                                value="<%= user.correo_usuario %>" 
                                                 class="form-control"
                                                 required
                                             >
@@ -84,7 +99,7 @@
                                                 type="text"
                                                 name="direccion_usuario"
                                                 id="direccion_usuario"
-                                                placeholder="Dirección Fiscal"
+                                                value="<%= user.direccion_usuario %>"
                                                 class="form-control" 
                                             >
                                         </div>
@@ -101,7 +116,7 @@
                                                 type="text"
                                                 name="nombre_usuario"
                                                 id="nombre_usuario"
-                                                placeholder="Nombre y Apellido *" 
+                                                value="<%= user.nombre_usuario %>" 
                                                 class="form-control"
                                                 required
                                             >
@@ -111,7 +126,7 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Rol</label>
                                         <div class="col-sm-10">
                                             <select class="form-control" name="rol">
-                                                <option selected value="0">Seleccione *</option>
+                                                <option selected value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option>
                                                 <% roles.forEach((rol) => { %>
                                                     <option value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option> 
                                                 <% }); %> 
@@ -119,15 +134,14 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Confirmar</label>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="password"
-                                                name="password_confirm"
-                                                id="password_confirm"
-                                                placeholder="Confirme Clave *"
-                                                class="form-control"
-                                                required 
+                                                type="text"
+                                                name="cargo_usuario"
+                                                id="cargo_usuario"
+                                                value="<%= user.cargo_usuario %>"
+                                                class="form-control" 
                                             >
                                         </div>
                                     </div>
@@ -138,7 +152,7 @@
                                                 type="text"
                                                 name="telefono_usuario"
                                                 id="telefono_usuario" 
-                                                placeholder="Teléfono" 
+                                                value="<%= user.telefono_usuario %>" 
                                                 class="form-control"
                                             >
                                         </div>
@@ -148,10 +162,11 @@
                                     <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
                                         <div class="col-sm-10">
                                             <input 
-                                                type="hidden" 
-                                                placeholder="" 
+                                                type="hidden"
+                                                name="password_confirm"
+                                                id="password_confirm"
+                                                value="<%= user.password_usuario %>"
                                                 class="form-control"
-                                                disabled
                                             >
                                         </div>
                                     </div>
@@ -161,40 +176,64 @@
                         <div class="col-lg-4">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="cargo_usuario"
-                                                id="cargo_usuario"
-                                                placeholder="Cargo"
-                                                class="form-control" 
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Productor</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="productor"> ¿Usuario es Productor?</label></div>
+                                            <div><label><input 
+                                                            type="checkbox" 
+                                                            name="productor"
+                                                            <%= user.productor_boolean === 1 ? 'checked': '' %>
+                                                        > ¿Usuario es Productor?</label></div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Admin</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="admin"> ¿Usuario es Administrador?</label></div>
+                                            <div><label><input 
+                                                            type="checkbox" 
+                                                            name="admin"
+                                                            <%= user.administrador_boolean === 1 ? 'checked': '' %>
+                                                        > ¿Usuario es Administrador?</label></div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label">Linea de Negocio</label>
                                         <div class="col-sm-10">
-                                            <div><label> <input type="checkbox" name="negocio" value="Auto"> Auto</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="Patrimonial"> Patrimonial</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="Persona"> Persona</label></div>
+                                            <div><label><input 
+                                                            type="checkbox" 
+                                                            name="negocio"
+                                                            value="Auto"
+                                                            <%= user.tipo_linea_negocio === 'Auto' ? 'checked': '' %>
+                                                        /> Auto</label></div>
+                                            <div><label><input 
+                                                            type="checkbox" 
+                                                            name="negocio"
+                                                            value="Patrimonial"
+                                                            <%= user.tipo_linea_negocio === 'Patrimonial' ? 'checked': '' %>
+                                                        /> Patrimonial</label></div>
+                                            <div><label><input 
+                                                            type="checkbox" 
+                                                            name="negocio"
+                                                            value="Persona"
+                                                            <%= user.tipo_linea_negocio === 'Persona' ? 'checked': '' %>
+                                                        /> Persona</label></div>
                                         </div>
                                     </div>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="hidden"
+                                                name="id_usuario"
+                                                id="id_usuario" 
+                                                value="<%= user.id_usuario %>" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
                                     </br>
                                 </div>
                             </div>
