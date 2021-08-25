@@ -178,13 +178,15 @@ module.exports = {
         });
     },
 /*               DELETE                  */
-    deleteUser: async (req, res) => {
-        await rolUserModel.deleteRolUser(req.params.id);
-        await userModel.deleteUser(req.params.id);
+    disableUser: async (req, res) => {
+        let disable = 1;
+        await rolUserModel.disableRolUser(req.params.id, disable);
+        await userModel.disableUser(req.params.id, disable);
         res.redirect('/sistema/users');
     },
-    deleteRol: async (req, res) => {
-        await rolModel.deleteRol(req.params.id);
+    disableRol: async (req, res) => {
+        let disableRol = 1
+        await rolModel.disableRol(req.params.id, disableRol);
         res.redirect('/sistema/roles');
     }
 }

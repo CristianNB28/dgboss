@@ -4,7 +4,7 @@ module.exports = {
 /*                  GET                  */
     getRoles: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_rol, nombre_rol, descripcion_rol FROM Rol', (error, rows) => {
+            db.query('SELECT id_rol, nombre_rol, descripcion_rol FROM Rol WHERE deshabilitar_rol=0', (error, rows) => {
                 if (error) {
                     reject(error)
                 }
@@ -49,9 +49,9 @@ module.exports = {
         });
     },
 /*               DELETE                  */
-    deleteRol: (id) => {
+    disableRol: (id, disableRol) => {
         return new Promise((resolve, reject) => {
-            db.query(`DELETE FROM Rol WHERE id_rol=?`, [id], 
+            db.query(`UPDATE Rol SET deshabilitar_rol=? WHERE id_rol=?`, [disableRol, id], 
             (error, rows) => {
                 if (error) {
                     reject(error)

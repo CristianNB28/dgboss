@@ -17,13 +17,15 @@ CREATE TABLE Usuario(
     cargo_usuario VARCHAR(255),
     productor_boolean BOOLEAN,
     administrador_boolean BOOLEAN,
-    tipo_linea_negocio VARCHAR(255) NOT NULL
+    tipo_linea_negocio VARCHAR(255) NOT NULL,
+    deshabilitar_usuario BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Rol(
     id_rol INT PRIMARY KEY AUTO_INCREMENT,
     nombre_rol VARCHAR(255) NOT NULL,
-    descripcion_rol VARCHAR(255) NOT NULL
+    descripcion_rol VARCHAR(255) NOT NULL,
+    deshabilitar_rol BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Tomador(
@@ -32,7 +34,8 @@ CREATE TABLE Tomador(
     rif_tomador VARCHAR(255),
     nombre_tomador VARCHAR(255),
     razon_social_tomador VARCHAR(255),
-    correo_usuario VARCHAR(255) NOT NULL
+    correo_usuario VARCHAR(255) NOT NULL,
+    deshabilitar_tomador BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Empresa(
@@ -48,7 +51,8 @@ CREATE TABLE Empresa(
     fecha_renovacion DATE NOT NULL,
     telefono_empresa VARCHAR(255) NOT NULL,
     telefono_opcional VARCHAR(255),
-    factor_retencion DECIMAL(20,4) NOT NULL
+    factor_retencion DECIMAL(20,4) NOT NULL,
+    deshabilitar_empresa BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Vehiculo(
@@ -69,7 +73,8 @@ CREATE TABLE Vehiculo(
     lugar_habitual VARCHAR(255),
     cedula_conductor_vehiculo VARCHAR(255),
     rif_conductor_vehiculo VARCHAR(255),
-    nombre_conductor_vehiculo VARCHAR(255)
+    nombre_conductor_vehiculo VARCHAR(255),
+    deshabilitar_vehiculo BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Poliza(
@@ -78,6 +83,7 @@ CREATE TABLE Poliza(
     ramo_poliza VARCHAR(255) NOT NULL,
     tomador_viejo BOOLEAN NOT NULL,
     tipo_negocio VARCHAR(255) NOT NULL,
+    tipo_poliza VARCHAR(255) NOT NULL,
     fecha_desde DATE NOT NULL,
     fecha_hasta DATE NOT NULL,
     tipo_moneda VARCHAR(255) NOT NULL,
@@ -90,7 +96,8 @@ CREATE TABLE Poliza(
     tipo_canal VARCHAR(255),
     corporativa_poliza BOOLEAN NOT NULL,
     grupo_poliza VARCHAR(255),
-    deducible_poliza INT
+    deducible_poliza INT,
+    deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Recibo(
@@ -101,6 +108,7 @@ CREATE TABLE Recibo(
     fecha_vigencia_hasta DATE NOT NULL,
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
+    deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza)
 );
@@ -111,6 +119,7 @@ CREATE TABLE Aseguradora(
     nombre_aseguradora VARCHAR(255) NOT NULL,
     direccion_aseguradora VARCHAR(255) NOT NULL,
     telefono_aseguradora VARCHAR(255),
+    deshabilitar_aseguradora BOOLEAN NOT NULL DEFAULT FALSE,
     empresa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_empresa_id(empresa_id) REFERENCES Empresa(id_empresa)
 );
@@ -122,7 +131,7 @@ CREATE TABLE Asegurado(
     nombre_asegurado VARCHAR(255) NOT NULL,
     telefono_asegurado VARCHAR(255) NOT NULL,
     correo_asegurado VARCHAR(255) NOT NULL,
-    tipo_asegurado VARCHAR(255) NOT NULL,
+    deshabilitar_asegurado BOOLEAN NOT NULL DEFAULT FALSE,
     empresa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_empresa_id(empresa_id) REFERENCES Empresa(id_empresa)
 );
@@ -131,6 +140,7 @@ CREATE TABLE Poliza_Tomador(
     id_poliza_tomador INT PRIMARY KEY AUTO_INCREMENT,
     poliza_id INT NOT NULL,
     tomador_id INT NOT NULL,
+    deshabilitar_poliza_tomador BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_tomador_id(tomador_id) REFERENCES Tomador(id_tomador)
 );
@@ -139,6 +149,7 @@ CREATE TABLE Usuario_Rol(
     id_usuario_rol INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id INT NOT NULL,
     rol_id INT NOT NULL,
+    deshabilitar_usuario_rol BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_usuario_id(usuario_id) REFERENCES Usuario(id_usuario),
     CONSTRAINT FOREIGN KEY fk_rol_id(rol_id) REFERENCES Rol(id_rol)
 );
@@ -148,6 +159,7 @@ CREATE TABLE Poliza_Aseguradora_Asegurado(
     poliza_id INT NOT NULL,
     aseguradora_id INT NOT NULL,
     asegurado_id INT NOT NULL,
+    deshabilitar_paa BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
     CONSTRAINT FOREIGN KEY fk_asegurado_id(asegurado_id) REFERENCES Asegurado(id_asegurado)
@@ -168,6 +180,7 @@ CREATE TABLE Siniestro(
     deducible_boolean BOOLEAN NOT NULL,
     descripcion_siniestro VARCHAR(255) NOT NULL,
     observacion_siniestro VARCHAR(255) NOT NULL,
+    deshabilitar_siniestro BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
 );
@@ -176,6 +189,7 @@ CREATE TABLE Comision(
     id_comision INT PRIMARY KEY AUTO_INCREMENT,
     porcentaje_comision DECIMAL(10,4) NOT NULL,
     estatus_comision VARCHAR(255) NOT NULL,
+    deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
     recibo_id INT NOT NULL,
     paa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_recibo_id(recibo_id) REFERENCES Recibo(id_recibo),
@@ -184,6 +198,7 @@ CREATE TABLE Comision(
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(
     id_paav INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_paav BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     vehiculo_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),

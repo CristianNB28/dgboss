@@ -36,7 +36,7 @@
                             <th>Teléfono</th>
                             <th>Dirección</th>
                             <th>Editar</th>
-                            <th>Eliminar</th>
+                            <th>Deshabilitar</th>
                         </tr>
                         </thead>
                         <% if (typeof data == 'undefined') { %>
@@ -57,7 +57,7 @@
                             <th>Teléfono</th>
                             <th>Dirección</th>
                             <th>Editar</th>
-                            <th>Eliminar</th>
+                            <th>Deshabilitar</th>
                         </tr>
                         </tfoot>
                         </table>
@@ -155,7 +155,7 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-insurer/${row.id_aseguradora}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
                                 </form>`;
                 }
             }

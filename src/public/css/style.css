@@ -9627,3 +9627,9 @@ body.md-skin {
   background-color: #707271;
   border-color: #707271;
 }
+
+.btn-edit,
+.btn-delete {
+  display: inline-block;
+  vertical-align: top;
+}

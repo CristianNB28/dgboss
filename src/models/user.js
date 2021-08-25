@@ -4,7 +4,8 @@ module.exports = {
 /*                  GET                  */
     getUsers: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_usuario, cedula_usuario, rif_usuario, correo_usuario, direccion_usuario, nombre_usuario, cargo_usuario, tipo_linea_negocio FROM Usuario', (error, rows) => {
+            db.query('SELECT id_usuario, cedula_usuario, rif_usuario, correo_usuario, direccion_usuario, nombre_usuario, cargo_usuario, tipo_linea_negocio FROM Usuario WHERE deshabilitar_usuario=0', 
+            (error, rows) => {
                 if (error) {
                     reject(error)
                 }
@@ -100,9 +101,9 @@ module.exports = {
         }
     },
 /*               DELETE                  */
-    deleteUser: (id) => {
+    disableUser: (id, disableUser) => {
         return new Promise((resolve, reject) => {
-            db.query(`DELETE FROM Usuario WHERE id_usuario=?`, [id], 
+            db.query(`UPDATE Usuario SET deshabilitar_usuario=? WHERE id_usuario=?`, [disableUser, id], 
             (error, rows) => {
                 if (error) {
                     reject(error)

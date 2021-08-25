@@ -88,9 +88,87 @@ module.exports = {
         }
     },
 /*                  PUT                  */
+    putInsurer: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idInsurer = req.params.id;
+        if (idInsurer.match(valoresAceptados)) {
+            let resultInsurer = await insurerModel.getInsurer(idInsurer);
+            res.render('editInsurer', {
+                insurer: resultInsurer[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putCompany: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idCompany = req.params.id;
+        if (idCompany.match(valoresAceptados)) {
+            let resultCompany = await companyModel.getCompany();
+            let fechaRenovacion = resultCompany[0].fecha_renovacion.toISOString().substring(0, 10);
+            res.render('editCompany', {
+                company: resultCompany[0],
+                fecha: fechaRenovacion,
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    updateInsurer: async (req, res) => {
+        await insurerModel.updateInsurer(req.body);
+        res.render('index', {
+            alert: true,
+            alertTitle: 'Exitoso',
+            alertMessage: 'Se actualizaron los datos exitosamente',
+            alertIcon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+            ruta: 'sistema',
+            name: req.session.name
+        });
+    },
+    updateCompany: async (req, res) => {
+        let comision_porcentaje = parseFloat(req.body.comision_empresa);
+        let fecha_empresa = new Date(req.body.dias_renovacion_empresa);
+        let factor_retencion_empresa = parseFloat(req.body.factor_empresa);
+        let cedulaEmpresa = '';
+        let rifEmpresa = '';
+        if ((typeof(req.body.rif_empresa) !== 'undefined')) {
+            if ((!req.body.rif_empresa.startsWith('J')) && (!req.body.rif_empresa.startsWith('G')) && (!req.body.rif_empresa.startsWith('V'))) {
+                cedulaEmpresa = req.body.rif_empresa;
+            } else if (((req.body.rif_empresa.startsWith('J')) || (req.body.rif_empresa.startsWith('G')) || (req.body.rif_empresa.startsWith('V')))) {
+                rifEmpresa = req.body.rif_empresa;
+            }
+        } else {
+            if ((req.body.cedula_empresa.startsWith('J')) || (req.body.cedula_empresa.startsWith('G')) || (req.body.cedula_empresa.startsWith('V'))) {
+                rifEmpresa = req.body.cedula_empresa
+            } else if ((!req.body.cedula_empresa.startsWith('J')) && (!req.body.cedula_empresa.startsWith('G')) && (!req.body.cedula_empresa.startsWith('V'))) {
+                cedulaEmpresa = req.body.cedula_empresa
+            } 
+        }
+        await companyModel.updateCompany(cedulaEmpresa, rifEmpresa, comision_porcentaje, fecha_empresa, factor_retencion_empresa, req.body)
+        res.render('index', {
+            alert: true,
+            alertTitle: 'Exitoso',
+            alertMessage: 'Se actualizaron los datos exitosamente',
+            alertIcon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+            ruta: 'sistema',
+            name: req.session.name
+        });
+    },
 /*               DELETE                  */
-    deleteInsurer: async (req, res) => {
-        await insurerModel.deleteInsurer(req.params.id);
+    disableInsurer: async (req, res) => {
+        let disableInsurer = 1;
+        await insurerModel.disableInsurer(req.params.id, disableInsurer);
         res.redirect('/sistema/insurers');
+    },
+    disableCompany: async (req, res) => {
+        let disableCompany = 1;
+        await companyModel.disableCompany(req.params.id, disableCompany);
+        res.redirect('/sistema/company');
     }
 }
