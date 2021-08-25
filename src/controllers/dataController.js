@@ -61,8 +61,8 @@ module.exports = {
     },
     postInsurerForm: async (req, res) => {
         let empresa = await companyModel.getCompany();
-        let idEmpresa = empresa[0].id_empresa;
-        if (idEmpresa !== undefined) {
+        if (empresa[0] !== undefined) {
+            let idEmpresa = empresa[0].id_empresa;
             await insurerModel.postInsurerForm(req.body, idEmpresa);
             res.render('insurerForm', {
                 alert: true,
@@ -82,7 +82,7 @@ module.exports = {
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
-                ruta: 'sistema/add-insurer',
+                ruta: 'sistema',
                 name: req.session.name
             });
         }
