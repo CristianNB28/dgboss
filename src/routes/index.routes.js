@@ -5,6 +5,7 @@ const loginController = require('../controllers/loginController');
 const indexController = require('../controllers/indexController');
 const userController = require('../controllers/userController');
 const dataController = require('../controllers/dataController');
+const insuredController = require('../controllers/insuredController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -41,6 +42,13 @@ router.get('/insurers', requireAuth, dataController.getInsurers);
 router.post('/remove-insurer/:id', requireAuth, dataController.disableInsurer);
 router.get('/edit-insurer/:id', requireAuth, dataController.putInsurer);
 router.post('/update-insurer', requireAuth, dataController.updateInsurer);
+// Rutas de Asegurados
+router.get('/add-insured', requireAuth, insuredController.getInsuredForm);
+router.post('/add-insured', requireAuth, insuredController.postInsuredForm);
+router.get('/insureds', requireAuth, insuredController.getInsureds);
+router.post('/remove-insured/:id', requireAuth, insuredController.disableInsured);
+router.get('/edit-insured/:id', requireAuth, insuredController.putInsured);
+router.post('/update-insured', requireAuth, insuredController.updateInsured);
 // Pagina error 404
 router.get('*', indexController.get404);
 
