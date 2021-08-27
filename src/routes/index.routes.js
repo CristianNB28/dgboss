@@ -6,6 +6,8 @@ const indexController = require('../controllers/indexController');
 const userController = require('../controllers/userController');
 const dataController = require('../controllers/dataController');
 const insuredController = require('../controllers/insuredController');
+const policyController = require('../controllers/policyController');
+const bondController = require('../controllers/bondController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -49,6 +51,15 @@ router.get('/insureds', requireAuth, insuredController.getInsureds);
 router.post('/remove-insured/:id', requireAuth, insuredController.disableInsured);
 router.get('/edit-insured/:id', requireAuth, insuredController.putInsured);
 router.post('/update-insured', requireAuth, insuredController.updateInsured);
+// Rutas de Pólizas
+router.get('/add-vehicle-policy', requireAuth, policyController.getVehiclePolicyForm);
+// Rutas de Bonos
+router.get('/add-bond', requireAuth, bondController.getBondForm);
+router.post('/add-bond', requireAuth, bondController.postBondForm);
+router.get('/bonds', requireAuth, bondController.getBonds);
+router.post('/remove-bond/:id', requireAuth, bondController.disableBond);
+router.get('/edit-bond/:id', requireAuth, bondController.putBond);
+router.post('/update-bond', requireAuth, bondController.updateBond);
 // Pagina error 404
 router.get('*', indexController.get404);
 

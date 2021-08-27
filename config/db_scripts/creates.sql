@@ -34,7 +34,7 @@ CREATE TABLE Tomador(
     rif_tomador VARCHAR(255),
     nombre_tomador VARCHAR(255),
     razon_social_tomador VARCHAR(255),
-    correo_usuario VARCHAR(255) NOT NULL,
+    correo_tomador VARCHAR(255) NOT NULL,
     deshabilitar_tomador BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -90,14 +90,26 @@ CREATE TABLE Poliza(
     tipo_movimiento VARCHAR(255) NOT NULL,
     monto_prima DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255) NOT NULL,
-    tipo_cobertura VARCHAR(255) NOT NULL,
-    tipo_bono VARCHAR(255) NOT NULL,
+    tipo_bono VARCHAR(255),
     tipo_producto VARCHAR(255),
     tipo_canal VARCHAR(255),
     corporativa_poliza BOOLEAN NOT NULL,
     grupo_poliza VARCHAR(255),
     deducible_poliza INT,
     deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE Cobertura(
+    id_cobertura INT PRIMARY KEY AUTO_INCREMENT,
+    descripcion_cobertura VARCHAR(255) NOT NULL,
+    deshabilitar_cobertura BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE Bono(
+    id_bono INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_bono VARCHAR(255) NOT NULL,
+    descripcion_bono VARCHAR(255),
+    deshabilitar_bono BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Recibo(
@@ -136,30 +148,48 @@ CREATE TABLE Asegurado(
     CONSTRAINT FOREIGN KEY fk_empresa_id(empresa_id) REFERENCES Empresa(id_empresa)
 );
 
+CREATE TABLE Poliza_Cobertura(
+    id_poliza_cobertura INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_poliza_cobertura BOOLEAN NOT NULL DEFAULT FALSE,
+    poliza_id INT NOT NULL,
+    cobertura_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_cobertura_id(cobertura_id) REFERENCES Cobertura(id_cobertura)
+);
+
+CREATE TABLE Poliza_Bono(
+    id_poliza_bono INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_poliza_bono BOOLEAN NOT NULL DEFAULT FALSE,
+    poliza_id INT NOT NULL,
+    bono_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_bono_id(bono_id) REFERENCES Bono(id_bono)
+);
+
 CREATE TABLE Poliza_Tomador(
     id_poliza_tomador INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_poliza_tomador BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     tomador_id INT NOT NULL,
-    deshabilitar_poliza_tomador BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_tomador_id(tomador_id) REFERENCES Tomador(id_tomador)
 );
 
 CREATE TABLE Usuario_Rol(
     id_usuario_rol INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_usuario_rol BOOLEAN NOT NULL DEFAULT FALSE,
     usuario_id INT NOT NULL,
     rol_id INT NOT NULL,
-    deshabilitar_usuario_rol BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_usuario_id(usuario_id) REFERENCES Usuario(id_usuario),
     CONSTRAINT FOREIGN KEY fk_rol_id(rol_id) REFERENCES Rol(id_rol)
 );
 
 CREATE TABLE Poliza_Aseguradora_Asegurado(
     id_paa INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_paa BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     aseguradora_id INT NOT NULL,
     asegurado_id INT NOT NULL,
-    deshabilitar_paa BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
     CONSTRAINT FOREIGN KEY fk_asegurado_id(asegurado_id) REFERENCES Asegurado(id_asegurado)
