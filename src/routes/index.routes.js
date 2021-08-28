@@ -8,6 +8,7 @@ const dataController = require('../controllers/dataController');
 const insuredController = require('../controllers/insuredController');
 const policyController = require('../controllers/policyController');
 const bondController = require('../controllers/bondController');
+const hedgeController = require('../controllers/hedgeController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -60,6 +61,13 @@ router.get('/bonds', requireAuth, bondController.getBonds);
 router.post('/remove-bond/:id', requireAuth, bondController.disableBond);
 router.get('/edit-bond/:id', requireAuth, bondController.putBond);
 router.post('/update-bond', requireAuth, bondController.updateBond);
+// Rutas de Coberturas
+router.get('/add-hedge', requireAuth, hedgeController.getHedgeForm);
+router.post('/add-hedge', requireAuth, hedgeController.postHedgeForm);
+router.get('/hedges', requireAuth, hedgeController.getHedges);
+router.post('/remove-hedge/:id', requireAuth, hedgeController.disableHedge);
+router.get('/edit-hedge/:id', requireAuth, hedgeController.putHedge);
+router.post('/update-hegde', requireAuth, hedgeController.updateHedge);
 // Pagina error 404
 router.get('*', indexController.get404);
 

@@ -1,23 +1,23 @@
-const bondModel = require('../models/bond');
+const hedgeModel = require('../models/hedge')
 
 module.exports = {
 /*                  GET                  */
-    getBondForm: (req, res) => {
-        res.render('bondForm', {
+    getHedgeForm: (req, res) => {
+        res.render('hedgeForm', {
             name: req.session.name
         });
     },
-    getBonds: async (req, res) => {
-        let resultsBonds = await bondModel.getBonds();
-        res.render('bonds',{
-            data: resultsBonds,
+    getHedges: async (req, res) => {
+        let resultsHedges = await hedgeModel.getHedges();
+        res.render('hedges',{
+            data: resultsHedges,
             name: req.session.name 
         });
     },
 /*                 POST                  */
-    postBondForm: async (req, res) => {
-        await bondModel.postBondForm(req.body);
-        res.render('bondForm', {
+    postHedgeForm: async (req, res) => {
+        await hedgeModel.postHedgeForm(req.body);
+        res.render('hedgeForm', {
             alert: true,
             alertTitle: 'Exitoso',
             alertMessage: 'Se registraron los datos exitosamente',
@@ -29,21 +29,21 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    putBond: async (req, res, next) => {
+    putHedge: async (req, res, next) => {
         let valoresAceptados = /^[0-9]+$/;
-        let idBond = req.params.id;
-        if (idBond.match(valoresAceptados)) {
-            let resultBond = await bondModel.getBond(idBond);
-            res.render('editBond', {
-                bond: resultBond[0],
+        let idHedge = req.params.id;
+        if (idHedge.match(valoresAceptados)) {
+            let resultHedge = await hedgeModel.getHedge(idHedge);
+            res.render('editHedge', {
+                hedge: resultHedge[0],
                 name: req.session.name
             });
         } else {
             next();
         }
     },
-    updateBond: async (req, res) => {
-        await bondModel.updateBond(req.body);
+    updateHedge: async (req, res) => {
+        await hedgeModel.updateHedge(req.body);
         res.render('index', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -56,9 +56,9 @@ module.exports = {
         });
     },
 /*               DELETE                  */
-    disableBond: async (req, res) => {
-        let disableBond = 1;
-        await bondModel.disableBond(req.params.id, disableBond);
-        res.redirect('/sistema/bonds');
-    } 
+    disableHedge: async (req, res) => {
+        let disableHedge = 1;
+        await hedgeModel.disableHedge(req.params.id, disableHedge);
+        res.redirect('/sistema/hedges');
+    }
 }
