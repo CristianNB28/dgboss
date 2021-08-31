@@ -1,4 +1,5 @@
 const bondModel = require('../models/bond');
+const policyBondModel = require('../models/policy_bond');
 
 module.exports = {
 /*                  GET                  */
@@ -27,6 +28,11 @@ module.exports = {
             ruta: 'sistema',
             name: req.session.name
         });
+    },
+    postPolicyBondForm: async (req, res) => {
+        await bondModel.updateBondDescription(req.body);
+        await policyBondModel.postPolicyBondForm(req.body.tipo_bono);
+        res.redirect('/sistema/add-vehicle-policy');
     },
 /*                  PUT                  */
     putBond: async (req, res, next) => {

@@ -49,6 +49,18 @@ module.exports = {
             });
         });
     },
+    updateBondDescription: (bond) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Bono SET descripcion_bono=? WHERE tipo_bono=?`, 
+            [bond.descripcion_bono, bond.tipo_bono], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableBond: (id, disableBond) => {
         return new Promise((resolve, reject) => {

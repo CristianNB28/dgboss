@@ -9,6 +9,8 @@ const insuredController = require('../controllers/insuredController');
 const policyController = require('../controllers/policyController');
 const bondController = require('../controllers/bondController');
 const hedgeController = require('../controllers/hedgeController');
+const vehicleController = require('../controllers/vehicleController');
+const receiptController = require('../controllers/receiptController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -54,6 +56,11 @@ router.get('/edit-insured/:id', requireAuth, insuredController.putInsured);
 router.post('/update-insured', requireAuth, insuredController.updateInsured);
 // Rutas de Pólizas
 router.get('/add-vehicle-policy', requireAuth, policyController.getVehiclePolicyForm);
+router.post('/add-policy', requireAuth, policyController.postPolicyForm);
+router.post('/add-vehicle', requireAuth, vehicleController.postVehicleForm);
+router.post('/add-hedge', requireAuth, hedgeController.postPolicyHedgeForm);
+router.post('/add-bond', requireAuth, bondController.postPolicyBondForm);
+router.post('/add-receipt', requireAuth, receiptController.postReceiptForm);
 // Rutas de Bonos
 router.get('/add-bond', requireAuth, bondController.getBondForm);
 router.post('/add-bond', requireAuth, bondController.postBondForm);

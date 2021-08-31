@@ -1,4 +1,5 @@
-const hedgeModel = require('../models/hedge')
+const hedgeModel = require('../models/hedge');
+const policyHedgeModel = require('../models/policy_hedge');
 
 module.exports = {
 /*                  GET                  */
@@ -27,6 +28,10 @@ module.exports = {
             ruta: 'sistema',
             name: req.session.name
         });
+    },
+    postPolicyHedgeForm: async (req, res) => {
+        await policyHedgeModel.postPolicyHedgeForm(req.body.descripcion_cobertura);
+        res.redirect('/sistema/add-vehicle-policy');
     },
 /*                  PUT                  */
     putHedge: async (req, res, next) => {

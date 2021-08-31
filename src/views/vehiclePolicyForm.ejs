@@ -29,7 +29,7 @@
                     <div id="form" class="wizard-big">
                         <h1><i class="fa fa-window-maximize"></i> Póliza</h1>
                         <fieldset>
-                            <form action="" method="POST">
+                            <form action="/sistema/add-policy" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -78,7 +78,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Correo Tomador</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
+                                                        type="email"
                                                         name="correo_tomador"
                                                         id="correo_tomador"
                                                         placeholder="Correo *" 
@@ -92,7 +92,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Correo Asegurado</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
+                                                        type="email"
                                                         name="correo_asegurado"
                                                         id="correo_asegurado"
                                                         placeholder="Correo *" 
@@ -131,6 +131,7 @@
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="number"
+                                                        step="0.01"
                                                         name="monto_prima"
                                                         id="monto_prima"
                                                         placeholder="Prima *" 
@@ -145,7 +146,7 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="ramo_poliza">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value="rcv">Responsabilidad Civil de Vehículo</option>
+                                                        <option value="responsabilidad civil de vehículo">Responsabilidad Civil de Vehículo</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -154,7 +155,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Producto</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_producto">
-                                                        <option selected value="0">Seleccione *</option>
+                                                        <option selected value="">Seleccione</option>
                                                         <option value="auto">Auto</option>
                                                     </select>
                                                 </div>
@@ -163,8 +164,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_producto">
-                                                        <option selected value="0">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_grupo">
+                                                        <option selected value="">Seleccione</option>
                                                         <option value="otro">Otro</option>
                                                     </select>
                                                 </div>
@@ -176,7 +177,8 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Tomador viejo</label>
                                                 <div class="col-sm-9">
-                                                    <div><label> <input type="checkbox" name="productor"> ¿Asegurado mismo tomador?</label></div>
+                                                    <div><label><input type="checkbox" name="tomador" id="tomador"> 
+                                                                ¿Asegurado mismo tomador?</label></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -185,7 +187,9 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="nombre_tomador">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
+                                                        <% insureds.forEach((insured) => { %>
+                                                            <option value="<%= insured.nombre_asegurado %>"><%= insured.nombre_asegurado %></option>
+                                                        <% }); %>
                                                     </select>
                                                 </div>
                                             </div>
@@ -208,7 +212,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Verificar</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
+                                                        type="email"
                                                         name="correo_verificar"
                                                         id="correo_verificar"
                                                         placeholder="Verificar Correo *" 
@@ -225,9 +229,8 @@
                                                         type="number"
                                                         name="deducible_poliza"
                                                         id="deducible_poliza"
-                                                        placeholder="Deducible *" 
+                                                        placeholder="Deducible" 
                                                         class="form-control"
-                                                        required
                                                     >
                                                 </div>
                                             </div>
@@ -260,7 +263,9 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="nombre_aseguradora">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
+                                                        <% insurers.forEach((insurer) => { %>
+                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                                        <% }); %>
                                                     </select>
                                                 </div>
                                             </div>
@@ -270,7 +275,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Corporativo</label>
                                                     <div class="col-sm-9">
-                                                        <div><label> <input type="checkbox" name="productor"> ¿Corporativo?</label></div>
+                                                        <div><label> <input type="checkbox" name="corporativo" id="corporativo"> ¿Corporativo?</label></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -279,7 +284,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_canal">
-                                                        <option selected value="0">Seleccione *</option>
+                                                        <option selected value="0">Seleccione</option>
                                                         <option value="whatsapp">WhatsApp</option>
                                                         <option value="redes sociales">Redes Sociales</option>
                                                     </select>
@@ -299,7 +304,7 @@
                         </fieldset>
                         <h1><i class="fa fa-automobile"></i> Vehículo</h1>
                         <fieldset>
-                            <form action="" method="POST">
+                            <form action="/sistema/add-vehicle" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -387,7 +392,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
+                                                        type="number"
                                                         name="capacidad_carga"
                                                         id="capacidad_carga"
                                                         placeholder="Capacidad" 
@@ -414,10 +419,16 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Año</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="year_vehiculo">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
-                                                    </select>
+                                                    <input 
+                                                        type="number" 
+                                                        min="1900" 
+                                                        max="2099" 
+                                                        step="1" 
+                                                        value="2021"
+                                                        name="year_vehiculo"
+                                                        id="year_vehiculo" 
+                                                        class="form-control"
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -426,7 +437,7 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="modelo_vehiculo">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
+                                                        <option value="ys250">YS250</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -521,14 +532,16 @@
                         </fieldset>
                         <h1><i class="fa fa-shield"></i> Coberturas</h1>
                         <fieldset>
-                            <form action="" method="post">
+                            <form action="/sistema/add-hedge" method="post">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-2 col-form-label">Coberturas</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="descripcion_cobertura">
                                                     <option selected value="0">Seleccione *</option>
-                                                    <option value=""></option>
+                                                    <% hedges.forEach((hedge) => { %>
+                                                        <option value="<%= hedge.descripcion_cobertura %>"><%= hedge.descripcion_cobertura %></option>
+                                                    <% }); %>
                                                 </select>
                                             </div>
                                         </div>
@@ -545,7 +558,7 @@
                         </fieldset>
                         <h1><i class="fa fa-money"></i> Bonos</h1>
                         <fieldset>
-                            <form action="" method="post">
+                            <form action="/sistema/add-bond" method="post">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -553,7 +566,9 @@
                                                 <div class="col-sm-10">
                                                     <select class="form-control" name="tipo_bono">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
+                                                        <% bonds.forEach((bond) => { %>
+                                                            <option value="<%= bond.tipo_bono %>"><%= bond.tipo_bono %></option>
+                                                        <% }); %>
                                                     </select>
                                                 </div>
                                             </div>
@@ -586,17 +601,17 @@
                         </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibos</h1>
                         <fieldset>
-                            <form action="" method="post">
+                            <form action="/sistema/add-receipt" method="post">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="number"
                                                         name="numero_recibo"
                                                         id="numero_recibo"
-                                                        placeholder="Número *" 
+                                                        placeholder="Número de Recibo *" 
                                                         class="form-control"
                                                         required
                                                     >
@@ -620,7 +635,8 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number" 
+                                                        type="number"
+                                                        step="0.01" 
                                                         name="monto_prima_recibo"
                                                         id="monto_prima_recibo"
                                                         placeholder="Monto *" 
@@ -635,9 +651,9 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_bono">
+                                                    <select class="form-control" name="tipo_recibo">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value=""></option>
+                                                        <option value="emisión">Emisión</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -659,7 +675,8 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number" 
+                                                        type="number"
+                                                        step="0.01" 
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
                                                         placeholder="Monto comisión *" 

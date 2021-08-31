@@ -1,0 +1,23 @@
+const vehicleModel = require('../models/vehicle');
+const polAsegAseguradoVehiModel = require('../models/pol_aseg_asegurado_vehi');
+
+module.exports = {
+/*                  GET                  */
+/*                 POST                  */
+    postVehicleForm: async (req, res) => {
+        let cedula_conductor = '';
+        let rif_conductor = '';
+        let year_vehicle = new Date(req.body.year_vehiculo)
+        year_vehicle = year_vehicle.getUTCFullYear();
+        if (((req.body.id_rif_conductor.startsWith('J')) || (req.body.id_rif_conductor.startsWith('G')) || (req.body.id_rif_conductor.startsWith('V')))) {
+            rif_conductor = req.body.id_rif_conductor;
+        } else {
+            cedula_conductor = req.body.id_rif_conductor;
+        }
+        let vehicle = await vehicleModel.postVehicleForm(cedula_conductor, rif_conductor, year_vehicle, req.body);
+        await polAsegAseguradoVehiModel.postPolAsegAseguradoVehi(vehicle.insertId);
+        res.redirect('/sistema/add-vehicle-policy');
+    }
+/*                  PUT                  */
+/*               DELETE                  */
+}
