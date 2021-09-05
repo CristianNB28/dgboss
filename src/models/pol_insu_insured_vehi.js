@@ -3,7 +3,7 @@ const db = require('../../config/database');
 module.exports = {
 /*                  GET                  */
 /*                  POST                 */
-    postPolAsegAseguradoVehi: async (vehicleId) => {
+    postPolInsuInsuredVehi: async (vehicleId) => {
         let policyId = await new Promise((resolve, reject) => {
             db.query(`SELECT id_poliza 
                     FROM Poliza 

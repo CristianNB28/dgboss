@@ -58,9 +58,13 @@ router.post('/update-insured', requireAuth, insuredController.updateInsured);
 router.get('/add-vehicle-policy', requireAuth, policyController.getVehiclePolicyForm);
 router.post('/add-policy', requireAuth, policyController.postPolicyForm);
 router.post('/add-vehicle', requireAuth, vehicleController.postVehicleForm);
-router.post('/add-hedge', requireAuth, hedgeController.postPolicyHedgeForm);
-router.post('/add-bond', requireAuth, bondController.postPolicyBondForm);
+router.post('/add-hedge-policy', requireAuth, hedgeController.postPolicyHedgeForm);
+router.post('/add-bond-policy', requireAuth, bondController.postPolicyBondForm);
 router.post('/add-receipt', requireAuth, receiptController.postReceiptForm);
+router.get('/policies', requireAuth, policyController.getPolicies);
+router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
+router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
+router.post('/update-policy', requireAuth, policyController.updatePolicy);
 // Rutas de Bonos
 router.get('/add-bond', requireAuth, bondController.getBondForm);
 router.post('/add-bond', requireAuth, bondController.postBondForm);

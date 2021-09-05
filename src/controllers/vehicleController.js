@@ -1,5 +1,5 @@
 const vehicleModel = require('../models/vehicle');
-const polAsegAseguradoVehiModel = require('../models/pol_aseg_asegurado_vehi');
+const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 
 module.exports = {
 /*                  GET                  */
@@ -15,7 +15,7 @@ module.exports = {
             cedula_conductor = req.body.id_rif_conductor;
         }
         let vehicle = await vehicleModel.postVehicleForm(cedula_conductor, rif_conductor, year_vehicle, req.body);
-        await polAsegAseguradoVehiModel.postPolAsegAseguradoVehi(vehicle.insertId);
+        await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
         res.redirect('/sistema/add-vehicle-policy');
     }
 /*                  PUT                  */
