@@ -1,4 +1,4 @@
-const companyModel = require('../models/company');
+const companyModel = require('../models/own_agent');
 const insuredModel = require('../models/insured');
 
 module.exports = {

@@ -1,0 +1,144 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Datos</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Datos</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Editar Agente Propio</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="POST" action="/sistema/update-own-agent">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <% if (ownAgent.rif_agente_propio === '') { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="cedula_agente_propio"
+                                                    id="cedula_agente_propio"
+                                                    value="<%= ownAgent.cedula_agente_propio %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="rif_agente_propio"
+                                                    id="rif_agente_propio"
+                                                    value="<%= ownAgent.rif_agente_propio %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="nombre_agente_propio"
+                                                id="nombre_agente_propio" 
+                                                value="<%= ownAgent.nombre_agente_propio %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="apellido_agente_propio"
+                                                id="apellido_agente_propio" 
+                                                value="<%= ownAgent.apellido_agente_propio %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Celular</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="celular_agente_propio"
+                                                id="celular_agente_propio" 
+                                                value="<%= ownAgent.celular_agente_propio %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Correo</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="email"
+                                                name="correo_agente_propio"
+                                                id="correo_agente_propio" 
+                                                value="<%= ownAgent.correo_agente_propio %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="hidden"
+                                                name="id_agente_propio"
+                                                id="id_agente_propio"  
+                                                value="<%= ownAgent.id_agente_propio %>" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a href="/sistema/own-agents" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

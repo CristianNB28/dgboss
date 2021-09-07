@@ -1,0 +1,144 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Datos</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Datos</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Editar Ejecutivo</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="POST" action="/sistema/update-executive">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <% if (executive.rif_ejecutivo === '') { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="cedula_ejecutivo"
+                                                    id="cedula_ejecutivo"
+                                                    value="<%= executive.cedula_ejecutivo %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-10">
+                                                <input 
+                                                    type="text"
+                                                    name="rif_ejecutivo"
+                                                    id="rif_ejecutivo"
+                                                    value="<%= executive.rif_ejecutivo %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="nombre_ejecutivo"
+                                                id="nombre_ejecutivo" 
+                                                value="<%= executive.nombre_ejecutivo %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="apellido_ejecutivo"
+                                                id="apellido_ejecutivo" 
+                                                value="<%= executive.apellido_ejecutivo %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Celular</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="celular_ejecutivo"
+                                                id="celular_ejecutivo" 
+                                                value="<%= executive.celular_ejecutivo %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Correo</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="email"
+                                                name="correo_ejecutivo"
+                                                id="correo_ejecutivo" 
+                                                value="<%= executive.correo_ejecutivo %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="hidden"
+                                                name="id_ejecutivo"
+                                                id="id_ejecutivo"  
+                                                value="<%= executive.id_ejecutivo %>" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a href="/sistema/executives" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>
