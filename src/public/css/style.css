@@ -9642,3 +9642,8 @@ body.md-skin {
   font-size: 10px;
   text-align: center;
 }
+
+.active-input-1,
+.active-input-2 {
+  display: none;
+}

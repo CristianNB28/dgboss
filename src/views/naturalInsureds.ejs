@@ -11,7 +11,7 @@
                 <a>Asegurados</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Consulta de Asegurados</strong>
+                <strong>Consulta de Asegurados Pólizas Persona Natural</strong>
             </li>
         </ol>
     </div>
@@ -21,21 +21,22 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Asegurados</h5>
+                    <h5>Asegurados Pólizas Persona Natural</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table 
                             class="table table-striped table-bordered table-hover"
-                            id="tablaAsegurados" 
+                            id="tablaAseguradosNaturales" 
                         >
                         <thead>
                         <tr>
                             <th>Cédula</th>
                             <th>Rif</th>
                             <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
                             <th>Celular</th>
-                            <th>Correo Principal</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -48,8 +49,9 @@
                             <th>Cédula</th>
                             <th>Rif</th>
                             <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
                             <th>Celular</th>
-                            <th>Correo Principal</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -124,24 +126,25 @@
 <!-- Page-Level Scripts -->
 <script>
 var lista = <%- JSON.stringify(data) %>;
-var tablaAsegurado = null;
+var tablaAseguradoNatural = null;
 $(document).ready(function(){
-    tablaAsegurado = $('#tablaAsegurados').DataTable({
+    tablaAseguradoNatural = $('#tablaAseguradosNaturales').DataTable({
         pageLength: 25,
         responsive: true,
         dom: '<"html5buttons"B>lTfgitp',
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "cedula_asegurado"},
-            {"data": "rif_asegurado"},
-            {"data": "nombre_asegurado"},
-            {"data": "telefono_asegurado"},
-            {"data": "correo_asegurado"},
+            {"data": "cedula_asegurado_per_nat"},
+            {"data": "rif_asegurado_per_nat"},
+            {"data": "nombre_asegurado_per_nat"},
+            {"data": "apellido_asegurado_per_nat"},
+            {"data": "correo_asegurado_per_nat"},
+            {"data": "celular_emergencia_per_nat"},
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-insured/${row.id_asegurado}">
+                        return `<form class="form-inline" method="get" action="/sistema/edit-natural-insured/${row.id_asegurado_per_nat}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
                 }
@@ -149,7 +152,7 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-insured/${row.id_asegurado}">
+                        return `<form class="form-inline" method="post" action="/sistema/remove-natural-insured/${row.id_asegurado_per_nat}">
                                     <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
                                 </form>`;
                 }
@@ -168,8 +171,8 @@ $(document).ready(function(){
             }
         ]
     });
-    tablaAsegurado.rows.add(lista);
-    tablaAsegurado.draw();
+    tablaAseguradoNatural.rows.add(lista);
+    tablaAseguradoNatural.draw();
 });
 </script>
 

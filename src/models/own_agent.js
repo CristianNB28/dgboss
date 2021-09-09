@@ -24,6 +24,18 @@ module.exports = {
             });
         });
     },
+    getOwnAgentId: (nombresAgentePropio, apellidosAgentePropio) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT id_agente_propio FROM Agente_Propio WHERE nombre_agente_propio=? AND apellido_agente_propio=?', 
+            [nombresAgentePropio, apellidosAgentePropio],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postOwnAgentForm: (cedulaAgentePropio, rifAgentePropio, ownAgent) => {
         if (cedulaAgentePropio === '') {

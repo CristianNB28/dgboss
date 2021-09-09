@@ -1,0 +1,180 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Asegurados</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Asegurados</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Agregar Póliza Persona Jurídica</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="POST" action="/sistema/add-legal-insured">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Rif</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="rif_asegurado_per_jur"
+                                                id="rif_asegurado_per_jur"
+                                                placeholder="Rif *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Razón Social</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="razon_social_per_jur"
+                                                id="razon_social_per_jur" 
+                                                placeholder="Razón Social *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono Fijo</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="telefono_asegurado_per_jur"
+                                                id="telefono_asegurado_per_jur" 
+                                                placeholder="Telefono Fijo *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono Opcional</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="telefono_opcional_per_jur"
+                                                id="telefono_opcional_per_jur" 
+                                                placeholder="Telefono Opcional" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="nombre_com_agente_propio">
+                                                <option selected value="">Seleccione *</option>
+                                                <% ownAgents.forEach((ownAgent) => { %>
+                                                    <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="celular_asegurado_per_jur"
+                                                id="celular_asegurado_per_jur" 
+                                                placeholder="Celular *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="active-input-1">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Persona Contacto</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_contacto_per_jur"
+                                                    id="nombre_contacto_per_jur" 
+                                                    placeholder="Persona Contacto de Empresa *" 
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                    </div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="email" 
+                                                name="correo_asegurado_per_nat"
+                                                id="correo_asegurado_per_nat"
+                                                placeholder="Email *"
+                                                class="form-control" 
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="active-input-2">
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Email opcional</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="correo_opcional_per_jur"
+                                                    id="correo_opcional_per_jur" 
+                                                    placeholder="Email opcional" 
+                                                    class="form-control"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="hidden" 
+                                                placeholder="" 
+                                                class="form-control"
+                                                disabled
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a href="/sistema" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

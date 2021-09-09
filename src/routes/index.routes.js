@@ -54,12 +54,18 @@ router.post('/remove-executive/:id', requireAuth, dataController.disableExecutiv
 router.get('/edit-executive/:id', requireAuth, dataController.putExecutive);
 router.post('/update-executive', requireAuth, dataController.updateExecutive);
 // Rutas de Asegurados
-router.get('/add-insured', requireAuth, insuredController.getInsuredForm);
-router.post('/add-insured', requireAuth, insuredController.postInsuredForm);
-router.get('/insureds', requireAuth, insuredController.getInsureds);
-router.post('/remove-insured/:id', requireAuth, insuredController.disableInsured);
-router.get('/edit-insured/:id', requireAuth, insuredController.putInsured);
-router.post('/update-insured', requireAuth, insuredController.updateInsured);
+router.get('/add-natural-insured', requireAuth, insuredController.getNaturalInsuredForm);
+router.post('/add-natural-insured', requireAuth, insuredController.postNaturalInsuredForm);
+router.get('/add-legal-insured', requireAuth, insuredController.getLegalInsuredForm);
+router.post('/add-legal-insured', requireAuth, insuredController.postLegalInsuredForm);
+router.get('/natural-insureds', requireAuth, insuredController.getNaturalInsureds);
+router.get('/legal-insureds', requireAuth, insuredController.getLegalInsureds);
+router.post('/remove-natural-insured/:id', requireAuth, insuredController.disableNaturalInsured);
+router.post('/remove-legal-insured/:id', requireAuth, insuredController.disableLegalInsured);
+router.get('/edit-natural-insured/:id', requireAuth, insuredController.putNaturalInsured);
+router.post('/update-natural-insured', requireAuth, insuredController.updateNaturalInsured);
+router.get('/edit-legal-insured/:id', requireAuth, insuredController.putLegalInsured);
+router.post('/update-legal-insured', requireAuth, insuredController.updateLegalInsured);
 // Rutas de Pólizas
 router.get('/add-vehicle-policy', requireAuth, policyController.getVehiclePolicyForm);
 router.post('/add-policy', requireAuth, policyController.postPolicyForm);

@@ -2,9 +2,11 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
-    getInsureds: () => {
+    getNaturalInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_asegurado, cedula_asegurado, rif_asegurado, nombre_asegurado, telefono_asegurado, correo_asegurado FROM Asegurado WHERE deshabilitar_asegurado=0', 
+            db.query(`SELECT id_asegurado_per_nat, cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, correo_asegurado_per_nat, celular_emergencia_per_nat 
+                    FROM Asegurado_Persona_Natural 
+                    WHERE deshabilitar_asegurado_per_nat=0`, 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -13,10 +15,35 @@ module.exports = {
             });
         });
     },
-    getInsured: (idInsured) => {
+    getLegalInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_asegurado, cedula_asegurado, rif_asegurado, nombre_asegurado, telefono_asegurado, correo_asegurado FROM Asegurado WHERE id_asegurado=?',
-            [idInsured],
+            db.query(`SELECT id_asegurado_per_jur, rif_asegurado_per_jur, razon_social_per_jur, telefono_asegurado_per_jur, celular_asegurado_per_jur, correo_asegurado_per_jur 
+                    FROM Asegurado_Persona_Juridica 
+                    WHERE deshabilitar_asegurado_per_jur=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNaturalInsured: (idNaturalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM Asegurado_Persona_Natural WHERE id_asegurado_per_nat=?',
+            [idNaturalInsured],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getLegalInsured: (idLegalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM Asegurado_Persona_Juridica WHERE id_asegurado_per_jur=?',
+            [idLegalInsured],
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -26,61 +53,78 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postInsuredForm: (insured, idEmpresa) => {
-        if ((insured.id_rif_asegurado.startsWith('J')) || (insured.id_rif_asegurado.startsWith('V')) || (insured.id_rif_asegurado.startsWith('G'))) {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Asegurado (rif_asegurado, nombre_asegurado, telefono_asegurado, correo_asegurado, empresa_id)
-                        VALUES (?, ?, ?, ?, ?)`, [insured.id_rif_asegurado, insured.nombre_asegurado, insured.telefono_asegurado, insured.correo_asegurado, idEmpresa], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+    postNaturalInsuredForm: (cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, naturalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Asegurado_Persona_Natural (cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, telefono_asegurado_per_nat, correo_asegurado_per_nat, celular_emergencia_per_nat, agente_propio_id)
+                    VALUES (?, ?, ?, ?, ?, ? ,?, ?)`, 
+            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_emergencia_per_nat, idAgentePropio], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Asegurado (cedula_asegurado, nombre_asegurado, telefono_asegurado, correo_asegurado, empresa_id)
-                        VALUES (?, ?, ?, ?, ?)`, [insured.id_rif_asegurado, insured.nombre_asegurado, insured.telefono_asegurado, insured.correo_asegurado, idEmpresa], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+        });
+    },
+    postLegalInsuredForm: (idAgentePropio, legalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Asegurado_Persona_Juridica (rif_asegurado_per_jur, razon_social_per_jur, telefono_asegurado_per_jur, telefono_opcional_per_jur, celular_asegurado_per_jur, nombre_contacto_per_jur, correo_asegurado_per_jur, correo_opcional_per_jur, agente_propio_id)
+                    VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?)`, 
+            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, idAgentePropio], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        }
+        });
     },
 /*                  PUT                  */
-    updateInsured: (cedulaAsegurado, rifAsegurado, insured) => {
-        if (cedulaAsegurado === '') {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Asegurado SET cedula_asegurado=?, rif_asegurado=?, nombre_asegurado=?, telefono_asegurado=?, correo_asegurado=? WHERE id_asegurado=?`, 
-                [cedulaAsegurado, rifAsegurado, insured.nombre_asegurado, insured.telefono_asegurado, insured.correo_asegurado, insured.id_asegurado], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+    updateNaturalInsured: (cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, naturalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Natural 
+                    SET cedula_asegurado_per_nat=?, rif_asegurado_per_nat=?, nombre_asegurado_per_nat=?, apellido_asegurado_per_nat=?, telefono_asegurado_per_nat=?, correo_asegurado_per_nat=?, celular_emergencia_per_nat=?, agente_propio_id=?
+                    WHERE id_asegurado_per_nat=?`, 
+            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_emergencia_per_nat, idAgentePropio, naturalInsured.id_asegurado_per_nat], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Asegurado SET cedula_asegurado=?, rif_asegurado=?, nombre_asegurado=?, telefono_asegurado=?, correo_asegurado=? WHERE id_asegurado=?`, 
-                [cedulaAsegurado, rifAsegurado, insured.nombre_asegurado, insured.telefono_asegurado, insured.correo_asegurado, insured.id_asegurado], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+        });
+    },
+    updateLegalInsured: (idAgentePropio, legalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Juridica 
+                    SET rif_asegurado_per_jur=?, razon_social_per_jur=?, telefono_asegurado_per_jur=?, telefono_opcional_per_jur=?, celular_asegurado_per_jur=?, nombre_contacto_per_jur=?, correo_asegurado_per_jur=?, correo_opcional_per_jur=?, agente_propio_id=?
+                    WHERE id_asegurado_per_jur=?`, 
+            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, idAgentePropio, legalInsured.id_asegurado_per_jur], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        }
+        });
     },
 /*               DELETE                  */
-    disableInsured: (id, disableInsured) => {
+    disableNaturalInsured: (id, disableNaturalInsured) => {
         return new Promise((resolve, reject) => {
-            db.query(`UPDATE Asegurado SET deshabilitar_asegurado=? WHERE id_asegurado=?`, [disableInsured, id], 
+            db.query(`UPDATE Asegurado_Persona_Natural SET deshabilitar_asegurado_per_nat=? WHERE id_asegurado_per_nat=?`, 
+            [disableNaturalInsured, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    disableLegalInsured: (id, disableLegalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Juridica SET deshabilitar_asegurado_per_jur=? WHERE id_asegurado_per_jur=?`, 
+            [disableLegalInsured, id], 
             (error, rows) => {
                 if (error) {
                     reject(error)
