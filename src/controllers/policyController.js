@@ -9,14 +9,10 @@ module.exports = {
 /*                  GET                  */
     getVehiclePolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
-        let resultsInsureds = await insuredModel.getInsureds();
-        let resultsHedges = await hedgeModel.getHedges();
-        let resultsBonds = await bondModel.getBonds();
+        //let resultsInsureds = await insuredModel.getInsureds();
         res.render('vehiclePolicyForm', {
             insurers: resultsInsurers,
-            insureds: resultsInsureds,
-            hedges: resultsHedges,
-            bonds: resultsBonds,
+            //insureds: resultsInsureds,
             name: req.session.name
         });
     },

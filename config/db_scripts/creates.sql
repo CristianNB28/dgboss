@@ -35,6 +35,8 @@ CREATE TABLE Vehiculo(
     marca_vehiculo VARCHAR(255) NOT NULL,
     modelo_vehiculo VARCHAR(255) NOT NULL,
     version_vehiculo VARCHAR(255) NOT NULL,
+    tipo_transmision_vehiculo VARCHAR(255) NOT NULL,
+    blindaje_boolean_vehiculo BOOLEAN NOT NULL,
     tipo_vehiculo VARCHAR(255) NOT NULL,
     descripcion_vehiculo VARCHAR(255),
     suma_asegurada INT,
@@ -54,15 +56,14 @@ CREATE TABLE Poliza(
     numero_poliza VARCHAR(255) NOT NULL,
     ramo_poliza VARCHAR(255) NOT NULL,
     tomador_viejo BOOLEAN NOT NULL,
-    tipo_negocio VARCHAR(255),
     tipo_poliza VARCHAR(255),
     fecha_desde DATE NOT NULL,
     fecha_hasta DATE NOT NULL,
     tipo_moneda VARCHAR(255) NOT NULL,
-    tipo_movimiento VARCHAR(255) NOT NULL,
+    tasa_poliza DECIMAL(10,4) NOT NULL,
     monto_prima DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255),
-    tipo_producto VARCHAR(255),
+    tipo_producto_poliza VARCHAR(255),
     tipo_canal VARCHAR(255),
     deducible_poliza INT,
     comision_poliza INT NOT NULL,
@@ -79,6 +80,7 @@ CREATE TABLE Ejecutivo(
     apellido_ejecutivo VARCHAR(255) NOT NULL,
     celular_ejecutivo VARCHAR(255) NOT NULL,
     correo_ejecutivo VARCHAR(255) NOT NULL,
+    direccion_ejecutivo VARCHAR(500) NOT NULL,
     deshabilitar_ejecutivo BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -99,6 +101,7 @@ CREATE TABLE Agente_Propio(
     apellido_agente_propio VARCHAR(255) NOT NULL,
     celular_agente_propio VARCHAR(255) NOT NULL,
     correo_agente_propio VARCHAR(255) NOT NULL,
+    direccion_agente_propio VARCHAR(500) NOT NULL,
     deshabilitar_agente_propio BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -106,8 +109,11 @@ CREATE TABLE Recibo(
     id_recibo INT PRIMARY KEY AUTO_INCREMENT,
     numero_recibo INT NOT NULL,
     tipo_recibo VARCHAR(255) NOT NULL,
-    fecha_vigencia_desde DATE NOT NULL,
-    fecha_vigencia_hasta DATE NOT NULL,
+    fecha_desde_recibo DATE NOT NULL,
+    fecha_hasta_recibo DATE NOT NULL,
+    fraccionamiento_boolean_recibo BOOLEAN NOT NULL,
+    tipo_fraccionamiento_recibo VARCHAR(255) NOT NULL,
+    forma_pago_recibo VARCHAR(255) NOT NULL, 
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
@@ -124,6 +130,7 @@ CREATE TABLE Asegurado_Persona_Natural(
     telefono_asegurado_per_nat VARCHAR(255),
     correo_asegurado_per_nat VARCHAR(255) NOT NULL,
     celular_emergencia_per_nat VARCHAR(255) NOT NULL,
+    direccion_asegurado_per_nat VARCHAR(500) NOT NULL,
     deshabilitar_asegurado_per_nat BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
@@ -139,6 +146,7 @@ CREATE TABLE Asegurado_Persona_Juridica(
     nombre_contacto_per_jur VARCHAR(255),
     correo_asegurado_per_jur VARCHAR(255) NOT NULL,
     correo_opcional_per_jur VARCHAR(255) NOT NULL,
+    direccion_asegurado_per_jur VARCHAR(500) NOT NULL,
     deshabilitar_asegurado_per_jur BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
@@ -182,6 +190,53 @@ CREATE TABLE Siniestro(
     descripcion_siniestro VARCHAR(255) NOT NULL,
     observacion_siniestro VARCHAR(255) NOT NULL,
     deshabilitar_siniestro BOOLEAN NOT NULL DEFAULT FALSE,
+    paa_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+);
+
+CREATE TABLE Reembolso(
+    id_reembolso INT PRIMARY KEY AUTO_INCREMENT,
+    patologia_reembolso VARCHAR(255) NOT NULL,
+    fecha_ocurrencia_reembolso DATE NOT NULL,
+    fecha_notificacion_reembolso DATE NOT NULL,
+    monto_reembolso INT NOT NULL,
+    deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
+    paa_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+);
+
+CREATE TABLE AMP(
+    id_amp INT PRIMARY KEY AUTO_INCREMENT,
+    patologia_amp VARCHAR(255) NOT NULL,
+    clinica_amp VARCHAR(255) NOT NULL,
+    fecha_ocurrencia_amp DATE NOT NULL,
+    fecha_notificacion_amp DATE NOT NULL,
+    monto_amp INT NOT NULL,
+    deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
+    paa_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+);
+
+CREATE TABLE Emergencia(
+    id_emergencia INT PRIMARY KEY AUTO_INCREMENT,
+    patologia_emergencia VARCHAR(255) NOT NULL,
+    clinica_emergencia VARCHAR(255) NOT NULL,
+    fecha_ocurrencia_emergencia DATE NOT NULL,
+    fecha_notificacion_emergencia DATE NOT NULL,
+    monto_emergencia INT NOT NULL,
+    deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
+    paa_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+);
+
+CREATE TABLE Carta_Aval(
+    id_carta_aval INT PRIMARY KEY AUTO_INCREMENT,
+    patologia_carta_aval VARCHAR(255) NOT NULL,
+    clinica_carta_aval VARCHAR(255) NOT NULL,
+    fecha_ocurrencia_carta_aval DATE NOT NULL,
+    fecha_notificacion_carta_aval DATE NOT NULL,
+    monto_carta_aval INT NOT NULL,
+    deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
 );

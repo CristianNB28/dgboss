@@ -27,61 +27,32 @@ module.exports = {
     },
 /*                  POST                 */
     postExecutiveForm: (cedulaEjecutivo, rifEjecutivo, executive) => {
-        if (cedulaEjecutivo === '') {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Ejecutivo (cedula_ejecutivo, rif_ejecutivo, nombre_ejecutivo, apellido_ejecutivo, celular_ejecutivo, correo_ejecutivo)
-                        VALUES (?, ?, ?, ?, ?, ?)`, 
-                [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Ejecutivo (cedula_ejecutivo, rif_ejecutivo, nombre_ejecutivo, apellido_ejecutivo, celular_ejecutivo, correo_ejecutivo, direccion_ejecutivo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+            [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Ejecutivo (cedula_ejecutivo, rif_ejecutivo, nombre_ejecutivo, apellido_ejecutivo, celular_ejecutivo, correo_ejecutivo)
-                        VALUES (?, ?, ?, ?, ?, ?)`, 
-                [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
-            });
-        }
+        });
     },
 /*                  PUT                  */
     updateExecutive: (cedulaEjecutivo, rifEjecutivo, executive) => {
-        if (cedulaEjecutivo === '') {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Ejecutivo 
-                        SET cedula_ejecutivo=?, rif_ejecutivo=?, nombre_ejecutivo=?, apellido_ejecutivo=?, celular_ejecutivo=?, correo_ejecutivo=?       
-                        WHERE id_ejecutivo=?`, 
-                [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.id_ejecutivo], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Ejecutivo 
+                    SET cedula_ejecutivo=?, rif_ejecutivo=?, nombre_ejecutivo=?, apellido_ejecutivo=?, celular_ejecutivo=?, correo_ejecutivo=?, direccion_ejecutivo=?       
+                    WHERE id_ejecutivo=?`, 
+            [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo, executive.id_ejecutivo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Ejecutivo 
-                        SET cedula_ejecutivo=?, rif_ejecutivo=?, nombre_ejecutivo=?, apellido_ejecutivo=?, celular_ejecutivo=?, correo_ejecutivo=?       
-                        WHERE id_ejecutivo=?`, 
-                [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.id_ejecutivo], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
-            });
-        }
+        });
     },
 /*               DELETE                  */
     disableExecutive: (id, disableExecutive) => {

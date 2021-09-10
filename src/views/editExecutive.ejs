@@ -79,7 +79,8 @@
                                                 required
                                             >
                                         </div>
-                                    </div>                                    
+                                    </div>
+                                    </br>                                    
                                 </div>
                             </div>
                         </div>
@@ -111,20 +112,29 @@
                                             >
                                         </div>
                                     </div>
-                                    </br>
-                                    </br>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
                                         <div class="col-sm-10">
-                                            <input 
-                                                type="hidden"
-                                                name="id_ejecutivo"
-                                                id="id_ejecutivo"  
-                                                value="<%= executive.id_ejecutivo %>" 
+                                            <textarea 
+                                                name="direccion_ejecutivo"
+                                                id="direccion_ejecutivo" 
                                                 class="form-control"
-                                            >
+                                                required
+                                            ><%= executive.direccion_ejecutivo %></textarea>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input 
+                                    type="hidden"
+                                    name="id_ejecutivo"
+                                    id="id_ejecutivo"  
+                                    value="<%= executive.id_ejecutivo %>" 
+                                    class="form-control"
+                                >
                             </div>
                         </div>
                     </div>

@@ -145,8 +145,8 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ramo</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="ramo_poliza">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <option value="responsabilidad civil de vehículo">Responsabilidad Civil de Vehículo</option>
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Automovil">Automovil</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -156,18 +156,23 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_producto">
                                                         <option selected value="">Seleccione</option>
-                                                        <option value="auto">Auto</option>
+                                                        <option value="Perdida Total">Perdida Total</option>
+                                                        <option value="Cobertura">Cobertura</option>
+                                                        <option value="RCV">RCV</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Bonificación</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_grupo">
-                                                        <option selected value="">Seleccione</option>
-                                                        <option value="otro">Otro</option>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="bonificacion_poliza"
+                                                        id="bonificacion_poliza"
+                                                        placeholder="Bonificación"
+                                                        class="form-control"
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -187,9 +192,7 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="nombre_tomador">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <% insureds.forEach((insured) => { %>
-                                                            <option value="<%= insured.nombre_asegurado %>"><%= insured.nombre_asegurado %></option>
-                                                        <% }); %>
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -236,12 +239,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Movimiento</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_movimiento">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <option value="anual">Anual</option>
-                                                    </select>
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="comision_poliza"
+                                                        id="comision_poliza"
+                                                        placeholder="Comisión *"
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -271,12 +279,16 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Corporativo</label>
-                                                    <div class="col-sm-9">
-                                                        <div><label> <input type="checkbox" name="corporativo" id="corporativo"> ¿Corporativo?</label></div>
-                                                    </div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="cobertura_poliza"
+                                                        id="cobertura_poliza"
+                                                        placeholder="Cobertura *"
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -284,9 +296,10 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_canal">
-                                                        <option selected value="0">Seleccione</option>
-                                                        <option value="whatsapp">WhatsApp</option>
-                                                        <option value="redes sociales">Redes Sociales</option>
+                                                        <option selected value="">Seleccione</option>
+                                                        <option value="Venta Regular">Venta Regular</option>
+                                                        <option value="Redes Sociales">Redes Sociales</option>
+                                                        <option value="Pagina Web">Pagina Web</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -382,20 +395,7 @@
                                                         type="text"
                                                         name="serial_corroceria"
                                                         id="serial_corroceria"
-                                                        placeholder="Serial" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="capacidad_carga"
-                                                        id="capacidad_carga"
-                                                        placeholder="Capacidad" 
+                                                        placeholder="Carrocería Serial" 
                                                         class="form-control"
                                                     >
                                                 </div>
@@ -409,6 +409,19 @@
                                                         name="id_rif_conductor"
                                                         id="id_rif_conductor"
                                                         placeholder="Cédula/Rif" 
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        name="capacidad_carga"
+                                                        id="capacidad_carga"
+                                                        placeholder="Carga Capacidad" 
                                                         class="form-control"
                                                     >
                                                 </div>
@@ -494,19 +507,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Lugar Uso</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="lugar_habitual"
-                                                        id="lugar_habitual"
-                                                        placeholder="Lugar de Uso Habital" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -530,76 +530,7 @@
                                 </div>
                             </form>
                         </fieldset>
-                        <h1><i class="fa fa-shield"></i> Coberturas</h1>
-                        <fieldset>
-                            <form action="/sistema/add-hedge-policy" method="post">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Coberturas</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" name="descripcion_cobertura">
-                                                    <option selected value="0">Seleccione *</option>
-                                                    <% hedges.forEach((hedge) => { %>
-                                                        <option value="<%= hedge.descripcion_cobertura %>"><%= hedge.descripcion_cobertura %></option>
-                                                    <% }); %>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </fieldset>
-                        <h1><i class="fa fa-money"></i> Bonos</h1>
-                        <fieldset>
-                            <form action="/sistema/add-bond-policy" method="post">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-2 col-form-label">Tipo</label>
-                                                <div class="col-sm-10">
-                                                    <select class="form-control" name="tipo_bono">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <% bonds.forEach((bond) => { %>
-                                                            <option value="<%= bond.tipo_bono %>"><%= bond.tipo_bono %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-2 col-form-label">Descripción</label>
-                                                <div class="col-sm-10">
-                                                    <input 
-                                                        type="text"
-                                                        name="descripcion_bono"
-                                                        id="descripcion_bono"
-                                                        placeholder="Descripción" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </fieldset>
-                        <h1><i class="fa fa-file-text-o"></i> Recibos</h1>
+                        <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
                             <form action="/sistema/add-receipt" method="post">
                                 <div class="row">
@@ -632,6 +563,18 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Fraccionamiento</label>
+                                                <div class="col-sm-9">
+                                                    <div>
+                                                        <label><input type="checkbox" name="fraccionamiento" id="fraccionamiento"> 
+                                                                ¿Aplica Fraccionamiento?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -639,7 +582,7 @@
                                                         step="0.01" 
                                                         name="monto_prima_recibo"
                                                         id="monto_prima_recibo"
-                                                        placeholder="Monto *" 
+                                                        placeholder="Monto Prima *" 
                                                         class="form-control"
                                                         required
                                                     >
@@ -652,8 +595,9 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_recibo">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <option value="emisión">Emisión</option>
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Emisión">Emisión</option>
+                                                        <option value="Renovación">Renovación</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -668,6 +612,21 @@
                                                         class="form-control"
                                                         required
                                                     >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Forma de Pago</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_recibo">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Transferencia">Transferencia</option>
+                                                        <option value="Zelle">Zelle</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Tarjeta de debito">Tarjeta de debito</option>
+                                                        <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+                                                        <option value="Otros">Otros</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
