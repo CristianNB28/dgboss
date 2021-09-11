@@ -3,7 +3,7 @@ const db = require('../../config/database');
 module.exports = {
 /*                  GET                  */
 /*                  POST                 */
-    postReceiptForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, receipt) => {
+    postCommissionForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision) => {
         let policyId = await new Promise((resolve, reject) => {
             db.query(`SELECT id_poliza 
                     FROM Poliza 
@@ -18,9 +18,9 @@ module.exports = {
             });
         });
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, forma_pago_recibo, monto_prima_recibo, monto_comision_recibo, poliza_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.forma_pago_recibo, montoPrimaRecibo, montoComisionRecibo, policyId[0].id_poliza], 
+            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_comision, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, poliza_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, policyId[0].id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)

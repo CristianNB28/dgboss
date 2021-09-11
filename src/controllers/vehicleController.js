@@ -5,16 +5,17 @@ module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postVehicleForm: async (req, res) => {
-        let cedula_conductor = '';
-        let rif_conductor = '';
-        let year_vehicle = new Date(req.body.year_vehiculo)
-        year_vehicle = year_vehicle.getUTCFullYear();
+        let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
+        let cedulaConductor = '';
+        let rifConductor = '';
+        let yearVehicle = new Date(req.body.year_vehiculo)
+        yearVehicle = yearVehicle.getUTCFullYear();
         if (((req.body.id_rif_conductor.startsWith('J')) || (req.body.id_rif_conductor.startsWith('G')) || (req.body.id_rif_conductor.startsWith('V')))) {
-            rif_conductor = req.body.id_rif_conductor;
+            rifConductor = req.body.id_rif_conductor;
         } else {
-            cedula_conductor = req.body.id_rif_conductor;
+            cedulaConductor = req.body.id_rif_conductor;
         }
-        let vehicle = await vehicleModel.postVehicleForm(cedula_conductor, rif_conductor, year_vehicle, req.body);
+        let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, rifConductor, yearVehicle, req.body);
         await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
         res.redirect('/sistema/add-vehicle-policy');
     }

@@ -9644,6 +9644,7 @@ body.md-skin {
 }
 
 .active-input-1,
-.active-input-2 {
+.active-input-2,
+#active-select-1 {
   display: none;
 }

@@ -9,12 +9,25 @@ module.exports = {
 /*                  GET                  */
     getVehiclePolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
-        //let resultsInsureds = await insuredModel.getInsureds();
-        res.render('vehiclePolicyForm', {
-            insurers: resultsInsurers,
-            //insureds: resultsInsureds,
-            name: req.session.name
-        });
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('vehiclePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('vehiclePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
     },
     getPolicies: async (req, res) => {
         let resultsPolicies =  await policyModel.getPolicies();
@@ -42,44 +55,41 @@ module.exports = {
 /*                 POST                  */
 // Falta terminar la relacion N a N de póliza con tomador
     postPolicyForm: async (req, res) => {
-        let tomador_viejo = req.body.tomador ? 1 : 0;
-        let corporativo = req.body.corporativo ? 1 : 0;
-        let monto_prima = parseFloat(req.body.monto_prima);
+        let tomadorViejo = req.body.tomador ? 1 : 0;
+        let montoPrima = parseFloat(req.body.monto_prima);
+        let tasaPoliza = parseFloat(req.body.tasa_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
-        let fecha_poliza_desde = new Date(req.body.fecha_desde);
-        let fecha_poliza_hasta = new Date(req.body.fecha_hasta);
+        let comisionPoliza = parseFloat(req.body.comision_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
         let resultsInsurers = await insurerModel.getInsurers();
-        let resultsInsureds = await insuredModel.getInsureds();
-        let tipo_negocio = 'Auto';
-        let tipo_poliza = 'Individual';
-        let cedula_tomador = '';
-        let rif_tomador = '';
-        let cedula_asegurado = '';
-        let rif_asegurado = '';
-        let estatus_poliza = '';
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
-        let diferenciaTiempo = fecha_poliza_hasta.getTime() - fechaActual.getTime();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (((req.body.id_rif_tomador.startsWith('J')) || (req.body.id_rif_tomador.startsWith('G')) || (req.body.id_rif_tomador.startsWith('V')))) {
-            rif_tomador = req.body.id_rif_tomador;
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
-            cedula_tomador = req.body.id_rif_tomador;
-        }
-        if (((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G')) || (req.body.id_rif_asegurado.startsWith('V')))) {
-            rif_asegurado = req.body.id_rif_asegurado;
-        } else {
-            cedula_asegurado = req.body.id_rif_asegurado;
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
         }
         if (diasExpiracion > 0) {
-            estatus_poliza = 'Vigente';
+            estatusPoliza = 'Vigente';
         } else {
-            estatus_poliza = 'Anulado';
+            estatusPoliza = 'Anulado';
         }
         if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postPolicyForm(tomador_viejo, corporativo, monto_prima, deducible, fecha_poliza_desde, fecha_poliza_hasta, tipo_negocio, tipo_poliza, estatus_poliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedula_asegurado, rif_asegurado, req.body.nombre_aseguradora, policy.insertId);
+            let policy = await policyModel.postPolicyForm(tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-vehicle-policy');
         } else {
             try {
@@ -95,7 +105,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/add-vehicle-policy',
                     insurers: resultsInsurers,
-                    insureds: resultsInsureds,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
                     name: req.session.name
                 });
             }

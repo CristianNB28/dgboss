@@ -56,11 +56,12 @@ CREATE TABLE Poliza(
     numero_poliza VARCHAR(255) NOT NULL,
     ramo_poliza VARCHAR(255) NOT NULL,
     tomador_viejo BOOLEAN NOT NULL,
+    nombre_tomador_poliza VARCHAR(255) NOT NULL,
     tipo_poliza VARCHAR(255),
     fecha_desde DATE NOT NULL,
     fecha_hasta DATE NOT NULL,
     tipo_moneda VARCHAR(255) NOT NULL,
-    tasa_poliza DECIMAL(10,4) NOT NULL,
+    tasa_poliza DECIMAL(10,4),
     monto_prima DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255),
     tipo_producto_poliza VARCHAR(255),
@@ -121,6 +122,20 @@ CREATE TABLE Recibo(
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza)
 );
 
+CREATE TABLE Comision(
+    id_comision INT PRIMARY KEY AUTO_INCREMENT,
+    porcentaje_agente_comision DECIMAL(10,4) NOT NULL,
+    caso_especial_comision DECIMAL(10,4),
+    porcentaje_ejecutivo_comision DECIMAL(10,4) NOT NULL,
+    porcentaje_fundatina_comision DECIMAL(10,4) NOT NULL,
+    porcentaje_director_comision DECIMAL(10,4) NOT NULL,
+    porcentaje_socio_comision DECIMAL(10,4) NOT NULL,
+    porcentaje_atina_comision DECIMAL(10,4) NOT NULL,
+    deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
+    poliza_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza)
+);
+
 CREATE TABLE Asegurado_Persona_Natural(
     id_asegurado_per_nat INT PRIMARY KEY AUTO_INCREMENT,
     cedula_asegurado_per_nat VARCHAR(255),
@@ -166,8 +181,8 @@ CREATE TABLE Poliza_Aseguradora_Asegurado(
     deshabilitar_paa BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     aseguradora_id INT NOT NULL,
-    asegurado_per_nat_id INT NOT NULL,
-    asegurado_per_jur_id INT NOT NULL,
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
     CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
@@ -239,20 +254,6 @@ CREATE TABLE Carta_Aval(
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
-);
-
-CREATE TABLE Comision(
-    id_comision INT PRIMARY KEY AUTO_INCREMENT,
-    porcentaje_agente_comision DECIMAL(10,4) NOT NULL,
-    caso_especial_comision DECIMAL(10,4),
-    porcentaje_ejecutivo_comision DECIMAL(10,4) NOT NULL,
-    porcentaje_fundatina_comision DECIMAL(10,4) NOT NULL DEFAULT 0.35,
-    porcentaje_director_comision DECIMAL(10,4) NOT NULL DEFAULT 2.5,
-    porcentaje_socio_comision DECIMAL(10,4) NOT NULL DEFAULT 2.5,
-    porcentaje_atina_comision DECIMAL(10,4) NOT NULL,
-    deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
-    recibo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_recibo_id(recibo_id) REFERENCES Recibo(id_recibo)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(

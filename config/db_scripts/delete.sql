@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS Pol_Aseg_Asegurado_Ejecu;
 DROP TABLE IF EXISTS Pol_Aseg_Asegurado_Vehi;
-DROP TABLE IF EXISTS Comision;
 DROP TABLE IF EXISTS Carta_Aval;
 DROP TABLE IF EXISTS Emergencia;
 DROP TABLE IF EXISTS AMP;
@@ -10,6 +9,7 @@ DROP TABLE IF EXISTS Poliza_Aseguradora_Asegurado;
 DROP TABLE IF EXISTS Usuario_Rol;
 DROP TABLE IF EXISTS Asegurado_Persona_Juridica;
 DROP TABLE IF EXISTS Asegurado_Persona_Natural;
+DROP TABLE IF EXISTS Comision;
 DROP TABLE IF EXISTS Recibo;
 DROP TABLE IF EXISTS Agente_Propio;
 DROP TABLE IF EXISTS Aseguradora;

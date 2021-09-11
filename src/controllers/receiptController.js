@@ -4,11 +4,12 @@ module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postReceiptForm: async (req, res) => {
-        let monto_prima_recibo = parseFloat(req.body.monto_prima_recibo);
-        let monto_comision = parseFloat(req.body.monto_comision_recibo);
-        let fecha_recibo_desde = new Date(req.body.fecha_vigencia_desde);
-        let fecha_recibo_hasta = new Date(req.body.fecha_vigencia_hasta);
-        await receiptModel.postReceiptForm(monto_prima_recibo, monto_comision, fecha_recibo_desde, fecha_recibo_hasta, req.body);
+        let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
+        let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+        let montoComisionRecibo = parseFloat(req.body.monto_comision_recibo);
+        let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
+        let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, req.body);
         res.redirect('/sistema/add-vehicle-policy');
     }
 /*                  PUT                  */

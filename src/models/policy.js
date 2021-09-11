@@ -25,12 +25,27 @@ module.exports = {
             });
         });
     },
-/*                  POST                 */
-    postPolicyForm: (tomador_viejo, corporativo, monto_prima, deducible, fecha_poliza_desde, fecha_poliza_hasta, tipo_negocio, tipo_poliza, estatus_poliza, policy) => {
+    getPolicyLast: () => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Poliza (numero_poliza, ramo_poliza, tomador_viejo, tipo_negocio, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, tipo_movimiento, monto_prima, estatus_poliza, tipo_producto, tipo_canal, corporativa_poliza, grupo_poliza, deducible_poliza)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [policy.numero_poliza, policy.ramo_poliza, tomador_viejo, tipo_negocio, tipo_poliza, fecha_poliza_desde, fecha_poliza_hasta, policy.tipo_moneda, policy.tipo_movimiento, monto_prima, estatus_poliza, policy.tipo_producto, policy.tipo_canal, corporativo, policy.tipo_grupo, deducible],                          
+            db.query(`SELECT id_poliza, monto_prima 
+                    FROM Poliza 
+                    WHERE deshabilitar_poliza=0
+                    ORDER BY id_poliza DESC
+                    LIMIT 1;`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+/*                  POST                 */
+    postPolicyForm: (tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, policy) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Poliza (numero_poliza, ramo_poliza, tomador_viejo, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, tasa_poliza, monto_prima, estatus_poliza, tipo_producto_poliza, tipo_canal, deducible_poliza, comision_poliza, bonificacion_poliza, cobertura_poliza)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [policy.numero_poliza, policy.ramo_poliza, tomadorViejo, policy.nombre_tomador_poliza, tipoPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda, tasaPoliza, montoPrima, estatusPoliza, policy.tipo_producto_poliza, policy.tipo_canal, deducible, comisionPoliza, policy.bonificacion_poliza, policy.cobertura_poliza],                          
             (error, rows) => {
                 if (error) {
                     reject(error)
