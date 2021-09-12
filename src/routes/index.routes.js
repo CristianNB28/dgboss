@@ -69,10 +69,18 @@ router.get('/edit-legal-insured/:id', requireAuth, insuredController.putLegalIns
 router.post('/update-legal-insured', requireAuth, insuredController.updateLegalInsured);
 // Rutas de Pólizas
 router.get('/add-vehicle-policy', requireAuth, policyController.getVehiclePolicyForm);
-router.post('/add-policy', requireAuth, policyController.postPolicyForm);
+router.post('/add-vehicle-policy', requireAuth, policyController.postVehiclePolicyForm);
 router.post('/add-vehicle', requireAuth, vehicleController.postVehicleForm);
-router.post('/add-receipt', requireAuth, receiptController.postReceiptForm);
-router.post('/add-commission', requireAuth, commissionController.postCommissionForm);
+router.post('/add-vehicle-receipt', requireAuth, receiptController.postVehicleReceiptForm);
+router.post('/add-vehicle-commission', requireAuth, commissionController.postVehicleCommissionForm);
+router.get('/add-health-policy', requireAuth, policyController.getHealthPolicyForm);
+router.post('/add-health-policy', requireAuth, policyController.postHealthPolicyForm);
+router.post('/add-health-receipt', requireAuth, receiptController.postHealthReceiptForm);
+router.post('/add-health-commission', requireAuth, commissionController.postHealthCommissionForm);
+router.get('/add-patrimonial-policy', requireAuth, policyController.getPatrimonialPolicyForm);
+router.post('/add-patrimonial-policy', requireAuth, policyController.postPatrimonialPolicyForm);
+router.post('/add-patrimonial-receipt', requireAuth, receiptController.postPatrimonialReceiptForm);
+router.post('/add-patrimonial-commission', requireAuth, commissionController.postPatrimonialCommissionForm);
 router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
 router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);

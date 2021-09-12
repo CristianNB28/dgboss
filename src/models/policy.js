@@ -41,11 +41,37 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postPolicyForm: (tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, policy) => {
+    postVehiclePolicyForm: (tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Poliza (numero_poliza, ramo_poliza, tomador_viejo, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, tasa_poliza, monto_prima, estatus_poliza, tipo_producto_poliza, tipo_canal, deducible_poliza, comision_poliza, bonificacion_poliza, cobertura_poliza)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
             [policy.numero_poliza, policy.ramo_poliza, tomadorViejo, policy.nombre_tomador_poliza, tipoPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda, tasaPoliza, montoPrima, estatusPoliza, policy.tipo_producto_poliza, policy.tipo_canal, deducible, comisionPoliza, policy.bonificacion_poliza, policy.cobertura_poliza],                          
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    postHealthPolicyForm: (tomadorViejo, montoPrima, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, policy) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Poliza (numero_poliza, ramo_poliza, tomador_viejo, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, monto_prima, estatus_poliza, tipo_canal, deducible_poliza, comision_poliza, bonificacion_poliza, cobertura_poliza)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [policy.numero_poliza, policy.ramo_poliza, tomadorViejo, policy.nombre_tomador_poliza, tipoPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda, montoPrima, estatusPoliza, policy.tipo_canal, deducible, comisionPoliza, policy.bonificacion_poliza, policy.cobertura_poliza],                          
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    postPatrimonialPolicyForm: (tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, patrimonial) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Poliza (numero_poliza, ramo_poliza, tomador_viejo, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, tasa_poliza, monto_prima, estatus_poliza, tipo_producto_poliza, tipo_canal, deducible_poliza, comision_poliza, bonificacion_poliza, cobertura_poliza)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [patrimonial.numero_poliza, patrimonial.ramo_poliza, tomadorViejo, patrimonial.nombre_tomador_poliza, tipoPoliza, fechaPolizaDesde, fechaPolizaHasta, patrimonial.tipo_moneda, tasaPoliza, montoPrima, estatusPoliza, patrimonial.tipo_producto_poliza, patrimonial.tipo_canal, deducible, comisionPoliza, patrimonial.bonificacion_poliza, patrimonial.cobertura_poliza],                          
             (error, rows) => {
                 if (error) {
                     reject(error)

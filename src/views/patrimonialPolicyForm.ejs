@@ -12,7 +12,7 @@
                 <a>Pólizas</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Póliza Individual Vehículo</strong>
+                <strong>Agregar Póliza Individual Patrimonial</strong>
             </li>
         </ol>
     </div>
@@ -23,13 +23,13 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>Póliza Individual Vehículo</h5>
+                    <h5>Póliza Individual Patrimonial</h5>
                 </div>
                 <div class="ibox-content">
-                    <div id="form" class="wizard-big">
+                    <div id="form" class="wizard-big wizard-health">
                         <h1><i class="fa fa-window-maximize"></i> Póliza</h1>
                         <fieldset>
-                            <form action="/sistema/add-vehicle-policy" method="POST">
+                            <form action="/sistema/add-patrimonial-policy" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -146,7 +146,7 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="ramo_poliza">
                                                         <option selected value="">Seleccione *</option>
-                                                        <option value="Automovil">Automovil</option>
+                                                        <option value="Patrimonial">Patrimonial</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -156,9 +156,12 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_producto_poliza">
                                                         <option selected value="">Seleccione</option>
-                                                        <option value="Perdida Total">Perdida Total</option>
-                                                        <option value="Cobertura">Cobertura</option>
-                                                        <option value="RCV">RCV</option>
+                                                        <option value="TRI">TRI</option>
+                                                        <option value="RCG">RCG</option>
+                                                        <option value="Fidelidad de Empleados">Fidelidad de Empleados</option>
+                                                        <option value="Incendio">Incendio</option>
+                                                        <option value="Riesgo Diversos">Riesgo Diversos</option>
+                                                        <option value="Combinado Empresarial">Combinado Empresarial</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -343,247 +346,9 @@
                                 </div>
                             </form>
                         </fieldset>
-                        <h1><i class="fa fa-automobile"></i> Vehículo</h1>
-                        <fieldset>
-                            <form action="/sistema/add-vehicle" method="POST">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Placa</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="numero_placa"
-                                                        id="numero_placa"
-                                                        placeholder="Número *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Marca</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="marca_vehiculo"
-                                                        id="marca_vehiculo"
-                                                        placeholder="Marca *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Versión</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="version_vehiculo"
-                                                        id="version_vehiculo"
-                                                        placeholder="Versión *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Descripción</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="descripcion_vehiculo"
-                                                        id="descripcion_vehiculo"
-                                                        placeholder="Descripción" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="color_vehiculo"
-                                                        id="color_vehiculo"
-                                                        placeholder="Color" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carrocería</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="serial_corroceria"
-                                                        id="serial_corroceria"
-                                                        placeholder="Carrocería Serial" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Conductor</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="id_rif_conductor"
-                                                        id="id_rif_conductor"
-                                                        placeholder="Cédula/Rif" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="capacidad_carga"
-                                                        id="capacidad_carga"
-                                                        placeholder="Carga Capacidad" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Transmisión</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_transmision_vehiculo">
-                                                        <option selected value="">Seleccione *</option>
-                                                        <option value="Automático">Automático</option>
-                                                        <option value="Sincrónico">Sincrónico</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Año</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number" 
-                                                        min="1900" 
-                                                        max="2099" 
-                                                        step="1" 
-                                                        value="2021"
-                                                        name="year_vehiculo"
-                                                        id="year_vehiculo" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Modelo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="modelo_vehiculo"
-                                                        id="modelo_vehiculo"
-                                                        placeholder="Modelo *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Vehículo</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_vehiculo">
-                                                        <option selected value="0">Seleccione *</option>
-                                                        <option value="motocicleta">Motocicleta</option>
-                                                        <option value="automovil">Automovil</option>
-                                                        <option value="camion">Camión</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="suma_asegurada"
-                                                        id="suma_asegurada"
-                                                        placeholder="Suma Asegurada Casco" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Serial Motor</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="serial_motor"
-                                                        id="serial_motor"
-                                                        placeholder="Serial Motor" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cantidad</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="cantidad_pasajero"
-                                                        id="cantidad_pasajero"
-                                                        placeholder="Cantidad Pasajeros" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_conductor_vehiculo"
-                                                        id="nombre_conductor_vehiculo"
-                                                        placeholder="Nombre" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
-                                                <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="blindaje_boolean_vehiculo" id="blindaje_boolean_vehiculo"> 
-                                                                ¿Tiene Blindaje?</label></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
-                            <form action="/sistema/add-vehicle-receipt" method="post">
+                            <form action="/sistema/add-patrimonial-receipt" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -743,7 +508,7 @@
                         </fieldset>
                         <h1><i class="fa fa-usd"></i> Comisión</h1>
                         <fieldset>
-                            <form action="/sistema/add-vehicle-commission" method="post">
+                            <form action="/sistema/add-patrimonial-commission" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
