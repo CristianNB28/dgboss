@@ -4,7 +4,7 @@ module.exports = {
 /*                  GET                  */
     getPolicies: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_poliza, numero_poliza, ramo_poliza, tipo_negocio, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, monto_prima, estatus_poliza FROM Poliza WHERE deshabilitar_poliza=0', 
+            db.query('SELECT id_poliza, numero_poliza, ramo_poliza, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, monto_prima, estatus_poliza FROM Poliza WHERE deshabilitar_poliza=0', 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -15,7 +15,7 @@ module.exports = {
     },
     getPolicy: (idPolicy) => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_poliza, numero_poliza, ramo_poliza, tipo_negocio, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, monto_prima, estatus_poliza FROM Poliza WHERE id_poliza=?', 
+            db.query('SELECT id_poliza, numero_poliza, ramo_poliza, nombre_tomador_poliza, tipo_poliza, fecha_desde, fecha_hasta, tipo_moneda, monto_prima, estatus_poliza FROM Poliza WHERE id_poliza=?', 
             [idPolicy], 
             (error, rows) => {
                 if (error) {
@@ -84,9 +84,9 @@ module.exports = {
     updatePolicy: (fechaDesdePoliza, fechaHastaPoliza, montoPrima, policy) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Poliza 
-                    SET numero_poliza=?, ramo_poliza=?, tipo_negocio=?, tipo_poliza=?, fecha_desde=?, fecha_hasta=?, tipo_moneda=?, monto_prima=?, estatus_poliza=? 
+                    SET numero_poliza=?, ramo_poliza=?, nombre_tomador_poliza=?, tipo_poliza=?, fecha_desde=?, fecha_hasta=?, tipo_moneda=?, monto_prima=?, estatus_poliza=? 
                     WHERE id_poliza=?`, 
-            [policy.numero_poliza, policy.ramo_poliza, policy.tipo_negocio, policy.tipo_poliza, fechaDesdePoliza, fechaHastaPoliza, policy.tipo_moneda, montoPrima, policy.estatus_poliza, policy.id_poliza], 
+            [policy.numero_poliza, policy.ramo_poliza, policy.nombre_tomador, policy.tipo_poliza, fechaDesdePoliza, fechaHastaPoliza, policy.tipo_moneda, montoPrima, policy.estatus_poliza, policy.id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)

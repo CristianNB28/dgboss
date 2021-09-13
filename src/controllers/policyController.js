@@ -2,8 +2,6 @@ const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
-const bondModel = require('../models/bond');
-const hedgeModel = require('../models/hedge');
 
 module.exports = {
 /*                  GET                  */
@@ -79,14 +77,12 @@ module.exports = {
         for (let index = 0; index < resultsPII.length; index++) {
             let elementPII = resultsPII[index];
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
-            let resultInsured = await insuredModel.getInsured(elementPII.asegurado_id);
             for (let index = 0; index < resultsPolicies.length; index++) {
                 let elementPolicy = resultsPolicies[index];
                 if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde) !== 'string')) {
                     elementPolicy.fecha_desde = elementPolicy.fecha_desde.toLocaleDateString().split('T')[0] 
                     elementPolicy.fecha_hasta = elementPolicy.fecha_hasta.toLocaleDateString().split('T')[0]
                     elementPolicy.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
-                    elementPolicy.cedula_asegurado = resultInsured[0].cedula_asegurado;
                     break;
                 }
             }
@@ -271,27 +267,24 @@ module.exports = {
         }
     },
 /*                  PUT                  */
-// Falta por arreglar los tomadores
     putPolicy: async (req, res, next) => {
         let valoresAceptados = /^[0-9]+$/;
         let idPolicy = req.params.id;
         if (idPolicy.match(valoresAceptados)) {
             let resultPolicy = await policyModel.getPolicy(idPolicy);
+            let resultPolicies = await policyModel.getPolicies()
             let fechaDesdePoliza = resultPolicy[0].fecha_desde.toISOString().substring(0, 10);
             let fechaHastaPoliza = resultPolicy[0].fecha_hasta.toISOString().substring(0, 10);
             let insurers = await insurerModel.getInsurers();
-            let insureds = await insuredModel.getInsureds();
             let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
-            let resultInsured = await insuredModel.getInsured(resultPII[0].asegurado_id);
             res.render('editPolicy', {
                 policy: resultPolicy[0],
+                policies: resultPolicies,
                 fechaDesdePoliza: fechaDesdePoliza,
                 fechaHastaPoliza: fechaHastaPoliza,
                 insurers: insurers,
-                insureds: insureds,
                 insurer: resultInsurer[0],
-                insured: resultInsured[0],
                 name: req.session.name
             });
         } else {
@@ -303,7 +296,7 @@ module.exports = {
         let fechaHastaPoliza = new Date(req.body.fecha_hasta);
         let montoPrima = parseFloat(req.body.monto_prima);
         await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrima, req.body);
-        await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_tomador, req.body.nombre_aseguradora, req.body.id_poliza);
+        await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
         res.render('index', {
             alert: true,
             alertTitle: 'Exitoso',
