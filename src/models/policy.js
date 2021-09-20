@@ -40,6 +40,74 @@ module.exports = {
             });
         });
     },
+    getHealthPolicyCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(ramo_poliza) AS health
+                    FROM Poliza 
+                    WHERE ramo_poliza='Salud'
+                    AND deshabilitar_poliza=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getAutoPolicyCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(ramo_poliza) AS auto
+                    FROM Poliza 
+                    WHERE ramo_poliza='Automovil'
+                    AND deshabilitar_poliza=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPatrimonialPolicyCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(ramo_poliza) AS patrimonial
+                    FROM Poliza 
+                    WHERE ramo_poliza='Patrimonial'
+                    AND deshabilitar_poliza=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getSummaryPolizaCousins: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(monto_prima) AS primaTotal
+                    FROM Poliza 
+                    WHERE deshabilitar_poliza=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getSumPolicyCommissions: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(comision_poliza) AS comisionTotal
+                    FROM Poliza 
+                    WHERE deshabilitar_poliza=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postVehiclePolicyForm: (tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {

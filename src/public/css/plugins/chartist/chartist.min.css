@@ -177,11 +177,23 @@
 }
 
 .ct-series-a .ct-point, .ct-series-a .ct-line, .ct-series-a .ct-bar, .ct-series-a .ct-slice-donut {
-    stroke: #1AB394;
+    stroke: #113bbf;
+}
+
+.ct-bar:nth-child(1){
+	stroke: #113bbf !important;
+}
+
+.ct-bar:nth-child(2){
+	stroke: #1AB394 !important;
+}
+
+.ct-bar:nth-child(3){
+	stroke: red !important;
 }
 
 .ct-series-a .ct-slice-pie, .ct-series-a .ct-area {
-    fill: #1AB394;
+    fill: #113bbf;
 }
 
 .ct-series-b .ct-point, .ct-series-b .ct-line, .ct-series-b .ct-bar, .ct-series-b .ct-slice-donut {

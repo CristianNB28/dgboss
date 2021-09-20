@@ -13,6 +13,18 @@ module.exports = {
             });
         });
     },
+    getPoliciesIds: (insurerId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT poliza_id FROM Poliza_Aseguradora_Asegurado WHERE aseguradora_id=? AND deshabilitar_paa=0',
+            [insurerId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
     getPolicyInsurerInsured: (idPolicy) => {
         return new Promise((resolve, reject) => {
             db.query('SELECT id_paa, aseguradora_id FROM Poliza_Aseguradora_Asegurado WHERE poliza_id=?', [idPolicy], 
