@@ -137,45 +137,18 @@ module.exports = {
             let newPassword = await bcrypt.hash(req.body.password_usuario, 8);
             await rolUserModel.updateRolUser(req.body.id_usuario, req.body.rol);
             await userModel.updateUser(cedulaUsuario, rifUsuario, admin, productor, newPassword, req.body);
-            res.render('index', {
-                alert: true,
-                alertTitle: 'Exitoso',
-                alertMessage: 'Se actualizaron los datos exitosamente',
-                alertIcon: 'success',
-                showConfirmButton: false,
-                timer: 1500,
-                ruta: 'sistema',
-                name: req.session.name
-            });
+            res.redirect('/sistema');
         } else {
             await rolUserModel.updateRolUser(req.body.id_usuario, req.body.rol);
             await userModel.updateUser(cedulaUsuario, rifUsuario, admin, productor, req.body.password_usuario, req.body);
-            res.render('index', {
-                alert: true,
-                alertTitle: 'Exitoso',
-                alertMessage: 'Se actualizaron los datos exitosamente',
-                alertIcon: 'success',
-                showConfirmButton: false,
-                timer: 1500,
-                ruta: 'sistema',
-                name: req.session.name
-            });
+            res.redirect('/sistema');
         }
     },
     updateRol: async (req, res) => {
         if ((req.body.nombre_rol) || (req.body.descripcion_rol)) {
             await rolModel.updateRol(req.body);
         }
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
 /*               DELETE                  */
     disableUser: async (req, res) => {

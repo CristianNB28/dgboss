@@ -297,16 +297,7 @@ module.exports = {
         let montoPrima = parseFloat(req.body.monto_prima);
         await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrima, req.body);
         await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
 /*               DELETE                  */
     disablePolicy: async (req, res) => {

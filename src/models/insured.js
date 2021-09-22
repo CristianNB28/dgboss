@@ -4,7 +4,7 @@ module.exports = {
 /*                  GET                  */
     getNaturalInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_asegurado_per_nat, cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, correo_asegurado_per_nat, celular_emergencia_per_nat, direccion_asegurado_per_nat 
+            db.query(`SELECT id_asegurado_per_nat, cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, correo_asegurado_per_nat, celular_per_nat, direccion_asegurado_per_nat 
                     FROM Asegurado_Persona_Natural 
                     WHERE deshabilitar_asegurado_per_nat=0`, 
             (error, rows) => {
@@ -55,9 +55,9 @@ module.exports = {
 /*                  POST                 */
     postNaturalInsuredForm: (cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Asegurado_Persona_Natural (cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, telefono_asegurado_per_nat, correo_asegurado_per_nat, celular_emergencia_per_nat, direccion_asegurado_per_nat, agente_propio_id)
-                    VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?)`, 
-            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio], 
+            db.query(`INSERT INTO Asegurado_Persona_Natural (cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, telefono_asegurado_per_nat, correo_asegurado_per_nat, celular_per_nat, nombre_emergencia_per_nat, telefono_emergencia_per_nat, direccion_asegurado_per_nat, agente_propio_id)
+                    VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?)`, 
+            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -83,9 +83,9 @@ module.exports = {
     updateNaturalInsured: (cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Asegurado_Persona_Natural 
-                    SET cedula_asegurado_per_nat=?, rif_asegurado_per_nat=?, nombre_asegurado_per_nat=?, apellido_asegurado_per_nat=?, telefono_asegurado_per_nat=?, correo_asegurado_per_nat=?, celular_emergencia_per_nat=?, direccion_asegurado_per_nat=?, agente_propio_id=?
+                    SET cedula_asegurado_per_nat=?, rif_asegurado_per_nat=?, nombre_asegurado_per_nat=?, apellido_asegurado_per_nat=?, telefono_asegurado_per_nat=?, correo_asegurado_per_nat=?, celular_per_nat=?, nombre_emergencia_per_nat=?, telefono_emergencia_per_nat=?, direccion_asegurado_per_nat=?, agente_propio_id=?
                     WHERE id_asegurado_per_nat=?`, 
-            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio, naturalInsured.id_asegurado_per_nat], 
+            [cedulaAseguradoNatural, rifAseguradoNatural, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio, naturalInsured.id_asegurado_per_nat], 
             (error, rows) => {
                 if (error) {
                     reject(error)

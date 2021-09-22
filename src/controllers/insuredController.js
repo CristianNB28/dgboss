@@ -164,16 +164,7 @@ module.exports = {
         }
         let idAgentePropio = agentePropio[0].id_agente_propio;
         await insuredModel.updateNaturalInsured(cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, req.body);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
     updateLegalInsured: async (req, res) => {
         let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
@@ -182,16 +173,7 @@ module.exports = {
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let idAgentePropio = agentePropio[0].id_agente_propio;
         await insuredModel.updateLegalInsured(idAgentePropio, req.body);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
 /*               DELETE                  */
     disableNaturalInsured: async (req, res) => {

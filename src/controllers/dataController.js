@@ -136,16 +136,7 @@ module.exports = {
     },
     updateInsurer: async (req, res) => {
         await insurerModel.updateInsurer(req.body);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
     updateOwnAgent: async (req, res) => {
         let cedulaAgentePropio = '';
@@ -164,16 +155,7 @@ module.exports = {
             } 
         }
         await ownAgentModel.updateOwnAgent(cedulaAgentePropio, rifAgentePropio, req.body);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
     updateExecutive: async (req, res) => {
         let cedulaEjecutivo = '';
@@ -192,16 +174,7 @@ module.exports = {
             } 
         }
         await executiveModel.updateExecutive(cedulaEjecutivo, rifEjecutivo, req.body);
-        res.render('index', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se actualizaron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        res.redirect('/sistema');
     },
 /*               DELETE                  */
     disableInsurer: async (req, res) => {

@@ -16,8 +16,13 @@ module.exports = {
         let insurers = [];
         let ownAgents = [];
         let totalInsurancePremiums = [];
-        totalPremium = totalPremium[0].primaTotal.toLocaleString();
-        totalCommission = totalCommission[0].comisionTotal.toLocaleString();
+        if ((totalPremium[0].primaTotal === null) && (totalCommission[0].comisionTotal === null)) {
+            totalPremium = 0;
+            totalCommission = 0;
+        } else {
+            totalPremium = totalPremium[0].primaTotal.toLocaleString();
+            totalCommission = totalCommission[0].comisionTotal.toLocaleString();
+        }
         for (let index = 0; index < resultPolicyInsuInsured.length; index++) {
             let element = resultPolicyInsuInsured[index];
             let elementNext = resultPolicyInsuInsured[index + 1];
