@@ -32,8 +32,8 @@
                         <thead>
                         <tr>
                             <th>Pólizas</th>
-                            <th>Ramo</th>
-                            <th>Tipo</th>
+                            <th>Tipo Individual</th>
+                            <th>Tipo Poliza</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
@@ -51,8 +51,8 @@
                         <tfoot>
                         <tr>
                             <th>Pólizas</th>
-                            <th>Ramo</th>
-                            <th>Tipo</th>
+                            <th>Tipo Individual</th>
+                            <th>Tipo Poliza</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
@@ -144,14 +144,14 @@ $(document).ready(function(){
         serverSide: false,
         columns: [
             {"data": "numero_poliza"},
-            {"data": "ramo_poliza"},
+            {"data": "tipo_individual_poliza"},
             {"data": "tipo_poliza"},
             {"data": "nombre_tomador_poliza"},
             {"data": "nombre_aseguradora"},
             {"data": "fecha_desde"},
             {"data": "fecha_hasta"},
-            {"data": "tipo_moneda"},
-            {"data": "monto_prima"},
+            {"data": "tipo_moneda_poliza"},
+            {"data": "prima_anual_poliza"},
             {"data": "estatus_poliza"},
             {
                 "data": "",

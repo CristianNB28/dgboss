@@ -103,17 +103,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda">
-                                                        <option selected value="0">Seleccione *</option>
-                                                            <option value="Bolivar">Bolivar</option>
-                                                            <option value="Dólar">Dólar</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia desde</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -127,14 +116,25 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_moneda_poliza">
+                                                        <option selected value="0">Seleccione *</option>
+                                                            <option value="Bolivar">Bolivar</option>
+                                                            <option value="Dólar">Dólar</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="number"
                                                         step="0.01"
-                                                        name="monto_prima"
-                                                        id="monto_prima"
-                                                        placeholder="Prima *" 
+                                                        name="prima_anual_poliza"
+                                                        id="prima_anual_poliza"
+                                                        placeholder="Prima Anual *" 
                                                         class="form-control"
                                                         required
                                                     >
@@ -142,36 +142,28 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ramo</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="ramo_poliza">
+                                                    <select class="form-control" name="tipo_cobertura_poliza">
                                                         <option selected value="">Seleccione *</option>
-                                                        <option value="Automovil">Automovil</option>
+                                                        <option value="Cob Amplia + Rcv">Cob Amplia + Rcv</option>
+                                                        <option value="Perdida Total + Rcv">Perdida Total + Rcv</option>
+                                                        <option value="RCG">RCG</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Producto</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_producto_poliza">
-                                                        <option selected value="">Seleccione</option>
-                                                        <option value="Perdida Total">Perdida Total</option>
-                                                        <option value="Cobertura">Cobertura</option>
-                                                        <option value="RCV">RCV</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Bonificación</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
-                                                        name="bonificacion_poliza"
-                                                        id="bonificacion_poliza"
-                                                        placeholder="Bonificación"
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="tasa_poliza"
+                                                        id="tasa_poliza"
+                                                        placeholder="Tasa Póliza *" 
                                                         class="form-control"
+                                                        required
                                                     >
                                                 </div>
                                             </div>
@@ -240,24 +232,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="tasa_poliza"
-                                                        id="tasa_poliza"
-                                                        placeholder="Tasa Póliza *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="number"
+                                                        step="0.01"
                                                         name="deducible_poliza"
                                                         id="deducible_poliza"
                                                         placeholder="Deducible *" 
@@ -281,21 +260,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        step="0.01"
-                                                        name="comision_poliza"
-                                                        id="comision_poliza"
-                                                        placeholder="Comisión *"
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="nombre_aseguradora">
@@ -308,13 +272,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
-                                                        name="cobertura_poliza"
-                                                        id="cobertura_poliza"
-                                                        placeholder="Cobertura *"
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="suma_asegurada_poliza"
+                                                        id="suma_asegurada_poliza"
+                                                        placeholder="Suma Asegurada *"
                                                         class="form-control"
                                                         required
                                                     >
@@ -324,7 +289,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal">
+                                                    <select class="form-control" name="tipo_canal_poliza">
                                                         <option selected value="">Seleccione</option>
                                                         <option value="Venta Regular">Venta Regular</option>
                                                         <option value="Redes Sociales">Redes Sociales</option>
@@ -387,19 +352,6 @@
                                                         placeholder="Versión *" 
                                                         class="form-control"
                                                         required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Descripción</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="descripcion_vehiculo"
-                                                        id="descripcion_vehiculo"
-                                                        placeholder="Descripción" 
-                                                        class="form-control"
                                                     >
                                                 </div>
                                             </div>
@@ -504,23 +456,11 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_vehiculo">
                                                         <option selected value="0">Seleccione *</option>
-                                                        <option value="motocicleta">Motocicleta</option>
-                                                        <option value="automovil">Automovil</option>
-                                                        <option value="camion">Camión</option>
+                                                        <option value="Motocicleta">Motocicleta</option>
+                                                        <option value="Automovil">Automovil</option>
+                                                        <option value="Camión">Camión</option>
+                                                        <option value="Autobus">Autobus</option>
                                                     </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        name="suma_asegurada"
-                                                        id="suma_asegurada"
-                                                        placeholder="Suma Asegurada Casco" 
-                                                        class="form-control"
-                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -544,7 +484,7 @@
                                                         type="number"
                                                         name="cantidad_pasajero"
                                                         id="cantidad_pasajero"
-                                                        placeholder="Cantidad Pasajeros" 
+                                                        placeholder="Cantidad de Puestos" 
                                                         class="form-control"
                                                     >
                                                 </div>
@@ -557,7 +497,7 @@
                                                         type="text"
                                                         name="nombre_conductor_vehiculo"
                                                         id="nombre_conductor_vehiculo"
-                                                        placeholder="Nombre" 
+                                                        placeholder="Nombre de Conductor" 
                                                         class="form-control"
                                                     >
                                                 </div>
@@ -584,7 +524,7 @@
                         </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
-                            <form action="/sistema/add-vehicle-receipt" method="post">
+                            <form action="/sistema/add-vehicle-receipt" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -651,7 +591,7 @@
                                                             step="0.01" 
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
-                                                            value="<%= policy.monto_prima %>" 
+                                                            value="<%= policy.prima_anual_poliza %>" 
                                                             class="form-control"
                                                             required
                                                         >
@@ -675,6 +615,22 @@
                                                 </div>
                                             </div>
                                         <% } %>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="comision_asociada_recibo"
+                                                        id="comision_asociada_recibo"
+                                                        onkeyup="pasarValor();"
+                                                        placeholder="Comisión Asociada *"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -684,6 +640,7 @@
                                                         <option selected value="">Seleccione *</option>
                                                         <option value="Emisión">Emisión</option>
                                                         <option value="Renovación">Renovación</option>
+                                                        <option value="Fraccionamiento">Fraccionamiento</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -702,17 +659,35 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Forma de Pago</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="forma_pago_recibo">
+                                                    <select class="form-control" name="metodo_pago_recibo">
                                                         <option selected value="">Seleccione *</option>
                                                         <option value="Transferencia">Transferencia</option>
                                                         <option value="Zelle">Zelle</option>
                                                         <option value="Efectivo">Efectivo</option>
                                                         <option value="Tarjeta de debito">Tarjeta de debito</option>
                                                         <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+                                                        <option value="Paypal">Paypal</option>
+                                                        <option value="Deposito bancario">Deposito bancario</option>
                                                         <option value="Otros">Otros</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Bonificación</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="bonificacion_recibo"
+                                                        id="bonificacion_recibo"
+                                                        onkeyup="pasarValor();"
+                                                        placeholder="Bonificación *"
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -724,7 +699,7 @@
                                                         step="0.01" 
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
-                                                        placeholder="Monto comisión *" 
+                                                        placeholder="Comisión *" 
                                                         class="form-control"
                                                         required
                                                     >

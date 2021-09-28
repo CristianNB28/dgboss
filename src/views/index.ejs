@@ -124,6 +124,7 @@
         var insurer = <%- JSON.stringify(insurers) %>;
         var insurerPremium = <%- JSON.stringify(InsurersPremium) %>;
         var ownAgent = <%- JSON.stringify(ownAgents) %>;
+        var ownAgentComission = <%- JSON.stringify(ownAgentsComission) %>;
         $(document).ready(function(){
 
             // Stocked bar chart
@@ -153,7 +154,7 @@
             new Chartist.Bar('#ct-chart4', {
                 labels: ownAgent,
                 series: [
-                    [5, 4]
+                    ownAgentComission
                 ]
             }, {
                 seriesBarDistance: 10,

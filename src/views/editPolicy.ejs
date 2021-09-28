@@ -42,8 +42,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda">
-                                                <option selected value="<%= policy.tipo_moneda %>"><%= policy.tipo_moneda %></option>
+                                            <select class="form-control" name="tipo_moneda_poliza">
+                                                <option selected value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
                                                     <option value="Bolivar">Bolivar</option>
                                                     <option value="Dólar">Dólar</option>
                                             </select>
@@ -68,9 +68,9 @@
                                             <input 
                                                 type="number"
                                                 step="0.01"
-                                                name="monto_prima"
-                                                id="monto_prima"
-                                                value="<%= policy.monto_prima %>"
+                                                name="prima_anual_poliza"
+                                                id="prima_anual_poliza"
+                                                value="<%= policy.prima_anual_poliza %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -95,10 +95,10 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Ramo</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="ramo_poliza">
-                                                <option selected value="<%= policy.ramo_poliza %>"><%= policy.ramo_poliza %></option>
+                                            <select class="form-control" name="tipo_individual_poliza">
+                                                <option selected value="<%= policy.tipo_individual_poliza %>"><%= policy.tipo_individual_poliza %></option>
                                                 <option value="Salud">Salud</option>
                                                 <option value="Automovil">Automovil</option>
                                                 <option value="Patrimonial">Patrimonial</option>
@@ -108,10 +108,10 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_tomador">
+                                            <select class="form-control" name="nombre_tomador_poliza">
                                                 <option selected value="<%= policy.nombre_tomador_poliza %>"><%= policy.nombre_tomador_poliza %></option>
-                                                <% policies.forEach((policy) => { %>
-                                                    <option value="<%= policy.nombre_tomador_poliza %>"><%= policy.nombre_tomador_poliza %></option>
+                                                <% takerNames.forEach((takerName) => { %>
+                                                    <option value="<%= takerName.nombreTomador %>"><%= takerName.nombreTomador %></option>
                                                 <% }); %>
                                             </select>
                                         </div>

@@ -2,6 +2,20 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
+    getOwnAgentPercentage: (policyId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT porcentaje_agente_comision
+                    FROM Comision 
+                    WHERE poliza_id=? AND deshabilitar_comision=0`,
+            [policyId],
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postCommissionForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision) => {
         let policyId = await new Promise((resolve, reject) => {

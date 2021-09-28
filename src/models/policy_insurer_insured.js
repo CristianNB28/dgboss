@@ -4,7 +4,9 @@ module.exports = {
 /*                  GET                  */
     getPoliciesInsurersInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_paa, aseguradora_id FROM Poliza_Aseguradora_Asegurado WHERE deshabilitar_paa=0', 
+            db.query(`SELECT id_paa, poliza_id, aseguradora_id, asegurado_per_nat_id, asegurado_per_jur_id 
+                    FROM Poliza_Aseguradora_Asegurado 
+                    WHERE deshabilitar_paa=0`, 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -17,6 +19,30 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query('SELECT poliza_id FROM Poliza_Aseguradora_Asegurado WHERE aseguradora_id=? AND deshabilitar_paa=0',
             [insurerId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPoliciesIdsNatural: (insuredNaturalId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT poliza_id FROM Poliza_Aseguradora_Asegurado WHERE asegurado_per_nat_id=? AND deshabilitar_paa=0',
+            [insuredNaturalId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPoliciesIdsLegal: (legalInsuredId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT poliza_id FROM Poliza_Aseguradora_Asegurado WHERE asegurado_per_jur_id=? AND deshabilitar_paa=0',
+            [legalInsuredId],
             (error, rows) => {
                 if (error) {
                     reject(error)

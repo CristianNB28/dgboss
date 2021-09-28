@@ -95,13 +95,14 @@ module.exports = {
 /*                 POST                  */
     postVehiclePolicyForm: async (req, res) => {
         let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
-        let montoPrima = parseFloat(req.body.monto_prima);
-        let tasaPoliza = parseFloat(req.body.tasa_poliza);
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
-        let comisionPoliza = parseFloat(req.body.comision_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
         let fechaPolizaDesde = new Date(req.body.fecha_desde);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta);
         let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Automovil';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
@@ -127,7 +128,7 @@ module.exports = {
             estatusPoliza = 'Anulado';
         }
         if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postVehiclePolicyForm(tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postVehiclePolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-vehicle-policy');
         } else {
@@ -153,12 +154,13 @@ module.exports = {
     },
     postHealthPolicyForm: async (req, res) => {
         let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
-        let montoPrima = parseFloat(req.body.monto_prima);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
-        let comisionPoliza = parseFloat(req.body.comision_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
         let fechaPolizaDesde = new Date(req.body.fecha_desde);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta);
         let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Salud';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
@@ -184,7 +186,7 @@ module.exports = {
             estatusPoliza = 'Anulado';
         }
         if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postHealthPolicyForm(tomadorViejo, montoPrima, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postHealthPolicyForm(tomadorViejo, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-health-policy');
         } else {
@@ -210,13 +212,14 @@ module.exports = {
     },
     postPatrimonialPolicyForm: async (req, res) => {
         let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
-        let montoPrima = parseFloat(req.body.monto_prima);
-        let tasaPoliza = parseFloat(req.body.tasa_poliza);
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
-        let comisionPoliza = parseFloat(req.body.comision_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
         let fechaPolizaDesde = new Date(req.body.fecha_desde);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta);
         let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Patrimonial';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
@@ -242,7 +245,7 @@ module.exports = {
             estatusPoliza = 'Anulado';
         }
         if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postPatrimonialPolicyForm(tomadorViejo, montoPrima, tasaPoliza, deducible, comisionPoliza, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postPatrimonialPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-patrimonial-policy');
         } else {
@@ -272,7 +275,8 @@ module.exports = {
         let idPolicy = req.params.id;
         if (idPolicy.match(valoresAceptados)) {
             let resultPolicy = await policyModel.getPolicy(idPolicy);
-            let resultPolicies = await policyModel.getPolicies()
+            let resultPolicies = await policyModel.getPolicies();
+            let resultsTaker = await policyModel.getPolicyHolder();
             let fechaDesdePoliza = resultPolicy[0].fecha_desde.toISOString().substring(0, 10);
             let fechaHastaPoliza = resultPolicy[0].fecha_hasta.toISOString().substring(0, 10);
             let insurers = await insurerModel.getInsurers();
@@ -281,6 +285,7 @@ module.exports = {
             res.render('editPolicy', {
                 policy: resultPolicy[0],
                 policies: resultPolicies,
+                takerNames: resultsTaker,
                 fechaDesdePoliza: fechaDesdePoliza,
                 fechaHastaPoliza: fechaHastaPoliza,
                 insurers: insurers,
@@ -294,8 +299,8 @@ module.exports = {
     updatePolicy: async (req, res) => {
         let fechaDesdePoliza = new Date(req.body.fecha_desde);
         let fechaHastaPoliza = new Date(req.body.fecha_hasta);
-        let montoPrima = parseFloat(req.body.monto_prima);
-        await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrima, req.body);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, req.body);
         await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
         res.redirect('/sistema');
     },
