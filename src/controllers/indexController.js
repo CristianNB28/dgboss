@@ -24,10 +24,14 @@ module.exports = {
         if ((totalPremium[0].primaTotal === null) && (totalCommission[0].comisionTotal === null)) {
             totalPremium[0].primaTotal = 0;
             totalCommission[0].comisionTotal = 0;
+            totalPremium = totalPremium[0].primaTotal;
+            totalCommission = totalCommission[0].comisionTotal;
         } else if (totalPremium[0].primaTotal === null) {
             totalPremium[0].primaTotal = 0;
+            totalPremium = totalPremium[0].primaTotal;
         } else if (totalCommission[0].comisionTotal === null) {
             totalCommission[0].comisionTotal = 0;
+            totalCommission = totalCommission[0].comisionTotal;
         } else {
             totalPremium = totalPremium[0].primaTotal.toLocaleString();
             totalCommission = totalCommission[0].comisionTotal.toLocaleString();
