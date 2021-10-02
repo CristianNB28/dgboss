@@ -215,10 +215,14 @@ CREATE TABLE Reembolso(
     patologia_reembolso VARCHAR(255) NOT NULL,
     fecha_ocurrencia_reembolso DATE NOT NULL,
     fecha_notificacion_reembolso DATE NOT NULL,
-    monto_reembolso INT NOT NULL,
+    monto_reembolso DECIMAL(10,4) NOT NULL,
+    nombre_beneficiario_reembolso VARCHAR(255) NOT NULL,
+    observacion_reembolso VARCHAR(500) NOT NULL,
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
-    paa_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE AMP(
@@ -227,10 +231,14 @@ CREATE TABLE AMP(
     clinica_amp VARCHAR(255) NOT NULL,
     fecha_ocurrencia_amp DATE NOT NULL,
     fecha_notificacion_amp DATE NOT NULL,
-    monto_amp INT NOT NULL,
+    monto_amp DECIMAL(10,4) NOT NULL,
+    nombre_beneficiario_amp VARCHAR(255) NOT NULL,
+    observacion_amp VARCHAR(500) NOT NULL,
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
-    paa_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Emergencia(
@@ -239,10 +247,14 @@ CREATE TABLE Emergencia(
     clinica_emergencia VARCHAR(255) NOT NULL,
     fecha_ocurrencia_emergencia DATE NOT NULL,
     fecha_notificacion_emergencia DATE NOT NULL,
-    monto_emergencia INT NOT NULL,
+    monto_emergencia DECIMAL(10,4) NOT NULL,
+    nombre_beneficiario_emergencia VARCHAR(255) NOT NULL,
+    observacion_emergencia VARCHAR(500) NOT NULL,
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
-    paa_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Carta_Aval(
@@ -251,10 +263,14 @@ CREATE TABLE Carta_Aval(
     clinica_carta_aval VARCHAR(255) NOT NULL,
     fecha_ocurrencia_carta_aval DATE NOT NULL,
     fecha_notificacion_carta_aval DATE NOT NULL,
-    monto_carta_aval INT NOT NULL,
+    monto_carta_aval DECIMAL(10,4) NOT NULL,
+    nombre_beneficiario_carta_aval VARCHAR(255) NOT NULL,
+    observacion_carta_aval VARCHAR(500) NOT NULL,
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
-    paa_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(

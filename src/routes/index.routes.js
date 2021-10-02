@@ -7,11 +7,10 @@ const userController = require('../controllers/userController');
 const dataController = require('../controllers/dataController');
 const insuredController = require('../controllers/insuredController');
 const policyController = require('../controllers/policyController');
-//const bondController = require('../controllers/bondController');
-//const hedgeController = require('../controllers/hedgeController');
 const vehicleController = require('../controllers/vehicleController');
 const receiptController = require('../controllers/receiptController');
 const commissionController = require('../controllers/commissionController');
+const claimController = require('../controllers/claimController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -85,15 +84,34 @@ router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
 router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
 router.post('/update-policy', requireAuth, policyController.updatePolicy);
-/*
-// Rutas de Bonos
-router.get('/add-bond', requireAuth, bondController.getBondForm);
-router.post('/add-bond', requireAuth, bondController.postBondForm);
-router.get('/bonds', requireAuth, bondController.getBonds);
-router.post('/remove-bond/:id', requireAuth, bondController.disableBond);
-router.get('/edit-bond/:id', requireAuth, bondController.putBond);
-router.post('/update-bond', requireAuth, bondController.updateBond);
+
+// Rutas de Reclamos
+router.get('/add-refund', requireAuth, claimController.getRefundForm);
+router.post('/add-refund', requireAuth, claimController.postRefundForm);
+router.get('/refunds', requireAuth, claimController.getRefunds);
+router.post('/remove-refund/:id', requireAuth, claimController.disableRefund);
+router.get('/edit-refund/:id', requireAuth, claimController.putRefund);
+router.post('/update-refund', requireAuth, claimController.updateRefund);
+router.get('/add-letter-guarantee', requireAuth, claimController.getLetterGuaranteeForm);
+router.post('/add-letter-guarantee', requireAuth, claimController.postLetterGuaranteeForm);
+router.get('/letters-guarentee', requireAuth, claimController.getLettersGuarantee);
+router.post('/remove-letter-guarantee/:id', requireAuth, claimController.disableLetterGuarentee);
+router.get('/edit-letter-guarantee/:id', requireAuth, claimController.putLetterGuarentee);
+router.post('/update-letter-guarantee', requireAuth, claimController.updateLetterGuarentee);
+router.get('/add-emergency', requireAuth, claimController.getEmergencyForm);
+router.post('/add-emergency', requireAuth, claimController.postEmergencyForm);
+router.get('/emergencies', requireAuth, claimController.getEmergencies);
+router.post('/remove-emergency/:id', requireAuth, claimController.disableEmergency);
+router.get('/edit-emergency/:id', requireAuth, claimController.putEmergency);
+router.post('/update-emergency', requireAuth, claimController.updateEmergency);
+router.get('/add-amp', requireAuth, claimController.getAMPForm);
+router.post('/add-amp', requireAuth, claimController.postAMPForm);
+router.get('/amp', requireAuth, claimController.getAMP);
+router.post('/remove-amp/:id', requireAuth, claimController.disableAMP);
+router.get('/edit-amp/:id', requireAuth, claimController.putAMP);
+router.post('/update-amp', requireAuth, claimController.updateAMP);
 // Rutas de Coberturas
+/*
 router.get('/add-hedge', requireAuth, hedgeController.getHedgeForm);
 router.post('/add-hedge', requireAuth, hedgeController.postHedgeForm);
 router.get('/hedges', requireAuth, hedgeController.getHedges);

@@ -3,16 +3,16 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Coberturas</h2>
+        <h2>Reclamos</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/sistema">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a>Coberturas</a>
+                <a>Reclamos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Consulta de Coberturas</strong>
+                <strong>Consulta de Emergencias</strong>
             </li>
         </ol>
     </div>
@@ -22,17 +22,22 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Coberturas</h5>
+                    <h5>Emergencias</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table 
                             class="table table-striped table-bordered table-hover"
-                            id="tablaCoberturas" 
+                            id="tablaEmergencias" 
                         >
                         <thead>
                         <tr>
-                            <th>Descripción</th>
+                            <th>Patología</th>
+                            <th>Clínica</th>
+                            <th>Fecha de Ocurrencia</th>
+                            <th>Fecha de Notificación</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -42,7 +47,12 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Descripción</th>
+                            <th>Patología</th>
+                            <th>Clínica</th>
+                            <th>Fecha de Ocurrencia</th>
+                            <th>Fecha de Notificación</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -117,20 +127,25 @@
 <!-- Page-Level Scripts -->
 <script>
 var lista = <%- JSON.stringify(data) %>;
-var tablaCobertura = null;
+var tablaEmergencia = null;
 $(document).ready(function(){
-    tablaCobertura = $('#tablaCoberturas').DataTable({
+    tablaEmergencia = $('#tablaEmergencias').DataTable({
         pageLength: 25,
         responsive: true,
         dom: '<"html5buttons"B>lTfgitp',
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "descripcion_cobertura"},
+            {"data": "patologia_emergencia"},
+            {"data": "clinica_emergencia"},
+            {"data": "fecha_ocurrencia_emergencia"},
+            {"data": "fecha_notificacion_emergencia"},
+            {"data": "monto_emergencia"},
+            {"data": "observacion_emergencia"},
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-hedge/${row.id_cobertura}">
+                        return `<form class="form-inline" method="get" action="/sistema/edit-emergency/${row.id_emergencia}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
                 }
@@ -138,7 +153,7 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-hedge/${row.id_cobertura}">
+                        return `<form class="form-inline" method="post" action="/sistema/remove-emergency/${row.id_emergencia}">
                                     <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
                                 </form>`;
                 }
@@ -157,8 +172,8 @@ $(document).ready(function(){
             }
         ]
     });
-    tablaCobertura.rows.add(lista);
-    tablaCobertura.draw();
+    tablaEmergencia.rows.add(lista);
+    tablaEmergencia.draw();
 });
 </script>
 

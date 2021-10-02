@@ -1,0 +1,244 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Reclamos</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Reclamos</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Editar Carta Aval</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="POST" action="/sistema/update-letter-guarantee">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Patología</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="patologia_carta_aval"
+                                                id="patologia_carta_aval"
+                                                value="<%= letterGuarentee.patologia_carta_aval %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Ocurrencia</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_ocurrencia_carta_aval"
+                                                id="fecha_ocurrencia_carta_aval"
+                                                value="<%= fechaOcurrenciaCartaAval %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <% if (naturalInsured === undefined) { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="id_rif_asegurado"
+                                                    id="id_rif_asegurado"
+                                                    onkeyup="pasarNombreAsegurado();"
+                                                    value="<%= legalInsured.rif_asegurado_per_jur %>" 
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } else if (legalInsured === undefined) { %>
+                                        <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarNombreAsegurado();"
+                                                        value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarNombreAsegurado();"
+                                                        value="<%= naturalInsured.rif_asegurado_per_nat %>" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nombre_beneficiario_carta_aval"
+                                                id="nombre_beneficiario_carta_aval"
+                                                value="<%= letterGuarentee.nombre_beneficiario_carta_aval %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="clinica_carta_aval"
+                                                id="clinica_carta_aval"
+                                                value="<%= letterGuarentee.clinica_carta_aval %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="number"
+                                                step="0.01"
+                                                name="monto_carta_aval"
+                                                id="monto_carta_aval" 
+                                                value="<%= letterGuarentee.monto_carta_aval %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Notificación</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_notificacion_carta_aval"
+                                                id="fecha_notificacion_carta_aval"
+                                                value="<%= fechaNotificacionCartaAval %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <% if (naturalInsured === undefined) { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_razon_asegurado"
+                                                    id="nombre_razon_asegurado"
+                                                    value="<%= legalInsured.razon_social_per_jur %>"
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } else if (legalInsured === undefined) { %>
+                                        <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
+                                        <div class="col-sm-9">
+                                            <textarea 
+                                                name="observacion_carta_aval"
+                                                id="observacion_carta_aval" 
+                                                class="form-control"
+                                                required
+                                            ><%= letterGuarentee.observacion_carta_aval %></textarea>
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="hidden"
+                                                name="id_carta_aval"
+                                                id="id_carta_aval"
+                                                value="<%= letterGuarentee.id_carta_aval %>"
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a href="/sistema/letters-guarentee" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footerClaim') %>

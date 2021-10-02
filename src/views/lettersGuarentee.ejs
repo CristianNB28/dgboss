@@ -3,16 +3,16 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Bonos</h2>
+        <h2>Reclamos</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/sistema">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a>Bonos</a>
+                <a>Reclamos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Consulta de Bonos</strong>
+                <strong>Consulta de Cartas Avales</strong>
             </li>
         </ol>
     </div>
@@ -22,18 +22,22 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Bonos</h5>
+                    <h5>Cartas Avales</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table 
                             class="table table-striped table-bordered table-hover"
-                            id="tablaBonos" 
+                            id="tablaCartasAvales" 
                         >
                         <thead>
                         <tr>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
+                            <th>Patología</th>
+                            <th>Clínica</th>
+                            <th>Fecha de Ocurrencia</th>
+                            <th>Fecha de Notificación</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -43,8 +47,12 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
+                            <th>Patología</th>
+                            <th>Clínica</th>
+                            <th>Fecha de Ocurrencia</th>
+                            <th>Fecha de Notificación</th>
+                            <th>Monto</th>
+                            <th>Observaciones</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -119,21 +127,25 @@
 <!-- Page-Level Scripts -->
 <script>
 var lista = <%- JSON.stringify(data) %>;
-var tablaBono = null;
+var tablaCartaAval = null;
 $(document).ready(function(){
-    tablaBono = $('#tablaBonos').DataTable({
+    tablaCartaAval = $('#tablaCartasAvales').DataTable({
         pageLength: 25,
         responsive: true,
         dom: '<"html5buttons"B>lTfgitp',
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "tipo_bono"},
-            {"data": "descripcion_bono"},
+            {"data": "patologia_carta_aval"},
+            {"data": "clinica_carta_aval"},
+            {"data": "fecha_ocurrencia_carta_aval"},
+            {"data": "fecha_notificacion_carta_aval"},
+            {"data": "monto_carta_aval"},
+            {"data": "observacion_carta_aval"},
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-bond/${row.id_bono}">
+                        return `<form class="form-inline" method="get" action="/sistema/edit-letter-guarantee/${row.id_carta_aval}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
                 }
@@ -141,7 +153,7 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-bond/${row.id_bono}">
+                        return `<form class="form-inline" method="post" action="/sistema/remove-letter-guarantee/${row.id_carta_aval}">
                                     <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
                                 </form>`;
                 }
@@ -160,8 +172,8 @@ $(document).ready(function(){
             }
         ]
     });
-    tablaBono.rows.add(lista);
-    tablaBono.draw();
+    tablaCartaAval.rows.add(lista);
+    tablaCartaAval.draw();
 });
 </script>
 
