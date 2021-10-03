@@ -39,8 +39,31 @@ module.exports = {
         for (let i = 0; i < resultPolicyInsuInsured.length; i++) {
             let element = resultPolicyInsuInsured[i];
             let elementNext = resultPolicyInsuInsured[i+1];
-            if (elementNext === undefined) {
+            if ((elementNext === undefined) && (i === 0)) {
+                let resultInsurer = await insurerModel.getInsurer(element.aseguradora_id);
+                let resultsPolicies = await policyInsurerInsuredModel.getPoliciesIds(element.aseguradora_id);
+                let sumInsurancePremiums = 0;
+                for (let index = 0; index < resultsPolicies.length; index++) {
+                    let elementPolicy = resultsPolicies[index];
+                    let resultPolicy =  await policyModel.getPolicy(elementPolicy.poliza_id);
+                    sumInsurancePremiums += resultPolicy[0].prima_anual_poliza;
+                }
+                totalInsurancePremiums.push(sumInsurancePremiums);
+                insurers.push(resultInsurer[0].nombre_aseguradora);
                 break;
+            } else if (elementNext === undefined) {
+                break;
+            } else if (i === 0) {
+                let resultInsurer = await insurerModel.getInsurer(element.aseguradora_id);
+                let resultsPolicies = await policyInsurerInsuredModel.getPoliciesIds(element.aseguradora_id);
+                let sumInsurancePremiums = 0;
+                for (let index = 0; index < resultsPolicies.length; index++) {
+                    let elementPolicy = resultsPolicies[index];
+                    let resultPolicy =  await policyModel.getPolicy(elementPolicy.poliza_id);
+                    sumInsurancePremiums += resultPolicy[0].prima_anual_poliza;
+                }
+                totalInsurancePremiums.push(sumInsurancePremiums);
+                insurers.push(resultInsurer[0].nombre_aseguradora);
             }
             if (element.aseguradora_id !== elementNext.aseguradora_id) {
                 let resultInsurer = await insurerModel.getInsurer(elementNext.aseguradora_id);

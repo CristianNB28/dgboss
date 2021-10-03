@@ -53,6 +53,7 @@
                                                         type="text"
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
+                                                        onkeyup="pasarNombreTomador();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
                                                         required
@@ -67,6 +68,7 @@
                                                         type="text"
                                                         name="id_rif_asegurado"
                                                         id="id_rif_asegurado"
+                                                        onkeyup="pasarNombreAsegurado();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
                                                         required
@@ -162,7 +164,7 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Tomador viejo</label>
                                                 <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="tomador_viejo" id="tomador_viejo"> 
+                                                    <div><label><input type="checkbox" name="tomador_viejo" id="tomador_viejo" onclick="pasarNombreTomador();"> 
                                                                 ¿Asegurado mismo tomador?</label></div>
                                                 </div>
                                             </div>
@@ -170,38 +172,28 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_tomador_poliza">
-                                                        <option selected value="">Seleccione *</option>
-                                                        <optgroup label="Persona Natural">
-                                                            <% naturalInsureds.forEach((naturalInsured) => { %>
-                                                                <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
-                                                            <% }); %>
-                                                        </optgroup>
-                                                        <optgroup label="Persona Jurídica">
-                                                            <% legalInsureds.forEach((legalInsured) => { %>
-                                                                <option value="<%= legalInsured.razon_social_per_jur %>"><%= legalInsured.razon_social_per_jur %></option>
-                                                            <% }); %>
-                                                        </optgroup>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_tomador_poliza"
+                                                        id="nombre_tomador_poliza"
+                                                        placeholder="Nombre/Razón Social Tomador *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_asegurado">
-                                                        <option selected value="">Seleccione *</option>
-                                                        <optgroup label="Persona Natural">
-                                                            <% naturalInsureds.forEach((naturalInsured) => { %>
-                                                                <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
-                                                            <% }); %>
-                                                        </optgroup>
-                                                        <optgroup label="Persona Jurídica">
-                                                            <% legalInsureds.forEach((legalInsured) => { %>
-                                                                <option value="<%= legalInsured.razon_social_per_jur %>"><%= legalInsured.razon_social_per_jur %></option>
-                                                            <% }); %>
-                                                        </optgroup>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_asegurado"
+                                                        id="nombre_asegurado"
+                                                        placeholder="Nombre/Razón Social Asegurado *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>

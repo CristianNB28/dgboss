@@ -80,8 +80,8 @@ module.exports = {
             for (let index = 0; index < resultsPolicies.length; index++) {
                 let elementPolicy = resultsPolicies[index];
                 if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde) !== 'string')) {
-                    elementPolicy.fecha_desde = elementPolicy.fecha_desde.toLocaleDateString().split('T')[0] 
-                    elementPolicy.fecha_hasta = elementPolicy.fecha_hasta.toLocaleDateString().split('T')[0]
+                    elementPolicy.fecha_desde = elementPolicy.fecha_desde.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
+                    elementPolicy.fecha_hasta = elementPolicy.fecha_hasta.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementPolicy.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
                     break;
                 }

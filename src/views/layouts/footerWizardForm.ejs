@@ -74,9 +74,9 @@
 <script>
     var policy = <%- JSON.stringify(policy) %>;
     function pasarValor() {
-        var montoComision = document.getElementById("comision_asociada_recibo").value
+        var montoComision = document.getElementById("comision_asociada_recibo").value;
         var totalComision = policy.prima_anual_poliza * montoComision;
-        var montoBonificacion = document.getElementById("bonificacion_recibo").value
+        var montoBonificacion = document.getElementById("bonificacion_recibo").value;
         if (montoBonificacion == '') {
             document.getElementById("monto_comision_recibo").value = totalComision.toFixed(2);
         } else {
@@ -89,6 +89,127 @@
     }
 </script>
 
+<script>
+    var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+    var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
+    function pasarNombreTomador() {
+        var idRif = document.getElementById("id_rif_tomador").value;
+        var checkboxTomadorViejo = document.getElementById("tomador_viejo").checked;
+        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+            for (let i = 0; i < legalInsureds.length; i++) {
+                let elementLegalInsured = legalInsureds[i];
+                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                    document.getElementById("correo_tomador").value = elementLegalInsured.correo_asegurado_per_jur;
+                    document.getElementById("nombre_tomador_poliza").value = elementLegalInsured.razon_social_per_jur;
+                    if (checkboxTomadorViejo === true) {
+                        document.getElementById("id_rif_asegurado").value = elementLegalInsured.rif_asegurado_per_jur;
+                        document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
+                        document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
+                    } else {
+                        document.getElementById("id_rif_asegurado").value = ''
+                        document.getElementById("correo_asegurado").value = '';
+                        document.getElementById("nombre_asegurado").value = '';
+                    }
+                    break;
+                } else {
+                    document.getElementById("correo_tomador").value = '';
+                    document.getElementById("nombre_tomador_poliza").value = '';
+                }
+            }
+        } else {
+            for (let i = 0; i < naturalInsureds.length; i++) {
+                let elementNaturalInsured = naturalInsureds[i];
+                if (idRif.startsWith('V')) {
+                    if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
+                        document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
+                        document.getElementById("nombre_tomador_poliza").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        if (checkboxTomadorViejo === true) {
+                            document.getElementById("id_rif_asegurado").value = elementNaturalInsured.rif_asegurado_per_nat;
+                            document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
+                            document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        } else {
+                            document.getElementById("id_rif_asegurado").value = ''
+                            document.getElementById("correo_asegurado").value = '';
+                            document.getElementById("nombre_asegurado").value = '';
+                        }
+                        break;
+                    } else {
+                        document.getElementById("correo_tomador").value = '';
+                        document.getElementById("nombre_tomador_poliza").value = '';
+                    }
+                } else if (idRif.match(/^\d/)) {
+                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                        document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
+                        document.getElementById("nombre_tomador_poliza").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        if (checkboxTomadorViejo === true) {
+                            document.getElementById("id_rif_asegurado").value = elementNaturalInsured.cedula_asegurado_per_nat;
+                            document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
+                            document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        } else {
+                            document.getElementById("id_rif_asegurado").value = ''
+                            document.getElementById("correo_asegurado").value = '';
+                            document.getElementById("nombre_asegurado").value = '';
+                        }
+                        break;
+                    } else {
+                        document.getElementById("correo_tomador").value = '';
+                        document.getElementById("nombre_tomador_poliza").value = '';
+                    }
+                } else if (idRif.startsWith('')) {
+                    document.getElementById("correo_tomador").value = '';
+                    document.getElementById("nombre_tomador_poliza").value = '';
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+    var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
+    function pasarNombreAsegurado() {
+        var idRif = document.getElementById("id_rif_asegurado").value;
+        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+            for (let i = 0; i < legalInsureds.length; i++) {
+                let elementLegalInsured = legalInsureds[i];
+                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                    document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
+                    document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
+                    break;
+                } else {
+                    document.getElementById("correo_asegurado").value = '';
+                    document.getElementById("nombre_asegurado").value = '';
+                }
+            }
+        } else {
+            for (let i = 0; i < naturalInsureds.length; i++) {
+                let elementNaturalInsured = naturalInsureds[i];
+                if (idRif.startsWith('V')) {
+                    if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
+                        document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
+                        document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        break;
+                    } else {
+                        document.getElementById("correo_asegurado").value = '';
+                        document.getElementById("nombre_asegurado").value = '';
+                    }
+                } else if (idRif.match(/^\d/)) {
+                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                        document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
+                        document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        break;
+                    } else {
+                        document.getElementById("correo_asegurado").value = '';
+                        document.getElementById("nombre_asegurado").value = '';
+                    }
+                } else if (idRif.startsWith('')) {
+                    document.getElementById("correo_asegurado").value = '';
+                    document.getElementById("nombre_asegurado").value = '';
+                }
+            }
+        }
+    }
+</script>
 
 </body>
 
