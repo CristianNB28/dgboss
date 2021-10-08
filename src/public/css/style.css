@@ -9655,3 +9655,17 @@ body.md-skin {
 #active-select-1 {
   display: none;
 }
+
+.lcircle,
+.lcircleOnwAgent {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  border-radius: 20px;
+  border: solid 1px;
+}
+
+.ltext,
+.ltextOnwAgent {
+  padding: 5px;
+}

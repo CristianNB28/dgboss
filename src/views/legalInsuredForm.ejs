@@ -129,6 +129,7 @@
                                                 type="email" 
                                                 name="correo_asegurado_per_nat"
                                                 id="correo_asegurado_per_nat"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                                 placeholder="Email *"
                                                 class="form-control" 
                                                 required
@@ -137,13 +138,14 @@
                                     </div>
                                     <div class="active-input-2">
                                         <div class="hr-line-dashed"></div>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Email opcional</label>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Emails opcionales</label>
                                             <div class="col-sm-9">
                                                 <input 
-                                                    type="text"
+                                                    type="email"
                                                     name="correo_opcional_per_jur"
-                                                    id="correo_opcional_per_jur" 
-                                                    placeholder="Email opcional" 
+                                                    id="correo_opcional_per_jur"
+                                                    placeholder="Emails opcionales (Cada correo se separa por comas)"
+                                                    multiple 
                                                     class="form-control"
                                                 >
                                             </div>

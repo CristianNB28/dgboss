@@ -105,7 +105,8 @@
                                             <input 
                                                 type="email"
                                                 name="correo_agente_propio"
-                                                id="correo_agente_propio" 
+                                                id="correo_agente_propio"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
                                                 value="<%= ownAgent.correo_agente_propio %>" 
                                                 class="form-control"
                                                 required
