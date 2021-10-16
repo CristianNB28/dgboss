@@ -415,6 +415,14 @@ module.exports = {
                 }
             }
         }
+        for(i=0; i < ownAgents.length; i++){
+            if(filteredOwnAgents.indexOf(ownAgents[i]) === -1) {
+                filteredOwnAgents.push(ownAgents[i]);
+            } else {
+                filteredOwnAgents.splice(filteredOwnAgents.indexOf(ownAgents[i]),1);
+                filteredOwnAgents.push(ownAgents[i]);
+            }
+        }
         for(i=0; i < totalCommissionsNatural.length; i++){
             if(filteredTotalComissionsNatural.indexOf(totalCommissionsNatural[i]) === -1) {
                 filteredTotalComissionsNatural.push(totalCommissionsNatural[i]);
@@ -431,115 +439,271 @@ module.exports = {
                 filteredTotalComissionsLegal.push(totalCommissionsLegal[i]);
             }
         }
-        if (filteredTotalComissionsNatural.length > filteredTotalComissionsLegal.length) {
-            for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
-                let elementComissionNatural = filteredTotalComissionsNatural[i];
-                for (let j = i; j <= filteredTotalComissionsLegal.length; j++) {
+        for (let i = 0; i < ownAgents.length; i++) {
+            let elementOwnAgent = ownAgents[i];
+            let elementOwnAgentNext = ownAgents[i+1];
+            if (elementOwnAgentNext === undefined) {
+                if (filteredTotalComissionsNatural.length > filteredTotalComissionsLegal.length) {
+                    for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
+                        let elementComissionNatural = filteredTotalComissionsNatural[i];
+                        if (i > filteredTotalComissionsLegal.length) {
+                            elementComissionNatural = parseFloat(elementComissionNatural);
+                            totalCommissions.push(elementComissionNatural.toFixed(2));
+                        }
+                        for (let j = i; j <= filteredTotalComissionsLegal.length; j++) {
+                            let elementComissionLegal = filteredTotalComissionsLegal[j];
+                            if (elementComissionLegal === undefined) {
+                                elementComissionNatural = parseFloat(elementComissionNatural);
+                                totalCommissions.push(elementComissionNatural.toFixed(2));
+                                break;
+                            } else {
+                                let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                                totalCommissions.push(resultComission.toFixed(2));
+                                break;
+                            }
+                        }
+                    }
+                } else if (filteredTotalComissionsLegal.length > filteredTotalComissionsNatural.length) {
+                    for (let i = 0; i < filteredTotalComissionsLegal.length; i++) {
+                        let elementComissionLegal = filteredTotalComissionsLegal[i];
+                        if (i > filteredTotalComissionsNatural.length) {
+                            elementComissionLegal = parseFloat(elementComissionLegal);
+                            totalCommissions.push(elementComissionLegal.toFixed(2));
+                        }
+                        for (let j = i; j <= filteredTotalComissionsNatural.length; j++) {
+                            let elementComissionNatural = filteredTotalComissionsNatural[j];
+                            if (elementComissionNatural === undefined) {
+                                elementComissionLegal = parseFloat(elementComissionLegal);
+                                totalCommissions.push(elementComissionLegal.toFixed(2));
+                                break;
+                            } else {
+                                let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                                totalCommissions.push(resultComission.toFixed(2));
+                                break;
+                            }
+                        }
+                    }
+                } else if (filteredTotalComissionsNatural.length === filteredTotalComissionsLegal.length) {
+                    for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
+                        let elementComissionNatural = filteredTotalComissionsNatural[i];
+                        for (let j = i; j < filteredTotalComissionsLegal.length; j++) {
+                            let elementComissionLegal = filteredTotalComissionsLegal[j];
+                            let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                            totalCommissions.push(resultComission.toFixed(2));
+                            break;
+                        }
+                    }
+                }
+                if (datesOwnAgentsNatural.length === datesOwnAgentsLegal.length) {
+                    for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
+                        let elementDateNatural = datesOwnAgentsNatural[i];
+                        for (let j = i; j < datesOwnAgentsLegal.length; j++) {
+                            let elementDateLegal = datesOwnAgentsLegal[j];
+                            if (elementDateNatural > elementDateLegal) {
+                                elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateNatural);
+                                break;
+                            } else {
+                                elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateLegal);
+                                break;
+                            }
+                        }
+                    }
+                } else if (datesOwnAgentsNatural.length > datesOwnAgentsLegal.length) {
+                    for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
+                        let elementDateNatural = datesOwnAgentsNatural[i];
+                        if ((i > datesOwnAgentsLegal.length)) {
+                            elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                            datesOwnAgents.push(elementDateNatural);
+                        }
+                        for (let j = i; j <= datesOwnAgentsLegal.length; j++) {
+                            let elementDateLegal = datesOwnAgentsLegal[j];
+                            if (elementDateLegal === undefined) {
+                                elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateNatural);
+                                break;
+                            } else {
+                                if (elementDateNatural > elementDateLegal) {
+                                    elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateNatural);
+                                    break;
+                                } else {
+                                    elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateLegal);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (datesOwnAgentsLegal.length > datesOwnAgentsNatural.length) {
+                    for (let i = 0; i < datesOwnAgentsLegal.length; i++) {
+                        let elementDateLegal = datesOwnAgentsLegal[i];
+                        if (i > datesOwnAgentsNatural.length) {
+                            elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                            datesOwnAgents.push(elementDateLegal);
+                        }
+                        for (let j = i; j <= datesOwnAgentsNatural.length; j++) {
+                            let elementDateNatural = datesOwnAgentsNatural[j];
+                            if (elementDateNatural === undefined) {
+                                elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateLegal);
+                                break;
+                            } else {
+                                if (elementDateLegal > elementDateNatural) {
+                                    elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateLegal);
+                                    break;
+                                } else {
+                                    elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateNatural);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            if (elementOwnAgent === elementOwnAgentNext) {
+                if (filteredTotalComissionsNatural.length > filteredTotalComissionsLegal.length) {
+                    for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
+                        let elementComissionNatural = filteredTotalComissionsNatural[i];
+                        if (i > filteredTotalComissionsLegal.length) {
+                            elementComissionNatural = parseFloat(elementComissionNatural);
+                            totalCommissions.push(elementComissionNatural.toFixed(2));
+                        }
+                        for (let j = i; j <= filteredTotalComissionsLegal.length; j++) {
+                            let elementComissionLegal = filteredTotalComissionsLegal[j];
+                            if (elementComissionLegal === undefined) {
+                                elementComissionNatural = parseFloat(elementComissionNatural);
+                                totalCommissions.push(elementComissionNatural.toFixed(2));
+                                break;
+                            } else {
+                                let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                                totalCommissions.push(resultComission.toFixed(2));
+                                break;
+                            }
+                        }
+                    }
+                } else if (filteredTotalComissionsLegal.length > filteredTotalComissionsNatural.length) {
+                    for (let i = 0; i < filteredTotalComissionsLegal.length; i++) {
+                        let elementComissionLegal = filteredTotalComissionsLegal[i];
+                        if (i > filteredTotalComissionsNatural.length) {
+                            elementComissionLegal = parseFloat(elementComissionLegal);
+                            totalCommissions.push(elementComissionLegal.toFixed(2));
+                        }
+                        for (let j = i; j <= filteredTotalComissionsNatural.length; j++) {
+                            let elementComissionNatural = filteredTotalComissionsNatural[j];
+                            if (elementComissionNatural === undefined) {
+                                elementComissionLegal = parseFloat(elementComissionLegal);
+                                totalCommissions.push(elementComissionLegal.toFixed(2));
+                                break;
+                            } else {
+                                let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                                totalCommissions.push(resultComission.toFixed(2));
+                                break;
+                            }
+                        }
+                    }
+                } else if (filteredTotalComissionsNatural.length === filteredTotalComissionsLegal.length) {
+                    for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
+                        let elementComissionNatural = filteredTotalComissionsNatural[i];
+                        for (let j = i; j < filteredTotalComissionsLegal.length; j++) {
+                            let elementComissionLegal = filteredTotalComissionsLegal[j];
+                            let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
+                            totalCommissions.push(resultComission.toFixed(2));
+                            break;
+                        }
+                    }
+                }
+                if (datesOwnAgentsNatural.length === datesOwnAgentsLegal.length) {
+                    for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
+                        let elementDateNatural = datesOwnAgentsNatural[i];
+                        for (let j = i; j < datesOwnAgentsLegal.length; j++) {
+                            let elementDateLegal = datesOwnAgentsLegal[j];
+                            if (elementDateNatural > elementDateLegal) {
+                                elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateNatural);
+                                break;
+                            } else {
+                                elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateLegal);
+                                break;
+                            }
+                        }
+                    }
+                } else if (datesOwnAgentsNatural.length > datesOwnAgentsLegal.length) {
+                    for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
+                        let elementDateNatural = datesOwnAgentsNatural[i];
+                        if ((i > datesOwnAgentsLegal.length)) {
+                            elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                            datesOwnAgents.push(elementDateNatural);
+                        }
+                        for (let j = i; j <= datesOwnAgentsLegal.length; j++) {
+                            let elementDateLegal = datesOwnAgentsLegal[j];
+                            if (elementDateLegal === undefined) {
+                                elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateNatural);
+                                break;
+                            } else {
+                                if (elementDateNatural > elementDateLegal) {
+                                    elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateNatural);
+                                    break;
+                                } else {
+                                    elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateLegal);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (datesOwnAgentsLegal.length > datesOwnAgentsNatural.length) {
+                    for (let i = 0; i < datesOwnAgentsLegal.length; i++) {
+                        let elementDateLegal = datesOwnAgentsLegal[i];
+                        if (i > datesOwnAgentsNatural.length) {
+                            elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                            datesOwnAgents.push(elementDateLegal);
+                        }
+                        for (let j = i; j <= datesOwnAgentsNatural.length; j++) {
+                            let elementDateNatural = datesOwnAgentsNatural[j];
+                            if (elementDateNatural === undefined) {
+                                elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                datesOwnAgents.push(elementDateLegal);
+                                break;
+                            } else {
+                                if (elementDateLegal > elementDateNatural) {
+                                    elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateLegal);
+                                    break;
+                                } else {
+                                    elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
+                                    datesOwnAgents.push(elementDateNatural);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
+                    let elementComissionNatural = filteredTotalComissionsNatural[i];
+                    totalCommissions.push(elementComissionNatural);
+                }
+                for (let j = 0; j < filteredTotalComissionsLegal.length; j++) {
                     let elementComissionLegal = filteredTotalComissionsLegal[j];
-                    if (elementComissionLegal === undefined) {
-                        elementComissionNatural = parseFloat(elementComissionNatural);
-                        totalCommissions.push(elementComissionNatural.toFixed(2));
-                        break;
-                    } else {
-                        let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
-                        totalCommissions.push(resultComission.toFixed(2));
-                        break;
-                    }
+                    totalCommissions.push(elementComissionLegal);
                 }
-            }
-        } else if (filteredTotalComissionsLegal.length > filteredTotalComissionsNatural.length) {
-            for (let i = 0; i < filteredTotalComissionsLegal.length; i++) {
-                let elementComissionLegal = filteredTotalComissionsLegal[i];
-                for (let j = i; j <= filteredTotalComissionsNatural.length; j++) {
-                    let elementComissionNatural = filteredTotalComissionsNatural[j];
-                    if (elementComissionNatural === undefined) {
-                        elementComissionLegal = parseFloat(elementComissionLegal);
-                        totalCommissions.push(elementComissionLegal.toFixed(2));
-                        break;
-                    } else {
-                        let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
-                        totalCommissions.push(resultComission.toFixed(2));
-                        break;
-                    }
-                }
-            }
-        } else if (filteredTotalComissionsNatural.length === filteredTotalComissionsLegal.length) {
-            for (let i = 0; i < filteredTotalComissionsNatural.length; i++) {
-                let elementComissionNatural = filteredTotalComissionsNatural[i];
-                for (let j = i; j < filteredTotalComissionsLegal.length; j++) {
-                    let elementComissionLegal = filteredTotalComissionsLegal[j];
-                    let resultComission = parseFloat(elementComissionNatural) + parseFloat(elementComissionLegal);
-                    totalCommissions.push(resultComission.toFixed(2));
-                    break;
-                }
-            }
-        }
-        if (datesOwnAgentsNatural.length === datesOwnAgentsLegal.length) {
-            for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
-                let elementDateNatural = datesOwnAgentsNatural[i];
-                for (let j = i; j < datesOwnAgentsLegal.length; j++) {
-                    let elementDateLegal = datesOwnAgentsLegal[j];
-                    if (elementDateNatural > elementDateLegal) {
-                        elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
-                        datesOwnAgents.push(elementDateNatural);
-                        break;
-                    } else {
-                        elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
-                        datesOwnAgents.push(elementDateLegal);
-                        break;
-                    }
-                }
-            }
-        } else if (datesOwnAgentsNatural.length > datesOwnAgentsLegal.length) {
-            for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
-                let elementDateNatural = datesOwnAgentsNatural[i];
-                if ((i > datesOwnAgentsLegal.length)) {
+                for (let i = 0; i < datesOwnAgentsNatural.length; i++) {
+                    let elementDateNatural = datesOwnAgentsNatural[i];
                     elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
                     datesOwnAgents.push(elementDateNatural);
                 }
-                for (let j = i; j <= datesOwnAgentsLegal.length; j++) {
+                for (let j = 0; j < datesOwnAgentsLegal.length; j++) {
                     let elementDateLegal = datesOwnAgentsLegal[j];
-                    if (elementDateLegal === undefined) {
-                        elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
-                        datesOwnAgents.push(elementDateNatural);
-                        break;
-                    } else {
-                        if (elementDateNatural > elementDateLegal) {
-                            elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
-                            datesOwnAgents.push(elementDateNatural);
-                            break;
-                        } else {
-                            elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
-                            datesOwnAgents.push(elementDateLegal);
-                            break;
-                        }
-                    }
-                }
-            }
-        } else if (datesOwnAgentsLegal.length > datesOwnAgentsNatural.length) {
-            for (let i = 0; i < datesOwnAgentsLegal.length; i++) {
-                let elementDateLegal = datesOwnAgentsLegal[i];
-                if (i > datesOwnAgentsNatural.length) {
                     elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
                     datesOwnAgents.push(elementDateLegal);
-                }
-                for (let j = i; j <= datesOwnAgentsNatural.length; j++) {
-                    let elementDateNatural = datesOwnAgentsNatural[j];
-                    if (elementDateNatural === undefined) {
-                        elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
-                        datesOwnAgents.push(elementDateLegal);
-                        break;
-                    } else {
-                        if (elementDateLegal > elementDateNatural) {
-                            elementDateLegal = elementDateLegal.toISOString().substring(0, 10);
-                            datesOwnAgents.push(elementDateLegal);
-                            break;
-                        } else {
-                            elementDateNatural = elementDateNatural.toISOString().substring(0, 10);
-                            datesOwnAgents.push(elementDateNatural);
-                            break;
-                        }
-                    }
                 }
             }
         }
@@ -564,14 +728,6 @@ module.exports = {
             maxDateOwnAgent = maxDateOwnAgent.toISOString().substring(0, 10);
             minDateOwnAgent = new Date();
             minDateOwnAgent = minDateOwnAgent.toISOString().substring(0, 10);
-        }
-        for(i=0; i < ownAgents.length; i++){
-            if(filteredOwnAgents.indexOf(ownAgents[i]) === -1) {
-                filteredOwnAgents.push(ownAgents[i]);
-            } else {
-                filteredOwnAgents.splice(filteredOwnAgents.indexOf(ownAgents[i]),1);
-                filteredOwnAgents.push(ownAgents[i]);
-            }
         }
         res.render('index', {
             healthPolicyCount: healthPolicyCounter[0],
