@@ -67,6 +67,7 @@ CREATE TABLE Poliza(
     tipo_canal_poliza VARCHAR(255),
     suma_asegurada_poliza DECIMAL(20,4) NOT NULL,
     deducible_poliza DECIMAL(20,4),
+    grupo_poliza VARCHAR(255) NOT NULL,
     deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -113,8 +114,6 @@ CREATE TABLE Recibo(
     tipo_fraccionamiento_recibo VARCHAR(255) NOT NULL,
     metodo_pago_recibo VARCHAR(255) NOT NULL, 
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
-    comision_asociada_recibo DECIMAL(20,4) NOT NULL,
-    bonificacion_recibo DECIMAL(20,4),
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
@@ -130,6 +129,8 @@ CREATE TABLE Comision(
     porcentaje_director_comision DECIMAL(10,4) NOT NULL,
     porcentaje_socio_comision DECIMAL(10,4) NOT NULL,
     porcentaje_atina_comision DECIMAL(10,4) NOT NULL,
+    porcentaje_ejecutivo_suscripcion DECIMAL(10,4) NOT NULL,
+    porcentaje_ejecutivo_reclamo DECIMAL(10,4) NOT NULL,
     deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza)
@@ -217,6 +218,7 @@ CREATE TABLE Reembolso(
     fecha_notificacion_reembolso DATE NOT NULL,
     monto_reembolso DECIMAL(10,4) NOT NULL,
     nombre_beneficiario_reembolso VARCHAR(255) NOT NULL,
+    cedula_beneficiario_reembolso VARCHAR(255) NOT NULL,
     observacion_reembolso VARCHAR(500) NOT NULL,
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_per_nat_id INT,
@@ -233,6 +235,7 @@ CREATE TABLE AMP(
     fecha_notificacion_amp DATE NOT NULL,
     monto_amp DECIMAL(10,4) NOT NULL,
     nombre_beneficiario_amp VARCHAR(255) NOT NULL,
+    cedula_beneficiario_amp VARCHAR(255) NOT NULL,
     observacion_amp VARCHAR(500) NOT NULL,
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_per_nat_id INT,
@@ -249,6 +252,7 @@ CREATE TABLE Emergencia(
     fecha_notificacion_emergencia DATE NOT NULL,
     monto_emergencia DECIMAL(10,4) NOT NULL,
     nombre_beneficiario_emergencia VARCHAR(255) NOT NULL,
+    cedula_beneficiario_emergencia VARCHAR(255) NOT NULL,
     observacion_emergencia VARCHAR(500) NOT NULL,
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_per_nat_id INT,
@@ -265,6 +269,7 @@ CREATE TABLE Carta_Aval(
     fecha_notificacion_carta_aval DATE NOT NULL,
     monto_carta_aval DECIMAL(10,4) NOT NULL,
     nombre_beneficiario_carta_aval VARCHAR(255) NOT NULL,
+    cedula_beneficiario_carta_aval VARCHAR(255) NOT NULL,
     observacion_carta_aval VARCHAR(500) NOT NULL,
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_per_nat_id INT,

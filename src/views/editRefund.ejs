@@ -99,19 +99,29 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="nombre_beneficiario_reembolso"
-                                                id="nombre_beneficiario_reembolso"
-                                                value="<%= refund.nombre_beneficiario_reembolso %>"
+                                                name="cedula_beneficiario_reembolso"
+                                                id="cedula_beneficiario_reembolso"
+                                                value="<%= refund.cedula_beneficiario_reembolso %>"
                                                 class="form-control"
                                                 required
                                             >
                                         </div>
                                     </div>
-                                    </br>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
+                                        <div class="col-sm-9">
+                                            <textarea 
+                                                name="observacion_reembolso"
+                                                id="observacion_reembolso" 
+                                                class="form-control"
+                                                required
+                                            ><%= refund.observacion_reembolso %></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -188,29 +198,34 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
                                         <div class="col-sm-9">
-                                            <textarea 
-                                                name="observacion_reembolso"
-                                                id="observacion_reembolso" 
+                                            <input 
+                                                type="text"
+                                                name="nombre_beneficiario_reembolso"
+                                                id="nombre_beneficiario_reembolso"
+                                                value="<%= refund.nombre_beneficiario_reembolso %>"
                                                 class="form-control"
                                                 required
-                                            ><%= refund.observacion_reembolso %></textarea>
+                                            >
                                         </div>
                                     </div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="hidden"
+                                                name="id_reembolso"
+                                                id="id_reembolso"
+                                                value="<%= refund.id_reembolso %>"
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    </br>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <input 
-                                type="hidden"
-                                name="id_reembolso"
-                                id="id_reembolso"
-                                value="<%= refund.id_reembolso %>"
-                                class="form-control"
-                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

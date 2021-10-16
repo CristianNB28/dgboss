@@ -75,9 +75,9 @@ module.exports = {
         }
         if (legalInsuredId[0] !== undefined) {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_carta_aval, nombre_beneficiario_carta_aval, observacion_carta_aval, asegurado_per_jur_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, legalInsuredId[0].id_asegurado_per_jur], 
+                db.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_carta_aval, nombre_beneficiario_carta_aval, cedula_beneficiario_carta_aval, observacion_carta_aval, asegurado_per_jur_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.cedula_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, legalInsuredId[0].id_asegurado_per_jur], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -87,9 +87,9 @@ module.exports = {
             });
         } else {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_carta_aval, nombre_beneficiario_carta_aval, observacion_carta_aval, asegurado_per_nat_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, naturalInsuredId[0].id_asegurado_per_nat], 
+                db.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_carta_aval, nombre_beneficiario_carta_aval, cedula_beneficiario_carta_aval, observacion_carta_aval, asegurado_per_nat_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.cedula_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, naturalInsuredId[0].id_asegurado_per_nat], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -146,9 +146,9 @@ module.exports = {
         if (legalInsuredId[0] !== undefined) {
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE Carta_Aval 
-                        SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_carta_aval=?, nombre_beneficiario_carta_aval=?, observacion_carta_aval=?, asegurado_per_jur_id=? 
+                        SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_carta_aval=?, nombre_beneficiario_carta_aval=?, cedula_beneficiario_carta_aval=?, observacion_carta_aval=?, asegurado_per_jur_id=? 
                         WHERE id_carta_aval=?`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, legalInsuredId[0].id_asegurado_per_jur, letterGuarantee.id_carta_aval], 
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.cedula_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, legalInsuredId[0].id_asegurado_per_jur, letterGuarantee.id_carta_aval], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -159,9 +159,9 @@ module.exports = {
         } else {
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE Carta_Aval 
-                        SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_carta_aval=?, nombre_beneficiario_carta_aval=?, observacion_carta_aval=?, asegurado_per_nat_id=? 
+                        SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_carta_aval=?, nombre_beneficiario_carta_aval=?, cedula_beneficiario_carta_aval=?, observacion_carta_aval=?, asegurado_per_nat_id=? 
                         WHERE id_carta_aval=?`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, naturalInsuredId[0].id_asegurado_per_nat, letterGuarantee.id_carta_aval], 
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoCartaAval, letterGuarantee.nombre_beneficiario_carta_aval, letterGuarantee.cedula_beneficiario_carta_aval, letterGuarantee.observacion_carta_aval, naturalInsuredId[0].id_asegurado_per_nat, letterGuarantee.id_carta_aval], 
                 (error, rows) => {
                     if (error) {
                         reject(error);

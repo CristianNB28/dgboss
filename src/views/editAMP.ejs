@@ -99,32 +99,29 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="nombre_beneficiario_amp"
-                                                id="nombre_beneficiario_amp"
-                                                value="<%= amp.nombre_beneficiario_amp %>"
+                                                name="cedula_beneficiario_amp"
+                                                id="cedula_beneficiario_amp"
+                                                value="<%= amp.cedula_beneficiario_amp %>"
                                                 class="form-control"
                                                 required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
                                         <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="clinica_amp"
-                                                id="clinica_amp"
-                                                value="<%= amp.clinica_amp %>"
+                                            <textarea 
+                                                name="observacion_amp"
+                                                id="observacion_amp" 
                                                 class="form-control"
                                                 required
-                                            >
+                                            ><%= amp.observacion_amp %></textarea>
                                         </div>
                                     </div>
-                                    </br>
                                 </div>
                             </div>
                         </div>
@@ -201,31 +198,45 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
-                                        <div class="col-sm-9">
-                                            <textarea 
-                                                name="observacion_amp"
-                                                id="observacion_amp" 
-                                                class="form-control"
-                                                required
-                                            ><%= amp.observacion_amp %></textarea>
-                                        </div>
-                                    </div>
-                                    </br>
-                                    </br>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="hidden"
-                                                name="id_amp"
-                                                id="id_amp"
-                                                value="<%= amp.id_amp %>"
+                                                type="text"
+                                                name="nombre_beneficiario_amp"
+                                                id="nombre_beneficiario_amp"
+                                                value="<%= amp.nombre_beneficiario_amp %>"
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="clinica_amp"
+                                                id="clinica_amp"
+                                                value="<%= amp.clinica_amp %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_amp"
+                                id="id_amp"
+                                value="<%= amp.id_amp %>"
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

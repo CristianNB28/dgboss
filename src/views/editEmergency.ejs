@@ -99,32 +99,29 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="nombre_beneficiario_emergencia"
-                                                id="nombre_beneficiario_emergencia"
-                                                value="<%= emergency.nombre_beneficiario_emergencia %>"
+                                                name="cedula_beneficiario_emergencia"
+                                                id="cedula_beneficiario_emergencia"
+                                                value="<%= emergency.cedula_beneficiario_emergencia %>"
                                                 class="form-control"
                                                 required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
                                         <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="clinica_emergencia"
-                                                id="clinica_emergencia"
-                                                value="<%= emergency.clinica_emergencia %>"
+                                            <textarea 
+                                                name="observacion_emergencia"
+                                                id="observacion_emergencia" 
                                                 class="form-control"
                                                 required
-                                            >
+                                            ><%= emergency.observacion_emergencia %></textarea>
                                         </div>
                                     </div>
-                                    </br>
                                 </div>
                             </div>
                         </div>
@@ -201,31 +198,45 @@
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
-                                        <div class="col-sm-9">
-                                            <textarea 
-                                                name="observacion_emergencia"
-                                                id="observacion_emergencia" 
-                                                class="form-control"
-                                                required
-                                            ><%= emergency.observacion_emergencia %></textarea>
-                                        </div>
-                                    </div>
-                                    </br>
-                                    </br>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="hidden"
-                                                name="id_emergencia"
-                                                id="id_emergencia"
-                                                value="<%= emergency.id_emergencia %>"
+                                                type="text"
+                                                name="nombre_beneficiario_emergencia"
+                                                id="nombre_beneficiario_emergencia"
+                                                value="<%= emergency.nombre_beneficiario_emergencia %>"
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="clinica_emergencia"
+                                                id="clinica_emergencia"
+                                                value="<%= emergency.clinica_emergencia %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_emergencia"
+                                id="id_emergencia"
+                                value="<%= emergency.id_emergencia %>"
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
