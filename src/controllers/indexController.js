@@ -12,6 +12,12 @@ module.exports = {
         let healthPolicyCounter = await policyModel.getHealthPolicyCounter();
         let autoPolicyCounter = await policyModel.getAutoPolicyCounter();
         let patrimonialPolicyCounter = await policyModel.getPatrimonialPolicyCounter();
+        let bailPolicyCounter = await policyModel.getBailPolicyCounter();
+        let anotherBranchPolicyCounter = await policyModel.getAnotherBranchPolicyCounter();
+        let funeralPolicyCounter = await policyModel.getFuneralPolicyCounter();
+        let lifePolicyCounter = await policyModel.getLifePolicyCounter();
+        let apPolicyCounter = await policyModel.getAPPolicyCounter();
+        let travelPolicyCounter = await policyModel.getTravelPolicyCounter();
         let resultPolicyInsuInsured = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
         let totalPremium = await policyModel.getSummaryPolizaCousins();
         let totalCommission = await receiptModel.getSumReceiptCommissions(); 
@@ -733,6 +739,12 @@ module.exports = {
             healthPolicyCount: healthPolicyCounter[0],
             autoPolicyCount: autoPolicyCounter[0],
             patrimonialPolicyCount: patrimonialPolicyCounter[0],
+            bailPolicyCount: bailPolicyCounter[0],
+            anotherBranchPolicyCount: anotherBranchPolicyCounter[0],
+            funeralPolicyCount: funeralPolicyCounter[0],
+            lifePolicyCount: lifePolicyCounter[0],
+            apPolicyCount: apPolicyCounter[0],
+            travelPolicyCount: travelPolicyCounter[0],
             totalPremium: totalPremium,
             totalCommission: totalCommission,
             insurers: filteredInsurers,

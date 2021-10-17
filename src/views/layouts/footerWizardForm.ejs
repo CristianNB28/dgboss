@@ -66,24 +66,6 @@
     });
 </script>
 
-<!--script>
-    var policy = <%- JSON.stringify(policy) %>;
-    function pasarValor() {
-        var montoComision = document.getElementById("comision_asociada_recibo").value;
-        var totalComision = policy.prima_anual_poliza * montoComision;
-        var montoBonificacion = document.getElementById("bonificacion_recibo").value;
-        if (montoBonificacion == '') {
-            document.getElementById("monto_comision_recibo").value = totalComision.toFixed(2);
-        } else {
-            montoBonificacion = parseFloat(montoBonificacion.replace(',','.'));
-            var ivaPorcentaje = montoBonificacion * 0.05;
-            var montoBonificacionPorcen = montoBonificacion - ivaPorcentaje.toFixed(2);
-            var totalComisionPorcen = totalComision + montoBonificacionPorcen;
-            document.getElementById("monto_comision_recibo").value = totalComisionPorcen.toFixed(2); 
-        }
-    }
-</script-->
-
 <script>
     var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;

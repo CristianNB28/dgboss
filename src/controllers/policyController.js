@@ -71,6 +71,138 @@ module.exports = {
             });
         }
     },
+    getBailPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('bailPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('bailPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
+    getAnotherBranchPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('anotherBranchPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('anotherBranchPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
+    getFuneralPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('funeralPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('funeralPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
+    getLifePolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('lifePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('lifePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
+    getAPPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('apPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('apPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
+    getTravelPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy === []) {
+            res.render('travelPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+        } else {
+            res.render('travelPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                name: req.session.name
+            });
+        }
+    },
     getPolicies: async (req, res) => {
         let resultsPolicies =  await policyModel.getPolicies();
         let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
@@ -261,6 +393,360 @@ module.exports = {
                     showConfirmButton: true,
                     timer: 1500,
                     ruta: 'sistema/add-patrimonial-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postBailPolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Fianza';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postBailPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-bail-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('bailPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-bail-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postAnotherBranchPolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Otros Ramos';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postAnotherBranchPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-another-branch-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('anotherBranchPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-another-branch-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postFuneralPolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Funerario';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postFuneralPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-funeral-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('funeralPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-funeral-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postLifePolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Vida';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postLifePolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-life-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('lifePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-life-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postAPPolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'AP';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postAPPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-ap-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('apPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-ap-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    name: req.session.name
+                });
+            }
+        }
+    },
+    postTravelPolicyForm: async (req, res) => {
+        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let montoTasa = parseFloat(req.body.tasa_poliza);
+        let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
+        let deducible = parseFloat(req.body.deducible_poliza);
+        let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
+        let fechaPolizaDesde = new Date(req.body.fecha_desde);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
+        let tipoPoliza = 'Individual';
+        let tipoIndividualPoliza = 'Viaje';
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let estatusPoliza = '';
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let diasExpiracion = 0;
+        let fechaActual = new Date();
+        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+        diasExpiracion = diferenciaDias.toFixed(0);
+        if (req.body.id_rif_asegurado.startsWith('V')) {
+            rifAseguradoNatural = req.body.id_rif_asegurado;
+        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        if (diasExpiracion > 0) {
+            estatusPoliza = 'Vigente';
+        } else {
+            estatusPoliza = 'Anulado';
+        }
+        if (req.body.correo_tomador === req.body.correo_verificar) {
+            let policy = await policyModel.postTravelPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-travel-policy');
+        } else {
+            try {
+                throw new Error('Error, los correos no son iguales');
+            } catch (error) {
+                console.log(error);
+                res.render('travelPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: 'Los correos no son iguales',
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-travel-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
