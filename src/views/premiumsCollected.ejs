@@ -1,0 +1,156 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Reportes</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Reportes</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Consulta de Primas Cobradas</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Primas Cobradas</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table 
+                            class="table table-striped table-bordered table-hover"
+                            id="tablaPrimasCobradas" 
+                        >
+                        <thead>
+                        <tr>
+                            <th>Agente Propio</th>
+                            <th>Empresa</th>
+                            <th>Ejecutivo</th>
+                            <th>Tipo Ramo</th>
+                            <th>Aseguradora</th>
+                            <th>Prima</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Agente Propio</th>
+                            <th>Empresa</th>
+                            <th>Ejecutivo</th>
+                            <th>Tipo Ramo</th>
+                            <th>Aseguradora</th>
+                            <th>Prima</th>
+                        </tr>
+                        </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</br>
+</br>
+</br>
+<div class="footer">
+    <strong>Desarrollado</strong> por 1B7
+</div>
+</div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Flot -->
+<script src="/js/plugins/flot/jquery.flot.js"></script>
+<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
+
+<!-- Peity -->
+<script src="/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/js/demo/peity-demo.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<!-- GITTER -->
+<script src="/js/plugins/gritter/jquery.gritter.min.js"></script>
+
+<!-- Sparkline -->
+<script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Sparkline demo data  -->
+<script src="/js/demo/sparkline-demo.js"></script>
+
+<!-- ChartJS-->
+<script src="/js/plugins/chartJs/Chart.min.js"></script>
+
+<!-- Toastr -->
+<script src="/js/plugins/toastr/toastr.min.js"></script>
+
+<!-- DataTables -->
+<script src="/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Page-Level Scripts -->
+<script>
+var lista = <%- JSON.stringify(data) %>;
+var tablaPrimaCobrada = null;
+$(document).ready(function(){
+    tablaPrimaCobrada = $('#tablaPrimasCobradas').DataTable({
+        pageLength: 25,
+        responsive: true,
+        dom: '<"html5buttons"B>lTfgitp',
+        processing: true,
+        serverSide: false,
+        columns: [
+            {"data": "ownAgent"},
+            {"data": "company"},
+            {"data": "executive"},
+            {"data": "bouquetType"},
+            {"data": "insurer"},
+            {"data": "premium"}
+        ],
+        buttons: [
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+            }
+            }
+        ]
+    });
+    tablaPrimaCobrada.rows.add(lista);
+    tablaPrimaCobrada.draw();
+});
+</script>
+
+</body>
+
+</html>

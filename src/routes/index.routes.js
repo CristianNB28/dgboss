@@ -11,6 +11,7 @@ const vehicleController = require('../controllers/vehicleController');
 const receiptController = require('../controllers/receiptController');
 const commissionController = require('../controllers/commissionController');
 const claimController = require('../controllers/claimController');
+const reportController = require('../controllers/reportController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -108,7 +109,6 @@ router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
 router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
 router.post('/update-policy', requireAuth, policyController.updatePolicy);
-
 // Rutas de Reclamos
 router.get('/add-refund', requireAuth, claimController.getRefundForm);
 router.post('/add-refund', requireAuth, claimController.postRefundForm);
@@ -134,15 +134,13 @@ router.get('/amp', requireAuth, claimController.getAMP);
 router.post('/remove-amp/:id', requireAuth, claimController.disableAMP);
 router.get('/edit-amp/:id', requireAuth, claimController.putAMP);
 router.post('/update-amp', requireAuth, claimController.updateAMP);
-// Rutas de Coberturas
-/*
-router.get('/add-hedge', requireAuth, hedgeController.getHedgeForm);
-router.post('/add-hedge', requireAuth, hedgeController.postHedgeForm);
-router.get('/hedges', requireAuth, hedgeController.getHedges);
-router.post('/remove-hedge/:id', requireAuth, hedgeController.disableHedge);
-router.get('/edit-hedge/:id', requireAuth, hedgeController.putHedge);
-router.post('/update-hegde', requireAuth, hedgeController.updateHedge);
-*/
+// Rutas de Reportes
+router.get('/premiums-collected', requireAuth, reportController.getPremiumsCollected);
+router.get('/commissions-collected', requireAuth, reportController.getCommissionsCollected);
+//router.get('/hedges', requireAuth, hedgeController.getHedges);
+//router.post('/remove-hedge/:id', requireAuth, hedgeController.disableHedge);
+//router.get('/edit-hedge/:id', requireAuth, hedgeController.putHedge);
+//router.post('/update-hegde', requireAuth, hedgeController.updateHedge);
 // Pagina error 404
 router.get('*', indexController.get404);
 
