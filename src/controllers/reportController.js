@@ -87,6 +87,65 @@ module.exports = {
             name: req.session.name
         });
     },
+    getPolicyClaims: async (req, res) => {
+        let resultNaturalInsured = await insuredModel.getNaturalInsureds();
+        let resultLegalInsured = await insuredModel.getLegalInsureds();
+        let resultPolicyClaims = [];
+        for (let i = 0; i < resultNaturalInsured.length; i++) {
+            let elementNaturalInsured = resultNaturalInsured[i];
+            let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
+            let totalPremium = 0;
+            let naturalInsured = {};
+            for (let j = 0; j < resultPolicyId.length; j++) {
+                let elementPolicyId = resultPolicyId[j];
+                let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
+                totalPremium += resultPolicy[0].prima_anual_poliza;
+            }
+            if (elementNaturalInsured.cedula_asegurado_per_nat !== '') {
+                naturalInsured = {
+                    insured: elementNaturalInsured.cedula_asegurado_per_nat,
+                    totalPremium: totalPremium 
+                }
+            } else {
+                naturalInsured = {
+                    insured: elementNaturalInsured.rif_asegurado_per_nat,
+                    totalPremium: totalPremium 
+                }
+            }
+            resultPolicyClaims.push(naturalInsured);
+        }
+        for (let i = 0; i < resultLegalInsured.length; i++) {
+            let elementLegalInsured = resultLegalInsured[i];
+            let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
+            let totalPremium = 0;
+            for (let j = 0; j < resultPolicyId.length; j++) {
+                let elementPolicyId = resultPolicyId[j];
+                let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
+                totalPremium += resultPolicy[0].prima_anual_poliza;
+            }
+            let legalInsured = {
+                insured: elementLegalInsured.rif_asegurado_per_jur,
+                totalPremium: totalPremium
+            };
+            resultPolicyClaims.push(legalInsured);
+        }
+        res.render('policyClaims', {
+            resultPolicyClaims: resultPolicyClaims,
+            name: req.session.name
+        });
+    },
+    getGlobalLossRatio: async (req, res) => {
+        let resultPolicy = await policyModel.getPolicies();
+        let totalPremium = 0;
+        for (let i = 0; i < resultPolicy.length; i++) {
+            let elementPolicy = resultPolicy[i];
+            totalPremium += elementPolicy.prima_anual_poliza;
+        }
+        res.render('globalLossRatio', {
+            totalPremium: totalPremium,
+            name: req.session.name
+        });
+    },
 /*                 POST                  */
 /*                  PUT                  */
 /*               DELETE                  */

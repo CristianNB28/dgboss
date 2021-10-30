@@ -4,7 +4,7 @@ module.exports = {
 /*                  GET                  */
     getNaturalInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_asegurado_per_nat, cedula_asegurado_per_nat, rif_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, correo_asegurado_per_nat, celular_per_nat, direccion_asegurado_per_nat 
+            db.query(`SELECT * 
                     FROM Asegurado_Persona_Natural 
                     WHERE deshabilitar_asegurado_per_nat=0`, 
             (error, rows) => {
@@ -17,7 +17,7 @@ module.exports = {
     },
     getLegalInsureds: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_asegurado_per_jur, rif_asegurado_per_jur, razon_social_per_jur, telefono_asegurado_per_jur, celular_asegurado_per_jur, correo_asegurado_per_jur, direccion_asegurado_per_jur 
+            db.query(`SELECT * 
                     FROM Asegurado_Persona_Juridica 
                     WHERE deshabilitar_asegurado_per_jur=0`, 
             (error, rows) => {

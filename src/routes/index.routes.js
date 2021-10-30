@@ -137,10 +137,8 @@ router.post('/update-amp', requireAuth, claimController.updateAMP);
 // Rutas de Reportes
 router.get('/premiums-collected', requireAuth, reportController.getPremiumsCollected);
 router.get('/commissions-collected', requireAuth, reportController.getCommissionsCollected);
-//router.get('/hedges', requireAuth, hedgeController.getHedges);
-//router.post('/remove-hedge/:id', requireAuth, hedgeController.disableHedge);
-//router.get('/edit-hedge/:id', requireAuth, hedgeController.putHedge);
-//router.post('/update-hegde', requireAuth, hedgeController.updateHedge);
+router.get('/policy-claims', requireAuth, reportController.getPolicyClaims);
+router.get('/global-loss-ratio', requireAuth, reportController.getGlobalLossRatio);
 // Pagina error 404
 router.get('*', indexController.get404);
 
