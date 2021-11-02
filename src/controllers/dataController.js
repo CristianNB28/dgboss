@@ -57,12 +57,13 @@ module.exports = {
     postOwnAgentForm: async (req, res) => {
         let cedulaAgentePropio = '';
         let rifAgentePropio = '';
+        let porcentajeAgentePropio = parseFloat(req.body.porcentaje_agente_propio);
         if ((req.body.id_rif_agente_propio.startsWith('J')) || (req.body.id_rif_agente_propio.startsWith('V')) || (req.body.id_rif_agente_propio.startsWith('G'))) {
             rifAgentePropio = req.body.id_rif_agente_propio;
         } else {
             cedulaAgentePropio = req.body.id_rif_agente_propio;
         }
-        await ownAgentModel.postOwnAgentForm(cedulaAgentePropio, rifAgentePropio, req.body);
+        await ownAgentModel.postOwnAgentForm(cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, req.body);
         res.render('ownAgentForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -141,6 +142,7 @@ module.exports = {
     updateOwnAgent: async (req, res) => {
         let cedulaAgentePropio = '';
         let rifAgentePropio = '';
+        let porcentajeAgentePropio = parseFloat(req.body.porcentaje_agente_propio);
         if ((typeof(req.body.rif_agente_propio) !== 'undefined')) {
             if ((!req.body.rif_agente_propio.startsWith('J')) && (!req.body.rif_agente_propio.startsWith('G')) && (!req.body.rif_agente_propio.startsWith('V'))) {
                 cedulaAgentePropio = req.body.rif_agente_propio;
@@ -154,7 +156,7 @@ module.exports = {
                 cedulaAgentePropio = req.body.cedula_agente_propio;
             } 
         }
-        await ownAgentModel.updateOwnAgent(cedulaAgentePropio, rifAgentePropio, req.body);
+        await ownAgentModel.updateOwnAgent(cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, req.body);
         res.redirect('/sistema');
     },
     updateExecutive: async (req, res) => {

@@ -92,12 +92,13 @@ module.exports = {
     },
 /*                 POST                  */
     postRefundForm: async (req, res) => {
-        let montoReembolso = parseFloat(req.body.monto_reembolso);
+        let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
+        let montoPagadoReembolso = parseFloat(req.body.monto_pagado_reembolso);
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
-        await refundModel.postRefundForm(montoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.render('refundForm', {
             alert: true,
             alertTitle: 'Exitoso',

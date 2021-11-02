@@ -30,7 +30,7 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postRefundForm: async (montoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, refund) => {
+    postRefundForm: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, refund) => {
         let legalInsuredId = 0;
         let naturalInsuredId = 0;
         if (refund.id_rif_asegurado.startsWith('J') || refund.id_rif_asegurado.startsWith('G')) {
@@ -75,9 +75,9 @@ module.exports = {
         }
         if (legalInsuredId[0] !== undefined) {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reembolso, nombre_beneficiario_reembolso, cedula_beneficiario_reembolso, observacion_reembolso, asegurado_per_jur_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReembolso, refund.nombre_beneficiario_reembolso, refund.cedula_beneficiario_reembolso, refund.observacion_reembolso, legalInsuredId[0].id_asegurado_per_jur], 
+                db.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, nombre_beneficiario_reembolso, cedula_beneficiario_reembolso, observacion_reembolso, tipo_moneda_reembolso, asegurado_per_jur_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.nombre_beneficiario_reembolso, refund.cedula_beneficiario_reembolso, refund.observacion_reembolso, refund.tipo_moneda_reembolso, legalInsuredId[0].id_asegurado_per_jur], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -87,9 +87,9 @@ module.exports = {
             });
         } else {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reembolso, nombre_beneficiario_reembolso, cedula_beneficiario_reembolso, observacion_reembolso, asegurado_per_nat_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReembolso, refund.nombre_beneficiario_reembolso, refund.cedula_beneficiario_reembolso, refund.observacion_reembolso, naturalInsuredId[0].id_asegurado_per_nat], 
+                db.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, nombre_beneficiario_reembolso, cedula_beneficiario_reembolso, observacion_reembolso, tipo_moneda_reembolso, asegurado_per_nat_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.nombre_beneficiario_reembolso, refund.cedula_beneficiario_reembolso, refund.observacion_reembolso, refund.tipo_moneda_reembolso, naturalInsuredId[0].id_asegurado_per_nat], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
