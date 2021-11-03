@@ -54,6 +54,20 @@ module.exports = {
             });
         });
     },
+    updateDisableExecutive: (id, executive) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Ejecutivo 
+                    SET obser_deshabilitar_ejecutivo=?       
+                    WHERE id_ejecutivo=?`, 
+            [executive.obser_deshabilitar_ejecutivo, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableExecutive: (id, disableExecutive) => {
         return new Promise((resolve, reject) => {

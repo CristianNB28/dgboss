@@ -195,6 +195,7 @@ CREATE TABLE Asegurado_Persona_Natural(
     nombre_emergencia_per_nat VARCHAR(255) NOT NULL,
     telefono_emergencia_per_nat VARCHAR(255) NOT NULL,
     direccion_asegurado_per_nat VARCHAR(500) NOT NULL,
+    obser_deshabilitar_per_nat VARCHAR(500),
     deshabilitar_asegurado_per_nat BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
@@ -212,6 +213,7 @@ CREATE TABLE Asegurado_Persona_Juridica(
     correo_asegurado_per_jur VARCHAR(255) NOT NULL,
     correo_opcional_per_jur VARCHAR(255) NOT NULL,
     direccion_asegurado_per_jur VARCHAR(500) NOT NULL,
+    obser_deshabilitar_per_jur VARCHAR(500),
     deshabilitar_asegurado_per_jur BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)

@@ -51,6 +51,18 @@ module.exports = {
             });
         });
     },
+    updateDisableInsurer: (id, insurer) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Aseguradora SET obser_deshabilitar_aseguradora=? WHERE id_aseguradora=?`, 
+            [insurer.obser_deshabilitar_aseguradora, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableInsurer: (id, disableInsurer) => {
         return new Promise((resolve, reject) => {

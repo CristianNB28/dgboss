@@ -108,6 +108,34 @@ module.exports = {
             });
         });
     },
+    updateDisableNaturalInsured: (id, naturalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Natural 
+                    SET obser_deshabilitar_per_nat=?
+                    WHERE id_asegurado_per_nat=?`, 
+            [naturalInsured.obser_deshabilitar_per_nat, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    updateDisableLegalInsured: (id, legalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Juridica 
+                    SET obser_deshabilitar_per_jur=?
+                    WHERE id_asegurado_per_jur=?`, 
+            [legalInsured.obser_deshabilitar_per_jur, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableNaturalInsured: (id, disableNaturalInsured) => {
         return new Promise((resolve, reject) => {

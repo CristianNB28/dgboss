@@ -153,12 +153,14 @@ module.exports = {
 /*               DELETE                  */
     disableUser: async (req, res) => {
         let disable = 1;
+        await userModel.updateDisableUser(req.params.id, req.body);
         await rolUserModel.disableRolUser(req.params.id, disable);
         await userModel.disableUser(req.params.id, disable);
         res.redirect('/sistema/users');
     },
     disableRol: async (req, res) => {
-        let disableRol = 1
+        let disableRol = 1;
+        await rolModel.updateDisableRol(req.params.id, req.body);
         await rolModel.disableRol(req.params.id, disableRol);
         res.redirect('/sistema/roles');
     }

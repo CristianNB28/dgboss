@@ -208,12 +208,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredNatural = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
-                };
-                objectInsuredNatural.push(insuredNatural);
+                if (resultPolicyId.length !== 0) {
+                    let insuredNatural = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    };
+                    objectInsuredNatural.push(insuredNatural);
+                }
             } else if (elementNaturalInsuredNext === undefined) {
                 break;
             } else if ((i === 0) && (elementNaturalInsured.agente_propio_id !== elementNaturalInsuredNext.agente_propio_id)) {
@@ -242,12 +244,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredNatural = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
+                if (resultPolicyId.length !== 0) {
+                    let insuredNatural = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    }
+                    objectInsuredNatural.push(insuredNatural);
                 }
-                objectInsuredNatural.push(insuredNatural);
                 sumOwnAgentCommisions = 0;
                 let resultPolicyIdNext = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsuredNext.id_asegurado_per_nat);
                 for (let k = 0; k < resultPolicyIdNext.length; k++) {
@@ -268,12 +272,14 @@ module.exports = {
                         dateMaxNext = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredNaturalNext = {
-                    ownAgent: fullNameOwnAgentNext,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMaxNext,
-                };
-                objectInsuredNatural.push(insuredNaturalNext);
+                if (resultPolicyIdNext.length !== 0) {
+                    let insuredNaturalNext = {
+                        ownAgent: fullNameOwnAgentNext,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMaxNext,
+                    };
+                    objectInsuredNatural.push(insuredNaturalNext);
+                }
             } else if (elementNaturalInsured.agente_propio_id === elementNaturalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
@@ -322,15 +328,17 @@ module.exports = {
                     date = dateMaxNext;
                 } else if (dateMax > dateMaxNext) {
                     date = dateMax;
-                } else if (date === dateMaxNext) {
+                } else if (dateMax === dateMaxNext) {
                     date = dateMax;
                 }
-                let insuredNatural = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: date
-                };
-                objectInsuredNatural.push(insuredNatural);
+                if ((resultPolicyId.length !== 0) || (resultPolicyIdNext.length !== 0)) {
+                    let insuredNatural = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: date
+                    };
+                    objectInsuredNatural.push(insuredNatural);
+                }
             } else if (elementNaturalInsured.agente_propio_id !== elementNaturalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
@@ -357,12 +365,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredNatural = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
+                if (resultPolicyId.length !== 0) {
+                    let insuredNatural = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    }
+                    objectInsuredNatural.push(insuredNatural);
                 }
-                objectInsuredNatural.push(insuredNatural);
                 sumOwnAgentCommisions = 0;
                 let resultPolicyIdNext = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsuredNext.id_asegurado_per_nat);
                 for (let k = 0; k < resultPolicyIdNext.length; k++) {
@@ -420,12 +430,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredLegal = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
-                };
-                objectInsuredLegal.push(insuredLegal);
+                if (resultPolicyId.length !== 0) {
+                    let insuredLegal = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    };
+                    objectInsuredLegal.push(insuredLegal);
+                }
             } else if (elementLegalInsuredNext === undefined) {
                 break;
             } else if ((i === 0) && (elementLegalInsured.agente_propio_id !== elementLegalInsuredNext.agente_propio_id)) {
@@ -454,12 +466,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredLegal = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
-                };
-                objectInsuredLegal.push(insuredLegal);
+                if (resultPolicyId.length !== 0) {
+                    let insuredLegal = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    };
+                    objectInsuredLegal.push(insuredLegal);
+                }
                 sumOwnAgentCommisions = 0;
                 let resultPolicyIdNext = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsuredNext.id_asegurado_per_jur);
                 for (let k = 0; k < resultPolicyIdNext.length; k++) {
@@ -480,12 +494,14 @@ module.exports = {
                         dateMaxNext = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredLegalNext = {
-                    ownAgent: fullNameOwnAgentNext,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMaxNext
-                };
-                objectInsuredLegal.push(insuredLegalNext);
+                if (resultPolicyIdNext.length !== 0) {
+                    let insuredLegalNext = {
+                        ownAgent: fullNameOwnAgentNext,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMaxNext
+                    };
+                    objectInsuredLegal.push(insuredLegalNext);
+                }
             } else if (elementLegalInsured.agente_propio_id === elementLegalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
@@ -534,15 +550,17 @@ module.exports = {
                     date = dateMaxNext;
                 } else if (dateMax > dateMaxNext) {
                     date = dateMax;
-                } else if (date === dateMaxNext) {
+                } else if (dateMax === dateMaxNext) {
                     date = dateMax;
                 }
-                let insuredLegal = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: date
-                };
-                objectInsuredLegal.push(insuredLegal);
+                if ((resultPolicyId.length !== 0) || (resultPolicyIdNext.length !== 0)) {
+                    let insuredLegal = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: date
+                    };
+                    objectInsuredLegal.push(insuredLegal);
+                }
             } else if (elementLegalInsured.agente_propio_id !== elementLegalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
@@ -569,12 +587,14 @@ module.exports = {
                         dateMax = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredLegal = {
-                    ownAgent: fullNameOwnAgent,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMax
-                };
-                objectInsuredLegal.push(insuredLegal);
+                if (resultPolicyId.length !== 0) {
+                    let insuredLegal = {
+                        ownAgent: fullNameOwnAgent,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMax
+                    };
+                    objectInsuredLegal.push(insuredLegal);
+                }
                 sumOwnAgentCommisions = 0;
                 let resultPolicyIdNext = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsuredNext.id_asegurado_per_jur);
                 for (let k = 0; k < resultPolicyIdNext.length; k++) {
@@ -595,12 +615,14 @@ module.exports = {
                         dateMaxNext = resultPolicyNext[0].fecha_desde;
                     }
                 }
-                let insuredLegalNext = {
-                    ownAgent: fullNameOwnAgentNext,
-                    commission: sumOwnAgentCommisions.toFixed(2),
-                    date: dateMaxNext
-                };
-                objectInsuredLegal.push(insuredLegalNext);
+                if (resultPolicyIdNext.length !== 0) {
+                    let insuredLegalNext = {
+                        ownAgent: fullNameOwnAgentNext,
+                        commission: sumOwnAgentCommisions.toFixed(2),
+                        date: dateMaxNext
+                    };
+                    objectInsuredLegal.push(insuredLegalNext);
+                }
             }
         }
         if (objectInsuredNatural.length > objectInsuredLegal.length) {

@@ -181,16 +181,19 @@ module.exports = {
 /*               DELETE                  */
     disableInsurer: async (req, res) => {
         let disableInsurer = 1;
+        await insurerModel.updateDisableInsurer(req.params.id, req.body);
         await insurerModel.disableInsurer(req.params.id, disableInsurer);
         res.redirect('/sistema/insurers');
     },
     disableOwnAgent: async (req, res) => {
         let disableOwnAgent = 1;
+        await ownAgentModel.updateDisableOwnAgent(req.params.id, req.body);
         await ownAgentModel.disableOwnAgent(req.params.id, disableOwnAgent);
         res.redirect('/sistema/own-agents');
     },
     disableExecutive: async (req, res) => {
         let disableExecutive = 1;
+        await executiveModel.updateDisableExecutive(req.params.id, req.body);
         await executiveModel.disableExecutive(req.params.id, disableExecutive);
         res.redirect('/sistema/executives');
     }

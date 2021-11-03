@@ -48,6 +48,17 @@ module.exports = {
             });
         });
     },
+    updateDisableRol: (id, rol) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Rol SET obser_deshabilitar_rol=? WHERE id_rol=?`, [rol.obser_deshabilitar_rol, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableRol: (id, disableRol) => {
         return new Promise((resolve, reject) => {

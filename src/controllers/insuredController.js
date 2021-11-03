@@ -178,11 +178,13 @@ module.exports = {
 /*               DELETE                  */
     disableNaturalInsured: async (req, res) => {
         let disableNaturalInsured = 1;
+        await insuredModel.updateDisableNaturalInsured(req.params.id, req.body);
         await insuredModel.disableNaturalInsured(req.params.id, disableNaturalInsured);
         res.redirect('/sistema/natural-insureds');
     },
     disableLegalInsured: async (req, res) => {
         let disableLegalInsured = 1;
+        await insuredModel.updateDisableLegalInsured(req.params.id, req.body);
         await insuredModel.disableLegalInsured(req.params.id, disableLegalInsured);
         res.redirect('/sistema/legal-insureds');
     }

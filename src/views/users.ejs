@@ -151,7 +151,24 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-user/${row.id_usuario}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                            <button 
+                                                class="btn btn-danger" 
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-ban"></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-sm-6 col-lg-12">
+                                            <textarea 
+                                                name="obser_deshabilitar_usuario"
+                                                id="obser_deshabilitar_usuario" 
+                                                placeholder="Observaciones de Deshabilitar *" 
+                                                class="form-control"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </form>`;
                 }
             }

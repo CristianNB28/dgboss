@@ -65,6 +65,20 @@ module.exports = {
             });
         });
     },
+    updateDisableOwnAgent: (id, ownAgent) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Agente_Propio 
+                    SET obser_deshabilitar_agente_propio=?       
+                    WHERE id_agente_propio=?`, 
+            [ownAgent.obser_deshabilitar_agente_propio, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableOwnAgent: (id, disableOwnAgent) => {
         return new Promise((resolve, reject) => {

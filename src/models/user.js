@@ -100,6 +100,20 @@ module.exports = {
             });
         }
     },
+    updateDisableUser: (id, user) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Usuario 
+                        SET obser_deshabilitar_usuario=?    
+                        WHERE id_usuario=?`, 
+            [user.obser_deshabilitar_usuario, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableUser: (id, disableUser) => {
         return new Promise((resolve, reject) => {
