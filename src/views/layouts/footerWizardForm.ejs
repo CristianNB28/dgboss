@@ -211,33 +211,35 @@
     }   
 </script>
 
-<script>
-    var policy = <%- JSON.stringify(policy) %>;
-    function premiumCalculation() {
-        var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
-        var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
-        if (getSelectValue === 'Mensual') {
-            var premiumMonthly = policy.prima_anual_poliza / 12;
-            premiumMonthly = premiumMonthly.toFixed(2);
-            document.getElementById("monto_prima_recibo").value = premiumMonthly;
-        } else if (getSelectValue === 'Bimensual') {
-            var premiumBimonthly = policy.prima_anual_poliza / 6;
-            premiumBimonthly = premiumBimonthly.toFixed(2);
-            document.getElementById("monto_prima_recibo").value = premiumBimonthly;
-        } else if (getSelectValue === 'Trimestral') {
-            var premiumQuarterly = policy.prima_anual_poliza / 4;
-            premiumQuarterly = premiumQuarterly.toFixed(2);
-            document.getElementById("monto_prima_recibo").value = premiumQuarterly;
-        } else if (getSelectValue === 'Semestral') {
-            var premiumBiannual = policy.prima_anual_poliza / 2;
-            premiumBiannual = premiumBiannual.toFixed(2);
-            document.getElementById("monto_prima_recibo").value = premiumBiannual;
+<% if (typeof(policy) !== 'undefined') { %>
+    <script>
+        var policy = <%- JSON.stringify(policy) %>;
+        function premiumCalculation() {
+            var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
+            var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
+            if (getSelectValue === 'Mensual') {
+                var premiumMonthly = policy.prima_anual_poliza / 12;
+                premiumMonthly = premiumMonthly.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumMonthly;
+            } else if (getSelectValue === 'Bimensual') {
+                var premiumBimonthly = policy.prima_anual_poliza / 6;
+                premiumBimonthly = premiumBimonthly.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+            } else if (getSelectValue === 'Trimestral') {
+                var premiumQuarterly = policy.prima_anual_poliza / 4;
+                premiumQuarterly = premiumQuarterly.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumQuarterly;
+            } else if (getSelectValue === 'Semestral') {
+                var premiumBiannual = policy.prima_anual_poliza / 2;
+                premiumBiannual = premiumBiannual.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumBiannual;
+            }
+            if (checkboxDivision === false) {
+                document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza;
+            }
         }
-        if (checkboxDivision === false) {
-            document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza;
-        }
-    }
-</script>
+    </script>
+<% } %>
 
 </body>
 

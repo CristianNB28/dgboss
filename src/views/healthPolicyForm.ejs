@@ -583,19 +583,35 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        step="0.01" 
-                                                        name="porcentaje_agente_comision"
-                                                        id="porcentaje_agente_comision"
-                                                        value="<%= ownAgent.porcentaje_agente_propio %>"
-                                                        class="form-control"
-                                                        required
-                                                    >
+                                            <% if (typeof(ownAgent) !== 'undefined') { %>
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="porcentaje_agente_comision"
+                                                            id="porcentaje_agente_comision"
+                                                            value="<%= ownAgent.porcentaje_agente_propio %>"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            <% } else { %>
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="porcentaje_agente_comision"
+                                                            id="porcentaje_agente_comision"
+                                                            placeholder="Porcentaje Agente Propio *"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            <% } %>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Caso Especial</label>
