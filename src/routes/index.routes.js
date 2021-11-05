@@ -12,6 +12,7 @@ const receiptController = require('../controllers/receiptController');
 const commissionController = require('../controllers/commissionController');
 const claimController = require('../controllers/claimController');
 const reportController = require('../controllers/reportController');
+const beneficiaryController = require('../controllers/beneficiaryController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 
@@ -75,6 +76,7 @@ router.post('/add-vehicle-receipt', requireAuth, receiptController.postVehicleRe
 router.post('/add-vehicle-commission', requireAuth, commissionController.postVehicleCommissionForm);
 router.get('/add-health-policy', requireAuth, policyController.getHealthPolicyForm);
 router.post('/add-health-policy', requireAuth, policyController.postHealthPolicyForm);
+router.post('/add-health-beneficiary', requireAuth, beneficiaryController.postHealthBeneficiaryForm);
 router.post('/add-health-receipt', requireAuth, receiptController.postHealthReceiptForm);
 router.post('/add-health-commission', requireAuth, commissionController.postHealthCommissionForm);
 router.get('/add-patrimonial-policy', requireAuth, policyController.getPatrimonialPolicyForm);
@@ -91,10 +93,12 @@ router.post('/add-another-branch-receipt', requireAuth, receiptController.postAn
 router.post('/add-another-branch-commission', requireAuth, commissionController.postAnotherBranchCommissionForm);
 router.get('/add-funeral-policy', requireAuth, policyController.getFuneralPolicyForm);
 router.post('/add-funeral-policy', requireAuth, policyController.postFuneralPolicyForm);
+router.post('/add-funeral-beneficiary', requireAuth, beneficiaryController.postFuneralBeneficiaryForm);
 router.post('/add-funeral-receipt', requireAuth, receiptController.postFuneralReceiptForm);
 router.post('/add-funeral-commission', requireAuth, commissionController.postFuneralCommissionForm);
 router.get('/add-life-policy', requireAuth, policyController.getLifePolicyForm);
 router.post('/add-life-policy', requireAuth, policyController.postLifePolicyForm);
+router.post('/add-life-beneficiary', requireAuth, beneficiaryController.postLifeBeneficiaryForm);
 router.post('/add-life-receipt', requireAuth, receiptController.postLifeReceiptForm);
 router.post('/add-life-commission', requireAuth, commissionController.postLifeCommissionForm);
 router.get('/add-ap-policy', requireAuth, policyController.getAPPolicyForm);

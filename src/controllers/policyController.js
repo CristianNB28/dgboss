@@ -2,6 +2,7 @@ const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
+const ownAgentModel = require('../models/own_agent');
 
 module.exports = {
 /*                  GET                  */
@@ -10,6 +11,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
@@ -23,6 +33,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -32,6 +43,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
@@ -45,6 +65,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -54,6 +75,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
@@ -67,6 +97,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -76,6 +107,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
@@ -89,6 +129,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -98,6 +139,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
@@ -111,6 +161,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -120,6 +171,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
@@ -133,6 +193,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -142,6 +203,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
@@ -155,6 +225,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -164,6 +235,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
@@ -177,6 +257,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -186,6 +267,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultOwnAgent = [];
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+        } else {
+            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+        }
         if (resultPolicy === []) {
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
@@ -199,6 +289,7 @@ module.exports = {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }
@@ -211,9 +302,9 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             for (let index = 0; index < resultsPolicies.length; index++) {
                 let elementPolicy = resultsPolicies[index];
-                if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde) !== 'string')) {
-                    elementPolicy.fecha_desde = elementPolicy.fecha_desde.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
-                    elementPolicy.fecha_hasta = elementPolicy.fecha_hasta.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
+                if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde_poliza) !== 'string')) {
+                    elementPolicy.fecha_desde_poliza = elementPolicy.fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
+                    elementPolicy.fecha_hasta_poliza = elementPolicy.fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementPolicy.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
                     break;
                 }
@@ -226,22 +317,18 @@ module.exports = {
     },
 /*                 POST                  */
     postVehiclePolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Automovil';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -259,47 +346,22 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postVehiclePolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-vehicle-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('vehiclePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-vehicle-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-vehicle-policy');
     },
     postHealthPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Salud';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -317,48 +379,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postHealthPolicyForm(tomadorViejo, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-health-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('healthPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-health-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-health-policy');
     },
     postPatrimonialPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Patrimonial';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -376,48 +413,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postPatrimonialPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-patrimonial-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('patrimonialPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-patrimonial-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-patrimonial-policy');
     },
     postBailPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Fianza';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -435,48 +447,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postBailPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-bail-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('bailPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-bail-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-bail-policy');
     },
     postAnotherBranchPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Otros Ramos';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -494,48 +481,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postAnotherBranchPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-another-branch-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('anotherBranchPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-another-branch-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-another-branch-policy');
     },
     postFuneralPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Funerario';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -553,48 +515,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postFuneralPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-funeral-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('funeralPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-funeral-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-funeral-policy');
     },
     postLifePolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Vida';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -612,48 +549,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postLifePolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-life-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('lifePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-life-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-life-policy');
     },
     postAPPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'AP';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -671,48 +583,23 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postAPPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-ap-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('apPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-ap-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-ap-policy');
     },
     postTravelPolicyForm: async (req, res) => {
-        let tomadorViejo = req.body.tomador_viejo ? 1 : 0;
+        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
         let montoTasa = parseFloat(req.body.tasa_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         let deducible = parseFloat(req.body.deducible_poliza);
         let sumaAsegurada = parseFloat(req.body.suma_asegurada_poliza);
-        let fechaPolizaDesde = new Date(req.body.fecha_desde);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta);
-        let tipoPoliza = 'Individual';
+        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'Viaje';
         let cedulaAseguradoNatural = '';
         let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let diasExpiracion = 0;
         let fechaActual = new Date();
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
@@ -730,30 +617,9 @@ module.exports = {
         } else {
             estatusPoliza = 'Anulado';
         }
-        if (req.body.correo_tomador === req.body.correo_verificar) {
-            let policy = await policyModel.postTravelPolicyForm(tomadorViejo, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoPoliza, tipoIndividualPoliza, estatusPoliza, req.body);
-            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            res.redirect('/sistema/add-travel-policy');
-        } else {
-            try {
-                throw new Error('Error, los correos no son iguales');
-            } catch (error) {
-                console.log(error);
-                res.render('travelPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: 'Los correos no son iguales',
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-travel-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    name: req.session.name
-                });
-            }
-        }
+        let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        res.redirect('/sistema/add-travel-policy');
     },
 /*                  PUT                  */
     putPolicy: async (req, res, next) => {
@@ -794,6 +660,7 @@ module.exports = {
     disablePolicy: async (req, res) => {
         let disablePolicy = 1;
         let disablePolicyInsurerInsured = 1;
+        await policyModel.updateDisablePolicy(req.params.id, req.body);
         await policyModel.disablePolicy(req.params.id, disablePolicy);
         await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
         res.redirect('/sistema/policies');

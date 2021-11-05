@@ -73,6 +73,7 @@ CREATE TABLE Poliza(
     plazo_espera_poliza VARCHAR(255),
     detalle_cliente_poliza VARCHAR(255),
     obser_deshabilitar_poliza VARCHAR(500),
+    tipo_producto_poliza VARCHAR(255),
     deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -159,8 +160,8 @@ CREATE TABLE Recibo(
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
-    poliza_id INT NOT NULL,
-    colectivo_id INT NOT NULL,
+    poliza_id INT,
+    colectivo_id INT,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
@@ -177,8 +178,8 @@ CREATE TABLE Comision(
     porcentaje_ejecutivo_suscripcion DECIMAL(10,4) NOT NULL,
     porcentaje_ejecutivo_reclamo DECIMAL(10,4) NOT NULL,
     deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
-    poliza_id INT NOT NULL,
-    colectivo_id INT NOT NULL,
+    poliza_id INT,
+    colectivo_id INT,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
@@ -283,8 +284,8 @@ CREATE TABLE Reembolso(
     tipo_moneda_reembolso VARCHAR(255) NOT NULL,
     obser_deshabilitar_reembolso VARCHAR(500),
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT NOT NULL,
-    caab_id INT NOT NULL,
+    paab_id INT,
+    caab_id INT,
     CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
     CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
 );
@@ -301,8 +302,8 @@ CREATE TABLE AMP(
     tipo_moneda_amp VARCHAR(255) NOT NULL,
     obser_deshabilitar_amp VARCHAR(500),
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT NOT NULL,
-    caab_id INT NOT NULL,
+    paab_id INT,
+    caab_id INT,
     CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
     CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
 );
@@ -319,8 +320,8 @@ CREATE TABLE Emergencia(
     tipo_moneda_emergencia VARCHAR(255) NOT NULL,
     obser_deshabilitar_emergencia VARCHAR(500),
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT NOT NULL,
-    caab_id INT NOT NULL,
+    paab_id INT,
+    caab_id INT,
     CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
     CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
 );
@@ -337,8 +338,8 @@ CREATE TABLE Carta_Aval(
     tipo_moneda_carta_aval VARCHAR(255) NOT NULL,
     obser_deshabilitar_carta_aval VARCHAR(500),
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT NOT NULL,
-    caab_id INT NOT NULL,
+    paab_id INT,
+    caab_id INT,
     CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
     CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
 );

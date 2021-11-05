@@ -26,7 +26,7 @@
                     <h5>Póliza Individual Vida</h5>
                 </div>
                 <div class="ibox-content">
-                    <div id="form" class="wizard-big wizard-health">
+                    <div id="form" class="wizard-big">
                         <h1><i class="fa fa-window-maximize"></i> Póliza</h1>
                         <fieldset>
                             <form action="/sistema/add-life-policy" method="POST">
@@ -109,8 +109,8 @@
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="date"
-                                                        name="fecha_desde"
-                                                        id="fecha_desde"
+                                                        name="fecha_desde_poliza"
+                                                        id="fecha_desde_poliza"
                                                         class="form-control"
                                                         required
                                                     >
@@ -120,10 +120,11 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda">
+                                                    <select class="form-control" name="tipo_moneda_poliza">
                                                         <option selected value="0">Seleccione *</option>
                                                             <option value="Bolivar">Bolivar</option>
                                                             <option value="Dólar">Dólar</option>
+                                                            <option value="Euros">Euros</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -180,7 +181,7 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Asegurado/Tomador</label>
                                                 <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="tomador_viejo" id="tomador_viejo" onclick="pasarNombreTomador();"> 
+                                                    <div><label><input type="checkbox" name="tomador_asegurado_poliza" id="tomador_asegurado_poliza" onclick="pasarNombreTomador();"> 
                                                                 ¿Asegurado mismo tomador?</label></div>
                                                 </div>
                                             </div>
@@ -214,20 +215,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Verificar</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="email"
-                                                        name="correo_verificar"
-                                                        id="correo_verificar"
-                                                        placeholder="Verificar Correo *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -243,12 +230,26 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="grupo_poliza"
+                                                        id="grupo_poliza"
+                                                        placeholder="Grupo *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="date"
-                                                        name="fecha_hasta"
-                                                        id="fecha_hasta"
+                                                        name="fecha_hasta_poliza"
+                                                        id="fecha_hasta_poliza"
                                                         class="form-control"
                                                         required
                                                     >
@@ -285,23 +286,101 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal">
-                                                        <option selected value="">Seleccione</option>
-                                                        <option value="Venta Regular">Venta Regular</option>
+                                                    <select class="form-control" name="tipo_canal_poliza">
+                                                        <option selected value="">Seleccione *</option>
                                                         <option value="Redes Sociales">Redes Sociales</option>
-                                                        <option value="Pagina Web">Pagina Web</option>
+                                                        <option value="Página Web">Página Web</option>
+                                                        <option value="Área By Atina">Área By Atina</option>
+                                                        <option value="Agente Propio">Agente Propio</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <div class="card-body d-flex">
+                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                        <h1><i class="fa fa-shield"></i> Beneficiarios</h1>
+                        <fieldset>
+                            <form action="/sistema/add-life-beneficiary" method="POST">
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
-                                                        name="grupo_poliza"
-                                                        id="grupo_poliza"
-                                                        placeholder="Grupo *" 
+                                                        name="nombre_beneficiario"
+                                                        id="nombre_beneficiario"
+                                                        placeholder="Nombre del Beneficiario *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="cedula_beneficiario"
+                                                        id="cedula_beneficiario"
+                                                        placeholder="Cédula del Beneficiario *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Parentesco</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="parentesco_beneficiario" id="parentesco_beneficiario">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Padre">Padre</option>
+                                                        <option value="Madre">Madre</option>
+                                                        <option value="Cónyuge">Cónyuge</option>
+                                                        <option value="Hijo">Hijo</option>
+                                                        <option value="Hija">Hija</option>
+                                                        <option value="Suegro">Suegro</option>
+                                                        <option value="Suegra">Suegra</option>
+                                                        <option value="Hermano">Hermano</option>
+                                                        <option value="Hermana">Hermana</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="apellido_beneficiario"
+                                                        id="apellido_beneficiario"
+                                                        placeholder="Apellido del Beneficiario *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Nacimiento</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fec_nac_beneficiario"
+                                                        id="fec_nac_beneficiario"
                                                         class="form-control"
                                                         required
                                                     >
@@ -356,7 +435,7 @@
                                                 <label class="col-sm-3 col-form-label">Fraccionamiento</label>
                                                 <div class="col-sm-9">
                                                     <div>
-                                                        <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo"> 
+                                                        <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculation()">  
                                                                 ¿Aplica Fraccionamiento?
                                                         </label>
                                                     </div>
@@ -367,13 +446,12 @@
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="tipo_fraccionamiento_recibo">
+                                                        <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
                                                             <option selected value="">Seleccione *</option>
                                                             <option value="Mensual">Mensual</option>
                                                             <option value="Bimensual">Bimensual</option>
                                                             <option value="Trimestral">Trimestral</option>
                                                             <option value="Semestral">Semestral</option>
-                                                            <option value="Anual">Anual</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -421,7 +499,7 @@
                                                         <option selected value="">Seleccione *</option>
                                                         <option value="Emisión">Emisión</option>
                                                         <option value="Renovación">Renovación</option>
-                                                        <option value="Fraccionamiento">Fraccionamiento</option>
+                                                        <option value="Modificación">Modificación</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -496,7 +574,7 @@
                                                         step="0.01" 
                                                         name="porcentaje_agente_comision"
                                                         id="porcentaje_agente_comision"
-                                                        placeholder="Porcentaje Agente Propio *" 
+                                                        value="<%= ownAgent.porcentaje_agente_propio %>" 
                                                         class="form-control"
                                                         required
                                                     >

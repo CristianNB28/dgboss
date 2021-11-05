@@ -53,7 +53,7 @@ module.exports = {
     },
     getPolicyInsurerInsured: (idPolicy) => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_paa, aseguradora_id FROM Poliza_Aseguradora_Asegurado WHERE poliza_id=?', [idPolicy], 
+            db.query('SELECT id_paa, aseguradora_id, asegurado_per_nat_id, asegurado_per_jur_id FROM Poliza_Aseguradora_Asegurado WHERE poliza_id=?', [idPolicy], 
             (error, rows) => {
                 if (error) {
                     reject(error)

@@ -33,7 +33,6 @@
                         <tr>
                             <th>Pólizas</th>
                             <th>Tipo Individual</th>
-                            <th>Tipo Poliza</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
@@ -52,7 +51,6 @@
                         <tr>
                             <th>Pólizas</th>
                             <th>Tipo Individual</th>
-                            <th>Tipo Poliza</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
@@ -142,8 +140,8 @@ $(document).ready(function(){
             {"data": "tipo_individual_poliza"},
             {"data": "nombre_tomador_poliza"},
             {"data": "nombre_aseguradora"},
-            {"data": "fecha_desde"},
-            {"data": "fecha_hasta"},
+            {"data": "fecha_desde_poliza"},
+            {"data": "fecha_hasta_poliza"},
             {"data": "tipo_moneda_poliza"},
             {"data": "prima_anual_poliza"},
             {"data": "estatus_poliza"},
@@ -159,7 +157,24 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-policy/${row.id_poliza}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
+                            <div class="row">
+                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                            <button 
+                                                class="btn btn-danger" 
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-ban"></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-sm-6 col-lg-12">
+                                            <textarea 
+                                                name="obser_deshabilitar_poliza"
+                                                id="obser_deshabilitar_poliza" 
+                                                placeholder="Observaciones de Deshabilitar *" 
+                                                class="form-control"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </form>`;
                 }
             }
