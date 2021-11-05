@@ -11,15 +11,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
@@ -28,6 +19,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -43,15 +43,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
@@ -60,6 +51,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -75,15 +75,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
@@ -92,6 +83,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -107,15 +107,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
@@ -124,6 +115,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -139,15 +139,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
@@ -156,6 +147,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -171,15 +171,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
@@ -188,6 +179,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -203,15 +203,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
@@ -220,6 +211,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -235,15 +235,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
@@ -252,6 +243,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -267,15 +267,6 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-        }
         if (resultPolicy === []) {
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
@@ -284,6 +275,15 @@ module.exports = {
                 name: req.session.name
             });
         } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultOwnAgent = [];
+            if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+                let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+            } else {
+                let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+            }
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
