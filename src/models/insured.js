@@ -52,6 +52,18 @@ module.exports = {
             });
         });
     },
+    getNaturalInsuredId: (ciNaturalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT id_asegurado_per_nat FROM Asegurado_Persona_Natural WHERE cedula_asegurado_per_nat=?',
+            [ciNaturalInsured],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postNaturalInsuredForm: (cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {

@@ -1,0 +1,634 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Colectivo</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Colectivo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Agregar Colectivo Salud</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Colectivo Salud</h5>
+                </div>
+                <div class="ibox-content">
+                    <div id="form" class="wizard-big">
+                        <h1><i class="fa fa-window-maximize"></i> Colectivo</h1>
+                        <fieldset>
+                            <form action="/sistema/add-health-collective" method="POST">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="numero_colectivo"
+                                                        id="numero_colectivo"
+                                                        placeholder="Número *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_tomador"
+                                                        id="id_rif_tomador"
+                                                        onkeyup="pasarNombreTomador2();"
+                                                        placeholder="Cédula/Rif *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Correo Tomador</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="email"
+                                                        name="correo_tomador"
+                                                        id="correo_tomador"
+                                                        placeholder="Correo *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia desde</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_desde_colectivo"
+                                                        id="fecha_desde_colectivo"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_moneda_colectivo">
+                                                        <option selected value="0">Seleccione *</option>
+                                                            <option value="Bolivar">Bolivar</option>
+                                                            <option value="Dólar">Dólar</option>
+                                                            <option value="Euros">Euros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Prima Anual</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="prima_anual_colectivo"
+                                                        id="prima_anual_colectivo"
+                                                        placeholder="Prima Anual *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">¿Maternidad?</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Sí">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchinput" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="cobertura_colectivo"
+                                                        id="cobertura_colectivo"
+                                                        placeholder="Cobertura *" 
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="grupo_colectivo"
+                                                        id="grupo_colectivo"
+                                                        placeholder="Grupo *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_tomador_colectivo"
+                                                        id="nombre_tomador_colectivo"
+                                                        placeholder="Nombre/Razón Social Tomador *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01"
+                                                        name="deducible_colectivo"
+                                                        id="deducible_colectivo"
+                                                        placeholder="Deducible *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_colectivo"
+                                                        id="fecha_hasta_colectivo"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_aseguradora">
+                                                        <option selected value="0">Seleccione *</option>
+                                                        <% insurers.forEach((insurer) => { %>
+                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                                        <% }); %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_canal_colectivo">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Redes Sociales">Redes Sociales</option>
+                                                        <option value="Página Web">Página Web</option>
+                                                        <option value="Área By Atina">Área By Atina</option>
+                                                        <option value="Agente Propio">Agente Propio</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Sí">Sí</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchinput2" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="detalle_cliente_colectivo"
+                                                        id="detalle_cliente_colectivo"
+                                                        placeholder="Detalle desde cuando es cliente *" 
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <div class="card-body d-flex">
+                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                        <h1><i class="fa fa-shield"></i> Beneficiarios</h1>
+                        <fieldset>
+                            <form action="/sistema/add-health-beneficiary-collective" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-2 col-form-label">Tipo de Movimiento</label>
+                                                <div class="col-sm-10">
+                                                    <select class="form-control" name="tipo_movimiento_beneficiario">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Emisión">Emisión</option>
+                                                        <option value="Renovación">Renovación</option>
+                                                        <option value="Inclusión">Inclusión</option>
+                                                        <option value="Exclusión">Exclusión</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-file">
+                                                <input id="excel" name="excel" type="file" class="custom-file-input">
+                                                <label for="xlsx" class="custom-file-label">Eliga un archivo...</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <div class="card-body d-flex">
+                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                        <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
+                        <fieldset>
+                            <form action="/sistema/add-health-receipt-collective" method="POST">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        name="numero_recibo"
+                                                        id="numero_recibo"
+                                                        placeholder="Número de Recibo *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_desde_recibo"
+                                                        id="fecha_desde_recibo" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row" id="radioContainer">
+                                                <label class="col-sm-3 col-form-label">Fraccionamiento</label>
+                                                <div class="col-sm-9">
+                                                    <div>
+                                                        <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculation()"> 
+                                                                ¿Aplica Fraccionamiento?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="active-select-1">
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
+                                                            <option selected value="">Seleccione *</option>
+                                                            <option value="Mensual">Mensual</option>
+                                                            <option value="Bimensual">Bimensual</option>
+                                                            <option value="Trimestral">Trimestral</option>
+                                                            <option value="Semestral">Semestral</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% if (typeof(collective) !== 'undefined') { %>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="monto_prima_recibo"
+                                                            id="monto_prima_recibo"
+                                                            value="<%= collective.prima_anual_colectivo %>" 
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="monto_prima_recibo"
+                                                            id="monto_prima_recibo"
+                                                            placeholder="Monto Prima *" 
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_recibo">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Emisión">Emisión</option>
+                                                        <option value="Renovación">Renovación</option>
+                                                        <option value="Inclusión">Inclusión</option>
+                                                        <option value="Exclusión">Exclusión</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_recibo"
+                                                        id="fecha_hasta_recibo"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="metodo_pago_recibo">
+                                                        <option selected value="">Seleccione *</option>
+                                                        <option value="Transferencia">Transferencia</option>
+                                                        <option value="Zelle">Zelle</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Tarjeta de debito">Tarjeta de debito</option>
+                                                        <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+                                                        <option value="Paypal">Paypal</option>
+                                                        <option value="Deposito bancario">Deposito bancario</option>
+                                                        <option value="Otros">Otros</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="monto_comision_recibo"
+                                                        id="monto_comision_recibo"
+                                                        placeholder="Comisión Asociada *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <div class="card-body d-flex">
+                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                        <h1><i class="fa fa-usd"></i> Comisión</h1>
+                        <fieldset>
+                            <form action="/sistema/add-health-commission-collective" method="POST">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <% if (typeof(ownAgent) !== 'undefined') { %>
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="porcentaje_agente_comision"
+                                                            id="porcentaje_agente_comision"
+                                                            value="<%= ownAgent.porcentaje_agente_propio %>"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number"
+                                                            step="0.01" 
+                                                            name="porcentaje_agente_comision"
+                                                            id="porcentaje_agente_comision"
+                                                            placeholder="Porcentaje Agente Propio *"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Caso Especial</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="caso_especial_comision"
+                                                        id="caso_especial_comision"
+                                                        placeholder="Porcentaje Caso Especial" 
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_ejecutivo_comision"
+                                                        id="porcentaje_ejecutivo_comision"
+                                                        placeholder="Porcentaje Ejecutivo *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fundatina</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_fundatina_comision"
+                                                        id="porcentaje_fundatina_comision"
+                                                        value="0.35" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_ejecutivo_suscripcion"
+                                                        id="porcentaje_ejecutivo_suscripcion"
+                                                        placeholder="Porcentaje Ejecutivo de Suscripción *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Director</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_director_comision"
+                                                        id="porcentaje_director_comision"
+                                                        value="2.5" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Socio</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_socio_comision"
+                                                        id="porcentaje_socio_comision"
+                                                        value="2.5" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Atina</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_atina_comision"
+                                                        id="porcentaje_atina_comision"
+                                                        placeholder="Porcentaje Atina *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_ejecutivo_reclamo"
+                                                        id="porcentaje_ejecutivo_reclamo"
+                                                        placeholder="Porcentaje Ejecutivo de Reclamos *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-12 col-sm-offset-2">
+                                        <div class="card-body d-flex">
+                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footerCollectiveWizardForm') %>

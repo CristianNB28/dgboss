@@ -42,6 +42,19 @@ module.exports = {
                 resolve(rows);
             });
         });
+    },
+    postCommissionCollectiveForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, collectiveId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_comision, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, porcentaje_ejecutivo_suscripcion, porcentaje_ejecutivo_reclamo, colectivo_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, collectiveId[0].id_colectivo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
     }
 /*                  PUT                  */
 /*               DELETE                  */

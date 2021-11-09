@@ -629,8 +629,8 @@ module.exports = {
             let resultPolicy = await policyModel.getPolicy(idPolicy);
             let resultPolicies = await policyModel.getPolicies();
             let resultsTaker = await policyModel.getPolicyHolder();
-            let fechaDesdePoliza = resultPolicy[0].fecha_desde.toISOString().substring(0, 10);
-            let fechaHastaPoliza = resultPolicy[0].fecha_hasta.toISOString().substring(0, 10);
+            let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             let insurers = await insurerModel.getInsurers();
             let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
@@ -649,14 +649,15 @@ module.exports = {
         }
     },
     updatePolicy: async (req, res) => {
-        let fechaDesdePoliza = new Date(req.body.fecha_desde);
-        let fechaHastaPoliza = new Date(req.body.fecha_hasta);
+        let fechaDesdePoliza = new Date(req.body.fecha_desde_poliza);
+        let fechaHastaPoliza = new Date(req.body.fecha_hasta_poliza);
         let montoPrimaAnual = parseFloat(req.body.prima_anual_poliza);
         await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, req.body);
         await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
         res.redirect('/sistema');
     },
 /*               DELETE                  */
+/*-------------- Arreglar -----------------*/
     disablePolicy: async (req, res) => {
         let disablePolicy = 1;
         let disablePolicyInsurerInsured = 1;
@@ -665,4 +666,5 @@ module.exports = {
         await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
         res.redirect('/sistema/policies');
     }
+/*-------------------------------------------*/
 }

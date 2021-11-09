@@ -3,16 +3,16 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Póliza</h2>
+        <h2>Colectivo</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="/sistema">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a>Póliza</a>
+                <a>Colectivo</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Editar Póliza</strong>
+                <strong>Editar Colectivo</strong>
             </li>
         </ol>
     </div>
@@ -22,7 +22,7 @@
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-content">
-                <form action="/sistema/update-policy" method="POST">
+                <form action="/sistema/update-collective" method="POST">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="ibox">
@@ -31,9 +31,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="numero_poliza"
-                                                id="numero_poliza"
-                                                value="<%= policy.numero_poliza %>"
+                                                name="numero_colectivo"
+                                                id="numero_colectivo"
+                                                value="<%= collective.numero_colectivo %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -42,8 +42,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda_poliza">
-                                                <option selected value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
+                                            <select class="form-control" name="tipo_moneda_colectivo">
+                                                <option selected value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
                                                     <option value="Bolivar">Bolivar</option>
                                                     <option value="Dólar">Dólar</option>
                                                     <option value="Euros">Euros</option>
@@ -55,9 +55,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="date"
-                                                name="fecha_desde_poliza"
-                                                id="fecha_desde_poliza"
-                                                value="<%= fechaDesdePoliza %>"
+                                                name="fecha_desde_colectivo"
+                                                id="fecha_desde_colectivo"
+                                                value="<%= fechaDesdeColectivo %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -69,9 +69,9 @@
                                             <input 
                                                 type="number"
                                                 step="0.01"
-                                                name="prima_anual_poliza"
-                                                id="prima_anual_poliza"
-                                                value="<%= policy.prima_anual_poliza %>"
+                                                name="prima_anual_colectivo"
+                                                id="prima_anual_colectivo"
+                                                value="<%= collective.prima_anual_colectivo %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -80,17 +80,11 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_individual_poliza">
-                                                <option selected value="<%= policy.tipo_individual_poliza %>"><%= policy.tipo_individual_poliza %></option>
+                                            <select class="form-control" name="tipo_colectivo">
+                                                <option selected value="<%= collective.tipo_colectivo %>"><%= collective.tipo_colectivo %></option>
                                                 <option value="Salud">Salud</option>
                                                 <option value="Automovil">Automovil</option>
-                                                <option value="Patrimonial">Patrimonial</option>
-                                                <option value="Fianza">Fianza</option>
-                                                <option value="Otros Ramos">Otros Ramos</option>
-                                                <option value="Funerario">Funerario</option>
-                                                <option value="Vida">Vida</option>
-                                                <option value="AP">AP</option>
-                                                <option value="Viaje">Viaje</option>
+                                                <option value="Riesgos Diversos">Riesgos Diversos</option>
                                             </select>
                                         </div>
                                     </div>
@@ -102,8 +96,8 @@
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_tomador_poliza">
-                                                <option selected value="<%= policy.nombre_tomador_poliza %>"><%= policy.nombre_tomador_poliza %></option>
+                                            <select class="form-control" name="nombre_tomador_colectivo">
+                                                <option selected value="<%= collective.nombre_tomador_colectivo %>"><%= collective.nombre_tomador_colectivo %></option>
                                                 <% takerNames.forEach((takerName) => { %>
                                                     <option value="<%= takerName.nombreTomador %>"><%= takerName.nombreTomador %></option>
                                                 <% }); %>
@@ -126,9 +120,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="date"
-                                                name="fecha_hasta_poliza"
-                                                id="fecha_hasta_poliza"
-                                                value="<%= fechaHastaPoliza %>"
+                                                name="fecha_hasta_colectivo"
+                                                id="fecha_hasta_colectivo"
+                                                value="<%= fechaHastaColectivo %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -137,8 +131,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="estatus_poliza">
-                                                <option selected value="<%= policy.estatus_poliza %>"><%= policy.estatus_poliza %></option>
+                                            <select class="form-control" name="estatus_colectivo">
+                                                <option selected value="<%= collective.estatus_colectivo %>"><%= collective.estatus_colectivo %></option>
                                                     <option value="Vigente">Vigente</option>
                                                     <option value="Anulado">Anulado</option>
                                             </select>
@@ -147,10 +141,10 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="hidden"
-                                                name="id_poliza"
-                                                id="id_poliza"
-                                                value="<%= policy.id_poliza %>"
+                                                type="hidden" 
+                                                name="id_colectivo"
+                                                id="id_colectivo"
+                                                value="<%= collective.id_colectivo %>"
                                                 class="form-control"
                                             >
                                         </div>
@@ -164,7 +158,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group row">
                         <div class="col-sm-12 col-sm-offset-2">
-                            <a href="/sistema/policies" class="btn btn-white btn-sm">Cancelar</a>
+                            <a href="/sistema/collectives" class="btn btn-white btn-sm">Cancelar</a>
                             <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
                         </div>
                     </div>

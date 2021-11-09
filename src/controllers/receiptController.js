@@ -1,4 +1,5 @@
 const receiptModel = require('../models/receipt');
+const collectiveModel = require('../models/collective');
 
 module.exports = {
 /*                  GET                  */
@@ -83,7 +84,37 @@ module.exports = {
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
         res.redirect('/sistema/add-travel-policy');
-    }
+    },
+    postHealthReceiptCollectiveForm: async (req, res) => {
+        let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
+        let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
+        let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let idCollective = await collectiveModel.getCollectiveLast();
+        await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        res.redirect('/sistema/add-health-collective');
+    },
+    postVehicleReceiptCollectiveForm: async (req, res) => {
+        let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
+        let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
+        let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let idCollective = await collectiveModel.getCollectiveLast();
+        await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        res.redirect('/sistema/add-vehicle-collective');
+    },
+    postRiskDiverseReceiptCollectiveForm: async (req, res) => {
+        let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
+        let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
+        let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let idCollective = await collectiveModel.getCollectiveLast();
+        await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        res.redirect('/sistema/add-risk-diverse-collective');
+    },
 /*                  PUT                  */
 /*               DELETE                  */
 }

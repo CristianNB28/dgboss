@@ -13,8 +13,11 @@ const commissionController = require('../controllers/commissionController');
 const claimController = require('../controllers/claimController');
 const reportController = require('../controllers/reportController');
 const beneficiaryController = require('../controllers/beneficiaryController');
+const collectiveController = require('../controllers/collectiveController');
+const riskDiverseController = require('../controllers/riskDiverseController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
+const upload = require('../middlewares/multerMiddleware');
 
 // Ruta index
 router.get('/', requireAuth, indexController.getIndex);
@@ -113,6 +116,26 @@ router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
 router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
 router.post('/update-policy', requireAuth, policyController.updatePolicy);
+// Rutas de Colectivos
+router.get('/add-health-collective', requireAuth, collectiveController.getHealthCollectiveForm);
+router.post('/add-health-collective', requireAuth, collectiveController.postHealthCollectiveForm);
+router.post('/add-health-beneficiary-collective', requireAuth, upload.single('excel'), beneficiaryController.postHealthBeneficiaryCollectiveForm);
+router.post('/add-health-receipt-collective', requireAuth, receiptController.postHealthReceiptCollectiveForm);
+router.post('/add-health-commission-collective', requireAuth, commissionController.postHealthCommissionCollectiveForm);
+router.get('/add-vehicle-collective', requireAuth, collectiveController.getVehicleCollectiveForm);
+router.post('/add-vehicle-collective', requireAuth, collectiveController.postVehicleCollectiveForm);
+router.post('/add-transportation', requireAuth, upload.single('excelAuto'), vehicleController.postVehicleCollectiveForm);
+router.post('/add-vehicle-receipt-collective', requireAuth, receiptController.postVehicleReceiptCollectiveForm);
+router.post('/add-vehicle-commission-collective', requireAuth, commissionController.postVehicleCommissionCollectiveForm);
+router.get('/add-risk-diverse-collective', requireAuth, collectiveController.getRiskDiverseCollectiveForm);
+router.post('/add-risk-diverse-collective', requireAuth, collectiveController.postRiskDiverseCollectiveForm);
+router.post('/add-point-sale', requireAuth, upload.single('excelPuntoVenta'), riskDiverseController.postRiskDiverseForm);
+router.post('/add-risk-receipt-collective', requireAuth, receiptController.postRiskDiverseReceiptCollectiveForm);
+router.post('/add-risk-commission-collective', requireAuth, commissionController.postRiskDiverseCommissionCollectiveForm);
+router.get('/collectives', requireAuth, collectiveController.getCollectives);
+router.post('/remove-collective/:id', requireAuth, collectiveController.disableCollective);
+router.get('/edit-collective/:id', requireAuth, collectiveController.putCollective);
+router.post('/update-collective', requireAuth, collectiveController.updateCollective);
 // Rutas de Reclamos
 router.get('/add-refund', requireAuth, claimController.getRefundForm);
 router.post('/add-refund', requireAuth, claimController.postRefundForm);

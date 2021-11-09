@@ -318,9 +318,9 @@ module.exports = {
     updatePolicy: (fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, policy) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Poliza 
-                    SET numero_poliza=?, nombre_tomador_poliza=?, tipo_individual_poliza=?, tipo_poliza=?, fecha_desde=?, fecha_hasta=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=? 
+                    SET numero_poliza=?, nombre_tomador_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=? 
                     WHERE id_poliza=?`, 
-            [policy.numero_poliza, policy.nombre_tomador_poliza, policy.tipo_individual_poliza, policy.tipo_poliza, fechaDesdePoliza, fechaHastaPoliza, policy.tipo_moneda_poliza, montoPrimaAnual, policy.estatus_poliza, policy.id_poliza], 
+            [policy.numero_poliza, policy.nombre_tomador_poliza, policy.tipo_individual_poliza, fechaDesdePoliza, fechaHastaPoliza, policy.tipo_moneda_poliza, montoPrimaAnual, policy.estatus_poliza, policy.id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)

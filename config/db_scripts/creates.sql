@@ -48,6 +48,8 @@ CREATE TABLE Vehiculo(
     cedula_conductor_vehiculo VARCHAR(255),
     rif_conductor_vehiculo VARCHAR(255),
     nombre_conductor_vehiculo VARCHAR(255),
+    suma_asegurada_vehiculo DECIMAL(20,4),
+    tipo_movimiento_vehiculo VARCHAR(255),
     deshabilitar_vehiculo BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -122,22 +124,27 @@ CREATE TABLE Beneficiario(
     cedula_beneficiario VARCHAR(255) NOT NULL,
     fec_nac_beneficiario DATE NOT NULL,
     parentesco_beneficiario VARCHAR(255) NOT NULL,
+    direccion_beneficiario VARCHAR(500),
+    telefono_beneficiario VARCHAR(255),
+    correo_beneficiario VARCHAR(255),
+    banco_beneficiario VARCHAR(255),
+    tipo_cuenta_beneficiario VARCHAR(255),
+    nro_cuenta_beneficiario VARCHAR(500),
+    tipo_movimiento_beneficiario VARCHAR(255),
     deshabilitar_beneficiario BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Colectivo(
     id_colectivo INT PRIMARY KEY AUTO_INCREMENT,
     numero_colectivo VARCHAR(255) NOT NULL,
-    tomador_asegurado_colectivo BOOLEAN NOT NULL,
     nombre_tomador_colectivo VARCHAR(255) NOT NULL,
     tipo_colectivo VARCHAR(255) NOT NULL,
     fecha_desde_colectivo DATE NOT NULL,
     fecha_hasta_colectivo DATE NOT NULL,
     tipo_moneda_colectivo VARCHAR(255) NOT NULL,
     prima_anual_colectivo DECIMAL(20,4) NOT NULL,
-    comision_colectivo DECIMAL(20,4) NOT NULL,
     estatus_colectivo VARCHAR(255),
-    tipo_cobertura_colectivo VARCHAR(255),
+    cobertura_colectivo VARCHAR(255),
     tipo_canal_colectivo VARCHAR(255),
     deducible_colectivo DECIMAL(20,4),
     grupo_colectivo VARCHAR(255) NOT NULL,
@@ -146,6 +153,21 @@ CREATE TABLE Colectivo(
     detalle_cliente_colectivo VARCHAR(255),
     obser_deshabilitar_colectivo VARCHAR(500),
     deshabilitar_colectivo BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE Riesgo_Diverso(
+    id_riesgo_diverso INT PRIMARY KEY AUTO_INCREMENT,
+    nom_razon_riesgo_diverso VARCHAR(255) NOT NULL,
+    cedula_riesgo_diverso VARCHAR(255),
+    rif_riesgo_diverso VARCHAR(255),
+    direccion_riesgo_diverso VARCHAR(500) NOT NULL,
+    telefono_riesgo_diverso VARCHAR(255) NOT NULL,
+    correo_riesgo_diverso VARCHAR(255) NOT NULL,
+    suma_asegurada_riesgo_diverso DECIMAL(20,4) NOT NULL,
+    modelo_riesgo_diverso VARCHAR(255) NOT NULL,
+    serial_riesgo_diverso VARCHAR(255) NOT NULL,
+    tipo_movimiento_riesgo_diverso VARCHAR(255),
+    deshabilitar_riesgo_diverso BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Recibo(
@@ -360,6 +382,15 @@ CREATE TABLE Col_Aseg_Asegurado_Vehi(
     vehiculo_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
     CONSTRAINT FOREIGN KEY fk_vehiculo_id(vehiculo_id) REFERENCES Vehiculo(id_vehiculo)
+);
+
+CREATE TABLE Col_Aseg_Asegurado_Ries_Diver(
+    id_caard INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_caard BOOLEAN NOT NULL DEFAULT FALSE,
+    caa_id INT NOT NULL,
+    riesgo_diverso_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_riesgo_diverso_id(riesgo_diverso_id) REFERENCES Riesgo_Diverso(id_riesgo_diverso)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Ejecu(
