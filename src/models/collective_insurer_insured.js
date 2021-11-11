@@ -27,6 +27,30 @@ module.exports = {
             });
         });
     },
+    getCollectivesIdsNatural: (insuredNaturalId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT colectivo_id FROM Colectivo_Aseguradora_Asegurado WHERE asegurado_per_nat_id=? AND deshabilitar_caa=0',
+            [insuredNaturalId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getCollectivesIdsLegal: (legalInsuredId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT colectivo_id FROM Colectivo_Aseguradora_Asegurado WHERE asegurado_per_jur_id=? AND deshabilitar_caa=0',
+            [legalInsuredId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postCollectiveInsurer: async (nombre_aseguradora, collectiveId) => {
         let insurerId = await  new Promise((resolve, reject) => {

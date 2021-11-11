@@ -58,6 +58,61 @@ module.exports = {
             });
         });
     },
+    getSummaryCollectiveCousins: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_colectivo) AS primaTotal
+                    FROM Colectivo 
+                    WHERE deshabilitar_colectivo=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getHealthCollectiveCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(tipo_colectivo) AS health
+                    FROM Colectivo 
+                    WHERE tipo_colectivo='Salud'
+                    AND deshabilitar_colectivo=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getAutoCollectiveCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(tipo_colectivo) AS auto
+                    FROM Colectivo 
+                    WHERE tipo_colectivo='Automovil'
+                    AND deshabilitar_colectivo=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRiskDiverCollectiveCounter: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(tipo_colectivo) AS risk
+                    FROM Colectivo 
+                    WHERE tipo_colectivo='Riesgos Diversos'
+                    AND deshabilitar_colectivo=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postCollectiveForm: (montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {

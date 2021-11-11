@@ -5,12 +5,17 @@ const ownAgentModel = require('../models/own_agent');
 const receiptModel = require('../models/receipt');
 const insuredModel = require('../models/insured');
 const commissionModel = require('../models/commission');
+const collectiveModel = require('../models/collective');
 
 module.exports = {
 /*                  GET                  */
     getIndex: async (req, res) => {
         let healthPolicyCounter = await policyModel.getHealthPolicyCounter();
+        let healthColectiveCounter = await collectiveModel.getHealthCollectiveCounter();
+        let healthCounter = healthPolicyCounter[0].health + healthColectiveCounter[0].health;
         let autoPolicyCounter = await policyModel.getAutoPolicyCounter();
+        let autoColectiveCounter = await collectiveModel.getAutoCollectiveCounter();
+        let autoCounter = autoPolicyCounter[0].auto + autoColectiveCounter[0].auto;
         let patrimonialPolicyCounter = await policyModel.getPatrimonialPolicyCounter();
         let bailPolicyCounter = await policyModel.getBailPolicyCounter();
         let anotherBranchPolicyCounter = await policyModel.getAnotherBranchPolicyCounter();
@@ -18,8 +23,10 @@ module.exports = {
         let lifePolicyCounter = await policyModel.getLifePolicyCounter();
         let apPolicyCounter = await policyModel.getAPPolicyCounter();
         let travelPolicyCounter = await policyModel.getTravelPolicyCounter();
+        let RiskDiverCollectiveCounter = await collectiveModel.getRiskDiverCollectiveCounter();
         let resultPolicyInsuInsured = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
-        let totalPremium = await policyModel.getSummaryPolizaCousins();
+        let totalPremiumPolicy = await policyModel.getSummaryPolizaCousins();
+        let totalPremiumCollective = await collectiveModel.getSummaryCollectiveCousins();
         let totalCommission = await receiptModel.getSumReceiptCommissions(); 
         let insurers = [];
         let objectInsuredNatural = [];
@@ -32,19 +39,25 @@ module.exports = {
         let filteredInsurers = [];
         let filteredTotalInsurancePremiums = [];
         let filteredDates = [];
-        if ((totalPremium[0].primaTotal === null) && (totalCommission[0].comisionTotal === null)) {
-            totalPremium[0].primaTotal = 0;
-            totalCommission[0].comisionTotal = 0;
-            totalPremium = totalPremium[0].primaTotal;
-            totalCommission = totalCommission[0].comisionTotal;
-        } else if (totalPremium[0].primaTotal === null) {
-            totalPremium[0].primaTotal = 0;
-            totalPremium = totalPremium[0].primaTotal;
-        } else if (totalCommission[0].comisionTotal === null) {
+        let totalPremium = 0;
+        if ((totalPremiumPolicy[0].primaTotal === null) && (totalPremiumCollective[0].primaTotal === null)) {
+            totalPremiumPolicy[0].primaTotal = 0;
+            totalPremiumPolicy = totalPremiumPolicy[0].primaTotal;
+            totalPremiumCollective[0].primaTotal = 0;
+            totalPremiumCollective = totalPremiumCollective[0].primaTotal;
+        } else if (totalPremiumPolicy[0].primaTotal === null){
+            totalPremiumPolicy[0].primaTotal = 0;
+            totalPremiumPolicy = totalPremiumPolicy[0].primaTotal;
+        } else if (totalPremiumCollective[0].primaTotal === null) {
+            totalPremiumCollective[0].primaTotal = 0;
+            totalPremiumCollective = totalPremiumCollective[0].primaTotal;
+        }
+        totalPremium = totalPremiumPolicy[0].primaTotal + totalPremiumCollective[0].primaTotal;
+        totalPremium = totalPremium.toFixed(2);
+        if (totalCommission[0].comisionTotal === null) {
             totalCommission[0].comisionTotal = 0;
             totalCommission = totalCommission[0].comisionTotal;
         } else {
-            totalPremium = totalPremium[0].primaTotal.toLocaleString();
             totalCommission = totalCommission[0].comisionTotal.toLocaleString();
         }
         for (let i = 0; i < resultPolicyInsuInsured.length; i++) {
@@ -636,7 +649,7 @@ module.exports = {
                         elementInsuredNaturalNext = objectInsuredNatural[j+1];
                         if (elementInsuredNaturalNext === undefined) {
                             resultComission = parseFloat(elementInsuredNatural.commission) + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
+                            totalCommissions.push(resultComission.toFixed(2));
                             ownAgents.push(elementInsuredNatural.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -645,7 +658,7 @@ module.exports = {
                             }
                         } else if (elementInsuredNatural.ownAgent !== elementInsuredNaturalNext.ownAgent) {
                             resultComission = parseFloat(elementInsuredNatural.commission) + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
+                            totalCommissions.push(resultComission.toFixed(2));
                             ownAgents.push(elementInsuredNatural.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -655,7 +668,6 @@ module.exports = {
                         } else if (elementInsuredNatural.ownAgent === elementInsuredNaturalNext.ownAgent) {
                             let resultComissionNatural = parseFloat(elementInsuredNatural.commission) + parseFloat(elementInsuredNaturalNext.commission);
                             resultComission = resultComissionNatural + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
                             ownAgents.push(elementInsuredNatural.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -704,48 +716,6 @@ module.exports = {
                     }
                 }
             }
-            /*           No se sabe si esta bien            */           
-            for (let i = 0; i < totalCommissions.length; i++) {
-                let elementTotalCommissions = totalCommissions[i];
-                if (typeof(elementTotalCommissions) === 'string') {
-                    totalCommissions.splice(i, 1);
-                    ownAgents.splice(i, 1);
-                    datesOwnAgents.splice(i, 1);
-                }
-            }
-            let swap = (val1, val2, arr) => {
-                if(!arr.includes(val1) || !arr.includes(val2)) return;
-                let val1_index = arr.indexOf(val1);
-                let val2_index = arr.indexOf(val2);
-                arr.splice(val1_index, 1, val2);
-                arr.splice(val2_index, 1, val1);
-            
-            }
-            for (let i = 0; i < ownAgents.length; i++) {
-                let elementOwnAgents = ownAgents[i];
-                let elementOwnAgentsNext = ownAgents[i+1];
-                if (elementOwnAgentsNext === undefined) {
-                    break;
-                }
-                swap(elementOwnAgents, elementOwnAgentsNext, ownAgents);
-            }
-            for (let j = 0; j < totalCommissions.length; j++) {
-                let elementTotalCommissions = totalCommissions[j];
-                let elementTotalCommissionsNext = totalCommissions[j+1];
-                if (elementTotalCommissionsNext === undefined) {
-                    break;
-                }
-                swap(elementTotalCommissions, elementTotalCommissionsNext, totalCommissions);
-            }
-            for (let k = 0; k < datesOwnAgents.length; k++) {
-                let elementDatesOwnAgents = datesOwnAgents[k];
-                let elementDatesOwnAgentsNext = datesOwnAgents[k+1];
-                if (elementDatesOwnAgentsNext === undefined) {
-                    break;
-                }
-                swap(elementDatesOwnAgents, elementDatesOwnAgentsNext, datesOwnAgents);
-            }
-            /*                                                 */
         } else if (objectInsuredLegal.length > objectInsuredNatural.length) {
             for (let i = 0; i < objectInsuredNatural.length; i++) {
                 let elementInsuredNatural = objectInsuredNatural[i];
@@ -757,7 +727,7 @@ module.exports = {
                         elementInsuredLegalNext = objectInsuredLegal[j+1];
                         if (elementInsuredLegalNext === undefined) {
                             resultComission = parseFloat(elementInsuredLegal.commission) + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
+                            totalCommissions.push(resultComission.toFixed(2));
                             ownAgents.push(elementInsuredLegal.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -766,7 +736,7 @@ module.exports = {
                             }
                         } else if (elementInsuredLegal.ownAgent !== elementInsuredLegalNext.ownAgent) {
                             resultComission = parseFloat(elementInsuredNatural.commission) + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
+                            totalCommissions.push(resultComission.toFixed(2));
                             ownAgents.push(elementInsuredLegal.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -776,7 +746,7 @@ module.exports = {
                         } else if (elementInsuredLegal.ownAgent === elementInsuredLegalNext.ownAgent) {
                             let resultComissionNatural = parseFloat(elementInsuredLegal.commission) + parseFloat(elementInsuredLegalNext.commission);
                             resultComission = resultComissionNatural + parseFloat(elementInsuredLegal.commission);
-                            totalCommissions.push(resultComission);
+                            totalCommissions.push(resultComission.toFixed(2));
                             ownAgents.push(elementInsuredLegal.ownAgent);
                             if (elementInsuredNatural.date > elementInsuredLegal.date) {
                                 datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
@@ -820,48 +790,6 @@ module.exports = {
                     }
                 }
             }
-            /*           No se sabe si esta bien            */           
-            for (let i = 0; i < totalCommissions.length; i++) {
-                let elementTotalCommissions = totalCommissions[i];
-                if (typeof(elementTotalCommissions) === 'string') {
-                    totalCommissions.splice(i, 1);
-                    ownAgents.splice(i, 1);
-                    datesOwnAgents.splice(i, 1);
-                }
-            }
-            let swap = (val1, val2, arr) => {
-                if(!arr.includes(val1) || !arr.includes(val2)) return;
-                let val1_index = arr.indexOf(val1);
-                let val2_index = arr.indexOf(val2);
-                arr.splice(val1_index, 1, val2);
-                arr.splice(val2_index, 1, val1);
-            
-            }
-            for (let i = 0; i < ownAgents.length; i++) {
-                let elementOwnAgents = ownAgents[i];
-                let elementOwnAgentsNext = ownAgents[i+1];
-                if (elementOwnAgentsNext === undefined) {
-                    break;
-                }
-                swap(elementOwnAgents, elementOwnAgentsNext, ownAgents);
-            }
-            for (let j = 0; j < totalCommissions.length; j++) {
-                let elementTotalCommissions = totalCommissions[j];
-                let elementTotalCommissionsNext = totalCommissions[j+1];
-                if (elementTotalCommissionsNext === undefined) {
-                    break;
-                }
-                swap(elementTotalCommissions, elementTotalCommissionsNext, totalCommissions);
-            }
-            for (let k = 0; k < datesOwnAgents.length; k++) {
-                let elementDatesOwnAgents = datesOwnAgents[k];
-                let elementDatesOwnAgentsNext = datesOwnAgents[k+1];
-                if (elementDatesOwnAgentsNext === undefined) {
-                    break;
-                }
-                swap(elementDatesOwnAgents, elementDatesOwnAgentsNext, datesOwnAgents);
-            }
-            /*                                                 */
         } else if (objectInsuredNatural.length === objectInsuredLegal.length) {
             for (let i = 0; i < objectInsuredNatural.length; i++) {
                 let elementInsuredNatural = objectInsuredNatural[i];
@@ -870,7 +798,7 @@ module.exports = {
                     let elementInsuredLegal = objectInsuredLegal[j];
                     if (elementInsuredLegal.ownAgent === elementInsuredNatural.ownAgent) {
                         let resultComission = parseFloat(elementInsuredNatural.commission) + parseFloat(elementInsuredLegal.commission);
-                        totalCommissions.push(resultComission);
+                        totalCommissions.push(resultComission.toFixed(2));
                         ownAgents.push(elementInsuredLegal.ownAgent);
                         if (elementInsuredLegal.date > elementInsuredNatural.date) {
                             datesOwnAgents.push(elementInsuredLegal.date.toISOString().substring(0, 10));
@@ -948,8 +876,8 @@ module.exports = {
             minDateOwnAgent = minDateOwnAgent.toISOString().substring(0, 10);
         }
         res.render('index', {
-            healthPolicyCount: healthPolicyCounter[0],
-            autoPolicyCount: autoPolicyCounter[0],
+            healthPolicyCount: healthCounter,
+            autoPolicyCount: autoCounter,
             patrimonialPolicyCount: patrimonialPolicyCounter[0],
             bailPolicyCount: bailPolicyCounter[0],
             anotherBranchPolicyCount: anotherBranchPolicyCounter[0],
@@ -957,6 +885,7 @@ module.exports = {
             lifePolicyCount: lifePolicyCounter[0],
             apPolicyCount: apPolicyCounter[0],
             travelPolicyCount: travelPolicyCounter[0],
+            RiskDiverCollectiveCount: RiskDiverCollectiveCounter[0],
             totalPremium: totalPremium,
             totalCommission: totalCommission,
             insurers: filteredInsurers,
