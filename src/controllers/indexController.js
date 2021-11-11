@@ -40,20 +40,16 @@ module.exports = {
         let filteredTotalInsurancePremiums = [];
         let filteredDates = [];
         let totalPremium = 0;
-        if ((totalPremiumPolicy[0].primaTotal === null) && (totalPremiumCollective[0].primaTotal === null)) {
-            totalPremiumPolicy[0].primaTotal = 0;
-            totalPremiumPolicy = totalPremiumPolicy[0].primaTotal;
-            totalPremiumCollective[0].primaTotal = 0;
-            totalPremiumCollective = totalPremiumCollective[0].primaTotal;
+        if ((totalPremiumPolicy[0].primaTotal !== null) && (totalPremiumCollective[0].primaTotal !== null)) {
+            totalPremium = totalPremiumPolicy[0].primaTotal + totalPremiumCollective[0].primaTotal;
+            totalPremium = totalPremium.toFixed(2);
+        } else if ((totalPremiumPolicy[0].primaTotal === null) && (totalPremiumCollective[0].primaTotal === null)) {
+            totalPremium = 0;
         } else if (totalPremiumPolicy[0].primaTotal === null){
-            totalPremiumPolicy[0].primaTotal = 0;
-            totalPremiumPolicy = totalPremiumPolicy[0].primaTotal;
+            totalPremium = totalPremiumCollective[0].primaTotal;
         } else if (totalPremiumCollective[0].primaTotal === null) {
-            totalPremiumCollective[0].primaTotal = 0;
-            totalPremiumCollective = totalPremiumCollective[0].primaTotal;
+            totalPremium = totalPremiumPolicy[0].primaTotal;
         }
-        totalPremium = totalPremiumPolicy[0].primaTotal + totalPremiumCollective[0].primaTotal;
-        totalPremium = totalPremium.toFixed(2);
         if (totalCommission[0].comisionTotal === null) {
             totalCommission[0].comisionTotal = 0;
             totalCommission = totalCommission[0].comisionTotal;
@@ -639,6 +635,15 @@ module.exports = {
             }
         }
         if (objectInsuredNatural.length > objectInsuredLegal.length) {
+            if (objectInsuredLegal.length === 0) {
+                for (let i = 0; i < objectInsuredNatural.length; i++) {
+                    let elementInsuredNatural = objectInsuredNatural[i];
+                    resultComission = parseFloat(elementInsuredNatural.commission);
+                    totalCommissions.push(resultComission.toFixed(2));
+                    ownAgents.push(elementInsuredNatural.ownAgent);
+                    datesOwnAgents.push(elementInsuredNatural.date.toISOString().substring(0, 10));
+                }
+            }
             for (let i = 0; i < objectInsuredLegal.length; i++) {
                 let elementInsuredLegal = objectInsuredLegal[i];
                 let counter = 1;
@@ -717,6 +722,15 @@ module.exports = {
                 }
             }
         } else if (objectInsuredLegal.length > objectInsuredNatural.length) {
+            if (objectInsuredNatural.length === 0) {
+                for (let i = 0; i < objectInsuredLegal.length; i++) {
+                    let elementInsuredLegal = objectInsuredLegal[i];
+                    resultComission = parseFloat(elementInsuredLegal.commission);
+                    totalCommissions.push(resultComission.toFixed(2));
+                    ownAgents.push(elementInsuredLegal.ownAgent);
+                    datesOwnAgents.push(elementInsuredLegal.date.toISOString().substring(0, 10));
+                }
+            }
             for (let i = 0; i < objectInsuredNatural.length; i++) {
                 let elementInsuredNatural = objectInsuredNatural[i];
                 let counter = 1;
