@@ -40,6 +40,19 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_moneda_amp">
+                                                    <option selected value="<%= amp.tipo_moneda_amp %>"><%= amp.tipo_moneda_amp %></option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Ocurrencia</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -103,9 +116,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="cedula_beneficiario_amp"
-                                                id="cedula_beneficiario_amp"
-                                                value="<%= amp.cedula_beneficiario_amp %>"
+                                                name="cedula_beneficiario"
+                                                id="cedula_beneficiario"
+                                                value="<%= arrayBeneficiaryId %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -128,14 +141,28 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Reclamado</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="number"
                                                 step="0.01"
-                                                name="monto_amp"
-                                                id="monto_amp" 
-                                                value="<%= amp.monto_amp %>"
+                                                name="monto_reclamado_amp"
+                                                id="monto_reclamado_amp" 
+                                                value="<%= amp.monto_reclamado_amp %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="number"
+                                                step="0.01"
+                                                name="monto_pagado_amp"
+                                                id="monto_pagado_amp" 
+                                                value="<%= amp.monto_pagado_amp %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -202,9 +229,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="nombre_beneficiario_amp"
-                                                id="nombre_beneficiario_amp"
-                                                value="<%= amp.nombre_beneficiario_amp %>"
+                                                name="nombre_beneficiario"
+                                                id="nombre_beneficiario"
+                                                value="<%= arrayBeneficiaryName %>"
                                                 class="form-control"
                                                 required
                                             >

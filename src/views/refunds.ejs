@@ -35,8 +35,10 @@
                             <th>Patología</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -49,8 +51,10 @@
                             <th>Patología</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -132,8 +136,10 @@ $(document).ready(function(){
             {"data": "patologia_reembolso"},
             {"data": "fecha_ocurrencia_reembolso"},
             {"data": "fecha_notificacion_reembolso"},
-            {"data": "monto_reembolso"},
+            {"data": "monto_reclamo_reembolso"},
+            {"data": "monto_pagado_reembolso"},
             {"data": "observacion_reembolso"},
+            {"data": "tipo_moneda_reembolso"},
             {
                 "data": "",
                 "render": (data, type, row) => {
@@ -146,7 +152,24 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-refund/${row.id_reembolso}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                            <button 
+                                                class="btn btn-danger" 
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-ban"></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-sm-6 col-lg-12">
+                                            <textarea 
+                                                name="obser_deshabilitar_reembolso"
+                                                id="obser_deshabilitar_reembolso" 
+                                                placeholder="Observaciones de Deshabilitar *" 
+                                                class="form-control"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </form>`;
                 }
             }

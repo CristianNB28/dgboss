@@ -16,6 +16,33 @@ module.exports = {
             });
         });
     },
+    getColInsuInsuredBenefs: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * 
+                    FROM Col_Aseg_Asegurado_Benef 
+                    WHERE deshabilitar_caab=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getColInsuInsuredBenefId: (beneficiaryId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT id_caab 
+                    FROM Col_Aseg_Asegurado_Benef 
+                    WHERE beneficiario_id=? AND deshabilitar_caab=0`, 
+            [beneficiaryId], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postColInsuInsuredBenef: async (caaId, BeneficiaryId) => {
         return new Promise((resolve, reject) => {

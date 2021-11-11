@@ -36,8 +36,10 @@
                             <th>Clínica</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -51,8 +53,10 @@
                             <th>Clínica</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -135,8 +139,10 @@ $(document).ready(function(){
             {"data": "clinica_carta_aval"},
             {"data": "fecha_ocurrencia_carta_aval"},
             {"data": "fecha_notificacion_carta_aval"},
-            {"data": "monto_carta_aval"},
+            {"data": "monto_reclamado_carta_aval"},
+            {"data": "monto_pagado_carta_aval"},
             {"data": "observacion_carta_aval"},
+            {"data": "tipo_moneda_carta_aval"},
             {
                 "data": "",
                 "render": (data, type, row) => {
@@ -149,7 +155,24 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-letter-guarantee/${row.id_carta_aval}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                            <button 
+                                                class="btn btn-danger" 
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-ban"></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-sm-6 col-lg-12">
+                                            <textarea 
+                                                name="obser_deshabilitar_carta_aval"
+                                                id="obser_deshabilitar_carta_aval" 
+                                                placeholder="Observaciones de Deshabilitar *" 
+                                                class="form-control"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </form>`;
                 }
             }

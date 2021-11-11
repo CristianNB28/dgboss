@@ -40,6 +40,19 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_moneda_emergencia">
+                                                    <option selected value="<%= emergency.tipo_moneda_emergencia %>"><%= emergency.tipo_moneda_emergencia %></option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Ocurrencia</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -103,9 +116,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="cedula_beneficiario_emergencia"
-                                                id="cedula_beneficiario_emergencia"
-                                                value="<%= emergency.cedula_beneficiario_emergencia %>"
+                                                name="cedula_beneficiario"
+                                                id="cedula_beneficiario"
+                                                value="<%= arrayBeneficiaryId %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -128,14 +141,28 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Reclamado</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="number"
                                                 step="0.01"
-                                                name="monto_emergencia"
-                                                id="monto_emergencia" 
-                                                value="<%= emergency.monto_emergencia %>"
+                                                name="monto_reclamado_emergencia"
+                                                id="monto_reclamado_emergencia" 
+                                                value="<%= emergency.monto_reclamado_emergencia %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="number"
+                                                step="0.01"
+                                                name="monto_pagado_emergencia"
+                                                id="monto_pagado_emergencia" 
+                                                value="<%= emergency.monto_pagado_emergencia %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -202,9 +229,9 @@
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="nombre_beneficiario_emergencia"
-                                                id="nombre_beneficiario_emergencia"
-                                                value="<%= emergency.nombre_beneficiario_emergencia %>"
+                                                name="nombre_beneficiario"
+                                                id="nombre_beneficiario"
+                                                value="<%= arrayBeneficiaryName %>"
                                                 class="form-control"
                                                 required
                                             >

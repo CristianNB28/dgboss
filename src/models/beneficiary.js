@@ -2,6 +2,19 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
+    getBeneficiaries: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * 
+                    FROM Beneficiario 
+                    WHERE deshabilitar_beneficiario=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postBeneficiaryForm: async (fechaNacBeneficiario, beneficiary) => {
         return new Promise((resolve, reject) => {

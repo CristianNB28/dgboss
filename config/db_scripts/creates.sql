@@ -306,10 +306,10 @@ CREATE TABLE Reembolso(
     tipo_moneda_reembolso VARCHAR(255) NOT NULL,
     obser_deshabilitar_reembolso VARCHAR(500),
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT,
-    caab_id INT,
-    CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
-    CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE AMP(
@@ -324,10 +324,10 @@ CREATE TABLE AMP(
     tipo_moneda_amp VARCHAR(255) NOT NULL,
     obser_deshabilitar_amp VARCHAR(500),
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT,
-    caab_id INT,
-    CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
-    CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Emergencia(
@@ -342,10 +342,10 @@ CREATE TABLE Emergencia(
     tipo_moneda_emergencia VARCHAR(255) NOT NULL,
     obser_deshabilitar_emergencia VARCHAR(500),
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT,
-    caab_id INT,
-    CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
-    CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Carta_Aval(
@@ -360,10 +360,10 @@ CREATE TABLE Carta_Aval(
     tipo_moneda_carta_aval VARCHAR(255) NOT NULL,
     obser_deshabilitar_carta_aval VARCHAR(500),
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
-    paab_id INT,
-    caab_id INT,
-    CONSTRAINT FOREIGN KEY fk_paab_id(paab_id) REFERENCES Pol_Aseg_Asegurado_Benef(id_paab),
-    CONSTRAINT FOREIGN KEY fk_caab_id(caab_id) REFERENCES Col_Aseg_Asegurado_Benef(id_caab)
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(

@@ -36,8 +36,10 @@
                             <th>Clínica</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -51,8 +53,10 @@
                             <th>Clínica</th>
                             <th>Fecha de Ocurrencia</th>
                             <th>Fecha de Notificación</th>
-                            <th>Monto</th>
+                            <th>Monto Reclamado</th>
+                            <th>Monto Pagado</th>
                             <th>Observaciones</th>
+                            <th>Tipo Moneda</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -135,8 +139,10 @@ $(document).ready(function(){
             {"data": "clinica_emergencia"},
             {"data": "fecha_ocurrencia_emergencia"},
             {"data": "fecha_notificacion_emergencia"},
-            {"data": "monto_emergencia"},
+            {"data": "monto_reclamado_emergencia"},
+            {"data": "monto_pagado_emergencia"},
             {"data": "observacion_emergencia"},
+            {"data": "tipo_moneda_emergencia"},
             {
                 "data": "",
                 "render": (data, type, row) => {
@@ -149,7 +155,24 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                         return `<form class="form-inline" method="post" action="/sistema/remove-emergency/${row.id_emergencia}">
-                                    <button class="btn btn-danger" type="submit"><i class="fa fa-ban"></i></button>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                            <button 
+                                                class="btn btn-danger" 
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-ban"></i>
+                                            </button>
+                                        </div> 
+                                        <div class="col-sm-6 col-lg-12">
+                                            <textarea 
+                                                name="obser_deshabilitar_emergencia"
+                                                id="obser_deshabilitar_emergencia" 
+                                                placeholder="Observaciones de Deshabilitar *" 
+                                                class="form-control"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </form>`;
                 }
             }

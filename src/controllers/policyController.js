@@ -3,6 +3,8 @@ const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const ownAgentModel = require('../models/own_agent');
+const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
+const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 
 module.exports = {
 /*                  GET                  */
@@ -657,14 +659,26 @@ module.exports = {
         res.redirect('/sistema');
     },
 /*               DELETE                  */
-/*-------------- Arreglar -----------------*/
     disablePolicy: async (req, res) => {
         let disablePolicy = 1;
         let disablePolicyInsurerInsured = 1;
+        let disablePIIB = 1;
+        let disablePIIV = 1;
         await policyModel.updateDisablePolicy(req.params.id, req.body);
         await policyModel.disablePolicy(req.params.id, disablePolicy);
         await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
+        let disablePII = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.params.id);
+        let resultPIIB = await polInsInsurerBenef.getPolInsuInsuredBenef(disablePII[0].id_paa);
+        let resultPIIV = await polInsuInsuredVehiModel.getPolInsuInsuredVehi(disablePII[0].id_paa);
+        if (resultPIIV.length === 0) {
+            for (const itemPIIB of resultPIIB) {
+                await polInsInsurerBenef.disablePolInsuInsuredBenef(itemPIIB.id_paab, disablePIIB);
+            }
+        } else if (resultPIIB.length === 0) {
+            for (const itemPIIV of resultPIIV) {
+                await polInsuInsuredVehiModel.disablePolInsuInsuredVehi(itemPIIV.id_paav, disablePIIV);
+            }
+        }
         res.redirect('/sistema/policies');
     }
-/*-------------------------------------------*/
 }

@@ -54,19 +54,6 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Validacion de numero de Telefono -->
-
-<script src="/js/phone-validations/insurer.js"></script>
-<script src="/js/phone-validations/own-agent.js"></script>
-<script src="/js/phone-validations/executive.js"></script>
-<script src="/js/phone-validations/natural-insured-phone.js"></script>
-<script src="/js/phone-validations/natural-insured-mobile.js"></script>
-<script src="/js/phone-validations/natural-insured-emergency.js"></script>
-<script src="/js/phone-validations/legal-insured-phone.js"></script>
-<script src="/js/phone-validations/legal-insured-optional.js"></script>
-<script src="/js/phone-validations/legal-insured-mobile.js"></script>
-<script src="/js/phone-validations/user.js"></script>
-
 <% if(typeof alert != 'undefined') { %>
 <script>
     Swal.fire({
@@ -91,9 +78,12 @@
                 let elementLegalInsured = legalInsureds[i];
                 if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
                     document.getElementById("nombre_razon_asegurado").value = elementLegalInsured.razon_social_per_jur;
+                    pasarNombreBeneficiarioPolizaJur(elementLegalInsured.id_asegurado_per_jur);
                     break;
                 } else {
                     document.getElementById("nombre_razon_asegurado").value = '';
+                    document.getElementById("cedula_beneficiario").value = ''; 
+                    document.getElementById("nombre_beneficiario").value = '';
                 }
             }
         } else {
@@ -102,19 +92,121 @@
                 if (idRif.startsWith('V')) {
                     if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
                         document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        pasarNombreBeneficiarioPolizaNat(elementNaturalInsured.id_asegurado_per_nat);
                         break;
                     } else {
                         document.getElementById("nombre_razon_asegurado").value = '';
+                        document.getElementById("cedula_beneficiario").value = ''; 
+                        document.getElementById("nombre_beneficiario").value = '';
                     }
                 } else if (idRif.match(/^\d/)) {
                     if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
                         document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        pasarNombreBeneficiarioPolizaNat(elementNaturalInsured.id_asegurado_per_nat);
                         break;
                     } else {
                         document.getElementById("nombre_razon_asegurado").value = '';
+                        document.getElementById("cedula_beneficiario").value = ''; 
+                        document.getElementById("nombre_beneficiario").value = '';
                     }
                 } else if (idRif.startsWith('')) {
                     document.getElementById("nombre_razon_asegurado").value = '';
+                    document.getElementById("cedula_beneficiario").value = ''; 
+                    document.getElementById("nombre_beneficiario").value = '';
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    var pii = <%- JSON.stringify(resultsPII) %>;
+    var piib = <%- JSON.stringify(resultsPIIB) %>;
+    var policies = <%- JSON.stringify(policies) %>;
+    var cii = <%- JSON.stringify(resultsCII) %>;
+    var ciib = <%- JSON.stringify(resultsCIIB) %>;
+    var collectives = <%- JSON.stringify(collectives) %>;
+    var beneficiaries = <%- JSON.stringify(beneficiaries) %>;
+    function pasarNombreBeneficiarioPolizaNat(idInsured) {
+        var arrayBeneficiaryId = [];
+        var arrayBeneficiaryName = [];
+        for (const itemPII of pii) {
+            if (itemPII.asegurado_per_nat_id === idInsured) {
+                for (const itemPolicy of policies) {
+                    if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                        if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                            for (const itemPIIB of piib) {
+                                if (itemPII.id_paa === itemPIIB.paa_id) {
+                                    for (const itemBeneficiary of beneficiaries) {
+                                        if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                            arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                            var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                            arrayBeneficiaryName.push(beneficiaryName);
+                                        }
+                                        document.getElementById("cedula_beneficiario").value = arrayBeneficiaryId; 
+                                        document.getElementById("nombre_beneficiario").value = arrayBeneficiaryName;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (const itemCII of cii) {
+            if (itemCII.asegurado_per_nat_id === idInsured) {
+                for (const itemCollective of collectives) {
+                    if (itemCII.colectivo_id === itemCollective.id_colectivo) {
+                        if (itemCollective.tipo_colectivo === 'Salud') {
+                            for (const itemCIIB of ciib) {
+                                if (itemCII.id_caa === itemCIIB.caa_id) {
+                                    for (const itemBeneficiary of beneficiaries) {
+                                        if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                            arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                            var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                            arrayBeneficiaryName.push(beneficiaryName);
+                                        }
+                                        document.getElementById("cedula_beneficiario").value = arrayBeneficiaryId; 
+                                        document.getElementById("nombre_beneficiario").value = arrayBeneficiaryName;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    var pii = <%- JSON.stringify(resultsPII) %>;
+    var piib = <%- JSON.stringify(resultsPIIB) %>;
+    var policies = <%- JSON.stringify(policies) %>;
+    var beneficiaries = <%- JSON.stringify(beneficiaries) %>;
+    function pasarNombreBeneficiarioPolizaJur(idInsured) {
+        var arrayBeneficiaryId = [];
+        var arrayBeneficiaryName = [];
+        for (const itemPII of pii) {
+            if (itemPII.asegurado_per_jur_id === idInsured) {
+                for (const itemPolicy of policies) {
+                    if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                        if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                            for (const itemPIIB of piib) {
+                                if (itemPII.id_paa === itemPIIB.paa_id) {
+                                    for (const itemBeneficiary of beneficiaries) {
+                                        if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                            arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                            var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                            arrayBeneficiaryName.push(beneficiaryName);
+                                        }
+                                        document.getElementById("cedula_beneficiario").value = arrayBeneficiaryId; 
+                                        document.getElementById("nombre_beneficiario").value = arrayBeneficiaryName;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -3,42 +3,105 @@ const refundModel = require('../models/refund');
 const letterGuaranteeModel = require('../models/letter_guarentee');
 const emergencyModel = require('../models/emergency');
 const ampModel = require('../models/amp');
+const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
+const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
+const policyModel = require('../models/policy');
+const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
+const colInsInsurerBenef = require('../models/col_aseg_asegurado_benef');
+const collectiveModel = require('../models/collective');
+const beneficiaryModel = require('../models/beneficiary');
 
 module.exports = {
 /*                  GET                  */
     getRefundForm: async (req, res) => {
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         res.render('refundForm', {
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     getLetterGuaranteeForm: async (req, res) => {
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         res.render('letterGuaranteeForm', {
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     getEmergencyForm: async (req, res) => {
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         res.render('emergencyForm', {
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     getAMPForm: async (req, res) => {
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         res.render('ampForm', {
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
@@ -98,6 +161,13 @@ module.exports = {
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.render('refundForm', {
             alert: true,
@@ -109,16 +179,31 @@ module.exports = {
             ruta: 'sistema',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     postLetterGuaranteeForm: async (req, res) => {
-        let montoCartaAval = parseFloat(req.body.monto_carta_aval);
+        let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
+        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado_carta_aval);
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
-        await letterGuaranteeModel.postLetterGuaranteeForm(montoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        await letterGuaranteeModel.postLetterGuaranteeForm(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
         res.render('letterGuaranteeForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -129,16 +214,31 @@ module.exports = {
             ruta: 'sistema',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     postEmergencyForm: async (req, res) => {
-        let montoEmergencia = parseFloat(req.body.monto_emergencia);
+        let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
+        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado_emergencia);
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
-        await emergencyModel.postEmergencyForm(montoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        await emergencyModel.postEmergencyForm(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
         res.render('emergencyForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -149,16 +249,31 @@ module.exports = {
             ruta: 'sistema',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
     postAMPForm: async (req, res) => {
-        let montoAMP = parseFloat(req.body.monto_amp);
+        let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
+        let montoPagadoAMP = parseFloat(req.body.monto_pagado_amp);
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
-        await ampModel.postAMPForm(montoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        await ampModel.postAMPForm(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
         res.render('ampForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -169,6 +284,13 @@ module.exports = {
             ruta: 'sistema',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
+            resultsPII: resultsPII,
+            resultsPIIB: resultsPIIB,
+            policies: resultsPolicies,
+            resultsCII: resultsCII,
+            resultsCIIB: resultsCIIB,
+            collectives: resultsCollectives,
+            beneficiaries: resultsBeneficiaries,
             name: req.session.name
         });
     },
@@ -177,6 +299,13 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let idRefund = req.params.id;
         if (idRefund.match(valoresAceptados)) {
             let resultRefund = await refundModel.getRefund(idRefund);
@@ -184,10 +313,75 @@ module.exports = {
             let fechaNotificacionReembolso = resultRefund[0].fecha_notificacion_reembolso.toISOString().substring(0, 10);
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
+            let arrayBeneficiaryId = [];
+            let arrayBeneficiaryName = [];
             if (resultRefund[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultRefund[0].asegurado_per_jur_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_jur_id === resultRefund[0].asegurado_per_jur_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultRefund[0].asegurado_per_nat_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (const itemCII of resultsCII) {
+                    if (itemCII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
+                        for (const itemCollective of resultsCollectives) {
+                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
+                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                    for (const itemCIIB of resultsCIIB) {
+                                        if (itemCII.id_caa === itemCIIB.caa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             res.render('editRefund', {
                 refund: resultRefund[0],
@@ -197,6 +391,15 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                resultsPII: resultsPII,
+                resultsPIIB: resultsPIIB,
+                policies: resultsPolicies,
+                resultsCII: resultsCII,
+                resultsCIIB: resultsCIIB,
+                collectives: resultsCollectives,
+                beneficiaries: resultsBeneficiaries,
+                arrayBeneficiaryId: arrayBeneficiaryId,
+                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -207,6 +410,13 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let idLetterGuarentee = req.params.id;
         if (idLetterGuarentee.match(valoresAceptados)) {
             let resultLetterGuarentee = await letterGuaranteeModel.getLetterGuarantee(idLetterGuarentee);
@@ -214,10 +424,75 @@ module.exports = {
             let fechaNotificacionCartaAval = resultLetterGuarentee[0].fecha_notificacion_carta_aval.toISOString().substring(0, 10);
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
+            let arrayBeneficiaryId = [];
+            let arrayBeneficiaryName = [];
             if (resultLetterGuarentee[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultLetterGuarentee[0].asegurado_per_jur_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_jur_id === resultLetterGuarentee[0].asegurado_per_jur_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultLetterGuarentee[0].asegurado_per_nat_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (const itemCII of resultsCII) {
+                    if (itemCII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
+                        for (const itemCollective of resultsCollectives) {
+                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
+                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                    for (const itemCIIB of resultsCIIB) {
+                                        if (itemCII.id_caa === itemCIIB.caa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             res.render('editLetterGuarentee', {
                 letterGuarentee: resultLetterGuarentee[0],
@@ -227,6 +502,15 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                resultsPII: resultsPII,
+                resultsPIIB: resultsPIIB,
+                policies: resultsPolicies,
+                resultsCII: resultsCII,
+                resultsCIIB: resultsCIIB,
+                collectives: resultsCollectives,
+                beneficiaries: resultsBeneficiaries,
+                arrayBeneficiaryId: arrayBeneficiaryId,
+                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -237,6 +521,13 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let idEmergency = req.params.id;
         if (idEmergency.match(valoresAceptados)) {
             let resultEmergency = await emergencyModel.getEmergency(idEmergency);
@@ -244,10 +535,75 @@ module.exports = {
             let fechaNotificacionEmergencia = resultEmergency[0].fecha_notificacion_emergencia.toISOString().substring(0, 10);
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
+            let arrayBeneficiaryId = [];
+            let arrayBeneficiaryName = [];
             if (resultEmergency[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultEmergency[0].asegurado_per_jur_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_jur_id === resultEmergency[0].asegurado_per_jur_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultEmergency[0].asegurado_per_nat_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (const itemCII of resultsCII) {
+                    if (itemCII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
+                        for (const itemCollective of resultsCollectives) {
+                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
+                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                    for (const itemCIIB of resultsCIIB) {
+                                        if (itemCII.id_caa === itemCIIB.caa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             res.render('editEmergency', {
                 emergency: resultEmergency[0],
@@ -257,6 +613,15 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                resultsPII: resultsPII,
+                resultsPIIB: resultsPIIB,
+                policies: resultsPolicies,
+                resultsCII: resultsCII,
+                resultsCIIB: resultsCIIB,
+                collectives: resultsCollectives,
+                beneficiaries: resultsBeneficiaries,
+                arrayBeneficiaryId: arrayBeneficiaryId,
+                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -267,6 +632,13 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
         let resultsLegalInsured = await insuredModel.getLegalInsureds();
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenefs();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
+        let resultsCollectives = await collectiveModel.getCollectives();
+        let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let idAMP = req.params.id;
         if (idAMP.match(valoresAceptados)) {
             let resultAMP = await ampModel.getAMPId(idAMP);
@@ -274,10 +646,75 @@ module.exports = {
             let fechaNotificacionAMP = resultAMP[0].fecha_notificacion_amp.toISOString().substring(0, 10);
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
+            let arrayBeneficiaryId = [];
+            let arrayBeneficiaryName = [];
             if (resultAMP[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultAMP[0].asegurado_per_jur_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_jur_id === resultAMP[0].asegurado_per_jur_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultAMP[0].asegurado_per_nat_id);
+                for (const itemPII of resultsPII) {
+                    if (itemPII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
+                        for (const itemPolicy of resultsPolicies) {
+                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
+                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                    for (const itemPIIB of resultsPIIB) {
+                                        if (itemPII.id_paa === itemPIIB.paa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (const itemCII of resultsCII) {
+                    if (itemCII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
+                        for (const itemCollective of resultsCollectives) {
+                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
+                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                    for (const itemCIIB of resultsCIIB) {
+                                        if (itemCII.id_caa === itemCIIB.caa_id) {
+                                            for (const itemBeneficiary of resultsBeneficiaries) {
+                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
+                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
+                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
+                                                    arrayBeneficiaryName.push(beneficiaryName);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             res.render('editAMP', {
                 amp: resultAMP[0],
@@ -287,6 +724,15 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                resultsPII: resultsPII,
+                resultsPIIB: resultsPIIB,
+                policies: resultsPolicies,
+                resultsCII: resultsCII,
+                resultsCIIB: resultsCIIB,
+                collectives: resultsCollectives,
+                beneficiaries: resultsBeneficiaries,
+                arrayBeneficiaryId: arrayBeneficiaryId,
+                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -294,51 +740,59 @@ module.exports = {
         }
     },
     updateRefund: async (req, res) => {
-        let montoReembolso = parseFloat(req.body.monto_reembolso);
+        let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
+        let montoPagadoReembolso = parseFloat(req.body.monto_pagado_reembolso);
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
-        await refundModel.updateRefund(montoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.redirect('/sistema');
     },
     updateLetterGuarentee: async (req, res) => {
-        let montoCartaAval = parseFloat(req.body.monto_carta_aval);
+        let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
+        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado_carta_aval);
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
-        await letterGuaranteeModel.updateLetterGuarantee(montoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
+        await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
         res.redirect('/sistema');
     },
     updateEmergency: async (req, res) => {
-        let montoEmergencia = parseFloat(req.body.monto_emergencia);
+        let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
+        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado_emergencia);
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
-        await emergencyModel.updateEmergency(montoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
+        await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
         res.redirect('/sistema');
     },
     updateAMP: async (req, res) => {
-        let montoAMP = parseFloat(req.body.monto_amp);
+        let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
+        let montoPagadoAMP = parseFloat(req.body.monto_pagado_amp);
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
-        await ampModel.updateAMP(montoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
+        await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
         res.redirect('/sistema');
     },
 /*               DELETE                  */
     disableRefund: async (req, res) => {
         let disableRefund = 1;
+        await refundModel.updateDisableRefund(req.params.id, req.body);
         await refundModel.disableRefund(req.params.id, disableRefund);
         res.redirect('/sistema/refunds');
     },
     disableLetterGuarentee: async (req, res) => {
         let disableLetterGuarentee = 1;
+        await letterGuaranteeModel.updateDisableLetterGuarentee(req.params.id, req.body);
         await letterGuaranteeModel.disableLetterGuarentee(req.params.id, disableLetterGuarentee);
         res.redirect('/sistema/letters-guarentee');
     },
     disableEmergency: async (req, res) => {
         let disableEmergency = 1;
+        await emergencyModel.updateDisableEmergency(req.params.id, req.body);
         await emergencyModel.disableEmergency(req.params.id, disableEmergency);
         res.redirect('/sistema/emergencies');
     },
     disableAMP: async (req, res) => {
         let disableAMP = 1;
+        await ampModel.updateDisableAMP(req.params.id, req.body);
         await ampModel.disableAMP(req.params.id, disableAMP);
         res.redirect('/sistema/amp');
     } 
