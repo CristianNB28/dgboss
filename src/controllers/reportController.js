@@ -65,7 +65,6 @@ module.exports = {
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     premium: resultCollective[0].prima_anual_colectivo,
-
                 };
                 resultPremiumCollection.push(premiumCollection);
             } else {
@@ -98,7 +97,7 @@ module.exports = {
             let elementPII = resultsPII[i];
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
-            let resultReceiptCommission = await receiptModel.getReceiptCommission(elementPII.poliza_id);
+            let resultReceiptCommission = await receiptModel.getReceiptCommissionPolicy(elementPII.poliza_id);
             if (elementPII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -133,7 +132,7 @@ module.exports = {
             let elementCII = resultsCII[i];
             let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
             let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
-            let resultReceiptCommission = await receiptModel.getReceiptCommission(elementCII.colectivo_id);
+            let resultReceiptCommission = await receiptModel.getReceiptCommissionCollective(elementCII.colectivo_id);
             if (elementCII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);

@@ -203,7 +203,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -239,7 +239,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -267,7 +267,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -300,7 +300,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -319,7 +319,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -360,7 +360,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -388,7 +388,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -425,7 +425,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -461,7 +461,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -489,7 +489,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -522,7 +522,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -541,7 +541,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -582,7 +582,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyId[j];
                     let elementPolicyIdNext = resultPolicyId[j+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {
@@ -610,7 +610,7 @@ module.exports = {
                     let elementPolicyId = resultPolicyIdNext[k];
                     let elementPolicyIdNext = resultPolicyIdNext[k+1];
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                    let commissionReceipt = await receiptModel.getReceiptCommission(elementPolicyId.poliza_id);
+                    let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
                     sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     if (elementPolicyIdNext === undefined) {

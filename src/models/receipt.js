@@ -15,12 +15,26 @@ module.exports = {
             });
         });
     },
-    getReceiptCommission: (policyId) => {
+    getReceiptCommissionPolicy: (policyId) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT monto_comision_recibo
                     FROM Recibo 
                     WHERE poliza_id=? AND deshabilitar_recibo=0`,
             [policyId],
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getReceiptCommissionCollective: (collectiveId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT monto_comision_recibo
+                    FROM Recibo 
+                    WHERE colectivo_id=? AND deshabilitar_recibo=0`,
+            [collectiveId],
             (error, rows) => {
                 if (error) {
                     reject(error);
