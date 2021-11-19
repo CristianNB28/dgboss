@@ -12,7 +12,7 @@
                 <a>Datos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Ejecutivo de Reclamos</strong>
+                <strong>Agregar Ejecutivo</strong>
             </li>
         </ol>
     </div>
@@ -27,8 +27,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="id_rif_ejecutivo"
@@ -40,8 +40,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="nombre_ejecutivo"
@@ -53,8 +53,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="apellido_ejecutivo"
@@ -66,16 +66,15 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Grupo</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="grupo_ejecutivo"
-                                                id="grupo_ejecutivo" 
-                                                placeholder="Grupo de Ejecutivo *" 
-                                                class="form-control"
-                                                required
-                                            >
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de ejecutivo</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_ejecutivo">
+                                                    <option selected value="">Seleccione *</option>
+                                                        <option value="Suscripción">Suscripción</option>
+                                                        <option value="Siniestros">Siniestros</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>                                    
                                 </div>
@@ -84,8 +83,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Celular</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="tel"
                                                 name="celular_ejecutivo"
@@ -97,8 +96,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Correo</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Correo</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="email"
                                                 name="correo_ejecutivo"
@@ -111,8 +110,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Dirección</label>
+                                        <div class="col-sm-9">
                                             <textarea 
                                                 name="direccion_ejecutivo"
                                                 id="direccion_ejecutivo" 
