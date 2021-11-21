@@ -234,9 +234,8 @@
                                                         type="text"
                                                         name="grupo_poliza"
                                                         id="grupo_poliza"
-                                                        placeholder="Grupo *" 
+                                                        placeholder="Grupo" 
                                                         class="form-control"
-                                                        required
                                                     >
                                                 </div>
                                             </div>
@@ -737,9 +736,24 @@
                                                     <input 
                                                         type="number"
                                                         step="0.01" 
-                                                        name="porcentaje_ejecutivo_comision"
-                                                        id="porcentaje_ejecutivo_comision"
-                                                        placeholder="Porcentaje Ejecutivo *" 
+                                                        name="porcentaje_ejecutivo_suscripcion"
+                                                        id="porcentaje_ejecutivo_suscripcion"
+                                                        placeholder="Porcentaje Ejecutivo de Suscripción *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_ejecutivo_siniestro"
+                                                        id="porcentaje_ejecutivo_siniestro"
+                                                        placeholder="Porcentaje Ejecutivo de Siniestros *" 
                                                         class="form-control"
                                                         required
                                                     >
@@ -755,21 +769,6 @@
                                                         name="porcentaje_fundatina_comision"
                                                         id="porcentaje_fundatina_comision"
                                                         value="0.35" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        step="0.01" 
-                                                        name="porcentaje_ejecutivo_suscripcion"
-                                                        id="porcentaje_ejecutivo_suscripcion"
-                                                        placeholder="Porcentaje Ejecutivo de Suscripción *" 
                                                         class="form-control"
                                                         required
                                                     >
@@ -809,6 +808,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="number"
+                                                        step="0.01" 
+                                                        name="porcentaje_ejecutivo_cobranza"
+                                                        id="porcentaje_ejecutivo_cobranza"
+                                                        placeholder="Porcentaje Ejecutivo de Cobranzas *" 
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Atina</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -817,21 +831,6 @@
                                                         name="porcentaje_atina_comision"
                                                         id="porcentaje_atina_comision"
                                                         placeholder="Porcentaje Atina *" 
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="number"
-                                                        step="0.01" 
-                                                        name="porcentaje_ejecutivo_reclamo"
-                                                        id="porcentaje_ejecutivo_reclamo"
-                                                        placeholder="Porcentaje Ejecutivo de Reclamos *" 
                                                         class="form-control"
                                                         required
                                                     >
