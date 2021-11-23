@@ -156,7 +156,7 @@ module.exports = {
 /*                 POST                  */
     postRefundForm: async (req, res) => {
         let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
-        let montoPagadoReembolso = parseFloat(req.body.monto_pagado_reembolso);
+        let montoPagadoReembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -168,7 +168,12 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
-        await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        if (req.body.monto_pagado === '') {
+            montoPagadoReembolso = 0;
+        } else {
+            montoPagadoReembolso = parseFloat(req.body.monto_pagado);
+        }
+        //await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.render('refundForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -191,7 +196,7 @@ module.exports = {
     },
     postLetterGuaranteeForm: async (req, res) => {
         let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
-        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado_carta_aval);
+        let montoPagadoCartaAval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -203,6 +208,11 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        if (req.body.monto_pagado === '') {
+            montoPagadoCartaAval = 0;
+        } else {
+            montoPagadoCartaAval = parseFloat(req.body.monto_pagado);
+        }
         await letterGuaranteeModel.postLetterGuaranteeForm(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
         res.render('letterGuaranteeForm', {
             alert: true,
@@ -226,7 +236,7 @@ module.exports = {
     },
     postEmergencyForm: async (req, res) => {
         let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
-        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado_emergencia);
+        let montoPagadoEmergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -238,6 +248,11 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        if (req.body.monto_pagado === '') {
+            montoPagadoEmergencia = 0;
+        } else {
+            montoPagadoEmergencia = parseFloat(req.body.monto_pagado);
+        }
         await emergencyModel.postEmergencyForm(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
         res.render('emergencyForm', {
             alert: true,
@@ -261,7 +276,7 @@ module.exports = {
     },
     postAMPForm: async (req, res) => {
         let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
-        let montoPagadoAMP = parseFloat(req.body.monto_pagado_amp);
+        let montoPagadoAMP = parseFloat(req.body.monto_pagado);
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -273,6 +288,11 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        if (req.body.monto_pagado === '') {
+            montoPagadoAMP = 0;
+        } else {
+            montoPagadoAMP = parseFloat(req.body.monto_pagado);
+        }
         await ampModel.postAMPForm(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
         res.render('ampForm', {
             alert: true,
@@ -741,7 +761,7 @@ module.exports = {
     },
     updateRefund: async (req, res) => {
         let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
-        let montoPagadoReembolso = parseFloat(req.body.monto_pagado_reembolso);
+        let montoPagadoReembolso = parseFloat(req.body.monto_pagado);
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
@@ -749,7 +769,7 @@ module.exports = {
     },
     updateLetterGuarentee: async (req, res) => {
         let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
-        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado_carta_aval);
+        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado);
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
         await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
@@ -757,7 +777,7 @@ module.exports = {
     },
     updateEmergency: async (req, res) => {
         let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
-        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado_emergencia);
+        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado);
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
         await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
@@ -765,7 +785,7 @@ module.exports = {
     },
     updateAMP: async (req, res) => {
         let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
-        let montoPagadoAMP = parseFloat(req.body.monto_pagado_amp);
+        let montoPagadoAMP = parseFloat(req.body.monto_pagado);
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);

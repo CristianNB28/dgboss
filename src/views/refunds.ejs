@@ -39,6 +39,7 @@
                             <th>Monto Pagado</th>
                             <th>Observaciones</th>
                             <th>Tipo Moneda</th>
+                            <th>Estatus</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -55,6 +56,7 @@
                             <th>Monto Pagado</th>
                             <th>Observaciones</th>
                             <th>Tipo Moneda</th>
+                            <th>Estatus</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -137,9 +139,10 @@ $(document).ready(function(){
             {"data": "fecha_ocurrencia_reembolso"},
             {"data": "fecha_notificacion_reembolso"},
             {"data": "monto_reclamo_reembolso"},
-            {"data": "monto_pagado_reembolso"},
+            {"data": "monto_pagado"},
             {"data": "observacion_reembolso"},
             {"data": "tipo_moneda_reembolso"},
+            {"data": "estatus"},
             {
                 "data": "",
                 "render": (data, type, row) => {

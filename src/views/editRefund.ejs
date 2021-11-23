@@ -40,19 +40,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_reembolso">
-                                                    <option selected value="<%= refund.tipo_moneda_reembolso %>"><%= refund.tipo_moneda_reembolso %></option>
-                                                        <option value="Bolivar">Bolivar</option>
-                                                        <option value="Dólar">Dólar</option>
-                                                        <option value="Euros">Euros</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Ocurrencia</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -125,6 +112,19 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_moneda_reembolso">
+                                                    <option selected value="<%= refund.tipo_moneda_reembolso %>"><%= refund.tipo_moneda_reembolso %></option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
                                         <div class="col-sm-9">
                                             <textarea 
@@ -149,20 +149,6 @@
                                                 name="monto_reclamo_reembolso"
                                                 id="monto_reclamo_reembolso" 
                                                 value="<%= refund.monto_reclamo_reembolso %>"
-                                                class="form-control"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="number"
-                                                step="0.01"
-                                                name="monto_pagado_reembolso"
-                                                id="monto_pagado_reembolso" 
-                                                value="<%= refund.monto_pagado_reembolso %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -237,22 +223,45 @@
                                             >
                                         </div>
                                     </div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="estatus" id="estatus">
+                                                <option selected value="<%= refund.estatus %>"><%= refund.estatus %></option>
+                                                    <option value="Pendiente">Pendiente</option>
+                                                    <option value="Rechazado">Rechazado</option>
+                                                    <option value="Liquidado">Liquidado</option>
+                                                    <option value="Pagado">Pagado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="hidden"
-                                                name="id_reembolso"
-                                                id="id_reembolso"
-                                                value="<%= refund.id_reembolso %>"
+                                                type="number"
+                                                step="0.01"
+                                                name="monto_pagado"
+                                                id="monto_pagado" 
+                                                value="<%= refund.monto_pagado %>"
                                                 class="form-control"
+                                                required
                                             >
                                         </div>
                                     </div>
-                                    </br>
-                                    </br>
-                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_reembolso"
+                                id="id_reembolso"
+                                value="<%= refund.id_reembolso %>"
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

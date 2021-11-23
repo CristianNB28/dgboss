@@ -40,19 +40,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_carta_aval">
-                                                    <option selected value="<%= letterGuarentee.tipo_moneda_carta_aval %>"><%= letterGuarentee.tipo_moneda_carta_aval %></option>
-                                                        <option value="Bolivar">Bolivar</option>
-                                                        <option value="Dólar">Dólar</option>
-                                                        <option value="Euros">Euros</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Ocurrencia</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -125,6 +112,32 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_moneda_carta_aval">
+                                                    <option selected value="<%= letterGuarentee.tipo_moneda_carta_aval %>"><%= letterGuarentee.tipo_moneda_carta_aval %></option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="clinica_carta_aval"
+                                                id="clinica_carta_aval"
+                                                value="<%= letterGuarentee.clinica_carta_aval %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
                                         <div class="col-sm-9">
                                             <textarea 
@@ -149,20 +162,6 @@
                                                 name="monto_reclamado_carta_aval"
                                                 id="monto_reclamado_carta_aval" 
                                                 value="<%= letterGuarentee.monto_reclamado_carta_aval %>"
-                                                class="form-control"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="number"
-                                                step="0.01"
-                                                name="monto_pagado_carta_aval"
-                                                id="monto_pagado_carta_aval" 
-                                                value="<%= letterGuarentee.monto_pagado_carta_aval %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -238,32 +237,44 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Clínica</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="estatus" id="estatus">
+                                                <option selected value="<%= letterGuarentee.estatus %>"><%= letterGuarentee.estatus %></option>
+                                                    <option value="Pendiente">Pendiente</option>
+                                                    <option value="Rechazado">Rechazado</option>
+                                                    <option value="Liquidado">Liquidado</option>
+                                                    <option value="Pagado">Pagado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="text"
-                                                name="clinica_carta_aval"
-                                                id="clinica_carta_aval"
-                                                value="<%= letterGuarentee.clinica_carta_aval %>"
+                                                type="number"
+                                                step="0.01"
+                                                name="monto_pagado"
+                                                id="monto_pagado" 
+                                                value="<%= letterGuarentee.monto_pagado %>"
                                                 class="form-control"
                                                 required
                                             >
                                         </div>
                                     </div>
-                                    </br>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="hidden"
+                                                name="id_carta_aval"
+                                                id="id_carta_aval"
+                                                value="<%= letterGuarentee.id_carta_aval %>"
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <input 
-                                type="hidden"
-                                name="id_carta_aval"
-                                id="id_carta_aval"
-                                value="<%= letterGuarentee.id_carta_aval %>"
-                                class="form-control"
-                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

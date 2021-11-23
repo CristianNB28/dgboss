@@ -75,9 +75,9 @@ module.exports = {
         }
         if (legalInsuredId[0] !== undefined) {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado_amp, observacion_amp, tipo_moneda_amp, asegurado_per_jur_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, legalInsuredId[0].id_asegurado_per_jur], 
+                db.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado, observacion_amp, tipo_moneda_amp, estatus, asegurado_per_jur_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, amp.estatus, legalInsuredId[0].id_asegurado_per_jur], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -87,9 +87,9 @@ module.exports = {
             });
         } else {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado_amp, observacion_amp, tipo_moneda_amp, asegurado_per_nat_id) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, naturalInsuredId[0].id_asegurado_per_nat], 
+                db.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado, observacion_amp, tipo_moneda_amp, estatus, asegurado_per_nat_id) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, amp.estatus, naturalInsuredId[0].id_asegurado_per_nat], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -147,9 +147,9 @@ module.exports = {
             naturalInsuredId = null;
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE AMP 
-                        SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado_amp=?, observacion_amp=?, tipo_moneda_amp=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado=?, observacion_amp=?, tipo_moneda_amp=?, estatus=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
                         WHERE id_amp=?`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, naturalInsuredId, legalInsuredId[0].id_asegurado_per_jur, amp.id_amp], 
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, amp.estatus, naturalInsuredId, legalInsuredId[0].id_asegurado_per_jur, amp.id_amp], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -161,9 +161,9 @@ module.exports = {
             legalInsuredId = null;
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE AMP 
-                        SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado_amp=?, observacion_amp=?, tipo_moneda_amp=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado=?, observacion_amp=?, tipo_moneda_amp=?, estatus=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
                         WHERE id_amp=?`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, naturalInsuredId[0].id_asegurado_per_nat, legalInsuredId, amp.id_amp], 
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_amp, amp.estatus, naturalInsuredId[0].id_asegurado_per_nat, legalInsuredId, amp.id_amp], 
                 (error, rows) => {
                     if (error) {
                         reject(error);

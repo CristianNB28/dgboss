@@ -78,6 +78,7 @@
                 let elementLegalInsured = legalInsureds[i];
                 if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
                     document.getElementById("nombre_razon_asegurado").value = elementLegalInsured.razon_social_per_jur;
+                    pasarNombreAseguradoSinestro(elementLegalInsured.razon_social_per_jur);
                     pasarNombreBeneficiarioPolizaJur(elementLegalInsured.id_asegurado_per_jur);
                     break;
                 } else {
@@ -92,6 +93,7 @@
                 if (idRif.startsWith('V')) {
                     if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
                         document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        pasarNombreAseguradoSinestro(elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat);
                         pasarNombreBeneficiarioPolizaNat(elementNaturalInsured.id_asegurado_per_nat);
                         break;
                     } else {
@@ -102,6 +104,7 @@
                 } else if (idRif.match(/^\d/)) {
                     if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
                         document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        pasarNombreAseguradoSinestro(elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat);
                         pasarNombreBeneficiarioPolizaNat(elementNaturalInsured.id_asegurado_per_nat);
                         break;
                     } else {
@@ -176,6 +179,10 @@
                 }
             }
         }
+        for (const itemBeneficiaryName of arrayBeneficiaryName) {
+            pasarNombreBeneficiarioSinestro(itemBeneficiaryName);
+        }
+        pasarNombreBeneficiarioSinestro = function(){};
     }
 </script>
 
@@ -210,6 +217,34 @@
                 }
             }
         }
+        for (const itemBeneficiaryName of arrayBeneficiaryName) {
+            pasarNombreBeneficiarioSinestro(itemBeneficiaryName);
+        }
+        pasarNombreBeneficiarioSinestro = function(){};
+    }
+</script>
+
+<script>
+    function showInput() {
+        var getSelectValue = document.getElementById("estatus").value;
+        if (getSelectValue === 'Pagado') {
+            document.getElementById("searchinput").style.display = "block";
+        } else if (getSelectValue !== 'Pagado') {
+            document.getElementById("searchinput").style.display = "none";
+        }
+    }   
+</script>
+
+<script>
+    function pasarNombreAseguradoSinestro(nameInsured) {
+        $('#siniestro_nombre').append(`<option value="${nameInsured}">${nameInsured}</option>`);
+        pasarNombreAseguradoSinestro = function(){};
+    }
+</script>
+
+<script>
+    function pasarNombreBeneficiarioSinestro(nameBeneficiary) {
+        $('#siniestro_nombre').append(`<option value="${nameBeneficiary}">${nameBeneficiary}</option>`);
     }
 </script>
 

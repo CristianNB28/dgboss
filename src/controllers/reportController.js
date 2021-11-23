@@ -12,8 +12,7 @@ module.exports = {
 /*                  GET                  */
     getPremiumsCollected: async (req, res) => {
         let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
-        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
-        let resultsExecutives = await executiveModel.getExecutives(); 
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds(); 
         let resultPremiumCollection = [];
         for (let i = 0; i < resultsPII.length; i++) {
             let elementPII = resultsPII[i];
@@ -25,7 +24,6 @@ module.exports = {
                 let premiumCollection = {
                     ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
                     company: ' ',
-                    executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
                     bouquetType: resultPolicy[0].tipo_individual_poliza,
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -39,7 +37,6 @@ module.exports = {
                 let premiumCollection = {
                     ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
                     company: resultInsuredLegal[0].razon_social_per_jur,
-                    executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
                     bouquetType: resultPolicy[0].tipo_individual_poliza,
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -59,7 +56,6 @@ module.exports = {
                 let premiumCollection = {
                     ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
                     company: ' ',
-                    executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
                     bouquetType: resultCollective[0].tipo_colectivo,
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -73,7 +69,6 @@ module.exports = {
                 let premiumCollection = {
                     ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
                     company: resultInsuredLegal[0].razon_social_per_jur,
-                    executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
                     bouquetType: resultCollective[0].tipo_colectivo,
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),

@@ -40,6 +40,7 @@
                             <th>Monto Pagado</th>
                             <th>Observaciones</th>
                             <th>Tipo Moneda</th>
+                            <th>Estatus</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -57,6 +58,7 @@
                             <th>Monto Pagado</th>
                             <th>Observaciones</th>
                             <th>Tipo Moneda</th>
+                            <th>Estatus</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -140,9 +142,10 @@ $(document).ready(function(){
             {"data": "fecha_ocurrencia_emergencia"},
             {"data": "fecha_notificacion_emergencia"},
             {"data": "monto_reclamado_emergencia"},
-            {"data": "monto_pagado_emergencia"},
+            {"data": "monto_pagado"},
             {"data": "observacion_emergencia"},
             {"data": "tipo_moneda_emergencia"},
+            {"data": "estatus"},
             {
                 "data": "",
                 "render": (data, type, row) => {
