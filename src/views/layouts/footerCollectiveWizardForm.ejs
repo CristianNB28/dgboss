@@ -62,6 +62,7 @@
     window.addEventListener("load", function() {
         document.getElementById("radioContainer").addEventListener("click", function() {
             document.getElementById("active-select-1").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
+            document.getElementById("active-select-2").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
         });
     });
 </script>
@@ -268,21 +269,21 @@
                 var premiumMonthly = collective.prima_anual_colectivo / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-            } else if (getSelectValue === 'Bimensual') {
-                var premiumBimonthly = collective.prima_anual_colectivo / 6;
-                premiumBimonthly = premiumBimonthly.toFixed(2);
-                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+                document.getElementById("numero_pago_recibo").value = 12;
             } else if (getSelectValue === 'Trimestral') {
                 var premiumQuarterly = collective.prima_anual_colectivo / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumQuarterly;
+                document.getElementById("numero_pago_recibo").value = 4;
             } else if (getSelectValue === 'Semestral') {
                 var premiumBiannual = collective.prima_anual_colectivo / 2;
                 premiumBiannual = premiumBiannual.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBiannual;
+                document.getElementById("numero_pago_recibo").value = 2;
             }
             if (checkboxDivision === false) {
                 document.getElementById("monto_prima_recibo").value = collective.prima_anual_colectivo;
+                document.getElementById("numero_pago_recibo").value = 0;
             }
         }
     </script>

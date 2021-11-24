@@ -6,6 +6,7 @@ const collectiveInsurerInsuredModel = require('../models/collective_insurer_insu
 const colInsInsurerBenef = require('../models/col_aseg_asegurado_benef');
 const colInsInsurerVehi = require('../models/col_insu_insured_vehi');
 const colInsInsurerRiskDiver = require('../models/col_insu_insured_ries_diver');
+const receiptModel = require('../models/receipt');
 
 module.exports = {
 /*                  GET                  */
@@ -24,12 +25,14 @@ module.exports = {
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
                 res.render('healthCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
+                    receipt: resultReceipt[0],
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_nat_id === null) {
@@ -41,6 +44,7 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
+                    receipt: resultReceipt[0],
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
@@ -52,6 +56,7 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
+                    receipt: resultReceipt[0],
                     name: req.session.name
                 });
             }
@@ -72,6 +77,7 @@ module.exports = {
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -85,6 +91,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -104,6 +111,7 @@ module.exports = {
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -117,6 +125,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }

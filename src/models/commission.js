@@ -58,11 +58,11 @@ module.exports = {
             });
         });
     },
-    postCommissionCollectiveForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, collectiveId) => {
+    postCommissionCollectiveForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, collectiveId) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_comision, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, porcentaje_ejecutivo_suscripcion, porcentaje_ejecutivo_reclamo, colectivo_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, collectiveId[0].id_colectivo], 
+            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_suscripcion, porcentaje_ejecutivo_siniestro, porcentaje_ejecutivo_cobranza, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, monto_comision_comision, colectivo_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, collectiveId[0].id_colectivo], 
             (error, rows) => {
                 if (error) {
                     reject(error)

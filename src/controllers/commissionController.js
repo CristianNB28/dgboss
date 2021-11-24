@@ -178,58 +178,61 @@ module.exports = {
     postHealthCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
         let casoEspecialComision
-        let porcentajeEjecutivoComision = parseFloat(req.body.porcentaje_ejecutivo_comision);
+        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
+        let porcentajeEjecutivoSiniestro = parseFloat(req.body.porcentaje_ejecutivo_siniestro);
+        let porcentajeEjecutivoCobranza = parseFloat(req.body.porcentaje_ejecutivo_cobranza);
         let porcentajeFundatinaComision = parseFloat(req.body.porcentaje_fundatina_comision);
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
-        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
-        let porcentajeEjecutivoReclamo = parseFloat(req.body.porcentaje_ejecutivo_reclamo);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         let idCollective = await collectiveModel.getCollectiveLast();
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, idCollective);
+        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-health-collective');
     },
     postVehicleCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
         let casoEspecialComision
-        let porcentajeEjecutivoComision = parseFloat(req.body.porcentaje_ejecutivo_comision);
+        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
+        let porcentajeEjecutivoSiniestro = parseFloat(req.body.porcentaje_ejecutivo_siniestro);
+        let porcentajeEjecutivoCobranza = parseFloat(req.body.porcentaje_ejecutivo_cobranza);
         let porcentajeFundatinaComision = parseFloat(req.body.porcentaje_fundatina_comision);
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
-        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
-        let porcentajeEjecutivoReclamo = parseFloat(req.body.porcentaje_ejecutivo_reclamo);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         let idCollective = await collectiveModel.getCollectiveLast();
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, idCollective);
+        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-vehicle-collective');
     },
     postRiskDiverseCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
         let casoEspecialComision
-        let porcentajeEjecutivoComision = parseFloat(req.body.porcentaje_ejecutivo_comision);
+        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
+        let porcentajeEjecutivoSiniestro = parseFloat(req.body.porcentaje_ejecutivo_siniestro);
+        let porcentajeEjecutivoCobranza = parseFloat(req.body.porcentaje_ejecutivo_cobranza);
         let porcentajeFundatinaComision = parseFloat(req.body.porcentaje_fundatina_comision);
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
-        let porcentajeEjecutivoSuscripcion = parseFloat(req.body.porcentaje_ejecutivo_suscripcion);
-        let porcentajeEjecutivoReclamo = parseFloat(req.body.porcentaje_ejecutivo_reclamo);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         let idCollective = await collectiveModel.getCollectiveLast();
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoComision, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoReclamo, idCollective);
+        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-risk-diverse-collective');
     },
 /*                  PUT                  */
