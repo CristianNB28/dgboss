@@ -173,7 +173,7 @@ module.exports = {
         } else {
             montoPagadoReembolso = parseFloat(req.body.monto_pagado);
         }
-        //await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.render('refundForm', {
             alert: true,
             alertTitle: 'Exitoso',
