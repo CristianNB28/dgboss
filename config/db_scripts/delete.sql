@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS Poliza_Aseguradora_Asegurado;
 DROP TABLE IF EXISTS Usuario_Rol;
 DROP TABLE IF EXISTS Asegurado_Persona_Juridica;
 DROP TABLE IF EXISTS Asegurado_Persona_Natural;
+DROP TABLE IF EXISTS Factor_Verificacion;
 DROP TABLE IF EXISTS Comision;
 DROP TABLE IF EXISTS Recibo;
 DROP TABLE IF EXISTS Riesgo_Diverso;

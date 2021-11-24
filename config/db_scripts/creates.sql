@@ -177,7 +177,7 @@ CREATE TABLE Recibo(
     fecha_desde_recibo DATE NOT NULL,
     fecha_hasta_recibo DATE NOT NULL,
     fraccionamiento_boolean_recibo BOOLEAN NOT NULL,
-    tipo_fraccionamiento_recibo VARCHAR(255) NOT NULL,
+    tipo_fraccionamiento_recibo VARCHAR(255),
     metodo_pago_recibo VARCHAR(255) NOT NULL, 
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
@@ -200,11 +200,20 @@ CREATE TABLE Comision(
     porcentaje_director_comision DECIMAL(10,4) NOT NULL,
     porcentaje_socio_comision DECIMAL(10,4) NOT NULL,
     porcentaje_atina_comision DECIMAL(10,4) NOT NULL,
+    monto_comision_comision DECIMAL(20,4) NOT NULL,
     deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT,
     colectivo_id INT,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
     CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
+);
+
+CREATE TABLE Factor_Verificacion(
+    id_factor_verificacion INT PRIMARY KEY AUTO_INCREMENT,
+    porcentaje_prima_factor_verificacion DECIMAL(10,4) NOT NULL,
+    estatus_comision_factor_verificacion VARCHAR(255) NOT NULL,
+    comision_id INT,
+    CONSTRAINT FOREIGN KEY fk_comision_id(comision_id) REFERENCES Comision(id_comision)
 );
 
 CREATE TABLE Asegurado_Persona_Natural(

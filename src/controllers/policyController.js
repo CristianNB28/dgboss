@@ -5,6 +5,7 @@ const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const ownAgentModel = require('../models/own_agent');
 const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
 const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
+const receiptModel = require('../models/receipt');
 
 module.exports = {
 /*                  GET                  */
@@ -23,6 +24,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -36,6 +38,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -55,6 +58,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -68,6 +72,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -87,6 +92,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -100,6 +106,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -119,6 +126,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -132,6 +140,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -151,6 +160,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -164,6 +174,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -183,6 +194,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -196,6 +208,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -215,6 +228,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -228,6 +242,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -247,6 +262,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -260,6 +276,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }
@@ -279,6 +296,7 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultReceipt = await receiptModel.getReceiptLast();
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -292,6 +310,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
+                receipt: resultReceipt[0],
                 name: req.session.name
             });
         }

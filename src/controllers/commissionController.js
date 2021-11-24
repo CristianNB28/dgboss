@@ -14,12 +14,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-vehicle-policy');
     },
     postHealthCommissionForm: async (req, res) => {
@@ -32,12 +33,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-health-policy');
     },
     postPatrimonialCommissionForm: async (req, res) => {
@@ -50,12 +52,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-patrimonial-policy');
     },
     postBailCommissionForm: async (req, res) => {
@@ -68,12 +71,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-bail-policy');
     },
     postAnotherBranchCommissionForm: async (req, res) => {
@@ -86,12 +90,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-another-branch-policy');
     },
     postFuneralCommissionForm: async (req, res) => {
@@ -104,12 +109,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-funeral-policy');
     },
     postLifeCommissionForm: async (req, res) => {
@@ -122,12 +128,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-life-policy');
     },
     postAPCommissionForm: async (req, res) => {
@@ -140,12 +147,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-ap-policy');
     },
     postTravelCommissionForm: async (req, res) => {
@@ -158,12 +166,13 @@ module.exports = {
         let porcentajeDirectorComision = parseFloat(req.body.porcentaje_director_comision);
         let porcentajeSocioComision = parseFloat(req.body.porcentaje_socio_comision);
         let porcentajeAtinaComision = parseFloat(req.body.porcentaje_atina_comision);
+        let montoComision = parseFloat(req.body.monto_comision_comision);
         if (req.body.caso_especial_comision === '') {
             casoEspecialComision = 0;
         } else {
             casoEspecialComision = parseFloat(req.body.caso_especial_comision);
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision);
+        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-travel-policy');
     },
     postHealthCommissionCollectiveForm: async (req, res) => {

@@ -16,8 +16,23 @@ module.exports = {
             });
         });
     },
+    getCommissionLast: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT id_comision
+                    FROM Comision 
+                    WHERE deshabilitar_comision=0
+                    ORDER BY id_comision DESC
+                    LIMIT 1;`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
-    postCommissionForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision) => {
+    postCommissionForm: async (porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision) => {
         let policyId = await new Promise((resolve, reject) => {
             db.query(`SELECT id_poliza 
                     FROM Poliza 
@@ -32,9 +47,9 @@ module.exports = {
             });
         });
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_suscripcion, porcentaje_ejecutivo_siniestro, porcentaje_ejecutivo_cobranza, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, poliza_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, policyId[0].id_poliza], 
+            db.query(`INSERT INTO Comision (porcentaje_agente_comision, caso_especial_comision, porcentaje_ejecutivo_suscripcion, porcentaje_ejecutivo_siniestro, porcentaje_ejecutivo_cobranza, porcentaje_fundatina_comision, porcentaje_director_comision, porcentaje_socio_comision, porcentaje_atina_comision, monto_comision_comision, poliza_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, policyId[0].id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)
