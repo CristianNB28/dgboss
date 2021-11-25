@@ -181,7 +181,8 @@ $(document).ready(function(){
             }
         ],
         buttons: [
-            {extend: 'print',
+            {
+                extend: 'print',
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
                     $(win.document.body).css('font-size', '10px');
@@ -189,9 +190,30 @@ $(document).ready(function(){
                     $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+                },
+                text: 'Imprimir'
             }
+        ],
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
             }
-        ]
+        }
     });
     tablaCartaAval.rows.add(lista);
     tablaCartaAval.draw();

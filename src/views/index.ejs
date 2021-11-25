@@ -2,10 +2,10 @@
 <%- include('layouts/header') %>
 
 <div class="row border-bottom white-bg dashboard-header">
-    <div class="col-md-3">
-        <h2>Bienvenido <%= name %></h2>
+    <div class="col-md-5">
+        <h1>Bienvenido <%= name %></h1>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-7">
         <img alt="image" class="logo-img" src="/img/ISOTIPO_V1_ATINA.png"/>
     </div>
 </div>
@@ -21,7 +21,7 @@
     <div class="col-lg-6">
         <div class="ibox">
             <div class="ibox-title">
-                <h5>Prima Cobradas por Aseguradoras</h5>
+                <h4>Prima Cobradas por Aseguradoras</h4>
             </div>
             <div class="ibox-content">
                 <div class="chartBox">
@@ -67,7 +67,7 @@
     <div class="col-lg-6">
         <div class="ibox">
             <div class="ibox-title">
-                <h5>Prima por AP</h5>
+                <h4>Prima por AP</h4>
             </div>
             <div class="ibox-content">
                 <div class="chartBox">
@@ -112,41 +112,81 @@
     </div>
 </div>
 
-<div class="row container">
-    <div class="col-lg-10">
-        <h3>Número de Póliza por ramo:</h3>
-        <ul class="list-group">
-            <li class="list-group-item">
-                Salud: <%= healthPolicyCount %> 
-            </li>
-            <li class="list-group-item">
-                Automovil: <%= autoPolicyCount %>
-            </li>
-            <li class="list-group-item">
-                Patrimoniales: <%= patrimonialPolicyCount.patrimonial %>
-            </li>
-            <li class="list-group-item">
-                Fianza: <%= bailPolicyCount.bail %>
-            </li>
-            <li class="list-group-item">
-                Otros Ramos: <%= anotherBranchPolicyCount.anotherBranch %>
-            </li>
-            <li class="list-group-item">
-                Funerario: <%= funeralPolicyCount.funeral %>
-            </li>
-            <li class="list-group-item">
-                Vida: <%= lifePolicyCount.life %>
-            </li>
-            <li class="list-group-item">
-                AP: <%= apPolicyCount.ap %>
-            </li>
-            <li class="list-group-item">
-                Viaje: <%= travelPolicyCount.travel %>
-            </li>
-            <li class="list-group-item">
-                Riesgos Diversos: <%= RiskDiverCollectiveCount.risk %>
-            </li>
-        </ul>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4>Número de Pólizas por ramo:</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Tipo de Póliza</th>
+                                <th>Números de Pólizas</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Salud</td>
+                                <td><%= healthPolicyCount %></td>
+                            </tr>
+                            <tr>
+                                <td>Vehículo</td>
+                                <td><%= autoPolicyCount %></td>
+                            </tr>
+                            <tr>
+                                <td>Patrimonial</td>
+                                <td><%= patrimonialPolicyCount.patrimonial %></td>
+                            </tr>
+                            <tr>
+                                <td>Fianza</td>
+                                <td><%= bailPolicyCount.bail %></td>
+                            </tr>
+                            <tr>
+                                <td>Otros Ramos</td>
+                                <td><%= anotherBranchPolicyCount.anotherBranch %></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Tipo de Póliza</th>
+                                <th>Números de Pólizas</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Funerario</td>
+                                <td><%= funeralPolicyCount.funeral %></td>
+                            </tr>
+                            <tr>
+                                <td>Vida</td>
+                                <td><%= lifePolicyCount.life %></td>
+                            </tr>
+                            <tr>
+                                <td>AP</td>
+                                <td><%= apPolicyCount.ap %></td>
+                            </tr>
+                            <tr>
+                                <td>Viaje</td>
+                                <td><%= travelPolicyCount.travel %></td>
+                            </tr>
+                            <tr>
+                                <td>Riesgos Diversos</td>
+                                <td><%= RiskDiverCollectiveCount.risk %></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -159,7 +199,6 @@
     </div>
 </div>
     
-
     <!-- Mainly scripts -->
     <script src="/js/jquery-3.1.1.min.js"></script>
     <script src="/js/jquery-2.1.1.js"></script>
