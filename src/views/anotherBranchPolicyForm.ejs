@@ -29,7 +29,7 @@
                     <div id="form" class="wizard-big">
                         <h1><i class="fa fa-window-maximize"></i> Póliza</h1>
                         <fieldset>
-                            <form action="/sistema/add-another-branch-policy" method="POST">
+                            <form id="policy-form" action="/sistema/add-another-branch-policy" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -120,11 +120,11 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda_poliza">
-                                                        <option selected value="0">Seleccione *</option>
-                                                            <option value="Bolivar">Bolivar</option>
-                                                            <option value="Dólar">Dólar</option>
-                                                            <option value="Euros">Euros</option>
+                                                    <select class="form-control" name="tipo_moneda_poliza" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -148,7 +148,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ramo</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_ramo_poliza">
-                                                        <option selected value="">Seleccione</option>
+                                                        <option value="">Seleccione</option>
                                                         <option value="TRI">TRI</option>
                                                         <option value="RCG">RCG</option>
                                                         <option value="Fidelidad de Empleados">Fidelidad de Empleados</option>
@@ -258,8 +258,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_aseguradora">
-                                                        <option selected value="0">Seleccione *</option>
+                                                    <select class="form-control" name="nombre_aseguradora" required>
+                                                        <option value="">Seleccione *</option>
                                                         <% insurers.forEach((insurer) => { %>
                                                             <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                         <% }); %>
@@ -285,8 +285,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal_poliza">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_canal_poliza" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Redes Sociales">Redes Sociales</option>
                                                         <option value="Página Web">Página Web</option>
                                                         <option value="Área By Atina">Área By Atina</option>
@@ -297,18 +297,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
-                            <form action="/sistema/add-another-branch-receipt" method="POST">
+                            <form id="receipt-form" action="/sistema/add-another-branch-receipt" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -355,7 +348,7 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
-                                                            <option selected value="">Seleccione</option>
+                                                            <option value="">Seleccione</option>
                                                             <option value="Mensual">Mensual</option>
                                                             <option value="Trimestral">Trimestral</option>
                                                             <option value="Semestral">Semestral</option>
@@ -402,8 +395,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_recibo">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_recibo" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Emisión">Emisión</option>
                                                         <option value="Renovación">Renovación</option>
                                                         <option value="Modificación">Modificación</option>
@@ -427,8 +420,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="metodo_pago_recibo">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="metodo_pago_recibo" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Transferencia">Transferencia</option>
                                                         <option value="Zelle">Zelle</option>
                                                         <option value="Efectivo">Efectivo</option>
@@ -476,18 +469,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-usd"></i> Comisión</h1>
                         <fieldset>
-                            <form action="/sistema/add-another-branch-commission" method="POST">
+                            <form id="commission-form" action="/sistema/add-another-branch-commission" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -677,18 +663,11 @@
                                         <% } %>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-check-square-o"></i> Factor de Verificación</h1>
                         <fieldset>
-                            <form action="/sistema/add-another-branch-verification-factor" method="POST">
+                            <form id="verification-form" action="/sistema/add-another-branch-verification-factor" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <% if (typeof(policy) !== 'undefined') { %>
@@ -727,20 +706,13 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus Comisión</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="estatus_comision_factor_verificacion">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="estatus_comision_factor_verificacion" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Pagado">Pagado</option>
                                                         <option value="Pendiente">Pendiente</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
                                         </div>
                                     </div>
                                 </div>

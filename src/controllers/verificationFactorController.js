@@ -8,55 +8,55 @@ module.exports = {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-health-policy');
+        res.redirect('/sistema');
     },
     postVehicleVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-vehicle-policy');
+        res.redirect('/sistema');
     },
     postPatrimonialVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-patrimonial-policy');
+        res.redirect('/sistema');
     },
     postBailVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-patrimonial-policy');
+        res.redirect('/sistema');
     },
     postAnotherBranchVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-another-branch-policy');
+        res.redirect('/sistema');
     },
     postFuneralVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-funeral-policy');
+        res.redirect('/sistema');
     },
     postLifeVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-life-policy');
+        res.redirect('/sistema');
     },
     postAPVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-ap-policy');
+        res.redirect('/sistema');
     },
     postTravelVerificationFactorForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-travel-policy');
+        res.redirect('/sistema');
     },
     postHealthVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);

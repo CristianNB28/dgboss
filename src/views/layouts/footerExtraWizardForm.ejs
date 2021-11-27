@@ -70,7 +70,7 @@
                 {
                     return true;
                 }
-                if (newIndex === 4)
+                if (newIndex === 5)
                 {
                     return false;
                 }
@@ -78,9 +78,12 @@
                     $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
                     return $("#policy-form").valid();
                 } else if (newIndex === 2) {
+                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#extra-form').valid();
+                } else if (newIndex === 3) {
                     $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#receipt-form').valid();
-                } else if (newIndex === 3) {
+                } else if (newIndex === 4) {
                     $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#commission-form').valid();
                 }
@@ -89,8 +92,10 @@
                 if (currentIndex === 1) {
                     $('#policy-form').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    $('#extra-form').submit();
                 } else if (currentIndex === 3) {
+                    $('#receipt-form').submit();
+                } else if (currentIndex === 4) {
                     $('#commission-form').submit();
                 }
             },
