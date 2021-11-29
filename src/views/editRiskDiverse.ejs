@@ -1,0 +1,190 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Colectivo</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Colectivo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Editar Colectivos Riesgo Diverso</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form action="/sistema/update-risk-diverse" method="POST">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nom_razon_riesgo_diverso"
+                                                id="nom_razon_riesgo_diverso"
+                                                value="<%= riskDiverse.nom_razon_riesgo_diverso %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="cedula_riesgo_diverso"
+                                                id="cedula_riesgo_diverso"
+                                                value="<%= riskDiverse.cedula_riesgo_diverso %>" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="tel"
+                                                name="telefono_riesgo_diverso"
+                                                id="telefono_riesgo_diverso" 
+                                                value="<%= riskDiverse.telefono_riesgo_diverso %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Correo</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="email"
+                                                name="correo_riesgo_diverso"
+                                                id="correo_riesgo_diverso"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+                                                value="<%= riskDiverse.correo_riesgo_diverso %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Dirección</label>
+                                        <div class="col-sm-9">
+                                            <textarea 
+                                                name="direccion_riesgo_diverso"
+                                                id="direccion_riesgo_diverso" 
+                                                class="form-control"
+                                                required
+                                            ><%= riskDiverse.direccion_riesgo_diverso %></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="number"
+                                                step="0.01"
+                                                name="suma_asegurada_riesgo_diverso"
+                                                id="suma_asegurada_riesgo_diverso"
+                                                value="<%= riskDiverse.suma_asegurada_riesgo_diverso %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Rif</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="rif_riesgo_diverso"
+                                                id="rif_riesgo_diverso"
+                                                value="<%= riskDiverse.rif_riesgo_diverso %>"
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Modelo</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="modelo_riesgo_diverso"
+                                                id="modelo_riesgo_diverso"
+                                                value="<%= riskDiverse.modelo_riesgo_diverso %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Serial</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="serial_riesgo_diverso"
+                                                id="serial_riesgo_diverso"
+                                                value="<%= riskDiverse.serial_riesgo_diverso %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Movimiento</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_movimiento_riesgo_diverso" id="tipo_movimiento_riesgo_diverso" required>
+                                                <option value="<%= riskDiverse.tipo_movimiento_riesgo_diverso %>"><%= riskDiverse.tipo_movimiento_riesgo_diverso %></option>
+                                                <option value="Emisión">Emisión</option>
+                                                <option value="Renovación">Renovación</option>
+                                                <option value="Inclusión">Inclusión</option>
+                                                <option value="Exclusión">Exclusión</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    </br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_riesgo_diverso"
+                                id="id_riesgo_diverso"  
+                                value="<%= riskDiverse.id_riesgo_diverso %>" 
+                                class="form-control"
+                            >
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-12 col-sm-offset-2">
+                            <a href="/sistema/collectives-detail/<%= idCollective.colectivo_id %>" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

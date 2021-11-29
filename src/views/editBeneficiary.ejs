@@ -1,0 +1,220 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Colectivo</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Colectivo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Editar Colectivos Beneficiario</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form action="/sistema/update-beneficiary" method="POST">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nombre_beneficiario"
+                                                id="nombre_beneficiario"
+                                                value="<%= beneficiary.nombre_beneficiario %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="cedula_beneficiario"
+                                                id="cedula_beneficiario"
+                                                value="<%= beneficiary.cedula_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Parentesco</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="parentesco_beneficiario" id="parentesco_beneficiario" required>
+                                                <option value="<%= beneficiary.parentesco_beneficiario %>"><%= beneficiary.parentesco_beneficiario %></option>
+                                                <option value="Padre">Padre</option>
+                                                <option value="Madre">Madre</option>
+                                                <option value="Cónyuge">Cónyuge</option>
+                                                <option value="Hijo">Hijo</option>
+                                                <option value="Hija">Hija</option>
+                                                <option value="Suegro">Suegro</option>
+                                                <option value="Suegra">Suegra</option>
+                                                <option value="Hermano">Hermano</option>
+                                                <option value="Hermana">Hermana</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="tel"
+                                                name="telefono_beneficiario"
+                                                id="telefono_beneficiario" 
+                                                value="<%= beneficiary.telefono_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Correo</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="email"
+                                                name="correo_beneficiario"
+                                                id="correo_beneficiario"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+                                                value="<%= beneficiary.correo_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Dirección</label>
+                                        <div class="col-sm-9">
+                                            <textarea 
+                                                name="direccion_beneficiario"
+                                                id="direccion_beneficiario" 
+                                                class="form-control"
+                                                required
+                                            ><%= beneficiary.direccion_beneficiario %></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="apellido_beneficiario"
+                                                id="apellido_beneficiario"
+                                                value="<%= beneficiary.apellido_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Nacimiento</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fec_nac_beneficiario"
+                                                id="fec_nac_beneficiario"
+                                                value="<%= fechaNacBeneficiario %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Banco</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="banco_beneficiario"
+                                                id="banco_beneficiario"
+                                                value="<%= beneficiary.banco_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de Cuenta</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_cuenta_beneficiario" id="tipo_cuenta_beneficiario" required>
+                                                <option value="<%= beneficiary.tipo_cuenta_beneficiario %>"><%= beneficiary.tipo_cuenta_beneficiario %></option>
+                                                <option value="Corriente">Corriente</option>
+                                                <option value="Nómina">Nómina</option>
+                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Renumeradas">Renumeradas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número Cuenta</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nro_cuenta_beneficiario"
+                                                id="nro_cuenta_beneficiario"
+                                                value="<%= beneficiary.nro_cuenta_beneficiario %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Movimiento</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_movimiento_beneficiario" id="tipo_movimiento_beneficiario" required>
+                                                <option value="<%= beneficiary.tipo_movimiento_beneficiario %>"><%= beneficiary.tipo_movimiento_beneficiario %></option>
+                                                <option value="Emisión">Emisión</option>
+                                                <option value="Renovación">Renovación</option>
+                                                <option value="Inclusión">Inclusión</option>
+                                                <option value="Exclusión">Exclusión</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    </br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_beneficiario"
+                                id="id_beneficiario"  
+                                value="<%= beneficiary.id_beneficiario %>" 
+                                class="form-control"
+                            >
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-12 col-sm-offset-2">
+                            <a href="/sistema/collectives-detail/<%= idCollective.colectivo_id %>" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footer') %>

@@ -7,6 +7,9 @@ const colInsInsurerBenef = require('../models/col_aseg_asegurado_benef');
 const colInsInsurerVehi = require('../models/col_insu_insured_vehi');
 const colInsInsurerRiskDiver = require('../models/col_insu_insured_ries_diver');
 const receiptModel = require('../models/receipt');
+const beneficiaryModel = require('../models/beneficiary');
+const vehicleModel = require('../models/vehicle');
+const riskDiverseModel = require('../models/risk_diverse');
 
 module.exports = {
 /*                  GET                  */
@@ -151,7 +154,49 @@ module.exports = {
             name: req.session.name
         });
     },
-
+    getCollectivesDetail: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idCollective = req.params.id;
+        if (idCollective.match(valoresAceptados)) {
+            let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(resultCII[0].id_caa);
+            let resultsCIIV = await colInsInsurerVehi.getColInsuInsuredVehi(resultCII[0].id_caa);
+            let resultsCIIRD = await colInsInsurerRiskDiver.getColInsuInsuredRiesDiver(resultCII[0].id_caa);
+            if ((resultsCIIV.length === 0) && (resultsCIIRD.length === 0)) {
+                let resultsBeneficiaries = [];
+                for (const resultCIIB of resultsCIIB) {
+                    let resultBenefiary = await beneficiaryModel.getBeneficiary(resultCIIB.beneficiario_id);
+                    resultsBeneficiaries.push(resultBenefiary[0]);
+                }
+                res.render('beneficiaries', {
+                    data: resultsBeneficiaries,
+                    name: req.session.name
+                });
+            } else if ((resultsCIIB.length === 0) && (resultsCIIRD.length === 0)) {
+                let resultsVehicles = [];
+                for (const resultCIIV of resultsCIIV) {
+                    let resultVehicle = await vehicleModel.getVehicle(resultCIIV.vehiculo_id);
+                    resultsVehicles.push(resultVehicle[0]);
+                }
+                res.render('vehicles', {
+                    data: resultsVehicles,
+                    name: req.session.name
+                });
+            } else if ((resultsCIIB.length === 0) && (resultsCIIV.length === 0)) {
+                let resultsVariousRisk = [];
+                for (const resultCIIRD of resultsCIIRD) {
+                    let resultRiskDiverse = await riskDiverseModel.getRiskDiverse(resultCIIRD.riesgo_diverso_id);
+                    resultsVariousRisk.push(resultRiskDiverse[0]);
+                }
+                res.render('variousRisk', {
+                    data: resultsVariousRisk,
+                    name: req.session.name
+                });
+            }
+        } else {
+            next();
+        }
+    },
 /*                 POST                  */
     postHealthCollectiveForm: async (req, res) => {
         let montoPrimaAnual = parseFloat(req.body.prima_anual_colectivo);

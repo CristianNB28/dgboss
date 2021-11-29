@@ -11,7 +11,7 @@
                 <a>Colectivos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Consulta de Colectivos</strong>
+                <strong>Consulta de Colectivos Vehículos</strong>
             </li>
         </ol>
     </div>
@@ -21,26 +21,26 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Colectivos</h5>
+                    <h5>Colectivos Vehículos</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table 
                             class="table table-striped table-bordered table-hover"
-                            id="tablaColectivos" 
+                            id="tablaVehiculos" 
                         >
                         <thead>
                         <tr>
-                            <th>Póliza</th>
-                            <th>Tipo Colectivo</th>
-                            <th>Tomador</th>
-                            <th>Aseguradora</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
-                            <th>Detalle</th>
+                            <th>Número de Placa</th>
+                            <th>Año</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Versión</th>
+                            <th>Tipo de Transmisión</th>
+                            <th>Tipo</th>
+                            <th>Color</th>
+                            <th>Serial del Motor</th>
+                            <th>Serial de la Carrocería</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -50,16 +50,16 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Póliza</th>
-                            <th>Tipo Colectivo</th>
-                            <th>Tomador</th>
-                            <th>Aseguradora</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
-                            <th>Detalle</th>
+                            <th>Número de Placa</th>
+                            <th>Año</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Versión</th>
+                            <th>Tipo de Transmisión</th>
+                            <th>Tipo</th>
+                            <th>Color</th>
+                            <th>Serial del Motor</th>
+                            <th>Serial de la Carrocería</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -129,36 +129,29 @@
 <!-- Page-Level Scripts -->
 <script>
 var lista = <%- JSON.stringify(data) %>;
-var tablaColectivo = null;
+var tablaVehiculo = null;
 $(document).ready(function(){
-    tablaColectivo = $('#tablaColectivos').DataTable({
+    tablaVehiculo = $('#tablaVehiculos').DataTable({
         pageLength: 25,
         responsive: true,
         dom: '<"html5buttons"B>lTfgitp',
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "numero_colectivo"},
-            {"data": "tipo_colectivo"},
-            {"data": "nombre_tomador_colectivo"},
-            {"data": "nombre_aseguradora"},
-            {"data": "fecha_desde_colectivo"},
-            {"data": "fecha_hasta_colectivo"},
-            {"data": "tipo_moneda_colectivo"},
-            {"data": "prima_anual_colectivo"},
-            {"data": "estatus_colectivo"},
+            {"data": "numero_placa"},
+            {"data": "year_vehiculo"},
+            {"data": "marca_vehiculo"},
+            {"data": "modelo_vehiculo"},
+            {"data": "version_vehiculo"},
+            {"data": "tipo_transmision_vehiculo"},
+            {"data": "tipo_vehiculo"},
+            {"data": "color_vehiculo"},
+            {"data": "serial_motor"},
+            {"data": "serial_corroceria"},
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/collectives-detail/${row.id_colectivo}">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                                </form>`;
-                }
-            },
-            {
-                "data": "",
-                "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-collective/${row.id_colectivo}">
+                        return `<form class="form-inline" method="get" action="/sistema/edit-vehicle/${row.id_vehiculo}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
                 }
@@ -166,7 +159,7 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-collective/${row.id_colectivo}">
+                        return `<form class="form-inline" method="post" action="/sistema/remove-vehicle/${row.id_vehiculo}">
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
                                             <button 
@@ -178,8 +171,8 @@ $(document).ready(function(){
                                         </div> 
                                         <div class="col-sm-6 col-lg-12">
                                             <textarea 
-                                                name="obser_deshabilitar_colectivo"
-                                                id="obser_deshabilitar_colectivo" 
+                                                name="obser_deshabilitar_vehiculo"
+                                                id="obser_deshabilitar_vehiculo" 
                                                 placeholder="Observaciones de Deshabilitar *" 
                                                 class="form-control"
                                             ></textarea>
@@ -224,8 +217,8 @@ $(document).ready(function(){
             }
         }
     });
-    tablaColectivo.rows.add(lista);
-    tablaColectivo.draw();
+    tablaVehiculo.rows.add(lista);
+    tablaVehiculo.draw();
 });
 </script>
 

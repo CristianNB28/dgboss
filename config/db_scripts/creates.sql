@@ -50,6 +50,7 @@ CREATE TABLE Vehiculo(
     nombre_conductor_vehiculo VARCHAR(255),
     suma_asegurada_vehiculo DECIMAL(20,4),
     tipo_movimiento_vehiculo VARCHAR(255),
+    obser_deshabilitar_vehiculo VARCHAR(500),
     deshabilitar_vehiculo BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -131,6 +132,7 @@ CREATE TABLE Beneficiario(
     tipo_cuenta_beneficiario VARCHAR(255),
     nro_cuenta_beneficiario VARCHAR(500),
     tipo_movimiento_beneficiario VARCHAR(255),
+    obser_deshabilitar_beneficiario VARCHAR(500),
     deshabilitar_beneficiario BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -167,6 +169,7 @@ CREATE TABLE Riesgo_Diverso(
     modelo_riesgo_diverso VARCHAR(255) NOT NULL,
     serial_riesgo_diverso VARCHAR(255) NOT NULL,
     tipo_movimiento_riesgo_diverso VARCHAR(255),
+    obser_deshabilitar_riesgo_diverso VARCHAR(500),
     deshabilitar_riesgo_diverso BOOLEAN NOT NULL DEFAULT FALSE
 );
 

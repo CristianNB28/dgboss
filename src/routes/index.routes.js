@@ -149,6 +149,7 @@ router.get('/collectives', requireAuth, collectiveController.getCollectives);
 router.post('/remove-collective/:id', requireAuth, collectiveController.disableCollective);
 router.get('/edit-collective/:id', requireAuth, collectiveController.putCollective);
 router.post('/update-collective', requireAuth, collectiveController.updateCollective);
+router.get('/collectives-detail/:id', requireAuth, collectiveController.getCollectivesDetail);
 // Rutas de Reclamos
 router.get('/add-refund', requireAuth, claimController.getRefundForm);
 router.post('/add-refund', requireAuth, claimController.postRefundForm);
@@ -179,6 +180,18 @@ router.get('/premiums-collected', requireAuth, reportController.getPremiumsColle
 router.get('/commissions-collected', requireAuth, reportController.getCommissionsCollected);
 router.get('/policy-claims', requireAuth, reportController.getPolicyClaims);
 router.get('/global-loss-ratio', requireAuth, reportController.getGlobalLossRatio);
+// Rutas de Beneficiarios
+router.post('/remove-beneficiary/:id', requireAuth, beneficiaryController.disableBeneficiary);
+router.get('/edit-beneficiary/:id', requireAuth, beneficiaryController.putBeneficiary);
+router.post('/update-beneficiary', requireAuth, beneficiaryController.updateBeneficiary);
+// Rutas de Vehiculos
+router.post('/remove-vehicle/:id', requireAuth, vehicleController.disableVehicle);
+router.get('/edit-vehicle/:id', requireAuth, vehicleController.putVehicle);
+router.post('/update-vehicle', requireAuth, vehicleController.updateVehicle);
+// Rutas de Riesgos Diversos
+router.post('/remove-risk-diverse/:id', requireAuth, riskDiverseController.disableRiskDiverse);
+router.get('/edit-risk-diverse/:id', requireAuth, riskDiverseController.putRiskDiverse);
+router.post('/update-risk-diverse', requireAuth, riskDiverseController.updateRiskDiverse);
 // Pagina error 404
 router.get('*', indexController.get404);
 

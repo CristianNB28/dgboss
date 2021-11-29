@@ -51,6 +51,18 @@ module.exports = {
             });
         });
     },
+    getCollectiveId: (caaId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT colectivo_id FROM Colectivo_Aseguradora_Asegurado WHERE id_caa=? AND deshabilitar_caa=0',
+            [caaId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postCollectiveInsurer: async (nombre_aseguradora, collectiveId) => {
         let insurerId = await  new Promise((resolve, reject) => {

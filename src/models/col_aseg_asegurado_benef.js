@@ -31,7 +31,7 @@ module.exports = {
     },
     getColInsuInsuredBenefId: (beneficiaryId) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_caab 
+            db.query(`SELECT id_caab, caa_id 
                     FROM Col_Aseg_Asegurado_Benef 
                     WHERE beneficiario_id=? AND deshabilitar_caab=0`, 
             [beneficiaryId], 
@@ -62,6 +62,18 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Col_Aseg_Asegurado_Benef SET deshabilitar_caab=? WHERE id_caab=?`, 
             [disableCIIB, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    disableColInsuInsuredBenefId: (idBeneficiary, disableCIIB) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Col_Aseg_Asegurado_Benef SET deshabilitar_caab=? WHERE beneficiario_id=?`, 
+            [disableCIIB, idBeneficiary], 
             (error, rows) => {
                 if (error) {
                     reject(error)

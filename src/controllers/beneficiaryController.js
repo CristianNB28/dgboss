@@ -1,11 +1,11 @@
 const beneficiaryModel = require('../models/beneficiary');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
-const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
+const polInsInsurerBenefModel = require('../models/pol_aseg_asegurado_benef');
 const insuredModel = require('../models/insured');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
-const colInsInsurerBenef = require('../models/col_aseg_asegurado_benef');
+const colInsInsurerBenefModel = require('../models/col_aseg_asegurado_benef');
 const xlsx = require('xlsx');
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
         let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
         let policy = await policyModel.getPolicyLast();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
-        await polInsInsurerBenef.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
+        await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
         res.redirect('/sistema/add-health-policy');
     },
     postFuneralBeneficiaryForm: async (req, res) => {
@@ -24,7 +24,7 @@ module.exports = {
         let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
         let policy = await policyModel.getPolicyLast();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
-        await polInsInsurerBenef.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
+        await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
         res.redirect('/sistema/add-funeral-policy');
     },
     postLifeBeneficiaryForm: async (req, res) => {
@@ -32,7 +32,7 @@ module.exports = {
         let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
         let policy = await policyModel.getPolicyLast();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
-        await polInsInsurerBenef.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
+        await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
         res.redirect('/sistema/add-life-policy');
     },
     postHealthBeneficiaryCollectiveForm: async (req, res) => {
@@ -57,11 +57,44 @@ module.exports = {
             } else {
                 let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(dateFile, accountTypeFile, accountNumberFile, req.body, itemFile);
                 let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-                await colInsInsurerBenef.postColInsuInsuredBenef(collectiveInsurerInsured[0].id_caa, beneficiary.insertId);
+                await colInsInsurerBenefModel.postColInsuInsuredBenef(collectiveInsurerInsured[0].id_caa, beneficiary.insertId);
             }
         }
         res.redirect('/sistema/add-health-collective');
     },
 /*                  PUT                  */
+    putBeneficiary: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idBeneficiary = req.params.id;
+        if (idBeneficiary.match(valoresAceptados)) {
+            let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+            let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+            let resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(idBeneficiary);
+            let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
+            res.render('editBeneficiary', {
+                beneficiary: resultBeneficiary[0],
+                fechaNacBeneficiario: fechaNacBeneficiario,
+                idCollective: resultCII[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    updateBeneficiary: async (req, res) => {
+        let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+        await beneficiaryModel.updateBeneficiary(fechaNacBeneficiario, req.body);
+        res.redirect('/sistema');
+    },
 /*               DELETE                  */
+    disableBeneficiary: async (req, res) => {
+        let disableCIIB = 1;
+        let disableBeneficiary = 1;
+        let resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(req.params.id);
+        let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
+        await colInsInsurerBenefModel.disableColInsuInsuredBenefId(req.params.id, disableCIIB);
+        await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
+        await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
+        res.redirect(`/sistema/collectives-detail/${resultCII[0].colectivo_id}`);
+    }
 }

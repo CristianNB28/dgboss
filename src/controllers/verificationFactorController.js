@@ -62,19 +62,19 @@ module.exports = {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-health-collective');
+        res.redirect('/sistema');
     },
     postVehicleVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-health-collective');
+        res.redirect('/sistema');
     },
     postRiskDiverseVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = parseFloat(req.body.porcentaje_prima_factor_verificacion);
         let idCommission = await commissionModel.getCommissionLast();
         await verificationFactorModel.postVerificationFactorForm(porcentajePrima, idCommission, req.body);
-        res.redirect('/sistema/add-risk-diverse-collective');
+        res.redirect('/sistema');
     }
 /*                  PUT                  */
 /*               DELETE                  */

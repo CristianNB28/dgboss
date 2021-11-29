@@ -29,7 +29,7 @@
                     <div id="form" class="wizard-big wizard-health">
                         <h1><i class="fa fa-window-maximize"></i> Colectivo</h1>
                         <fieldset>
-                            <form action="/sistema/add-risk-diverse-collective" method="POST">
+                            <form id="policy-form" action="/sistema/add-risk-diverse-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -120,11 +120,11 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda_colectivo">
-                                                        <option selected value="0">Seleccione *</option>
-                                                            <option value="Bolivar">Bolivar</option>
-                                                            <option value="Dólar">Dólar</option>
-                                                            <option value="Euros">Euros</option>
+                                                    <select class="form-control" name="tipo_moneda_colectivo" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="Bolivar">Bolivar</option>
+                                                        <option value="Dólar">Dólar</option>
+                                                        <option value="Euros">Euros</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -147,8 +147,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">¿Maternidad?</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Sí">Sí</option>
                                                         <option value="No">No</option>
                                                     </select>
@@ -252,8 +252,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_aseguradora">
-                                                        <option selected value="0">Seleccione *</option>
+                                                    <select class="form-control" name="nombre_aseguradora" required>
+                                                        <option value="">Seleccione *</option>
                                                         <% insurers.forEach((insurer) => { %>
                                                             <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                         <% }); %>
@@ -264,8 +264,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal_colectivo">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_canal_colectivo" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Redes Sociales">Redes Sociales</option>
                                                         <option value="Página Web">Página Web</option>
                                                         <option value="Área By Atina">Área By Atina</option>
@@ -277,8 +277,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Sí">Sí</option>
                                                         <option value="No">No</option>
                                                     </select>
@@ -300,25 +300,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-credit-card"></i> Puntos de Ventas</h1>
                         <fieldset>
-                            <form action="/sistema/add-point-sale" method="POST" enctype="multipart/form-data">
+                            <form id="extra-form" action="/sistema/add-point-sale" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-2 col-form-label">Tipo de Movimiento</label>
                                                 <div class="col-sm-10">
-                                                    <select class="form-control" name="tipo_movimiento_riesgo_diverso">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_movimiento_riesgo_diverso" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Emisión">Emisión</option>
                                                         <option value="Renovación">Renovación</option>
                                                         <option value="Inclusión">Inclusión</option>
@@ -335,18 +328,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
-                            <form action="/sistema/add-risk-receipt-collective" method="POST">
+                            <form id="receipt-form" action="/sistema/add-risk-receipt-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -393,7 +379,7 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
-                                                            <option selected value="">Seleccione</option>
+                                                            <option value="">Seleccione</option>
                                                             <option value="Mensual">Mensual</option>
                                                             <option value="Trimestral">Trimestral</option>
                                                             <option value="Semestral">Semestral</option>
@@ -440,8 +426,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_recibo">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="tipo_recibo" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Emisión">Emisión</option>
                                                         <option value="Renovación">Renovación</option>
                                                         <option value="Inclusión">Inclusión</option>
@@ -466,8 +452,8 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="metodo_pago_recibo">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="metodo_pago_recibo" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Transferencia">Transferencia</option>
                                                         <option value="Zelle">Zelle</option>
                                                         <option value="Efectivo">Efectivo</option>
@@ -514,18 +500,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-usd"></i> Comisión</h1>
                         <fieldset>
-                            <form action="/sistema/add-risk-commission-collective" method="POST">
+                            <form id="commission-form" action="/sistema/add-risk-commission-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -715,18 +694,11 @@
                                         <% } %>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
                             </form>
                         </fieldset>
                         <h1><i class="fa fa-check-square-o"></i> Factor de Verificación</h1>
                         <fieldset>
-                            <form action="/sistema/add-risk-verification-collective" method="POST">
+                            <form id="verification-form" action="/sistema/add-risk-verification-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <% if (typeof(collective) !== 'undefined') { %>
@@ -765,20 +737,13 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus Comisión</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="estatus_comision_factor_verificacion">
-                                                        <option selected value="">Seleccione *</option>
+                                                    <select class="form-control" name="estatus_comision_factor_verificacion" required>
+                                                        <option value="">Seleccione *</option>
                                                         <option value="Pagado">Pagado</option>
                                                         <option value="Pendiente">Pendiente</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <button class="btn btn-primary btn-sm btn-circle ml-auto" type="submit"><i class="fa fa-check"></i></button>
                                         </div>
                                     </div>
                                 </div>
