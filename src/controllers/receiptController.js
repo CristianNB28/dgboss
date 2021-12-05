@@ -7,7 +7,18 @@ module.exports = {
     postVehicleReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -16,7 +27,18 @@ module.exports = {
     postHealthReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -25,7 +47,18 @@ module.exports = {
     postPatrimonialReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -34,7 +67,18 @@ module.exports = {
     postBailReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -43,7 +87,18 @@ module.exports = {
     postAnotherBranchReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -52,7 +107,18 @@ module.exports = {
     postFuneralReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -61,7 +127,18 @@ module.exports = {
     postLifeReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -70,7 +147,18 @@ module.exports = {
     postAPReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -79,7 +167,18 @@ module.exports = {
     postTravelReceiptForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
@@ -88,7 +187,18 @@ module.exports = {
     postHealthReceiptCollectiveForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();
@@ -98,7 +208,18 @@ module.exports = {
     postVehicleReceiptCollectiveForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();
@@ -108,7 +229,18 @@ module.exports = {
     postRiskDiverseReceiptCollectiveForm: async (req, res) => {
         let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
         let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
-        let montoComisionAsociado = parseFloat(req.body.monto_comision_recibo);
+        let montoComisionAsociado = req.body.monto_comision_recibo;
+        if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        } else if (montoComisionAsociado.indexOf(',') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(",", ".");
+            montoComisionAsociado = parseFloat(montoComisionAsociado);
+        } else if (montoComisionAsociado.indexOf('.') !== -1) {
+            montoComisionAsociado = montoComisionAsociado.replace(".", ",");
+            montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
+        }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();

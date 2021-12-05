@@ -43,7 +43,7 @@ module.exports = {
             let fileSumInsured = itemFile['Suma Asegurada'];
             let fileSerialEngine = itemFile['Serial del Motor'];
             let idCollective = await collectiveModel.getCollectiveLast();
-            if (fileShield === 'Si') {
+            if (fileShield === 'SÍ') {
                 fileShield = 1;
             } else {
                 fileShield = 0;
@@ -65,9 +65,15 @@ module.exports = {
             let resultVehicle = await vehicleModel.getVehicle(idVehicle);
             let resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(idVehicle);
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
+            let sumaAsegurada = resultVehicle[0].suma_asegurada_vehiculo;
+            let capacidadCarga = resultVehicle[0].capacidad_carga;
+            sumaAsegurada = new Intl.NumberFormat('de-DE').format(sumaAsegurada);
+            capacidadCarga = new Intl.NumberFormat('de-DE').format(capacidadCarga);
             res.render('editVehicle', {
                 vehicle: resultVehicle[0],
                 idCollective: resultCII[0],
+                sumaAsegurada: sumaAsegurada,
+                capacidadCarga: capacidadCarga,
                 name: req.session.name
             });
         } else {
@@ -76,8 +82,23 @@ module.exports = {
     },
     updateVehicle: async (req, res) => {
         let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-        let capacidadCarga = parseFloat(req.body.capacidad_carga);
-        let sumaAsegurada = parseFloat(req.body.suma_asegurada_vehiculo);
+        let capacidadCarga = req.body.capacidad_carga;
+        let sumaAsegurada = req.body.suma_asegurada_vehiculo;
+        if (capacidadCarga.indexOf('.') !== -1) {
+            capacidadCarga = capacidadCarga.replace(".", ",");
+            capacidadCarga = parseFloat(capacidadCarga.replace(/,/g,''));
+        }
+        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+            sumaAsegurada = sumaAsegurada.replace(",", ".");
+            sumaAsegurada = sumaAsegurada.replace(".", ",");
+            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+        } else if (sumaAsegurada.indexOf(',') !== -1) {
+            sumaAsegurada = sumaAsegurada.replace(",", ".");
+            sumaAsegurada = parseFloat(sumaAsegurada);
+        } else if (sumaAsegurada.indexOf('.') !== -1) {
+            sumaAsegurada = sumaAsegurada.replace(".", ",");
+            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+        }
         let yearVehicle = new Date(req.body.year_vehiculo);
         yearVehicle = yearVehicle.getUTCFullYear();
         await vehicleModel.updateVehicle(blindaje, capacidadCarga, sumaAsegurada, yearVehicle, req.body);

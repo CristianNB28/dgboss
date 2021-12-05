@@ -35,6 +35,7 @@
                                                 id="nombre_beneficiario"
                                                 value="<%= beneficiary.nombre_beneficiario %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -47,7 +48,7 @@
                                                 name="cedula_beneficiario"
                                                 id="cedula_beneficiario"
                                                 value="<%= beneficiary.cedula_beneficiario %>" 
-                                                class="form-control"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -57,15 +58,15 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="parentesco_beneficiario" id="parentesco_beneficiario" required>
                                                 <option value="<%= beneficiary.parentesco_beneficiario %>"><%= beneficiary.parentesco_beneficiario %></option>
-                                                <option value="Padre">Padre</option>
-                                                <option value="Madre">Madre</option>
-                                                <option value="Cónyuge">Cónyuge</option>
-                                                <option value="Hijo">Hijo</option>
-                                                <option value="Hija">Hija</option>
-                                                <option value="Suegro">Suegro</option>
-                                                <option value="Suegra">Suegra</option>
-                                                <option value="Hermano">Hermano</option>
-                                                <option value="Hermana">Hermana</option>
+                                                <option value="PADRE">PADRE</option>
+                                                <option value="MADRE">MADRE</option>
+                                                <option value="CÓNYUGE">CÓNYUGE</option>
+                                                <option value="HIJO">HIJO</option>
+                                                <option value="HIJA">HIJA</option>
+                                                <option value="SUEGRO">SUEGRO</option>
+                                                <option value="SUEGRA">SUEGRA</option>
+                                                <option value="HERMANO">HERMANO</option>
+                                                <option value="HERMANA">HERMANA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -103,6 +104,7 @@
                                                 name="direccion_beneficiario"
                                                 id="direccion_beneficiario" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= beneficiary.direccion_beneficiario %></textarea>
                                         </div>
@@ -121,6 +123,7 @@
                                                 id="apellido_beneficiario"
                                                 value="<%= beneficiary.apellido_beneficiario %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -147,6 +150,7 @@
                                                 id="banco_beneficiario"
                                                 value="<%= beneficiary.banco_beneficiario %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -156,10 +160,10 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_cuenta_beneficiario" id="tipo_cuenta_beneficiario" required>
                                                 <option value="<%= beneficiary.tipo_cuenta_beneficiario %>"><%= beneficiary.tipo_cuenta_beneficiario %></option>
-                                                <option value="Corriente">Corriente</option>
-                                                <option value="Nómina">Nómina</option>
-                                                <option value="Ahorro">Ahorro</option>
-                                                <option value="Renumeradas">Renumeradas</option>
+                                                <option value="CORRIENTE">CORRIENTE</option>
+                                                <option value="NÓMINA">NÓMINA</option>
+                                                <option value="AHORRO">AHORRO</option>
+                                                <option value="RENUMERADAS">RENUMERADAS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -167,7 +171,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Número Cuenta</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="text"
+                                                type="number"
                                                 name="nro_cuenta_beneficiario"
                                                 id="nro_cuenta_beneficiario"
                                                 value="<%= beneficiary.nro_cuenta_beneficiario %>" 
@@ -181,10 +185,10 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_movimiento_beneficiario" id="tipo_movimiento_beneficiario" required>
                                                 <option value="<%= beneficiary.tipo_movimiento_beneficiario %>"><%= beneficiary.tipo_movimiento_beneficiario %></option>
-                                                <option value="Emisión">Emisión</option>
-                                                <option value="Renovación">Renovación</option>
-                                                <option value="Inclusión">Inclusión</option>
-                                                <option value="Exclusión">Exclusión</option>
+                                                <option value="EMISIÓN">EMISIÓN</option>
+                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                <option value="INCLUSIÓN">INCLUSIÓN</option>
+                                                <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                             </select>
                                         </div>
                                     </div>

@@ -35,6 +35,7 @@
                                                 id="numero_poliza"
                                                 value="<%= policy.numero_poliza %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -42,11 +43,11 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda_poliza">
-                                                <option selected value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
-                                                    <option value="Bolivar">Bolivar</option>
-                                                    <option value="Dólar">Dólar</option>
-                                                    <option value="Euros">Euros</option>
+                                            <select class="form-control" name="tipo_moneda_poliza" required>
+                                                <option value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
+                                                <option value="BOLIVAR">BOLIVAR</option>
+                                                <option value="DÓLAR">DÓLAR</option>
+                                                <option value="EUROS">EUROS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -67,12 +68,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="prima_anual_poliza"
                                                 id="prima_anual_poliza"
-                                                value="<%= policy.prima_anual_poliza %>"
-                                                class="form-control"
+                                                value="<%= primaAnual %>"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -80,17 +80,17 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_individual_poliza">
-                                                <option selected value="<%= policy.tipo_individual_poliza %>"><%= policy.tipo_individual_poliza %></option>
-                                                <option value="Salud">Salud</option>
-                                                <option value="Automovil">Automovil</option>
-                                                <option value="Patrimonial">Patrimonial</option>
-                                                <option value="Fianza">Fianza</option>
-                                                <option value="Otros Ramos">Otros Ramos</option>
-                                                <option value="Funerario">Funerario</option>
-                                                <option value="Vida">Vida</option>
+                                            <select class="form-control" name="tipo_individual_poliza" required>
+                                                <option value="<%= policy.tipo_individual_poliza %>"><%= policy.tipo_individual_poliza %></option>
+                                                <option value="SALUD">SALUD</option>
+                                                <option value="AUTOMÓVIL">AUTOMÓVIL</option>
+                                                <option value="PATRIMONIAL">PATRIMONIAL</option>
+                                                <option value="FIANZA">FIANZA</option>
+                                                <option value="OTROS RAMOS">OTROS RAMOS</option>
+                                                <option value="FUNERARIO">FUNERARIO</option>
+                                                <option value="VIDA">VIDA</option>
                                                 <option value="AP">AP</option>
-                                                <option value="Viaje">Viaje</option>
+                                                <option value="VIAJE">VIAJE</option>
                                             </select>
                                         </div>
                                     </div>
@@ -102,8 +102,8 @@
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_tomador_poliza">
-                                                <option selected value="<%= policy.nombre_tomador_poliza %>"><%= policy.nombre_tomador_poliza %></option>
+                                            <select class="form-control" name="nombre_tomador_poliza" required>
+                                                <option value="<%= policy.nombre_tomador_poliza %>"><%= policy.nombre_tomador_poliza %></option>
                                                 <% takerNames.forEach((takerName) => { %>
                                                     <option value="<%= takerName.nombreTomador %>"><%= takerName.nombreTomador %></option>
                                                 <% }); %>
@@ -113,8 +113,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_aseguradora">
-                                                <option selected value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                            <select class="form-control" name="nombre_aseguradora" required>
+                                                <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                 <% insurers.forEach((insurer) => { %>
                                                     <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                 <% }); %>
@@ -137,10 +137,10 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="estatus_poliza">
-                                                <option selected value="<%= policy.estatus_poliza %>"><%= policy.estatus_poliza %></option>
-                                                    <option value="Vigente">Vigente</option>
-                                                    <option value="Anulado">Anulado</option>
+                                            <select class="form-control" name="estatus_poliza" required>
+                                                <option value="<%= policy.estatus_poliza %>"><%= policy.estatus_poliza %></option>
+                                                    <option value="VIGENTE">VIGENTE</option>
+                                                    <option value="ANULADO">ANULADO</option>
                                             </select>
                                         </div>
                                     </div>

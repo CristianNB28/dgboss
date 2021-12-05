@@ -18,6 +18,7 @@ module.exports = {
             let elementPII = resultsPII[i];
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
+            let primaAnualPoliza = new Intl.NumberFormat('de-DE').format(resultPolicy[0].prima_anual_poliza);
             if (elementPII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -28,7 +29,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    premium: resultPolicy[0].prima_anual_poliza
+                    premium: primaAnualPoliza
                 };
                 resultPremiumCollection.push(premiumCollection);
             } else {
@@ -41,7 +42,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    premium: resultPolicy[0].prima_anual_poliza
+                    premium: primaAnualPoliza
                 };
                 resultPremiumCollection.push(premiumCollection);
             }
@@ -50,6 +51,7 @@ module.exports = {
             let elementCII = resultsCII[i];
             let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
             let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
+            let primaAnualColectivo = new Intl.NumberFormat('de-DE').format(resultCollective[0].prima_anual_colectivo);
             if (elementCII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -60,7 +62,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    premium: resultCollective[0].prima_anual_colectivo,
+                    premium: primaAnualColectivo
                 };
                 resultPremiumCollection.push(premiumCollection);
             } else {
@@ -73,7 +75,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    premium: resultCollective[0].prima_anual_colectivo
+                    premium: primaAnualColectivo
                 };
                 resultPremiumCollection.push(premiumCollection);
             }
@@ -93,6 +95,7 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
             let resultReceiptCommission = await receiptModel.getReceiptCommissionPolicy(elementPII.poliza_id);
+            let reciboComisionPoliza = new Intl.NumberFormat('de-DE').format(resultReceiptCommission[0].monto_comision_recibo);
             if (elementPII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -104,7 +107,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    commission: resultReceiptCommission[0].monto_comision_recibo,
+                    commission: reciboComisionPoliza
                 };
                 resultCommissionCollection.push(commissionCollection);
             } else {
@@ -118,7 +121,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    commission: resultReceiptCommission[0].monto_comision_recibo,
+                    commission: reciboComisionPoliza
                 };
                 resultCommissionCollection.push(commissionCollection);
             }
@@ -128,6 +131,7 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
             let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
             let resultReceiptCommission = await receiptModel.getReceiptCommissionCollective(elementCII.colectivo_id);
+            let reciboComisionColectivo = new Intl.NumberFormat('de-DE').format(resultReceiptCommission[0].monto_comision_recibo);
             if (elementCII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -139,7 +143,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    commission: resultReceiptCommission[0].monto_comision_recibo,
+                    commission: reciboComisionColectivo
                 };
                 resultCommissionCollection.push(commissionCollection);
             } else {
@@ -153,7 +157,7 @@ module.exports = {
                     insurer: resultInsurer[0].nombre_aseguradora,
                     dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
                     dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                    commission: resultReceiptCommission[0].monto_comision_recibo,
+                    commission: reciboComisionColectivo,
                 };
                 resultCommissionCollection.push(commissionCollection);
             }

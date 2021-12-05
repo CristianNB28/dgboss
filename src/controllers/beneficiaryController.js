@@ -51,7 +51,7 @@ module.exports = {
             let accountTypeFile = itemFile['Tipo de Cuenta'];
             let accountNumberFile = itemFile['Nro. de Cuenta'];
             let idCollective = await collectiveModel.getCollectiveLast();
-            if (clientFile === 'Titular') {
+            if (clientFile === 'TITULAR') {
                 let idNaturalInsured = await insuredModel.getNaturalInsuredId(itemFile.Cedula);
                 await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
             } else {

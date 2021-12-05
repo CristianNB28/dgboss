@@ -32,7 +32,6 @@
                         <thead>
                         <tr>
                             <th>Cédula</th>
-                            <th>Rif</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Celular</th>
@@ -49,7 +48,6 @@
                         <tfoot>
                         <tr>
                             <th>Cédula</th>
-                            <th>Rif</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Celular</th>
@@ -135,7 +133,6 @@ $(document).ready(function(){
         serverSide: false,
         columns: [
             {"data": "cedula_ejecutivo"},
-            {"data": "rif_ejecutivo"},
             {"data": "nombre_ejecutivo"},
             {"data": "apellido_ejecutivo"},
             {"data": "celular_ejecutivo"},
@@ -167,7 +164,8 @@ $(document).ready(function(){
                                             <textarea 
                                                 name="obser_deshabilitar_ejecutivo"
                                                 id="obser_deshabilitar_ejecutivo" 
-                                                placeholder="Observaciones de Deshabilitar *" 
+                                                placeholder="Observaciones de Deshabilitar *"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                                 class="form-control"
                                             ></textarea>
                                         </div>

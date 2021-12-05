@@ -57,7 +57,18 @@ module.exports = {
     postOwnAgentForm: async (req, res) => {
         let cedulaAgentePropio = '';
         let rifAgentePropio = '';
-        let porcentajeAgentePropio = parseFloat(req.body.porcentaje_agente_propio);
+        let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
+        if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+        } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        }
         if ((req.body.id_rif_agente_propio.startsWith('J')) || (req.body.id_rif_agente_propio.startsWith('V')) || (req.body.id_rif_agente_propio.startsWith('G'))) {
             rifAgentePropio = req.body.id_rif_agente_propio;
         } else {
@@ -76,14 +87,7 @@ module.exports = {
         });
     },
     postExecutiveForm: async (req, res) => {
-        let cedulaEjecutivo = '';
-        let rifEjecutivo = '';
-        if ((req.body.id_rif_ejecutivo.startsWith('J')) || (req.body.id_rif_ejecutivo.startsWith('V')) || (req.body.id_rif_ejecutivo.startsWith('G'))) {
-            rifEjecutivo = req.body.id_rif_ejecutivo;
-        } else {
-            cedulaEjecutivo = req.body.id_rif_ejecutivo;
-        }
-        await executiveModel.postExecutiveForm(cedulaEjecutivo, rifEjecutivo, req.body);
+        await executiveModel.postExecutiveForm(req.body);
         res.render('executiveForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -114,8 +118,11 @@ module.exports = {
         let idOwnAgent = req.params.id;
         if (idOwnAgent.match(valoresAceptados)) {
             let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = new Intl.NumberFormat('de-DE').format(porcentajeAgentePropio);
             res.render('editOwnAgent', {
                 ownAgent: resultOwnAgent[0],
+                porcentajeAgentePropio: porcentajeAgentePropio,
                 name: req.session.name
             });
         } else {
@@ -142,7 +149,18 @@ module.exports = {
     updateOwnAgent: async (req, res) => {
         let cedulaAgentePropio = '';
         let rifAgentePropio = '';
-        let porcentajeAgentePropio = parseFloat(req.body.porcentaje_agente_propio);
+        let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
+        if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+        } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        }
         if ((typeof(req.body.rif_agente_propio) !== 'undefined')) {
             if ((!req.body.rif_agente_propio.startsWith('J')) && (!req.body.rif_agente_propio.startsWith('G')) && (!req.body.rif_agente_propio.startsWith('V'))) {
                 cedulaAgentePropio = req.body.rif_agente_propio;
@@ -160,22 +178,7 @@ module.exports = {
         res.redirect('/sistema');
     },
     updateExecutive: async (req, res) => {
-        let cedulaEjecutivo = '';
-        let rifEjecutivo = '';
-        if ((typeof(req.body.rif_ejecutivo) !== 'undefined')) {
-            if ((!req.body.rif_ejecutivo.startsWith('J')) && (!req.body.rif_ejecutivo.startsWith('G')) && (!req.body.rif_ejecutivo.startsWith('V'))) {
-                cedulaEjecutivo = req.body.rif_ejecutivo;
-            } else if (((req.body.rif_ejecutivo.startsWith('J')) || (req.body.rif_ejecutivo.startsWith('G')) || (req.body.rif_ejecutivo.startsWith('V')))) {
-                rifEjecutivo = req.body.rif_ejecutivo;
-            }
-        } else {
-            if ((req.body.cedula_ejecutivo.startsWith('J')) || (req.body.cedula_ejecutivo.startsWith('G')) || (req.body.cedula_ejecutivo.startsWith('V'))) {
-                rifEjecutivo = req.body.cedula_ejecutivo;
-            } else if ((!req.body.cedula_ejecutivo.startsWith('J')) && (!req.body.cedula_ejecutivo.startsWith('G')) && (!req.body.cedula_ejecutivo.startsWith('V'))) {
-                cedulaEjecutivo = req.body.cedula_ejecutivo;
-            } 
-        }
-        await executiveModel.updateExecutive(cedulaEjecutivo, rifEjecutivo, req.body);
+        await executiveModel.updateExecutive(req.body);
         res.redirect('/sistema');
     },
 /*               DELETE                  */

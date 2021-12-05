@@ -35,6 +35,7 @@
                                                 id="nombre_rol"
                                                 placeholder="Nombre *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -53,6 +54,7 @@
                                                 id="descripcion_rol" 
                                                 placeholder="Descripción *"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>

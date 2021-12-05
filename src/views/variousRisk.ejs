@@ -169,6 +169,7 @@ $(document).ready(function(){
                                                 id="obser_deshabilitar_riesgo_diverso" 
                                                 placeholder="Observaciones de Deshabilitar *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             ></textarea>
                                         </div>
                                     </div>

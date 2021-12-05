@@ -35,7 +35,7 @@
                                                     name="cedula_asegurado_per_nat"
                                                     id="cedula_asegurado_per_nat"
                                                     value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                    class="form-control"
+                                                    class="form-control number_format"
                                                     required
                                                 >
                                             </div>
@@ -49,6 +49,7 @@
                                                     id="rif_asegurado_per_nat"
                                                     value="<%= naturalInsured.rif_asegurado_per_nat %>" 
                                                     class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -63,6 +64,7 @@
                                                 id="nombre_asegurado_per_nat" 
                                                 value="<%= naturalInsured.nombre_asegurado_per_nat %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -76,6 +78,7 @@
                                                 id="apellido_asegurado_per_nat" 
                                                 value="<%= naturalInsured.apellido_asegurado_per_nat %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -134,6 +137,7 @@
                                                 id="nombre_emergencia_per_nat" 
                                                 value="<%= naturalInsured.nombre_emergencia_per_nat %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -154,8 +158,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Agente</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control" name="nombre_com_agente_propio">
-                                                <option selected value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                            <select class="form-control" name="nombre_com_agente_propio" required>
+                                                <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% ownAgents.forEach((ownAgent) => { %>
                                                     <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% }); %>
@@ -169,6 +173,7 @@
                                                 name="direccion_asegurado_per_nat"
                                                 id="direccion_asegurado_per_nat" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= naturalInsured.direccion_asegurado_per_nat %></textarea>
                                         </div>

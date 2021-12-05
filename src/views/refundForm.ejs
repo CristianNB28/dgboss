@@ -35,6 +35,7 @@
                                                 id="patologia_reembolso"
                                                 placeholder="Patología *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -61,6 +62,7 @@
                                                 onkeyup="pasarNombreAsegurado();"
                                                 placeholder="Cédula/Rif del Asegurado *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -73,7 +75,7 @@
                                                 name="cedula_beneficiario"
                                                 id="cedula_beneficiario"
                                                 placeholder="Cédula del Beneficiario (separa por ,)"
-                                                class="form-control"
+                                                class="form-control number_format"
                                             >
                                         </div>
                                     </div>
@@ -81,11 +83,11 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_reembolso">
-                                                    <option selected value="0">Seleccione *</option>
-                                                        <option value="Bolivar">Bolivar</option>
-                                                        <option value="Dólar">Dólar</option>
-                                                        <option value="Euros">Euros</option>
+                                                <select class="form-control" name="tipo_moneda_reembolso" required>
+                                                    <option value="">Seleccione *</option>
+                                                    <option value="BOLIVAR">BOLIVAR</option>
+                                                    <option value="DÓLAR">DÓLAR</option>
+                                                    <option value="EUROS">EUROS</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -94,8 +96,8 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="siniestro_nombre" id="siniestro_nombre">
-                                                    <option selected value="0">Seleccione *</option>
+                                                <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
+                                                    <option value="">Seleccione *</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -108,6 +110,7 @@
                                                 id="observacion_reembolso" 
                                                 placeholder="Observaciones *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ></textarea>
                                         </div>
@@ -121,12 +124,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Reclamado</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="monto_reclamo_reembolso"
                                                 id="monto_reclamo_reembolso" 
                                                 placeholder="Monto Reclamado *"
-                                                class="form-control"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -152,6 +154,7 @@
                                                 id="nombre_razon_asegurado"
                                                 placeholder="Nombre o Razón Social del Asegurado *"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -164,6 +167,7 @@
                                                 name="nombre_beneficiario"
                                                 id="nombre_beneficiario"
                                                 placeholder="Nombre del Beneficiario (separa por ,)"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 class="form-control"
                                             >
                                         </div>
@@ -171,12 +175,12 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="estatus" id="estatus" onchange="showInput()">
-                                                <option selected value="0">Seleccione *</option>
-                                                    <option value="Pendiente">Pendiente</option>
-                                                    <option value="Rechazado">Rechazado</option>
-                                                    <option value="Liquidado">Liquidado</option>
-                                                    <option value="Pagado">Pagado</option>
+                                            <select class="form-control" name="estatus" id="estatus" onchange="showInput()" required>
+                                                <option value="">Seleccione *</option>
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="RECHAZADO">RECHAZADO</option>
+                                                <option value="LIQUIDADO">LIQUIDADO</option>
+                                                <option value="PAGADO">PAGADO</option>
                                             </select>
                                         </div>
                                     </div>
@@ -185,12 +189,11 @@
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
                                             <div class="col-sm-9">
                                                 <input 
-                                                    type="number"
-                                                    step="0.01"
-                                                    name="monto_pagado"
-                                                    id="monto_pagado" 
+                                                    type="text"
+                                                    name="monto_pagado_reembolso"
+                                                    id="monto_pagado_reembolso" 
                                                     placeholder="Monto Pagado"
-                                                    class="form-control"
+                                                    class="form-control number_format"
                                                 >
                                             </div>
                                         </div>

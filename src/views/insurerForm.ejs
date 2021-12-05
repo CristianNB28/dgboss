@@ -35,6 +35,7 @@
                                                 id="rif_aseguradora"
                                                 placeholder="Rif *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -48,6 +49,7 @@
                                                 id="nombre_aseguradora" 
                                                 placeholder="Nombre *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -77,6 +79,7 @@
                                                 name="direccion_aseguradora"
                                                 id="direccion_aseguradora"
                                                 placeholder="Dirección Fiscal *"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 class="form-control" 
                                                 required
                                             >

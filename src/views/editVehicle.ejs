@@ -35,6 +35,7 @@
                                                 id="numero_placa"
                                                 value="<%= vehicle.numero_placa %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -48,6 +49,7 @@
                                                 id="marca_vehiculo"
                                                 value="<%= vehicle.marca_vehiculo %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -61,6 +63,7 @@
                                                 id="version_vehiculo"
                                                 value="<%= vehicle.version_vehiculo %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -74,6 +77,8 @@
                                                 id="serial_corroceria"
                                                 value="<%= vehicle.serial_corroceria %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -86,6 +91,7 @@
                                                 id="color_vehiculo"
                                                 value="<%= vehicle.color_vehiculo %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>
@@ -93,11 +99,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
+                                                type="text"
                                                 name="capacidad_carga"
                                                 id="capacidad_carga"
-                                                value="<%= vehicle.capacidad_carga %>" 
-                                                class="form-control"
+                                                value="<%= capacidadCarga %>" 
+                                                class="form-control number_format"
                                             >
                                         </div>
                                     </div>
@@ -106,8 +112,8 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_transmision_vehiculo" required>
                                                 <option value="<%= vehicle.tipo_transmision_vehiculo %>"><%= vehicle.tipo_transmision_vehiculo %></option>
-                                                <option value="Automático">Automático</option>
-                                                <option value="Sincrónico">Sincrónico</option>
+                                                <option value="AUTOMÁTICO">AUTOMÁTICO</option>
+                                                <option value="SINCRÓNICO">SINCRÓNICO</option>
                                             </select>
                                         </div>
                                     </div>
@@ -154,6 +160,7 @@
                                                 id="modelo_vehiculo"
                                                 value="<%= vehicle.modelo_vehiculo %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -163,10 +170,10 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_vehiculo" required>
                                                 <option value="<%= vehicle.tipo_vehiculo %>"><%= vehicle.tipo_vehiculo %></option>
-                                                <option value="Motocicleta">Motocicleta</option>
-                                                <option value="Automóvil">Automóvil</option>
-                                                <option value="Camión">Camión</option>
-                                                <option value="Autobus">Autobus</option>
+                                                <option value="MOTOCICLETA">MOTOCICLETA</option>
+                                                <option value="AUTOMÓVIL">AUTOMÓVIL</option>
+                                                <option value="CAMIÓN">CAMIÓN</option>
+                                                <option value="AUTOBUS">AUTOBUS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -179,6 +186,8 @@
                                                 id="serial_motor"
                                                 value="<%= vehicle.serial_motor %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -191,6 +200,7 @@
                                                 id="nombre_conductor_vehiculo"
                                                 value="<%= vehicle.nombre_conductor_vehiculo %>"  
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>
@@ -198,12 +208,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="suma_asegurada_vehiculo"
                                                 id="suma_asegurada_vehiculo"
-                                                value="<%= vehicle.suma_asegurada_vehiculo %>" 
-                                                class="form-control"
+                                                value="<%= sumaAsegurada %>" 
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -213,10 +222,10 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_movimiento_beneficiario" id="tipo_movimiento_beneficiario" required>
                                                 <option value="<%= vehicle.tipo_movimiento_vehiculo %>"><%= vehicle.tipo_movimiento_vehiculo %></option>
-                                                <option value="Emisión">Emisión</option>
-                                                <option value="Renovación">Renovación</option>
-                                                <option value="Inclusión">Inclusión</option>
-                                                <option value="Exclusión">Exclusión</option>
+                                                <option value="EMISIÓN">EMISIÓN</option>
+                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                <option value="INCLUSIÓN">INCLUSIÓN</option>
+                                                <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                             </select>
                                         </div>
                                     </div>

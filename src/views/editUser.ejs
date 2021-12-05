@@ -36,6 +36,7 @@
                                                     id="rif_usuario"
                                                     value="<%= user.rif_usuario %>"
                                                     class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -48,7 +49,7 @@
                                                     name="cedula_usuario"
                                                     id="cedula_usuario"
                                                     value="<%= user.cedula_usuario %>"
-                                                    class="form-control"
+                                                    class="form-control number_format"
                                                     required
                                                 >
                                             </div>
@@ -63,6 +64,7 @@
                                                 id="username" 
                                                 value="<%= user.username %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>
@@ -101,7 +103,8 @@
                                                 name="direccion_usuario"
                                                 id="direccion_usuario"
                                                 value="<%= user.direccion_usuario %>"
-                                                class="form-control" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                             >
                                         </div>
                                     </div>
@@ -119,6 +122,7 @@
                                                 id="nombre_usuario"
                                                 value="<%= user.nombre_usuario %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -126,8 +130,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Rol</label>
                                         <div class="col-sm-10">
-                                            <select class="form-control" name="rol">
-                                                <option selected value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option>
+                                            <select class="form-control" name="rol" required>
+                                                <option value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option>
                                                 <% roles.forEach((rol) => { %>
                                                     <option value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option> 
                                                 <% }); %> 
@@ -142,7 +146,8 @@
                                                 name="cargo_usuario"
                                                 id="cargo_usuario"
                                                 value="<%= user.cargo_usuario %>"
-                                                class="form-control" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                             >
                                         </div>
                                     </div>
@@ -205,21 +210,21 @@
                                             <div><label><input 
                                                             type="checkbox" 
                                                             name="negocio"
-                                                            value="Auto"
-                                                            <%= user.tipo_linea_negocio === 'Auto' ? 'checked': '' %>
-                                                        /> Auto</label></div>
+                                                            value="AUTOMÓVIL"
+                                                            <%= user.tipo_linea_negocio === 'AUTOMÓVIL' ? 'checked': '' %>
+                                                        /> AUTOMÓVIL</label></div>
                                             <div><label><input 
                                                             type="checkbox" 
                                                             name="negocio"
-                                                            value="Patrimonial"
-                                                            <%= user.tipo_linea_negocio === 'Patrimonial' ? 'checked': '' %>
-                                                        /> Patrimonial</label></div>
+                                                            value="PATRIMONIAL"
+                                                            <%= user.tipo_linea_negocio === 'PATRIMONIAL' ? 'checked': '' %>
+                                                        /> PATRIMONIAL</label></div>
                                             <div><label><input 
                                                             type="checkbox" 
                                                             name="negocio"
-                                                            value="Persona"
-                                                            <%= user.tipo_linea_negocio === 'Persona' ? 'checked': '' %>
-                                                        /> Persona</label></div>
+                                                            value="SALUD"
+                                                            <%= user.tipo_linea_negocio === 'SALUD' ? 'checked': '' %>
+                                                        /> SALUD</label></div>
                                         </div>
                                     </div>
                                     </br>

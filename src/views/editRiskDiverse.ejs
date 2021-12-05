@@ -35,6 +35,7 @@
                                                 id="nom_razon_riesgo_diverso"
                                                 value="<%= riskDiverse.nom_razon_riesgo_diverso %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -47,7 +48,7 @@
                                                 name="cedula_riesgo_diverso"
                                                 id="cedula_riesgo_diverso"
                                                 value="<%= riskDiverse.cedula_riesgo_diverso %>" 
-                                                class="form-control"
+                                                class="form-control number_format"
                                             >
                                         </div>
                                     </div>
@@ -85,6 +86,7 @@
                                                 name="direccion_riesgo_diverso"
                                                 id="direccion_riesgo_diverso" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= riskDiverse.direccion_riesgo_diverso %></textarea>
                                         </div>
@@ -98,12 +100,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="suma_asegurada_riesgo_diverso"
                                                 id="suma_asegurada_riesgo_diverso"
-                                                value="<%= riskDiverse.suma_asegurada_riesgo_diverso %>" 
-                                                class="form-control"
+                                                value="<%= sumaAsegurada %>" 
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -117,6 +118,7 @@
                                                 id="rif_riesgo_diverso"
                                                 value="<%= riskDiverse.rif_riesgo_diverso %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>
@@ -129,6 +131,7 @@
                                                 id="modelo_riesgo_diverso"
                                                 value="<%= riskDiverse.modelo_riesgo_diverso %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -142,6 +145,7 @@
                                                 id="serial_riesgo_diverso"
                                                 value="<%= riskDiverse.serial_riesgo_diverso %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -151,10 +155,10 @@
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_movimiento_riesgo_diverso" id="tipo_movimiento_riesgo_diverso" required>
                                                 <option value="<%= riskDiverse.tipo_movimiento_riesgo_diverso %>"><%= riskDiverse.tipo_movimiento_riesgo_diverso %></option>
-                                                <option value="Emisión">Emisión</option>
-                                                <option value="Renovación">Renovación</option>
-                                                <option value="Inclusión">Inclusión</option>
-                                                <option value="Exclusión">Exclusión</option>
+                                                <option value="EMISIÓN">EMISIÓN</option>
+                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                <option value="INCLUSIÓN">INCLUSIÓN</option>
+                                                <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                             </select>
                                         </div>
                                     </div>

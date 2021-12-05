@@ -27,33 +27,18 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <% if (executive.rif_ejecutivo === '') { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="cedula_ejecutivo"
-                                                    id="cedula_ejecutivo"
-                                                    value="<%= executive.cedula_ejecutivo %>"
-                                                    class="form-control"
-                                                    required
-                                                >
-                                            </div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="cedula_ejecutivo"
+                                                id="cedula_ejecutivo"
+                                                value="<%= executive.cedula_ejecutivo %>"
+                                                class="form-control number_format"
+                                                required
+                                            >
                                         </div>
-                                    <% } else { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="rif_ejecutivo"
-                                                    id="rif_ejecutivo"
-                                                    value="<%= executive.rif_ejecutivo %>"
-                                                    class="form-control"
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    <% } %>
+                                    </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
                                         <div class="col-sm-9">
@@ -63,6 +48,7 @@
                                                 id="nombre_ejecutivo" 
                                                 value="<%= executive.nombre_ejecutivo %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -76,6 +62,7 @@
                                                 id="apellido_ejecutivo" 
                                                 value="<%= executive.apellido_ejecutivo %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -84,10 +71,10 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de ejecutivo</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_ejecutivo">
-                                                    <option selected value="<%= executive.tipo_ejecutivo %>"><%= executive.tipo_ejecutivo %></option>
-                                                        <option value="Suscripción">Suscripción</option>
-                                                        <option value="Siniestros">Siniestros</option>
+                                                <select class="form-control" name="tipo_ejecutivo" required>
+                                                    <option value="<%= executive.tipo_ejecutivo %>"><%= executive.tipo_ejecutivo %></option>
+                                                    <option value="SUSCRIPCIÓN">SUSCRIPCIÓN</option>
+                                                    <option value="SINIESTROS">SINIESTROS</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -131,6 +118,7 @@
                                                 name="direccion_ejecutivo"
                                                 id="direccion_ejecutivo" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= executive.direccion_ejecutivo %></textarea>
                                         </div>

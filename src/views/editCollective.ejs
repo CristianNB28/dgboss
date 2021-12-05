@@ -35,6 +35,7 @@
                                                 id="numero_colectivo"
                                                 value="<%= collective.numero_colectivo %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -42,11 +43,11 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda_colectivo">
-                                                <option selected value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
-                                                    <option value="Bolivar">Bolivar</option>
-                                                    <option value="Dólar">Dólar</option>
-                                                    <option value="Euros">Euros</option>
+                                            <select class="form-control" name="tipo_moneda_colectivo" required>
+                                                <option value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
+                                                <option value="BOLIVAR">BOLIVAR</option>
+                                                <option value="DÓLAR">DÓLAR</option>
+                                                <option value="EUROS">EUROS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -67,12 +68,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="prima_anual_colectivo"
                                                 id="prima_anual_colectivo"
-                                                value="<%= collective.prima_anual_colectivo %>"
-                                                class="form-control"
+                                                value="<%= primaAnual %>"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -80,11 +80,11 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_colectivo">
-                                                <option selected value="<%= collective.tipo_colectivo %>"><%= collective.tipo_colectivo %></option>
-                                                <option value="Salud">Salud</option>
-                                                <option value="Automovil">Automovil</option>
-                                                <option value="Riesgos Diversos">Riesgos Diversos</option>
+                                            <select class="form-control" name="tipo_colectivo" required>
+                                                <option value="<%= collective.tipo_colectivo %>"><%= collective.tipo_colectivo %></option>
+                                                <option value="SALUD">SALUD</option>
+                                                <option value="AUTOMÓVIL">AUTOMÓVIL</option>
+                                                <option value="RIESGOS DIVERSOS">RIESGOS DIVERSOS</option>
                                             </select>
                                         </div>
                                     </div>
@@ -96,8 +96,8 @@
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_tomador_colectivo">
-                                                <option selected value="<%= collective.nombre_tomador_colectivo %>"><%= collective.nombre_tomador_colectivo %></option>
+                                            <select class="form-control" name="nombre_tomador_colectivo" required>
+                                                <option value="<%= collective.nombre_tomador_colectivo %>"><%= collective.nombre_tomador_colectivo %></option>
                                                 <% takerNames.forEach((takerName) => { %>
                                                     <option value="<%= takerName.nombreTomador %>"><%= takerName.nombreTomador %></option>
                                                 <% }); %>
@@ -107,8 +107,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_aseguradora">
-                                                <option selected value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                            <select class="form-control" name="nombre_aseguradora" required>
+                                                <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                 <% insurers.forEach((insurer) => { %>
                                                     <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
                                                 <% }); %>
@@ -131,10 +131,10 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="estatus_colectivo">
-                                                <option selected value="<%= collective.estatus_colectivo %>"><%= collective.estatus_colectivo %></option>
-                                                    <option value="Vigente">Vigente</option>
-                                                    <option value="Anulado">Anulado</option>
+                                            <select class="form-control" name="estatus_colectivo" required>
+                                                <option value="<%= collective.estatus_colectivo %>"><%= collective.estatus_colectivo %></option>
+                                                <option value="VIGENTE">VIGENTE</option>
+                                                <option value="ANULADO">ANULADO</option>
                                             </select>
                                         </div>
                                     </div>

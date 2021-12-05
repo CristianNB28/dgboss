@@ -137,7 +137,7 @@
             if (itemPII.asegurado_per_nat_id === idInsured) {
                 for (const itemPolicy of policies) {
                     if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                        if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                        if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                             for (const itemPIIB of piib) {
                                 if (itemPII.id_paa === itemPIIB.paa_id) {
                                     for (const itemBeneficiary of beneficiaries) {
@@ -160,7 +160,7 @@
             if (itemCII.asegurado_per_nat_id === idInsured) {
                 for (const itemCollective of collectives) {
                     if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                        if (itemCollective.tipo_colectivo === 'Salud') {
+                        if (itemCollective.tipo_colectivo === 'SALUD') {
                             for (const itemCIIB of ciib) {
                                 if (itemCII.id_caa === itemCIIB.caa_id) {
                                     for (const itemBeneficiary of beneficiaries) {
@@ -198,7 +198,7 @@
             if (itemPII.asegurado_per_jur_id === idInsured) {
                 for (const itemPolicy of policies) {
                     if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                        if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                        if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                             for (const itemPIIB of piib) {
                                 if (itemPII.id_paa === itemPIIB.paa_id) {
                                     for (const itemBeneficiary of beneficiaries) {
@@ -227,9 +227,9 @@
 <script>
     function showInput() {
         var getSelectValue = document.getElementById("estatus").value;
-        if (getSelectValue === 'Pagado') {
+        if (getSelectValue === 'PAGADO') {
             document.getElementById("searchinput").style.display = "block";
-        } else if (getSelectValue !== 'Pagado') {
+        } else if (getSelectValue !== 'PAGADO') {
             document.getElementById("searchinput").style.display = "none";
         }
     }   
@@ -245,6 +245,19 @@
 <script>
     function pasarNombreBeneficiarioSinestro(nameBeneficiary) {
         $('#siniestro_nombre').append(`<option value="${nameBeneficiary}">${nameBeneficiary}</option>`);
+    }
+</script>
+
+<script>
+    var separador = document.getElementsByClassName('number_format');
+    for (var i = 0 ; i < separador.length; i++) {
+        separador[i].addEventListener('input', (e) => {
+            var entrada = e.target.value.split(','),
+            parteEntera = entrada[0].replace(/\./g, ''),
+            parteDecimal = entrada[1],
+            salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+        }, false); 
     }
 </script>
 

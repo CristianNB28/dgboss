@@ -26,11 +26,11 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postExecutiveForm: (cedulaEjecutivo, rifEjecutivo, executive) => {
+    postExecutiveForm: (executive) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Ejecutivo (cedula_ejecutivo, rif_ejecutivo, nombre_ejecutivo, apellido_ejecutivo, celular_ejecutivo, correo_ejecutivo, direccion_ejecutivo, tipo_ejecutivo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo, executive.tipo_ejecutivo], 
+            db.query(`INSERT INTO Ejecutivo (cedula_ejecutivo, nombre_ejecutivo, apellido_ejecutivo, celular_ejecutivo, correo_ejecutivo, direccion_ejecutivo, tipo_ejecutivo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+            [executive.cedula_ejecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo, executive.tipo_ejecutivo], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -40,12 +40,12 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateExecutive: (cedulaEjecutivo, rifEjecutivo, executive) => {
+    updateExecutive: (executive) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Ejecutivo 
-                    SET cedula_ejecutivo=?, rif_ejecutivo=?, nombre_ejecutivo=?, apellido_ejecutivo=?, celular_ejecutivo=?, correo_ejecutivo=?, direccion_ejecutivo=?, tipo_ejecutivo=?       
+                    SET cedula_ejecutivo=?, nombre_ejecutivo=?, apellido_ejecutivo=?, celular_ejecutivo=?, correo_ejecutivo=?, direccion_ejecutivo=?, tipo_ejecutivo=?       
                     WHERE id_ejecutivo=?`, 
-            [cedulaEjecutivo, rifEjecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo, executive.tipo_ejecutivo, executive.id_ejecutivo], 
+            [executive.cedula_ejecutivo, executive.nombre_ejecutivo, executive.apellido_ejecutivo, executive.celular_ejecutivo, executive.correo_ejecutivo, executive.direccion_ejecutivo, executive.tipo_ejecutivo, executive.id_ejecutivo], 
             (error, rows) => {
                 if (error) {
                     reject(error)

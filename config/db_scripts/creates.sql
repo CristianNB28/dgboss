@@ -82,8 +82,7 @@ CREATE TABLE Poliza(
 
 CREATE TABLE Ejecutivo(
     id_ejecutivo INT PRIMARY KEY AUTO_INCREMENT,
-    cedula_ejecutivo VARCHAR(255),
-    rif_ejecutivo VARCHAR(255),
+    cedula_ejecutivo VARCHAR(255) NOT NULL,
     nombre_ejecutivo VARCHAR(255) NOT NULL,
     apellido_ejecutivo VARCHAR(255) NOT NULL,
     celular_ejecutivo VARCHAR(255) NOT NULL,

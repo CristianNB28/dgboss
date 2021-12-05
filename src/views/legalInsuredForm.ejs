@@ -35,6 +35,7 @@
                                                 id="rif_asegurado_per_jur"
                                                 placeholder="Rif *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -48,6 +49,7 @@
                                                 id="razon_social_per_jur" 
                                                 placeholder="Razón Social *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -80,8 +82,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Agente</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_com_agente_propio">
-                                                <option selected value="">Seleccione *</option>
+                                            <select class="form-control" name="nombre_com_agente_propio" required>
+                                                <option value="">Seleccione *</option>
                                                 <% ownAgents.forEach((ownAgent) => { %>
                                                     <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% }); %>
@@ -96,6 +98,7 @@
                                                 id="direccion_asegurado_per_jur" 
                                                 placeholder="Dirección *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ></textarea>
                                         </div>
@@ -126,7 +129,8 @@
                                                     type="text"
                                                     name="nombre_contacto_per_jur"
                                                     id="nombre_contacto_per_jur" 
-                                                    placeholder="Persona Contacto de Empresa" 
+                                                    placeholder="Persona Contacto de Empresa"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                                     class="form-control"
                                                 >
                                             </div>
@@ -138,7 +142,8 @@
                                                     type="text"
                                                     name="cargo_contacto_per_jur"
                                                     id="cargo_contacto_per_jur" 
-                                                    placeholder="Cargo de Persona Contacto de Empresa" 
+                                                    placeholder="Cargo de Persona Contacto de Empresa"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                                     class="form-control"
                                                 >
                                             </div>

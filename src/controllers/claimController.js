@@ -109,6 +109,8 @@ module.exports = {
         let resultsRefunds = await refundModel.getRefunds();
         for (let i = 0; i < resultsRefunds.length; i++) {
             let elementRefund = resultsRefunds[i];
+            elementRefund.monto_reclamo_reembolso = new Intl.NumberFormat('de-DE').format(elementRefund.monto_reclamo_reembolso);
+            elementRefund.monto_pagado_reembolso = new Intl.NumberFormat('de-DE').format(elementRefund.monto_pagado_reembolso);
             elementRefund.fecha_ocurrencia_reembolso = elementRefund.fecha_ocurrencia_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementRefund.fecha_notificacion_reembolso = elementRefund.fecha_notificacion_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -121,6 +123,8 @@ module.exports = {
         let resultsLettersGuarentee = await letterGuaranteeModel.getLettersGuarantee();
         for (let i = 0; i < resultsLettersGuarentee.length; i++) {
             let elementLettersGuarantee = resultsLettersGuarentee[i];
+            elementLettersGuarantee.monto_reclamado_carta_aval = new Intl.NumberFormat('de-DE').format(elementLettersGuarantee.monto_reclamado_carta_aval);
+            elementLettersGuarantee.monto_pagado_carta_aval = new Intl.NumberFormat('de-DE').format(elementLettersGuarantee.monto_pagado_carta_aval);
             elementLettersGuarantee.fecha_ocurrencia_carta_aval = elementLettersGuarantee.fecha_ocurrencia_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementLettersGuarantee.fecha_notificacion_carta_aval = elementLettersGuarantee.fecha_notificacion_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -133,6 +137,8 @@ module.exports = {
         let resultsEmergencies = await emergencyModel.getEmergencies();
         for (let i = 0; i < resultsEmergencies.length; i++) {
             let elementEmergencies = resultsEmergencies[i];
+            elementEmergencies.monto_reclamado_emergencia = new Intl.NumberFormat('de-DE').format(elementEmergencies.monto_reclamado_emergencia);
+            elementEmergencies.monto_pagado_emergencia = new Intl.NumberFormat('de-DE').format(elementEmergencies.monto_pagado_emergencia);
             elementEmergencies.fecha_ocurrencia_emergencia = elementEmergencies.fecha_ocurrencia_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementEmergencies.fecha_notificacion_emergencia = elementEmergencies.fecha_notificacion_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -145,6 +151,8 @@ module.exports = {
         let resultsAMP = await ampModel.getAMP(); 
         for (let i = 0; i < resultsAMP.length; i++) {
             let elementAMP = resultsAMP[i];
+            elementAMP.monto_reclamado_amp = new Intl.NumberFormat('de-DE').format(elementAMP.monto_reclamado_amp);
+            elementAMP.monto_pagado_amp = new Intl.NumberFormat('de-DE').format(elementAMP.monto_pagado_amp);
             elementAMP.fecha_ocurrencia_amp = elementAMP.fecha_ocurrencia_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementAMP.fecha_notificacion_amp = elementAMP.fecha_notificacion_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -155,7 +163,7 @@ module.exports = {
     },
 /*                 POST                  */
     postRefundForm: async (req, res) => {
-        let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
+        let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
         let montoPagadoReembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
@@ -168,10 +176,32 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
-        if (req.body.monto_pagado === '') {
+        if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
+            montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
+        } else if (montoReclamoReembolso.indexOf(',') !== -1) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso);
+        } else if (montoReclamoReembolso.indexOf('.') !== -1) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
+        }
+        if (req.body.monto_pagado_reembolso === '') {
             montoPagadoReembolso = 0;
         } else {
-            montoPagadoReembolso = parseFloat(req.body.monto_pagado);
+            montoPagadoReembolso = req.body.monto_pagado_reembolso;
+            if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+                montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+            } else if (montoPagadoReembolso.indexOf(',') !== -1) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso);
+            } else if (montoPagadoReembolso.indexOf('.') !== -1) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+            }
         }
         await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.render('refundForm', {
@@ -195,7 +225,7 @@ module.exports = {
         });
     },
     postLetterGuaranteeForm: async (req, res) => {
-        let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
+        let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
         let montoPagadoCartaAval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
@@ -208,10 +238,32 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
-        if (req.body.monto_pagado === '') {
+        if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
+        } else if (montoReclamoCartaAval.indexOf(',') !== -1) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval);
+        } else if (montoReclamoCartaAval.indexOf('.') !== -1) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
+        }
+        if (req.body.monto_pagado_carta_aval === '') {
             montoPagadoCartaAval = 0;
         } else {
-            montoPagadoCartaAval = parseFloat(req.body.monto_pagado);
+            montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
+            if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+            } else if (montoPagadoCartaAval.indexOf(',') !== -1) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval);
+            } else if (montoPagadoCartaAval.indexOf('.') !== -1) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+            }
         }
         await letterGuaranteeModel.postLetterGuaranteeForm(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
         res.render('letterGuaranteeForm', {
@@ -235,7 +287,7 @@ module.exports = {
         });
     },
     postEmergencyForm: async (req, res) => {
-        let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
+        let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
         let montoPagadoEmergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
@@ -248,10 +300,32 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
-        if (req.body.monto_pagado === '') {
+        if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
+        } else if (montoReclamoEmergencia.indexOf(',') !== -1) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia);
+        } else if (montoReclamoEmergencia.indexOf('.') !== -1) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
+        }
+        if (req.body.monto_pagado_emergencia === '') {
             montoPagadoEmergencia = 0;
         } else {
-            montoPagadoEmergencia = parseFloat(req.body.monto_pagado);
+            montoPagadoEmergencia = req.body.monto_pagado_emergencia;
+            if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+            } else if (montoPagadoEmergencia.indexOf(',') !== -1) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia);
+            } else if (montoPagadoEmergencia.indexOf('.') !== -1) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+            }
         }
         await emergencyModel.postEmergencyForm(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
         res.render('emergencyForm', {
@@ -275,8 +349,8 @@ module.exports = {
         });
     },
     postAMPForm: async (req, res) => {
-        let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
-        let montoPagadoAMP = parseFloat(req.body.monto_pagado);
+        let montoReclamoAMP = req.body.monto_reclamado_amp;
+        let montoPagadoAMP;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -288,10 +362,32 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
-        if (req.body.monto_pagado === '') {
+        if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
+            montoReclamoAMP = montoReclamoAMP.replace(",", ".");
+            montoReclamoAMP = montoReclamoAMP.replace(".", ",");
+            montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
+        } else if (montoReclamoAMP.indexOf(',') !== -1) {
+            montoReclamoAMP = montoReclamoAMP.replace(",", ".");
+            montoReclamoAMP = parseFloat(montoReclamoAMP);
+        } else if (montoReclamoAMP.indexOf('.') !== -1) {
+            montoReclamoAMP = montoReclamoAMP.replace(".", ",");
+            montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
+        }
+        if (req.body.monto_pagado_amp === '') {
             montoPagadoAMP = 0;
         } else {
-            montoPagadoAMP = parseFloat(req.body.monto_pagado);
+            montoPagadoAMP = req.body.monto_pagado_amp;
+            if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
+                montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+                montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+                montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+            } else if (montoPagadoAMP.indexOf(',') !== -1) {
+                montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+                montoPagadoAMP = parseFloat(montoPagadoAMP);
+            } else if (montoPagadoAMP.indexOf('.') !== -1) {
+                montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+                montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+            }
         }
         await ampModel.postAMPForm(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
         res.render('ampForm', {
@@ -331,17 +427,21 @@ module.exports = {
             let resultRefund = await refundModel.getRefund(idRefund);
             let fechaOcurrenciaReembolso = resultRefund[0].fecha_ocurrencia_reembolso.toISOString().substring(0, 10);
             let fechaNotificacionReembolso = resultRefund[0].fecha_notificacion_reembolso.toISOString().substring(0, 10);
+            let montoReclamoReembolso = resultRefund[0].monto_reclamo_reembolso;
+            let montoPagadoReembolso = resultRefund[0].monto_pagado_reembolso;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
+            montoReclamoReembolso = new Intl.NumberFormat('de-DE').format(montoReclamoReembolso);
+            montoPagadoReembolso = new Intl.NumberFormat('de-DE').format(montoPagadoReembolso);
             if (resultRefund[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultRefund[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
                     if (itemPII.asegurado_per_jur_id === resultRefund[0].asegurado_per_jur_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -364,7 +464,7 @@ module.exports = {
                     if (itemPII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -385,7 +485,7 @@ module.exports = {
                     if (itemCII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
                         for (const itemCollective of resultsCollectives) {
                             if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                if (itemCollective.tipo_colectivo === 'SALUD') {
                                     for (const itemCIIB of resultsCIIB) {
                                         if (itemCII.id_caa === itemCIIB.caa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -407,6 +507,8 @@ module.exports = {
                 refund: resultRefund[0],
                 fechaOcurrenciaReembolso: fechaOcurrenciaReembolso,
                 fechaNotificacionReembolso: fechaNotificacionReembolso,
+                montoReclamoReembolso: montoReclamoReembolso,
+                montoPagadoReembolso: montoPagadoReembolso,
                 naturalInsureds: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
@@ -442,17 +544,21 @@ module.exports = {
             let resultLetterGuarentee = await letterGuaranteeModel.getLetterGuarantee(idLetterGuarentee);
             let fechaOcurrenciaCartaAval = resultLetterGuarentee[0].fecha_ocurrencia_carta_aval.toISOString().substring(0, 10);
             let fechaNotificacionCartaAval = resultLetterGuarentee[0].fecha_notificacion_carta_aval.toISOString().substring(0, 10);
+            let montoReclamoCartaAval = resultLetterGuarentee[0].monto_reclamado_carta_aval;
+            let montoPagadoCartaAval = resultLetterGuarentee[0].monto_pagado_carta_aval;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
+            montoReclamoCartaAval = new Intl.NumberFormat('de-DE').format(montoReclamoCartaAval);
+            montoPagadoCartaAval = new Intl.NumberFormat('de-DE').format(montoPagadoCartaAval);
             if (resultLetterGuarentee[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultLetterGuarentee[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
                     if (itemPII.asegurado_per_jur_id === resultLetterGuarentee[0].asegurado_per_jur_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -475,7 +581,7 @@ module.exports = {
                     if (itemPII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -496,7 +602,7 @@ module.exports = {
                     if (itemCII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
                         for (const itemCollective of resultsCollectives) {
                             if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                if (itemCollective.tipo_colectivo === 'SALUD') {
                                     for (const itemCIIB of resultsCIIB) {
                                         if (itemCII.id_caa === itemCIIB.caa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -518,6 +624,8 @@ module.exports = {
                 letterGuarentee: resultLetterGuarentee[0],
                 fechaOcurrenciaCartaAval: fechaOcurrenciaCartaAval,
                 fechaNotificacionCartaAval: fechaNotificacionCartaAval,
+                montoReclamoCartaAval: montoReclamoCartaAval,
+                montoPagadoCartaAval: montoPagadoCartaAval,
                 naturalInsureds: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
@@ -553,17 +661,21 @@ module.exports = {
             let resultEmergency = await emergencyModel.getEmergency(idEmergency);
             let fechaOcurrenciaEmergencia = resultEmergency[0].fecha_ocurrencia_emergencia.toISOString().substring(0, 10);
             let fechaNotificacionEmergencia = resultEmergency[0].fecha_notificacion_emergencia.toISOString().substring(0, 10);
+            let montoReclamoEmergencia = resultEmergency[0].monto_reclamado_emergencia;
+            let montoPagadoEmergencia = resultEmergency[0].monto_pagado_emergencia;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
+            montoReclamoEmergencia = new Intl.NumberFormat('de-DE').format(montoReclamoEmergencia);
+            montoPagadoEmergencia = new Intl.NumberFormat('de-DE').format(montoPagadoEmergencia);
             if (resultEmergency[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultEmergency[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
                     if (itemPII.asegurado_per_jur_id === resultEmergency[0].asegurado_per_jur_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -586,7 +698,7 @@ module.exports = {
                     if (itemPII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -607,7 +719,7 @@ module.exports = {
                     if (itemCII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
                         for (const itemCollective of resultsCollectives) {
                             if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                if (itemCollective.tipo_colectivo === 'SALUD') {
                                     for (const itemCIIB of resultsCIIB) {
                                         if (itemCII.id_caa === itemCIIB.caa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -629,6 +741,8 @@ module.exports = {
                 emergency: resultEmergency[0],
                 fechaOcurrenciaEmergencia: fechaOcurrenciaEmergencia,
                 fechaNotificacionEmergencia: fechaNotificacionEmergencia,
+                montoReclamoEmergencia: montoReclamoEmergencia,
+                montoPagadoEmergencia: montoPagadoEmergencia,
                 naturalInsureds: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
@@ -664,17 +778,21 @@ module.exports = {
             let resultAMP = await ampModel.getAMPId(idAMP);
             let fechaOcurrenciaAMP = resultAMP[0].fecha_ocurrencia_amp.toISOString().substring(0, 10);
             let fechaNotificacionAMP = resultAMP[0].fecha_notificacion_amp.toISOString().substring(0, 10);
+            let montoReclamoAMP = resultAMP[0].monto_reclamado_amp;
+            let montoPagadoAMP = resultAMP[0].monto_pagado_amp;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
+            montoReclamoAMP = new Intl.NumberFormat('de-DE').format(montoReclamoAMP);
+            montoPagadoAMP = new Intl.NumberFormat('de-DE').format(montoPagadoAMP);
             if (resultAMP[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultAMP[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
                     if (itemPII.asegurado_per_jur_id === resultAMP[0].asegurado_per_jur_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -697,7 +815,7 @@ module.exports = {
                     if (itemPII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
                         for (const itemPolicy of resultsPolicies) {
                             if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'Salud') || (itemPolicy.tipo_individual_poliza === 'Funerario') || (itemPolicy.tipo_individual_poliza === 'Vida')) {
+                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
                                     for (const itemPIIB of resultsPIIB) {
                                         if (itemPII.id_paa === itemPIIB.paa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -718,7 +836,7 @@ module.exports = {
                     if (itemCII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
                         for (const itemCollective of resultsCollectives) {
                             if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'Salud') {
+                                if (itemCollective.tipo_colectivo === 'SALUD') {
                                     for (const itemCIIB of resultsCIIB) {
                                         if (itemCII.id_caa === itemCIIB.caa_id) {
                                             for (const itemBeneficiary of resultsBeneficiaries) {
@@ -740,6 +858,8 @@ module.exports = {
                 amp: resultAMP[0],
                 fechaOcurrenciaAMP: fechaOcurrenciaAMP,
                 fechaNotificacionAMP: fechaNotificacionAMP,
+                montoReclamoAMP: montoReclamoAMP,
+                montoPagadoAMP: montoPagadoAMP,
                 naturalInsureds: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
@@ -760,34 +880,122 @@ module.exports = {
         }
     },
     updateRefund: async (req, res) => {
-        let montoReclamoReembolso = parseFloat(req.body.monto_reclamo_reembolso);
-        let montoPagadoReembolso = parseFloat(req.body.monto_pagado);
+        let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
+        let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
+        if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
+            montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
+        } else if (montoReclamoReembolso.indexOf(',') !== -1) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso);
+        } else if (montoReclamoReembolso.indexOf('.') !== -1) {
+            montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
+            montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
+        }
+        if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
+            montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+            montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+            montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+        } else if (montoPagadoReembolso.indexOf(',') !== -1) {
+            montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+            montoPagadoReembolso = parseFloat(montoPagadoReembolso);
+        } else if (montoPagadoReembolso.indexOf('.') !== -1) {
+            montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+            montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+        }
         await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
         res.redirect('/sistema');
     },
     updateLetterGuarentee: async (req, res) => {
-        let montoReclamoCartaAval = parseFloat(req.body.monto_reclamado_carta_aval);
-        let montoPagadoCartaAval = parseFloat(req.body.monto_pagado);
+        let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
+        let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
+        if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
+        } else if (montoReclamoCartaAval.indexOf(',') !== -1) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval);
+        } else if (montoReclamoCartaAval.indexOf('.') !== -1) {
+            montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
+            montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
+        }
+        if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
+            montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+            montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+        } else if (montoPagadoCartaAval.indexOf(',') !== -1) {
+            montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval);
+        } else if (montoPagadoCartaAval.indexOf('.') !== -1) {
+            montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+        }
         await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
         res.redirect('/sistema');
     },
     updateEmergency: async (req, res) => {
-        let montoReclamoEmergencia = parseFloat(req.body.monto_reclamado_emergencia);
-        let montoPagadoEmergencia = parseFloat(req.body.monto_pagado);
+        let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
+        let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
+        if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
+        } else if (montoReclamoEmergencia.indexOf(',') !== -1) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia);
+        } else if (montoReclamoEmergencia.indexOf('.') !== -1) {
+            montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
+            montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
+        }
+        if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
+            montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+            montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+        } else if (montoPagadoEmergencia.indexOf(',') !== -1) {
+            montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia);
+        } else if (montoPagadoEmergencia.indexOf('.') !== -1) {
+            montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+        }
         await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
         res.redirect('/sistema');
     },
     updateAMP: async (req, res) => {
-        let montoReclamoAMP = parseFloat(req.body.monto_reclamado_amp);
-        let montoPagadoAMP = parseFloat(req.body.monto_pagado);
+        let montoReclamoAMP = req.body.monto_reclamado_amp;
+        let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
+        if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
+            montoReclamoAMP = montoReclamoAMP.replace(",", ".");
+            montoReclamoAMP = montoReclamoAMP.replace(".", ",");
+            montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
+        } else if (montoReclamoAMP.indexOf(',') !== -1) {
+            montoReclamoAMP = montoReclamoAMP.replace(",", ".");
+            montoReclamoAMP = parseFloat(montoReclamoAMP);
+        } else if (montoReclamoAMP.indexOf('.') !== -1) {
+            montoReclamoAMP = montoReclamoAMP.replace(".", ",");
+            montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
+        }
+        if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
+            montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+            montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+            montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+        } else if (montoPagadoAMP.indexOf(',') !== -1) {
+            montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+            montoPagadoAMP = parseFloat(montoPagadoAMP);
+        } else if (montoPagadoAMP.indexOf('.') !== -1) {
+            montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+            montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+        }
         await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
         res.redirect('/sistema');
     },

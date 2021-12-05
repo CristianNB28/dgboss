@@ -41,6 +41,7 @@
                                                         id="numero_colectivo"
                                                         placeholder="Número *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -122,9 +123,9 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_moneda_colectivo" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Bolivar">Bolivar</option>
-                                                        <option value="Dólar">Dólar</option>
-                                                        <option value="Euros">Euros</option>
+                                                        <option value="BOLIVAR">BOLIVAR</option>
+                                                        <option value="DÓLAR">DÓLAR</option>
+                                                        <option value="EUROS">EUROS</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -133,12 +134,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Prima Anual</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01"
+                                                        type="text"
                                                         name="prima_anual_colectivo"
                                                         id="prima_anual_colectivo"
                                                         placeholder="Prima Anual *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -149,8 +149,8 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Sí">Sí</option>
-                                                        <option value="No">No</option>
+                                                        <option value="SÍ">SÍ</option>
+                                                        <option value="NO">NO</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -164,6 +164,7 @@
                                                         id="cobertura_colectivo"
                                                         placeholder="Cobertura" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
@@ -188,6 +189,7 @@
                                                         id="nombre_tomador_colectivo"
                                                         placeholder="Nombre/Razón Social Tomador *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -202,6 +204,7 @@
                                                         id="nombre_asegurado"
                                                         placeholder="Nombre/Razón Social Asegurado *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -211,12 +214,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01"
+                                                        type="text"
                                                         name="deducible_colectivo"
                                                         id="deducible_colectivo"
                                                         placeholder="Deducible *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -231,6 +233,7 @@
                                                         id="grupo_colectivo"
                                                         placeholder="Grupo *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -266,10 +269,10 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_canal_colectivo" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Redes Sociales">Redes Sociales</option>
-                                                        <option value="Página Web">Página Web</option>
-                                                        <option value="Área By Atina">Área By Atina</option>
-                                                        <option value="Agente Propio">Agente Propio</option>
+                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
+                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
+                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
+                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -279,8 +282,8 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Sí">Sí</option>
-                                                        <option value="No">No</option>
+                                                        <option value="SÍ">SÍ</option>
+                                                        <option value="NO">NO</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -294,6 +297,7 @@
                                                         id="detalle_cliente_colectivo"
                                                         placeholder="Detalle desde cuando es cliente" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
@@ -312,10 +316,10 @@
                                                 <div class="col-sm-10">
                                                     <select class="form-control" name="tipo_movimiento_riesgo_diverso" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Emisión">Emisión</option>
-                                                        <option value="Renovación">Renovación</option>
-                                                        <option value="Inclusión">Inclusión</option>
-                                                        <option value="Exclusión">Exclusión</option>
+                                                        <option value="EMISIÓN">EMISIÓN</option>
+                                                        <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                        <option value="INCLUSIÓN">INCLUSIÓN</option>
+                                                        <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -380,9 +384,9 @@
                                                     <div class="col-sm-9">
                                                         <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
                                                             <option value="">Seleccione</option>
-                                                            <option value="Mensual">Mensual</option>
-                                                            <option value="Trimestral">Trimestral</option>
-                                                            <option value="Semestral">Semestral</option>
+                                                            <option value="MENSUAL">MENSUAL</option>
+                                                            <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                            <option value="SEMESTRAL">SEMESTRAL</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -393,12 +397,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text" 
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             value="<%= collective.prima_anual_colectivo %>" 
-                                                            class="form-control"
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -409,12 +412,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text" 
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             placeholder="Monto Prima *" 
-                                                            class="form-control"
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -428,10 +430,10 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="tipo_recibo" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Emisión">Emisión</option>
-                                                        <option value="Renovación">Renovación</option>
-                                                        <option value="Inclusión">Inclusión</option>
-                                                        <option value="Exclusión">Exclusión</option>
+                                                        <option value="EMISIÓN">EMISIÓN</option>
+                                                        <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                        <option value="INCLUSIÓN">INCLUSIÓN</option>
+                                                        <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -454,14 +456,14 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="metodo_pago_recibo" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Transferencia">Transferencia</option>
-                                                        <option value="Zelle">Zelle</option>
-                                                        <option value="Efectivo">Efectivo</option>
-                                                        <option value="Tarjeta de debito">Tarjeta de debito</option>
-                                                        <option value="Tarjeta de crédito">Tarjeta de crédito</option>
-                                                        <option value="Paypal">Paypal</option>
-                                                        <option value="Deposito bancario">Deposito bancario</option>
-                                                        <option value="Otros">Otros</option>
+                                                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                                        <option value="ZELLE">ZELLE</option>
+                                                        <option value="EFECTIVO">EFECTIVO</option>
+                                                        <option value="TARJETA DE DEBITO">TARJETA DE DEBITO</option>
+                                                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
+                                                        <option value="PAYPAL">PAYPAL</option>
+                                                        <option value="DEPOSITO BANCARIO">DEPOSITO BANCARIO</option>
+                                                        <option value="OTROS">OTROS</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -487,12 +489,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
                                                         placeholder="Comisión Asociada *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -526,12 +527,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text" 
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
                                                             placeholder="Porcentaje Agente Propio *"
-                                                            class="form-control"
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -542,12 +542,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Caso Especial</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text"
                                                         name="caso_especial_comision"
                                                         id="caso_especial_comision"
                                                         placeholder="Porcentaje Caso Especial" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                     >
                                                 </div>
                                             </div>
@@ -556,12 +555,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_ejecutivo_suscripcion"
                                                         id="porcentaje_ejecutivo_suscripcion"
                                                         placeholder="Porcentaje Ejecutivo de Suscripción *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -571,12 +569,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_ejecutivo_siniestro"
                                                         id="porcentaje_ejecutivo_siniestro"
                                                         placeholder="Porcentaje Ejecutivo de Siniestros *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -586,12 +583,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Fundatina</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_fundatina_comision"
                                                         id="porcentaje_fundatina_comision"
-                                                        value="0.35" 
-                                                        class="form-control"
+                                                        value="0,35" 
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -603,12 +599,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Director</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_director_comision"
                                                         id="porcentaje_director_comision"
-                                                        value="2.5" 
-                                                        class="form-control"
+                                                        value="2,5" 
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -618,12 +613,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Socio</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_socio_comision"
                                                         id="porcentaje_socio_comision"
-                                                        value="2.5" 
-                                                        class="form-control"
+                                                        value="2,5" 
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -633,12 +627,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_ejecutivo_cobranza"
                                                         id="porcentaje_ejecutivo_cobranza"
                                                         placeholder="Porcentaje Ejecutivo de Cobranzas *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -648,12 +641,11 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Atina</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
-                                                        step="0.01" 
+                                                        type="text" 
                                                         name="porcentaje_atina_comision"
                                                         id="porcentaje_atina_comision"
                                                         placeholder="Porcentaje Atina *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -680,12 +672,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text" 
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             placeholder="Comisión Asociada *" 
-                                                            class="form-control"
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -739,8 +730,8 @@
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="estatus_comision_factor_verificacion" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="Pagado">Pagado</option>
-                                                        <option value="Pendiente">Pendiente</option>
+                                                        <option value="PAGADO">PAGADO</option>
+                                                        <option value="PENDIENTE">PENDIENTE</option>
                                                     </select>
                                                 </div>
                                             </div>

@@ -35,6 +35,7 @@
                                                 id="rif_asegurado_per_jur"
                                                 value="<%= legalInsured.rif_asegurado_per_jur %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -48,6 +49,7 @@
                                                 id="razon_social_per_jur" 
                                                 value="<%= legalInsured.razon_social_per_jur %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -80,8 +82,8 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Agente</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_com_agente_propio">
-                                                <option selected value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                            <select class="form-control" name="nombre_com_agente_propio" required>
+                                                <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% ownAgents.forEach((ownAgent) => { %>
                                                     <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% }); %>
@@ -96,6 +98,7 @@
                                                 id="direccion_asegurado_per_jur" 
                                                 placeholder="Dirección *" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= legalInsured.direccion_asegurado_per_jur %></textarea>
                                         </div>
@@ -127,6 +130,7 @@
                                                 id="nombre_contacto_per_jur" 
                                                 value="<%= legalInsured.nombre_contacto_per_jur %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -140,6 +144,7 @@
                                                     id="cargo_contacto_per_jur" 
                                                     value="<%= legalInsured.cargo_contacto_per_jur %>" 
                                                     class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>

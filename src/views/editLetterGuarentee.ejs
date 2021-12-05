@@ -35,6 +35,7 @@
                                                 id="patologia_carta_aval"
                                                 value="<%= letterGuarentee.patologia_carta_aval %>" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -63,6 +64,7 @@
                                                     onkeyup="pasarNombreAsegurado();"
                                                     value="<%= legalInsured.rif_asegurado_per_jur %>" 
                                                     class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -77,7 +79,7 @@
                                                         id="id_rif_asegurado"
                                                         onkeyup="pasarNombreAsegurado();"
                                                         value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         required
                                                     >
                                                 </div>
@@ -92,6 +94,7 @@
                                                         onkeyup="pasarNombreAsegurado();"
                                                         value="<%= naturalInsured.rif_asegurado_per_nat %>" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -106,8 +109,7 @@
                                                 name="cedula_beneficiario"
                                                 id="cedula_beneficiario"
                                                 value="<%= arrayBeneficiaryId %>"
-                                                class="form-control"
-                                                required
+                                                class="form-control number_format"
                                             >
                                         </div>
                                     </div>
@@ -115,11 +117,11 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_carta_aval">
-                                                    <option selected value="<%= letterGuarentee.tipo_moneda_carta_aval %>"><%= letterGuarentee.tipo_moneda_carta_aval %></option>
-                                                        <option value="Bolivar">Bolivar</option>
-                                                        <option value="Dólar">Dólar</option>
-                                                        <option value="Euros">Euros</option>
+                                                <select class="form-control" name="tipo_moneda_carta_aval" required>
+                                                    <option value="<%= letterGuarentee.tipo_moneda_carta_aval %>"><%= letterGuarentee.tipo_moneda_carta_aval %></option>
+                                                    <option value="BOLIVAR">BOLIVAR</option>
+                                                    <option value="DÓLAR">DÓLAR</option>
+                                                    <option value="EUROS">EUROS</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -129,8 +131,8 @@
                                         <% if (naturalInsured === undefined) { %>
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="siniestro_nombre" id="siniestro_nombre">
-                                                        <option selected value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
+                                                    <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
+                                                        <option value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
                                                         <option value="<%= legalInsured.razon_social_per_jur %>"><%= legalInsured.razon_social_per_jur %></option>
                                                         <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
                                                             <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
@@ -142,8 +144,8 @@
                                             <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre">
-                                                            <option selected value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
+                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
+                                                            <option value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
                                                             <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
                                                             <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
                                                                 <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
@@ -154,8 +156,8 @@
                                             <% } else { %>
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
                                                     <div class="col-sm-9">
-                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre">
-                                                            <option selected value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
+                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
+                                                            <option value="<%= letterGuarentee.siniestro_nombre_carta_aval %>"><%= letterGuarentee.siniestro_nombre_carta_aval %></option>
                                                             <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
                                                             <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
                                                                 <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
@@ -173,6 +175,7 @@
                                                 name="observacion_carta_aval"
                                                 id="observacion_carta_aval" 
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ><%= letterGuarentee.observacion_carta_aval %></textarea>
                                         </div>
@@ -186,12 +189,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Reclamado</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
+                                                type="text"
                                                 name="monto_reclamado_carta_aval"
                                                 id="monto_reclamado_carta_aval" 
-                                                value="<%= letterGuarentee.monto_reclamado_carta_aval %>"
-                                                class="form-control"
+                                                value="<%= montoReclamoCartaAval %>"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -219,6 +221,7 @@
                                                     id="nombre_razon_asegurado"
                                                     value="<%= legalInsured.razon_social_per_jur %>"
                                                     class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -233,6 +236,7 @@
                                                         id="nombre_razon_asegurado"
                                                         value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -246,6 +250,7 @@
                                                         id="nombre_razon_asegurado"
                                                         value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -261,7 +266,7 @@
                                                 id="nombre_beneficiario"
                                                 value="<%= arrayBeneficiaryName %>"
                                                 class="form-control"
-                                                required
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
                                         </div>
                                     </div>
@@ -274,6 +279,7 @@
                                                 id="clinica_carta_aval"
                                                 value="<%= letterGuarentee.clinica_carta_aval %>"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -281,12 +287,12 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="estatus" id="estatus">
-                                                <option selected value="<%= letterGuarentee.estatus_carta_aval %>"><%= letterGuarentee.estatus_carta_aval %></option>
-                                                    <option value="Pendiente">Pendiente</option>
-                                                    <option value="Rechazado">Rechazado</option>
-                                                    <option value="Liquidado">Liquidado</option>
-                                                    <option value="Pagado">Pagado</option>
+                                            <select class="form-control" name="estatus" id="estatus" required>
+                                                <option value="<%= letterGuarentee.estatus_carta_aval %>"><%= letterGuarentee.estatus_carta_aval %></option>
+                                                <option value="PENDIENTE">PENDIENTE</option>
+                                                <option value="RECHAZADO">RECHAZADO</option>
+                                                <option value="LIQUIDADO">LIQUIDADO</option>
+                                                <option value="PAGADO">PAGADO</option>
                                             </select>
                                         </div>
                                     </div>
@@ -294,29 +300,29 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Pagado</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01"
-                                                name="monto_pagado"
-                                                id="monto_pagado" 
-                                                value="<%= letterGuarentee.monto_pagado_carta_aval %>"
-                                                class="form-control"
+                                                type="text"
+                                                name="monto_pagado_carta_aval"
+                                                id="monto_pagado_carta_aval" 
+                                                value="<%= montoPagadoCartaAval %>"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
                                     </div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="hidden"
-                                                name="id_carta_aval"
-                                                id="id_carta_aval"
-                                                value="<%= letterGuarentee.id_carta_aval %>"
-                                                class="form-control"
-                                            >
-                                        </div>
-                                    </div>
+                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_carta_aval"
+                                id="id_carta_aval"
+                                value="<%= letterGuarentee.id_carta_aval %>"
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

@@ -46,9 +46,12 @@ module.exports = {
             let resultRiskDiverse = await riskDiverseModel.getRiskDiverse(idRiskDiverse);
             let resultCIIRD = await colInsInsurerRiskDiverModel.getColInsuInsuredRiesDiverId(idRiskDiverse);
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIRD[0].caa_id);
+            let sumaAsegurada = resultRiskDiverse[0].suma_asegurada_riesgo_diverso;
+            sumaAsegurada = new Intl.NumberFormat('de-DE').format(sumaAsegurada);
             res.render('editRiskDiverse', {
                 riskDiverse: resultRiskDiverse[0],
                 idCollective: resultCII[0],
+                sumaAsegurada: sumaAsegurada,
                 name: req.session.name
             });
         } else {
@@ -56,7 +59,18 @@ module.exports = {
         }
     },
     updateRiskDiverse: async (req, res) => {
-        let sumaAsegurada = parseFloat(req.body.suma_asegurada_riesgo_diverso);
+        let sumaAsegurada = req.body.suma_asegurada_riesgo_diverso;
+        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+            sumaAsegurada = sumaAsegurada.replace(",", ".");
+            sumaAsegurada = sumaAsegurada.replace(".", ",");
+            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+        } else if (sumaAsegurada.indexOf(',') !== -1) {
+            sumaAsegurada = sumaAsegurada.replace(",", ".");
+            sumaAsegurada = parseFloat(sumaAsegurada);
+        } else if (sumaAsegurada.indexOf('.') !== -1) {
+            sumaAsegurada = sumaAsegurada.replace(".", ",");
+            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+        }
         await riskDiverseModel.updateRiskDiverse(sumaAsegurada, req.body);
         res.redirect('/sistema');
     },
