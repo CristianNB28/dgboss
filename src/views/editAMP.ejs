@@ -70,36 +70,19 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="id_rif_asegurado"
-                                                        id="id_rif_asegurado"
-                                                        onkeyup="pasarNombreAsegurado();"
-                                                        value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                        class="form-control number_format"
-                                                        required
-                                                    >
-                                                </div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="id_rif_asegurado"
+                                                    id="id_rif_asegurado"
+                                                    onkeyup="pasarNombreAsegurado();"
+                                                    value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
+                                                    class="form-control number_format"
+                                                    required
+                                                >
                                             </div>
-                                        <% } else { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="id_rif_asegurado"
-                                                        id="id_rif_asegurado"
-                                                        onkeyup="pasarNombreAsegurado();"
-                                                        value="<%= naturalInsured.rif_asegurado_per_nat %>" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        <% } %>
+                                        </div>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
@@ -141,31 +124,17 @@
                                                 </div>
                                             </div>
                                         <% } else if (legalInsured === undefined) { %>
-                                            <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
-                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
-                                                            <option value="<%= amp.siniestro_nombre_amp %>"><%= amp.siniestro_nombre_amp %></option>
-                                                            <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
-                                                            <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
-                                                                <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
-                                                            <% }); %>
-                                                        </select>
-                                                    </div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
+                                                        <option value="<%= amp.siniestro_nombre_amp %>"><%= amp.siniestro_nombre_amp %></option>
+                                                        <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
+                                                        <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
+                                                            <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
-                                            <% } else { %>
-                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
-                                                            <option value="<%= amp.siniestro_nombre_amp %>"><%= amp.siniestro_nombre_amp %></option>
-                                                            <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
-                                                            <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
-                                                                <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
-                                                            <% }); %>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            <% } %>
+                                            </div>
                                         <% } %>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -227,35 +196,19 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <% if (naturalInsured.rif_asegurado_per_nat === '') { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_razon_asegurado"
-                                                        id="nombre_razon_asegurado"
-                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_razon_asegurado"
+                                                    id="nombre_razon_asegurado"
+                                                    value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    required
+                                                >
                                             </div>
-                                        <% } else { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_razon_asegurado"
-                                                        id="nombre_razon_asegurado"
-                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        <% } %>
+                                        </div>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Beneficiario</label>

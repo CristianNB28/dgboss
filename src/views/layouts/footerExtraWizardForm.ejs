@@ -213,25 +213,7 @@
         } else {
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
-                if (idRif.startsWith('V')) {
-                    if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
-                        document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
-                        document.getElementById("nombre_tomador_poliza").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
-                        if (checkboxTomadorViejo === true) {
-                            document.getElementById("id_rif_asegurado").value = elementNaturalInsured.rif_asegurado_per_nat;
-                            document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
-                            document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
-                        } else {
-                            document.getElementById("id_rif_asegurado").value = ''
-                            document.getElementById("correo_asegurado").value = '';
-                            document.getElementById("nombre_asegurado").value = '';
-                        }
-                        break;
-                    } else {
-                        document.getElementById("correo_tomador").value = '';
-                        document.getElementById("nombre_tomador_poliza").value = '';
-                    }
-                } else if (idRif.match(/^\d/)) {
+                if (idRif.match(/^\d/)) {
                     if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
                         document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_tomador_poliza").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
@@ -279,16 +261,7 @@
         } else {
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
-                if (idRif.startsWith('V')) {
-                    if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
-                        document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
-                        document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
-                        break;
-                    } else {
-                        document.getElementById("correo_asegurado").value = '';
-                        document.getElementById("nombre_asegurado").value = '';
-                    }
-                } else if (idRif.match(/^\d/)) {
+                if (idRif.match(/^\d/)) {
                     if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
                         document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;

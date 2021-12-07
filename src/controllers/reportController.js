@@ -187,16 +187,9 @@ module.exports = {
                 let resultCollective = await collectiveModel.getCollective(elementCollectiveId.colectivo_id);
                 totalPremium += resultCollective[0].prima_anual_colectivo;
             }
-            if (elementNaturalInsured.cedula_asegurado_per_nat !== '') {
-                naturalInsured = {
-                    insured: elementNaturalInsured.cedula_asegurado_per_nat,
-                    totalPremium: totalPremium 
-                }
-            } else {
-                naturalInsured = {
-                    insured: elementNaturalInsured.rif_asegurado_per_nat,
-                    totalPremium: totalPremium 
-                }
+            naturalInsured = {
+                insured: elementNaturalInsured.cedula_asegurado_per_nat,
+                totalPremium: totalPremium 
             }
             resultPolicyClaims.push(naturalInsured);
         }

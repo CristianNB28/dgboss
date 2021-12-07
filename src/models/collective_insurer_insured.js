@@ -85,10 +85,10 @@ module.exports = {
             });
         });
     },
-    postCollectiveInsurerInsured: async (cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, nombre_aseguradora, collectiveId) => {
+    postCollectiveInsurerInsured: async (cedulaAseguradoNatural, rifAseguradoJuridico, nombre_aseguradora, collectiveId) => {
         let naturalInsuredId = 0;
         let legalInsuredId = 0;
-        if ((cedulaAseguradoNatural === '') && (rifAseguradoNatural == '')) {
+        if (cedulaAseguradoNatural === '') {
             legalInsuredId = await new Promise((resolve, reject) => {
                 db.query('SELECT id_asegurado_per_jur FROM Asegurado_Persona_Juridica WHERE rif_asegurado_per_jur=? AND deshabilitar_asegurado_per_jur=0', 
                 [rifAseguradoJuridico], 
@@ -99,21 +99,10 @@ module.exports = {
                     resolve(rows);
                 });
             });
-        } else if ((rifAseguradoJuridico === '') && (rifAseguradoNatural == '')) {
+        } else if (rifAseguradoJuridico === '') {
             naturalInsuredId = await new Promise((resolve, reject) => {
                 db.query('SELECT id_asegurado_per_nat FROM Asegurado_Persona_Natural WHERE cedula_asegurado_per_nat=? AND deshabilitar_asegurado_per_nat=0', 
                 [cedulaAseguradoNatural], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(rows);
-                });
-            });
-        } else if ((rifAseguradoJuridico === '') && (cedulaAseguradoNatural == '')) {
-            naturalInsuredId = await new Promise((resolve, reject) => {
-                db.query('SELECT id_asegurado_per_nat FROM Asegurado_Persona_Natural WHERE rif_asegurado_per_nat=? AND deshabilitar_asegurado_per_nat=0', 
-                [rifAseguradoNatural], 
                 (error, rows) => {
                     if (error) {
                         reject(error);

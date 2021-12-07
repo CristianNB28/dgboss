@@ -41,8 +41,8 @@ CREATE TABLE Vehiculo(
     blindaje_boolean_vehiculo BOOLEAN NOT NULL,
     tipo_vehiculo VARCHAR(255) NOT NULL,
     color_vehiculo VARCHAR(255),
-    serial_motor VARCHAR(255),
-    serial_corroceria VARCHAR(255),
+    serial_motor VARCHAR(255) NOT NULL,
+    serial_carroceria VARCHAR(255) NOT NULL,
     cantidad_pasajero INT,
     capacidad_carga INT,
     cedula_conductor_vehiculo VARCHAR(255),
@@ -220,8 +220,7 @@ CREATE TABLE Factor_Verificacion(
 
 CREATE TABLE Asegurado_Persona_Natural(
     id_asegurado_per_nat INT PRIMARY KEY AUTO_INCREMENT,
-    cedula_asegurado_per_nat VARCHAR(255),
-    rif_asegurado_per_nat VARCHAR(255),
+    cedula_asegurado_per_nat VARCHAR(255) NOT NULL,
     nombre_asegurado_per_nat VARCHAR(255) NOT NULL,
     apellido_asegurado_per_nat VARCHAR(255) NOT NULL,
     telefono_asegurado_per_nat VARCHAR(255),

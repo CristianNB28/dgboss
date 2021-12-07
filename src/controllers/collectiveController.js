@@ -249,7 +249,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
         let tipoColectivo = 'AUTOMÓVIL';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -257,9 +256,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -292,7 +289,7 @@ module.exports = {
             deducible = parseFloat(deducible.replace(/,/g,''));
         }
         let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
-        await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+        await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
         res.redirect('/sistema/add-vehicle-collective');
     },
     postRiskDiverseCollectiveForm: async (req, res) => {
@@ -302,7 +299,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
         let tipoColectivo = 'RIESGOS DIVERSOS';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -310,9 +306,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -345,7 +339,7 @@ module.exports = {
             deducible = parseFloat(deducible.replace(/,/g,''));
         }
         let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
-        await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+        await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
         res.redirect('/sistema/add-risk-diverse-collective');
     },
 /*                  PUT                  */

@@ -38,16 +38,9 @@ module.exports = {
         let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
-        if ((req.body.id_rif_asegurado_per_nat.startsWith('J')) || (req.body.id_rif_asegurado_per_nat.startsWith('V')) || (req.body.id_rif_asegurado_per_nat.startsWith('G'))) {
-            rifAseguradoNatural = req.body.id_rif_asegurado_per_nat;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado_per_nat;
-        }
         if (agentePropio[0] !== undefined) {
             let idAgentePropio = agentePropio[0].id_agente_propio;
-            await insuredModel.postNaturalInsuredForm(cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, req.body);
+            await insuredModel.postNaturalInsuredForm(idAgentePropio, req.body);
             res.render('naturalInsuredForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -143,27 +136,12 @@ module.exports = {
         }
     },
     updateNaturalInsured: async (req, res) => {
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
         let nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
         let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
-        if ((typeof(req.body.rif_asegurado_per_nat) !== 'undefined')) {
-            if ((!req.body.rif_asegurado_per_nat.startsWith('J')) && (!req.body.rif_asegurado_per_nat.startsWith('G')) && (!req.body.rif_asegurado_per_nat.startsWith('V'))) {
-                cedulaAseguradoNatural = req.body.rif_asegurado_per_nat;
-            } else if (((req.body.rif_asegurado_per_nat.startsWith('J')) || (req.body.rif_asegurado_per_nat.startsWith('G')) || (req.body.rif_asegurado_per_nat.startsWith('V')))) {
-                rifAseguradoNatural = req.body.rif_asegurado_per_nat;
-            }
-        } else {
-            if ((req.body.cedula_asegurado_per_nat.startsWith('J')) || (req.body.cedula_asegurado_per_nat.startsWith('G')) || (req.body.cedula_asegurado_per_nat.startsWith('V'))) {
-                rifAseguradoNatural = req.body.cedula_asegurado_per_nat
-            } else if ((!req.body.cedula_asegurado_per_nat.startsWith('J')) && (!req.body.cedula_asegurado_per_nat.startsWith('G')) && (!req.body.cedula_asegurado_per_nat.startsWith('V'))) {
-                cedulaAseguradoNatural = req.body.cedula_asegurado_per_nat
-            } 
-        }
         let idAgentePropio = agentePropio[0].id_agente_propio;
-        await insuredModel.updateNaturalInsured(cedulaAseguradoNatural, rifAseguradoNatural, idAgentePropio, req.body);
+        await insuredModel.updateNaturalInsured(idAgentePropio, req.body);
         res.redirect('/sistema');
     },
     updateLegalInsured: async (req, res) => {

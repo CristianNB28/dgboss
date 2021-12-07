@@ -392,7 +392,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'AUTOMÓVIL';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -400,9 +399,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -413,7 +410,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-vehicle-policy');
     },
     postHealthPolicyForm: async (req, res) => {
@@ -458,7 +455,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'SALUD';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -466,9 +462,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -479,7 +473,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-health-policy');
     },
     postPatrimonialPolicyForm: async (req, res) => {
@@ -536,7 +530,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'PATRIMONIAL';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -544,9 +537,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -557,7 +548,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-patrimonial-policy');
     },
     postBailPolicyForm: async (req, res) => {
@@ -614,7 +605,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'FIANZA';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -622,9 +612,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -635,7 +623,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-bail-policy');
     },
     postAnotherBranchPolicyForm: async (req, res) => {
@@ -692,7 +680,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'OTROS RAMOS';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -700,9 +687,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -713,7 +698,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-another-branch-policy');
     },
     postFuneralPolicyForm: async (req, res) => {
@@ -770,7 +755,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'FUNERARIO';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -778,9 +762,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -791,7 +773,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-funeral-policy');
     },
     postLifePolicyForm: async (req, res) => {
@@ -848,7 +830,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'VIDA';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -856,9 +837,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -869,7 +848,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-life-policy');
     },
     postAPPolicyForm: async (req, res) => {
@@ -926,7 +905,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'AP';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -934,9 +912,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -947,7 +923,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-ap-policy');
     },
     postTravelPolicyForm: async (req, res) => {
@@ -1004,7 +980,6 @@ module.exports = {
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
         let tipoIndividualPoliza = 'VIAJE';
         let cedulaAseguradoNatural = '';
-        let rifAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let estatusPoliza = '';
         let diasExpiracion = 0;
@@ -1012,9 +987,7 @@ module.exports = {
         let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
         let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
         diasExpiracion = diferenciaDias.toFixed(0);
-        if (req.body.id_rif_asegurado.startsWith('V')) {
-            rifAseguradoNatural = req.body.id_rif_asegurado;
-        } else if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1025,7 +998,7 @@ module.exports = {
             estatusPoliza = 'ANULADO';
         }
         let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
         res.redirect('/sistema/add-travel-policy');
     },
 /*                  PUT                  */

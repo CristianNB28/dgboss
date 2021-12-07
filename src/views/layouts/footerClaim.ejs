@@ -90,18 +90,7 @@
         } else {
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
-                if (idRif.startsWith('V')) {
-                    if (idRif === elementNaturalInsured.rif_asegurado_per_nat) {
-                        document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
-                        pasarNombreAseguradoSinestro(elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat);
-                        pasarNombreBeneficiarioPolizaNat(elementNaturalInsured.id_asegurado_per_nat);
-                        break;
-                    } else {
-                        document.getElementById("nombre_razon_asegurado").value = '';
-                        document.getElementById("cedula_beneficiario").value = ''; 
-                        document.getElementById("nombre_beneficiario").value = '';
-                    }
-                } else if (idRif.match(/^\d/)) {
+                if (idRif.match(/^\d/)) {
                     if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
                         document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         pasarNombreAseguradoSinestro(elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat);

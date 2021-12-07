@@ -46,19 +46,6 @@ module.exports = {
                     resolve(rows);
                 });
             });
-        } else if (amp.id_rif_asegurado.startsWith('V')) {
-            naturalInsuredId = await new Promise((resolve, reject) => {
-                db.query(`SELECT id_asegurado_per_nat 
-                        FROM Asegurado_Persona_Natural 
-                        WHERE deshabilitar_asegurado_per_nat=0 AND rif_asegurado_per_nat=?`,
-                [amp.id_rif_asegurado],
-                (error, rows) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(rows);
-                });
-            });
         } else if (amp.id_rif_asegurado.match(/^\d/)) {
             naturalInsuredId = await new Promise((resolve, reject) => {
                 db.query(`SELECT id_asegurado_per_nat 
@@ -108,19 +95,6 @@ module.exports = {
                 db.query(`SELECT id_asegurado_per_jur 
                         FROM Asegurado_Persona_Juridica 
                         WHERE deshabilitar_asegurado_per_jur=0 AND rif_asegurado_per_jur=?`,
-                [amp.id_rif_asegurado],
-                (error, rows) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(rows);
-                });
-            });
-        } else if (amp.id_rif_asegurado.startsWith('V')) {
-            naturalInsuredId = await new Promise((resolve, reject) => {
-                db.query(`SELECT id_asegurado_per_nat 
-                        FROM Asegurado_Persona_Natural 
-                        WHERE deshabilitar_asegurado_per_nat=0 AND rif_asegurado_per_nat=?`,
                 [amp.id_rif_asegurado],
                 (error, rows) => {
                     if (error) {
