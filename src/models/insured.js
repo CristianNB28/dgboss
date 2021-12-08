@@ -80,9 +80,9 @@ module.exports = {
     },
     postLegalInsuredForm: (idAgentePropio, legalInsured) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Asegurado_Persona_Juridica (rif_asegurado_per_jur, razon_social_per_jur, telefono_asegurado_per_jur, telefono_opcional_per_jur, celular_asegurado_per_jur, nombre_contacto_per_jur, cargo_contacto_per_jur, correo_asegurado_per_jur, correo_opcional_per_jur, direccion_asegurado_per_jur, agente_propio_id)
-                    VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?)`, 
-            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.cargo_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, legalInsured.direccion_asegurado_per_jur, idAgentePropio], 
+            db.query(`INSERT INTO Asegurado_Persona_Juridica (rif_asegurado_per_jur, razon_social_per_jur, telefono_asegurado_per_jur, telefono_opcional_per_jur, celular_asegurado_per_jur, nombre_contacto_per_jur, cargo_contacto_per_jur, celular_contacto_per_jur, correo_contacto_per_jur, correo_asegurado_per_jur, correo_opcional_per_jur, direccion_asegurado_per_jur, agente_propio_id)
+                    VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?)`, 
+            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.cargo_contacto_per_jur, legalInsured.celular_contacto_per_jur, legalInsured.correo_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, legalInsured.direccion_asegurado_per_jur, idAgentePropio], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -109,9 +109,9 @@ module.exports = {
     updateLegalInsured: (idAgentePropio, legalInsured) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Asegurado_Persona_Juridica 
-                    SET rif_asegurado_per_jur=?, razon_social_per_jur=?, telefono_asegurado_per_jur=?, telefono_opcional_per_jur=?, celular_asegurado_per_jur=?, nombre_contacto_per_jur=?, cargo_contacto_per_jur=?, correo_asegurado_per_jur=?, correo_opcional_per_jur=?, direccion_asegurado_per_jur=?, agente_propio_id=?
+                    SET rif_asegurado_per_jur=?, razon_social_per_jur=?, telefono_asegurado_per_jur=?, telefono_opcional_per_jur=?, celular_asegurado_per_jur=?, nombre_contacto_per_jur=?, cargo_contacto_per_jur=?, celular_contacto_per_jur=?, correo_contacto_per_jur=?, correo_asegurado_per_jur=?, correo_opcional_per_jur=?, direccion_asegurado_per_jur=?, agente_propio_id=?
                     WHERE id_asegurado_per_jur=?`, 
-            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.cargo_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, legalInsured.direccion_asegurado_per_jur, idAgentePropio, legalInsured.id_asegurado_per_jur], 
+            [legalInsured.rif_asegurado_per_jur, legalInsured.razon_social_per_jur, legalInsured.telefono_asegurado_per_jur, legalInsured.telefono_opcional_per_jur, legalInsured.celular_asegurado_per_jur, legalInsured.nombre_contacto_per_jur, legalInsured.cargo_contacto_per_jur, legalInsured.celular_contacto_per_jur, legalInsured.correo_contacto_per_jur, legalInsured.correo_asegurado_per_nat, legalInsured.correo_opcional_per_jur, legalInsured.direccion_asegurado_per_jur, idAgentePropio, legalInsured.id_asegurado_per_jur], 
             (error, rows) => {
                 if (error) {
                     reject(error)

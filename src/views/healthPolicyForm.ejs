@@ -340,6 +340,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="apellido_beneficiario"
+                                                        id="apellido_beneficiario"
+                                                        placeholder="Apellido del Beneficiario *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -353,6 +368,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-6">
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Parentesco</label>
                                                 <div class="col-sm-9">
@@ -368,23 +385,6 @@
                                                         <option value="HERMANO">HERMANO</option>
                                                         <option value="HERMANA">HERMANA</option>
                                                     </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="apellido_beneficiario"
-                                                        id="apellido_beneficiario"
-                                                        placeholder="Apellido del Beneficiario *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -464,6 +464,7 @@
                                                         <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
                                                             <option value="">Seleccione</option>
                                                             <option value="MENSUAL">MENSUAL</option>
+                                                            <option value="BIMENSUAL">BIMENSUAL</option>
                                                             <option value="TRIMESTRAL">TRIMESTRAL</option>
                                                             <option value="SEMESTRAL">SEMESTRAL</option>
                                                         </select>
@@ -537,7 +538,7 @@
                                                         <option value="TRANSFERENCIA">TRANSFERENCIA</option>
                                                         <option value="ZELLE">ZELLE</option>
                                                         <option value="EFECTIVO">EFECTIVO</option>
-                                                        <option value="TARJETA DE DÉBITO">TARJETA DE DEBITO</option>
+                                                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
                                                         <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
                                                         <option value="PAYPAL">PAYPAL</option>
                                                         <option value="DEPOSITO BANCARIO">DEPOSITO BANCARIO</option>

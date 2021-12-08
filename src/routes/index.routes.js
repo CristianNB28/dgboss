@@ -126,6 +126,7 @@ router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
 router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
 router.post('/update-policy', requireAuth, policyController.updatePolicy);
+router.get('/policies-detail/:id', requireAuth, policyController.getPoliciesDetail);
 // Rutas de Colectivos
 router.get('/add-health-collective', requireAuth, collectiveController.getHealthCollectiveForm);
 router.post('/add-health-collective', requireAuth, collectiveController.postHealthCollectiveForm);
@@ -184,6 +185,9 @@ router.get('/global-loss-ratio', requireAuth, reportController.getGlobalLossRati
 router.post('/remove-beneficiary/:id', requireAuth, beneficiaryController.disableBeneficiary);
 router.get('/edit-beneficiary/:id', requireAuth, beneficiaryController.putBeneficiary);
 router.post('/update-beneficiary', requireAuth, beneficiaryController.updateBeneficiary);
+router.post('/remove-policy-beneficiary/:id', requireAuth, beneficiaryController.disablePolicyBeneficiary);
+router.get('/edit-policy-beneficiary/:id', requireAuth, beneficiaryController.putPolicyBeneficiary);
+router.post('/update-policy-beneficiary', requireAuth, beneficiaryController.updatePolicyBeneficiary);
 // Rutas de Vehiculos
 router.post('/remove-vehicle/:id', requireAuth, vehicleController.disableVehicle);
 router.get('/edit-vehicle/:id', requireAuth, vehicleController.putVehicle);

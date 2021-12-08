@@ -348,7 +348,12 @@
                 var premiumMonthly = collective.prima_anual_colectivo / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").value = 12;
+                document.getElementById("numero_pago_recibo").value = '';
+            } else if (getSelectValue === 'BIMENSUAL') {
+                var premiumBimonthly = collective.prima_anual_colectivo / 6;
+                premiumBimonthly = premiumBimonthly.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+                document.getElementById("numero_pago_recibo").value = 6;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 var premiumQuarterly = collective.prima_anual_colectivo / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);

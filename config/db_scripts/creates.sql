@@ -244,6 +244,8 @@ CREATE TABLE Asegurado_Persona_Juridica(
     celular_asegurado_per_jur VARCHAR(255) NOT NULL,
     nombre_contacto_per_jur VARCHAR(255),
     cargo_contacto_per_jur VARCHAR(255),
+    celular_contacto_per_jur VARCHAR(255),
+    correo_contacto_per_jur VARCHAR(255),
     correo_asegurado_per_jur VARCHAR(255) NOT NULL,
     correo_opcional_per_jur VARCHAR(255) NOT NULL,
     direccion_asegurado_per_jur VARCHAR(500) NOT NULL,

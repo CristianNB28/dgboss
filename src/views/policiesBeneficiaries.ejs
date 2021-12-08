@@ -11,7 +11,7 @@
                 <a>Pólizas</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Consulta de Pólizas</strong>
+                <strong>Consulta de Pólizas Beneficiarios</strong>
             </li>
         </ol>
     </div>
@@ -21,26 +21,21 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>Pólizas</h5>
+                    <h5>Pólizas Beneficiarios</h5>
                 </div>
                 <div class="ibox-content">
                     <div class="table-responsive">
                         <table 
                             class="table table-striped table-bordered table-hover"
-                            id="tablaPolizas" 
+                            id="tablaBeneficiarios" 
                         >
                         <thead>
                         <tr>
-                            <th>Pólizas</th>
-                            <th>Tipo Individual</th>
-                            <th>Tomador</th>
-                            <th>Aseguradora</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
-                            <th>Detalle</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Cédula</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Parentesco</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -50,16 +45,11 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Pólizas</th>
-                            <th>Tipo Individual</th>
-                            <th>Tomador</th>
-                            <th>Aseguradora</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
-                            <th>Detalle</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Cédula</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Parentesco</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -129,40 +119,24 @@
 <!-- Page-Level Scripts -->
 <script>
 var lista = <%- JSON.stringify(data) %>;
-var tablaPoliza = null;
+var tablaBeneficiario = null;
 $(document).ready(function(){
-    tablaPoliza = $('#tablaPolizas').DataTable({
+    tablaBeneficiario = $('#tablaBeneficiarios').DataTable({
         pageLength: 25,
         responsive: true,
         dom: '<"html5buttons"B>lTfgitp',
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "numero_poliza"},
-            {"data": "tipo_individual_poliza"},
-            {"data": "nombre_tomador_poliza"},
-            {"data": "nombre_aseguradora"},
-            {"data": "fecha_desde_poliza"},
-            {"data": "fecha_hasta_poliza"},
-            {"data": "tipo_moneda_poliza"},
-            {"data": "prima_anual_poliza"},
-            {"data": "estatus_poliza"},
+            {"data": "nombre_beneficiario"},
+            {"data": "apellido_beneficiario"},
+            {"data": "cedula_beneficiario"},
+            {"data": "fec_nac_beneficiario"},
+            {"data": "parentesco_beneficiario"},
             {
                 "data": "",
                 "render": (data, type, row) => {
-                    if ((row.tipo_individual_poliza === 'SALUD') || (row.tipo_individual_poliza === 'FUNERARIO') || (row.tipo_individual_poliza === 'VIDA')) { 
-                        return `<form class="form-inline" method="get" action="/sistema/policies-detail/${row.id_poliza}">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                                </form>`;
-                    } else {
-                        return '<p>No tiene beneficiarios</p>'
-                    }
-                }
-            },
-            {
-                "data": "",
-                "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy/${row.id_poliza}">
+                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-beneficiary/${row.id_beneficiario}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
                 }
@@ -170,7 +144,7 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-policy/${row.id_poliza}">
+                        return `<form class="form-inline" method="post" action="/sistema/remove-policy-beneficiary/${row.id_beneficiario}">
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
                                             <button 
@@ -182,8 +156,8 @@ $(document).ready(function(){
                                         </div> 
                                         <div class="col-sm-6 col-lg-12">
                                             <textarea 
-                                                name="obser_deshabilitar_poliza"
-                                                id="obser_deshabilitar_poliza" 
+                                                name="obser_deshabilitar_beneficiario"
+                                                id="obser_deshabilitar_beneficiario" 
                                                 placeholder="Observaciones de Deshabilitar *" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
@@ -229,8 +203,8 @@ $(document).ready(function(){
             }
         }
     });
-    tablaPoliza.rows.add(lista);
-    tablaPoliza.draw();
+    tablaBeneficiario.rows.add(lista);
+    tablaBeneficiario.draw();
 });
 </script>
 

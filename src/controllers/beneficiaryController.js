@@ -81,9 +81,32 @@ module.exports = {
             next();
         }
     },
+    putPolicyBeneficiary: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idBeneficiary = req.params.id;
+        if (idBeneficiary.match(valoresAceptados)) {
+            let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+            let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+            let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
+            let resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
+            res.render('editPolicyBeneficiary', {
+                beneficiary: resultBeneficiary[0],
+                fechaNacBeneficiario: fechaNacBeneficiario,
+                idPolicy: resultPII[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
     updateBeneficiary: async (req, res) => {
         let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
         await beneficiaryModel.updateBeneficiary(fechaNacBeneficiario, req.body);
+        res.redirect('/sistema');
+    },
+    updatePolicyBeneficiary: async (req, res) => {
+        let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+        await beneficiaryModel.updatePolicyBeneficiary(fechaNacBeneficiario, req.body);
         res.redirect('/sistema');
     },
 /*               DELETE                  */
@@ -96,5 +119,15 @@ module.exports = {
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
         res.redirect(`/sistema/collectives-detail/${resultCII[0].colectivo_id}`);
+    },
+    disablePolicyBeneficiary: async (req, res) => {
+        let disablePIIB = 1;
+        let disableBeneficiary = 1;
+        let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(req.params.id);
+        let resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
+        await polInsInsurerBenefModel.disablePolInsuInsuredBenefId(req.params.id, disablePIIB);
+        await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
+        await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
+        res.redirect(`/sistema/policies-detail/${resultPII[0].poliza_id}`);
     }
 }

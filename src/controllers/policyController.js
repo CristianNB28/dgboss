@@ -6,6 +6,7 @@ const ownAgentModel = require('../models/own_agent');
 const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
 const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 const receiptModel = require('../models/receipt');
+const beneficiaryModel = require('../models/beneficiary');
 
 module.exports = {
 /*                  GET                  */
@@ -336,6 +337,28 @@ module.exports = {
             data: resultsPolicies,
             name: req.session.name
         });
+    },
+    getPoliciesDetail: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultsBeneficiaries = [];
+            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy);
+            let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenef(resultPII[0].id_paa);
+            for (const resultPIIB of resultsPIIB) {
+                let resultBenefiary = await beneficiaryModel.getBeneficiary(resultPIIB.beneficiario_id);
+                resultsBeneficiaries.push(resultBenefiary[0]);
+            }
+            for (const resultBeneficiary of resultsBeneficiaries) {
+                resultBeneficiary.fec_nac_beneficiario = resultBeneficiary.fec_nac_beneficiario.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
+            }
+            res.render('policiesBeneficiaries', {
+                data: resultsBeneficiaries,
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
     },
 /*                 POST                  */
     postVehiclePolicyForm: async (req, res) => {

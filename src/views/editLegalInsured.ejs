@@ -80,14 +80,30 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Email</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="nombre_com_agente_propio" required>
-                                                <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                <% ownAgents.forEach((ownAgent) => { %>
-                                                    <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                <% }); %>
-                                            </select>
+                                            <input 
+                                                type="email" 
+                                                name="correo_asegurado_per_nat"
+                                                id="correo_asegurado_per_nat"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                                value="<%= legalInsured.correo_asegurado_per_jur %>"
+                                                class="form-control" 
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Emails opcionales</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="email"
+                                                name="correo_opcional_per_jur"
+                                                id="correo_opcional_per_jur"
+                                                value="<%= legalInsured.correo_opcional_per_jur %>"
+                                                multiple 
+                                                class="form-control"
+                                            >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -109,6 +125,17 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="nombre_com_agente_propio" required>
+                                                <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                                <% ownAgents.forEach((ownAgent) => { %>
+                                                    <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -136,43 +163,43 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cargo</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="cargo_contacto_per_jur"
-                                                    id="cargo_contacto_per_jur" 
-                                                    value="<%= legalInsured.cargo_contacto_per_jur %>" 
-                                                    class="form-control"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    required
-                                                >
-                                            </div>
-                                        </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Email</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cargo</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="email" 
-                                                name="correo_asegurado_per_nat"
-                                                id="correo_asegurado_per_nat"
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                                                value="<%= legalInsured.correo_asegurado_per_jur %>"
-                                                class="form-control" 
+                                                type="text"
+                                                name="cargo_contacto_per_jur"
+                                                id="cargo_contacto_per_jur" 
+                                                value="<%= legalInsured.cargo_contacto_per_jur %>" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Emails opcionales</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="email"
-                                                name="correo_opcional_per_jur"
-                                                id="correo_opcional_per_jur"
-                                                value="<%= legalInsured.correo_opcional_per_jur %>"
-                                                multiple 
+                                                type="tel"
+                                                name="celular_contacto_per_jur"
+                                                id="celular_contacto_per_jur" 
+                                                value="<%= legalInsured.celular_contacto_per_jur %>" 
                                                 class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="email" 
+                                                name="correo_contacto_per_jur"
+                                                id="correo_contacto_per_jur"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                                value="<%= legalInsured.correo_contacto_per_jur %>"
+                                                class="form-control" 
+                                                required
                                             >
                                         </div>
                                     </div>

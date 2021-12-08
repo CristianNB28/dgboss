@@ -31,7 +31,7 @@ module.exports = {
     },
     getPolInsuInsuredBenefId: (beneficiaryId) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_paab 
+            db.query(`SELECT id_paab, paa_id
                     FROM Pol_Aseg_Asegurado_Benef 
                     WHERE beneficiario_id=? AND deshabilitar_paab=0`, 
             [beneficiaryId], 
@@ -62,6 +62,18 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Pol_Aseg_Asegurado_Benef SET deshabilitar_paab=? WHERE id_paab=?`, 
             [disablePIIB, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    disablePolInsuInsuredBenefId: (idBeneficiary, disablePIIB) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Pol_Aseg_Asegurado_Benef SET deshabilitar_paab=? WHERE beneficiario_id=?`, 
+            [disablePIIB, idBeneficiary], 
             (error, rows) => {
                 if (error) {
                     reject(error)

@@ -294,7 +294,12 @@
                 var premiumMonthly = policy.prima_anual_poliza / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").value = 12;
+                document.getElementById("numero_pago_recibo").value = '';
+            } else if (getSelectValue === 'BIMENSUAL') {
+                var premiumBimonthly = policy.prima_anual_poliza / 6;
+                premiumBimonthly = premiumBimonthly.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+                document.getElementById("numero_pago_recibo").value = 6;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);

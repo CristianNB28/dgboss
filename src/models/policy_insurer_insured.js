@@ -62,6 +62,18 @@ module.exports = {
             });
         });
     },
+    getPolicyId: (paaId) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT poliza_id FROM Poliza_Aseguradora_Asegurado WHERE id_paa=? AND deshabilitar_paa=0',
+            [paaId],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postPolicyInsurerInsured: async (cedulaAseguradoNatural, rifAseguradoJuridico, nombre_aseguradora, policyId) => {
         let naturalInsuredId = 0;
