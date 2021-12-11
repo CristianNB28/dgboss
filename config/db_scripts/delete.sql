@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS Pol_Aseg_Asegurado_Benef;
 DROP TABLE IF EXISTS Colectivo_Aseguradora_Asegurado;
 DROP TABLE IF EXISTS Poliza_Aseguradora_Asegurado;
 DROP TABLE IF EXISTS Usuario_Rol;
+DROP TABLE IF EXISTS Recibo_Asegurado;
 DROP TABLE IF EXISTS Asegurado_Persona_Juridica;
 DROP TABLE IF EXISTS Asegurado_Persona_Natural;
 DROP TABLE IF EXISTS Factor_Verificacion;

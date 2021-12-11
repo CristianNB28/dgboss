@@ -58,6 +58,33 @@ module.exports = {
             });
         });
     },
+    getReceipt: (id) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT *
+                    FROM Recibo 
+                    WHERE id_recibo=? AND deshabilitar_recibo=0`,
+            [id],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getReceipts: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT *
+                    FROM Recibo 
+                    WHERE deshabilitar_recibo=0`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postReceiptForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, receipt) => {
         let policyId = await new Promise((resolve, reject) => {
@@ -85,6 +112,19 @@ module.exports = {
             });
         });
     },
+    postReceiptPolicyForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, policyId, receipt) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, poliza_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, policyId[0].id_poliza], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
     postReceiptCollectiveForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, collectiveId, receipt) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, colectivo_id)
@@ -97,7 +137,60 @@ module.exports = {
                 resolve(rows);
             });
         });
-    }
+    },
 /*                  PUT                  */
+    updateReceiptPolicy: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, collectiveId, policyId, receipt) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Recibo 
+                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, poliza_id=?, colectivo_id=? 
+                    WHERE id_recibo=?`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, policyId[0].id_poliza, collectiveId, receipt.id_recibo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    updateReceiptCollective: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, policyId, collectiveId, receipt) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Recibo 
+                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, poliza_id=?, colectivo_id=? 
+                    WHERE id_recibo=?`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, policyId, collectiveId[0].id_colectivo, receipt.id_recibo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    updateDisableReceipt: (id, receipt) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Recibo 
+                    SET obser_deshabilitar_recibo=?    
+                    WHERE id_recibo=?`, 
+            [receipt.obser_deshabilitar_recibo, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
+    disableReceipt: (id, disableReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Recibo SET deshabilitar_recibo=? WHERE id_recibo=?`, [disableReceipt, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    }
 }

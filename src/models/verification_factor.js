@@ -2,6 +2,20 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
+    getVerificationFactor: (idCommission) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT *
+                    FROM Factor_Verificacion 
+                    WHERE comision_id=?`,
+            [idCommission],
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postVerificationFactorForm: (porcentajePrima, idCommission, verificationFactor) => {
         return new Promise((resolve, reject) => {

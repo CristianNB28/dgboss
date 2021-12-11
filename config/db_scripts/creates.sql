@@ -50,6 +50,10 @@ CREATE TABLE Vehiculo(
     nombre_conductor_vehiculo VARCHAR(255),
     suma_asegurada_vehiculo DECIMAL(20,4),
     tipo_movimiento_vehiculo VARCHAR(255),
+    fecha_desde_vehiculo DATE,
+    fecha_hasta_vehiculo DATE,
+    monto_blindaje_vehiculo DECIMAL(10,4),
+    grado_blindaje_vehiculo INT,
     obser_deshabilitar_vehiculo VARCHAR(500),
     deshabilitar_vehiculo BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -184,6 +188,7 @@ CREATE TABLE Recibo(
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
     numero_pago_recibo INT,
+    obser_deshabilitar_recibo VARCHAR(500),
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT,
     colectivo_id INT,
@@ -253,6 +258,17 @@ CREATE TABLE Asegurado_Persona_Juridica(
     deshabilitar_asegurado_per_jur BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
+);
+
+CREATE TABLE Recibo_Asegurado(
+    id_recibo_asegurado INT PRIMARY KEY AUTO_INCREMENT,
+    desahabilitar_recibo_asegurado BOOLEAN NOT NULL DEFAULT FALSE,
+    recibo_id INT NOT NULL,
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    CONSTRAINT FOREIGN KEY fk_recibo_id(recibo_id) REFERENCES Recibo(id_recibo),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Usuario_Rol(

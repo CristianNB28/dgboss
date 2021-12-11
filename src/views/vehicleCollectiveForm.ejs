@@ -57,6 +57,7 @@
                                                         onkeyup="pasarNombreTomador();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -72,6 +73,7 @@
                                                         onkeyup="pasarNombreAsegurado();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>

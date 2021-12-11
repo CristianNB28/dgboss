@@ -1,0 +1,256 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Recibo</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Recibo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Agregar Recibo</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-content">
+                <form method="POST" action="/sistema/add-receipt">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="number"
+                                                name="numero_recibo"
+                                                id="numero_recibo"
+                                                placeholder="Número de Recibo *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_desde_recibo"
+                                                id="fecha_desde_recibo" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row" id="radioContainer">
+                                        <label class="col-sm-3 col-form-label">Fraccionamiento</label>
+                                        <div class="col-sm-9">
+                                            <div>
+                                                <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculation()">  
+                                                        ¿Aplica Fraccionamiento?
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="active-select-1">
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
+                                                    <option value="">Seleccione</option>
+                                                    <option value="MENSUAL">MENSUAL</option>
+                                                    <option value="BIMENSUAL">BIMENSUAL</option>
+                                                    <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                    <option value="SEMESTRAL">SEMESTRAL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="numero_poliza_colectivo" required>
+                                                <option value="">Seleccione *</option>
+                                                <% policies.forEach((policy) => { %>
+                                                    <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
+                                                <% }); %>
+                                                <% collectives.forEach((collective) => { %>
+                                                    <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="id_rif_asegurado"
+                                                id="id_rif_asegurado"
+                                                onkeyup="pasarAgentePropio();"
+                                                placeholder="Cédula/Rif *" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nombre_agente_propio"
+                                                id="nombre_agente_propio"
+                                                placeholder="Nombre del Agente Propio *"
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="monto_prima_recibo"
+                                                id="monto_prima_recibo"
+                                                placeholder="Monto Prima *" 
+                                                class="form-control number_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_recibo" required>
+                                                <option value="">Seleccione *</option>
+                                                <option value="EMISIÓN">EMISIÓN</option>
+                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                <option value="MODIFICACIÓN">MODIFICACIÓN</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_hasta_recibo"
+                                                id="fecha_hasta_recibo"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="metodo_pago_recibo" required>
+                                                <option value="">Seleccione *</option>
+                                                <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                                <option value="ZELLE">ZELLE</option>
+                                                <option value="EFECTIVO">EFECTIVO</option>
+                                                <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
+                                                <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
+                                                <option value="PAYPAL">PAYPAL</option>
+                                                <option value="DEPOSITO BANCARIO">DEPOSITO BANCARIO</option>
+                                                <option value="FINANCIAMIENTO">FINANCIAMIENTO</option>
+                                                <option value="OTROS">OTROS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="active-select-2">
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="number"
+                                                    step="0.01" 
+                                                    name="numero_pago_recibo"
+                                                    id="numero_pago_recibo"
+                                                    value="0" 
+                                                    class="form-control"
+                                                    onchange="premiumCalculation()"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="monto_comision_recibo"
+                                                id="monto_comision_recibo"
+                                                placeholder="Comisión Asociada *" 
+                                                class="form-control number_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="nombre_razon_asegurado"
+                                                id="nombre_razon_asegurado"
+                                                placeholder="Nombre o Razón Social del Asegurado *"
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Porcentaje</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="porcentaje_agente_propio"
+                                                id="porcentaje_agente_propio"
+                                                placeholder="Porcentaje Agente Propio *"
+                                                class="form-control number_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
+                                    </br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a href="/sistema" class="btn btn-white btn-sm">Cancelar</a>
+                            <button class="btn btn-primary btn-sm" type="submit">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footerReceipt') %>

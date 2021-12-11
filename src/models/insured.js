@@ -64,6 +64,18 @@ module.exports = {
             });
         });
     },
+    getLegalInsuredId: (rifLegalInsured) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT id_asegurado_per_jur FROM Asegurado_Persona_Juridica WHERE rif_asegurado_per_jur=?',
+            [rifLegalInsured],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postNaturalInsuredForm: (idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {

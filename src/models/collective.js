@@ -113,6 +113,20 @@ module.exports = {
             });
         });
     },
+    getCollectiveNumberId: (numberCollective) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT id_colectivo
+                    FROM Colectivo 
+                    WHERE numero_colectivo=? AND deshabilitar_colectivo=0`,
+            [numberCollective], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postCollectiveForm: (montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {

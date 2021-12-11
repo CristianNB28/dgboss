@@ -196,6 +196,20 @@ module.exports = {
             });
         });
     },
+    getPolicyNumberId: (numberPolicy) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT id_poliza
+                    FROM Poliza 
+                    WHERE numero_poliza=? AND deshabilitar_poliza=0`,
+            [numberPolicy], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postVehiclePolicyForm: (tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {

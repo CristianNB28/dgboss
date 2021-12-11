@@ -184,6 +184,27 @@
 </script>
 
 <script>
+    window.addEventListener("load", function() {
+        document.getElementById("radioContainer2").addEventListener("click", function() {
+            document.getElementById("active-select-3").style.display = document.getElementById("blindaje_boolean_vehiculo").checked ? "inline" : "none";
+            document.getElementById("active-select-4").style.display = document.getElementById("blindaje_boolean_vehiculo").checked ? "inline" : "none";
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#fecha_desde_poliza').change(function () {
+            var extraer = $('#fecha_desde_poliza').val();
+            var fecha = new Date(extraer);
+            fecha.setFullYear(fecha.getFullYear() + 1);
+            fecha = fecha.toISOString().substring(0, 10);
+            $('#fecha_hasta_poliza').val(fecha);
+        });
+    });
+</script>
+
+<script>
     var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreTomador() {
@@ -311,12 +332,11 @@
                 var premiumMonthly = policy.prima_anual_poliza / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").value = '';
             } else if (getSelectValue === 'BIMENSUAL') {
-                var premiumBimonthly = policy.prima_anual_poliza / 6;
+                var premiumBimonthly = policy.prima_anual_poliza / 5;
                 premiumBimonthly = premiumBimonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBimonthly;
-                document.getElementById("numero_pago_recibo").value = 6;
+                document.getElementById("numero_pago_recibo").value = 5;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);

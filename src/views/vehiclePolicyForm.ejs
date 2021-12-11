@@ -57,6 +57,7 @@
                                                         onkeyup="pasarNombreTomador();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -72,6 +73,7 @@
                                                         onkeyup="pasarNombreAsegurado();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -348,20 +350,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="color_vehiculo"
-                                                        id="color_vehiculo"
-                                                        placeholder="Color" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Carrocería</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -377,6 +365,20 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="color_vehiculo"
+                                                        id="color_vehiculo"
+                                                        placeholder="Color" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Conductor</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -385,31 +387,56 @@
                                                         id="id_rif_conductor"
                                                         placeholder="Cédula/Rif" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia desde</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
-                                                        name="capacidad_carga"
-                                                        id="capacidad_carga"
-                                                        placeholder="Carga Capacidad" 
-                                                        class="form-control number_format"
+                                                        type="date"
+                                                        name="fecha_desde_vehiculo"
+                                                        id="fecha_desde_vehiculo"
+                                                        class="form-control"
                                                     >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Transmisión</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_transmision_vehiculo" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="AUTOMÁTICO">AUTOMÁTICO</option>
-                                                        <option value="SINCRÓNICO">SINCRÓNICO</option>
-                                                    </select>
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_vehiculo"
+                                                        id="fecha_hasta_vehiculo"
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row" id="radioContainer2">
+                                                <label class="col-sm-3 col-form-label">Blindaje</label>
+                                                <div class="col-sm-9">
+                                                    <div><label><input type="checkbox" name="blindaje_boolean_vehiculo" id="blindaje_boolean_vehiculo"> 
+                                                                ¿Tiene Blindaje?</label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="active-select-3">
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Monto Blindaje</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="text"
+                                                            name="monto_blindaje_vehiculo"
+                                                            id="monto_blindaje_vehiculo"
+                                                            placeholder="Monto Blindaje"
+                                                            class="form-control number_format"
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -503,10 +530,41 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
                                                 <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="blindaje_boolean_vehiculo" id="blindaje_boolean_vehiculo"> 
-                                                                ¿Tiene Blindaje?</label></div>
+                                                    <input 
+                                                        type="text"
+                                                        name="capacidad_carga"
+                                                        id="capacidad_carga"
+                                                        placeholder="Carga Capacidad" 
+                                                        class="form-control number_format"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Transmisión</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_transmision_vehiculo" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="AUTOMÁTICO">AUTOMÁTICO</option>
+                                                        <option value="SINCRÓNICO">SINCRÓNICO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="active-select-4">
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Grado</label>
+                                                    <div class="col-sm-9">
+                                                        <input 
+                                                            type="number" 
+                                                            name="grado_blindaje_vehiculo"
+                                                            id="grado_blindaje_vehiculo"
+                                                            placeholder="Grado de Blindaje" 
+                                                            class="form-control"
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

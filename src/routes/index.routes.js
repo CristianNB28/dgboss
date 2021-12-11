@@ -181,6 +181,7 @@ router.get('/premiums-collected', requireAuth, reportController.getPremiumsColle
 router.get('/commissions-collected', requireAuth, reportController.getCommissionsCollected);
 router.get('/policy-claims', requireAuth, reportController.getPolicyClaims);
 router.get('/global-loss-ratio', requireAuth, reportController.getGlobalLossRatio);
+router.get('/pending-payments', requireAuth, reportController.getPendingPayments);
 // Rutas de Beneficiarios
 router.post('/remove-beneficiary/:id', requireAuth, beneficiaryController.disableBeneficiary);
 router.get('/edit-beneficiary/:id', requireAuth, beneficiaryController.putBeneficiary);
@@ -196,6 +197,13 @@ router.post('/update-vehicle', requireAuth, vehicleController.updateVehicle);
 router.post('/remove-risk-diverse/:id', requireAuth, riskDiverseController.disableRiskDiverse);
 router.get('/edit-risk-diverse/:id', requireAuth, riskDiverseController.putRiskDiverse);
 router.post('/update-risk-diverse', requireAuth, riskDiverseController.updateRiskDiverse);
+// Rutas de Recibos
+router.get('/add-receipt', requireAuth, receiptController.getReceiptForm);
+router.post('/add-receipt', requireAuth, receiptController.postReceiptForm);
+router.get('/receipts', requireAuth, receiptController.getReceipts);
+router.post('/remove-receipt/:id', requireAuth, receiptController.disableReceipt);
+router.get('/edit-receipt/:id', requireAuth, receiptController.putReceipt);
+router.post('/update-receipt', requireAuth, receiptController.updateReceipt);
 // Pagina error 404
 router.get('*', indexController.get404);
 

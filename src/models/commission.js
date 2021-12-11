@@ -16,6 +16,34 @@ module.exports = {
             });
         });
     },
+    getComissionPolicy: (policyId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT *
+                    FROM Comision 
+                    WHERE poliza_id=? AND deshabilitar_comision=0`,
+            [policyId],
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getComissionCollective: (collectiveId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT *
+                    FROM Comision 
+                    WHERE colectivo_id=? AND deshabilitar_comision=0`,
+            [collectiveId],
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
     getCommissionLast: () => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT id_comision

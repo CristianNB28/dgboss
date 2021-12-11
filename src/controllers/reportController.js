@@ -7,6 +7,8 @@ const executiveModel = require('../models/executive');
 const receiptModel = require('../models/receipt');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
+const commissionModel = require('../models/commission');
+const verficationFactorModel = require('../models/verification_factor');
 
 module.exports = {
 /*                  GET                  */
@@ -237,6 +239,94 @@ module.exports = {
             name: req.session.name
         });
     },
+    getPendingPayments: async (req, res) => {
+        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultPendingPayment = [];
+        for (let i = 0; i < resultsPII.length; i++) {
+            let elementPII = resultsPII[i];
+            let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
+            let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
+            let resultCommission = await commissionModel.getComissionPolicy(elementPII.poliza_id);
+            let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
+            if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
+                let primaPorcentajeVerificacion = new Intl.NumberFormat('de-DE').format(resultVerificationFactor[0].porcentaje_prima_factor_verificacion);
+                if (elementPII.asegurado_per_nat_id !== null) {
+                    let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
+                    let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
+                    let pendingPayment = {
+                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                        taker: resultPolicy[0].nombre_tomador_poliza,
+                        bouquetType: resultPolicy[0].tipo_individual_poliza,
+                        insurer: resultInsurer[0].nombre_aseguradora,
+                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        premium: primaPorcentajeVerificacion
+                    };
+                    resultPendingPayment.push(pendingPayment);
+                } else {
+                    let resultInsuredLegal = await insuredModel.getLegalInsured(elementPII.asegurado_per_jur_id);
+                    let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
+                    let pendingPayment = {
+                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                        taker: resultPolicy[0].nombre_tomador_poliza,
+                        bouquetType: resultPolicy[0].tipo_individual_poliza,
+                        insurer: resultInsurer[0].nombre_aseguradora,
+                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        premium: primaPorcentajeVerificacion
+                    };
+                    resultPendingPayment.push(pendingPayment);
+                }
+            }
+        }
+        for (let i = 0; i < resultsCII.length; i++) {
+            let elementCII = resultsCII[i];
+            let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
+            let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
+            let resultCommission = await commissionModel.getComissionCollective(elementCII.colectivo_id);
+            let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
+            if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
+                let primaPorcentajeVerificacion = new Intl.NumberFormat('de-DE').format(resultVerificationFactor[0].porcentaje_prima_factor_verificacion);
+                if (elementCII.asegurado_per_nat_id !== null) {
+                    let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
+                    let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
+                    let pendingPayment = {
+                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                        taker: resultCollective[0].nombre_tomador_colectivo,
+                        bouquetType: resultCollective[0].tipo_colectivo,
+                        insurer: resultInsurer[0].nombre_aseguradora,
+                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        premium: primaPorcentajeVerificacion
+                    };
+                    resultPendingPayment.push(pendingPayment);
+                } else {
+                    let resultInsuredLegal = await insuredModel.getLegalInsured(elementCII.asegurado_per_jur_id);
+                    let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
+                    let pendingPayment = {
+                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                        taker: resultCollective[0].nombre_tomador_colectivo,
+                        bouquetType: resultCollective[0].tipo_colectivo,
+                        insurer: resultInsurer[0].nombre_aseguradora,
+                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                        premium: primaPorcentajeVerificacion
+                    };
+                    resultPendingPayment.push(pendingPayment);
+                }
+            }
+        }
+        res.render('pendingPayments',{
+            data: resultPendingPayment,
+            name: req.session.name 
+        });
+    }
 /*                 POST                  */
 /*                  PUT                  */
 /*               DELETE                  */

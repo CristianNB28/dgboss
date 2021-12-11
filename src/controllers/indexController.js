@@ -112,6 +112,13 @@ module.exports = {
                         if (contDates >= 2) {
                             dates.splice(dates.length-2,1);
                         }
+                    } else if (resultPolicyNext[0].fecha_desde_poliza.getTime() === resultPolicy[0].fecha_desde_poliza.getTime()) {
+                        let fechaPolizaDesde = resultPolicyNext[0].fecha_desde_poliza.toISOString().substring(0, 10);
+                        dates.push(fechaPolizaDesde);
+                        contDates++;
+                        if (contDates >= 2) {
+                            dates.splice(dates.length-2,1);
+                        }
                     }
                 }
                 sumInsurancePremiums = sumInsurancePremiums.toFixed(2);
@@ -205,7 +212,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -213,9 +222,11 @@ module.exports = {
                         break;
                     }
                     let resultPolicyNext = await policyModel.getPolicy(elementPolicyIdNext.poliza_id);
-                    if (resultPolicyNext[0].fecha_desde_poliza > resultPolicy[0].fecha_desde_poliza) {
+                    if (resultPolicyNext[0].fecha_desde_poliza.getTime() === resultPolicy[0].fecha_desde_poliza.getTime()) {
                         dateMax = resultPolicyNext[0].fecha_desde_poliza;
-                    }
+                    } else if (resultPolicyNext[0].fecha_desde_poliza > resultPolicy[0].fecha_desde_poliza) {
+                        dateMax = resultPolicyNext[0].fecha_desde_poliza;
+                    } 
                 }
                 if (resultPolicyId.length !== 0) {
                     let insuredNatural = {
@@ -241,7 +252,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -269,7 +282,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;
@@ -302,7 +317,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -321,7 +338,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;
@@ -362,7 +381,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -390,7 +411,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;
@@ -427,7 +450,11 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -436,6 +463,8 @@ module.exports = {
                     }
                     let resultPolicyNext = await policyModel.getPolicy(elementPolicyIdNext.poliza_id);
                     if (resultPolicyNext[0].fecha_desde_poliza > resultPolicy[0].fecha_desde_poliza) {
+                        dateMax = resultPolicyNext[0].fecha_desde_poliza;
+                    } else if (resultPolicyNext[0].fecha_desde_poliza.getTime() === resultPolicy[0].fecha_desde_poliza.getTime()) {
                         dateMax = resultPolicyNext[0].fecha_desde_poliza;
                     }
                 }
@@ -463,7 +492,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -491,7 +522,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;
@@ -524,7 +557,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -543,7 +578,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;
@@ -584,7 +621,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (j === 0) {
                             dateMax = resultPolicy[0].fecha_desde_poliza;
@@ -612,7 +651,9 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    if (commissionReceipt.length !== 0) {
+                        sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
+                    }
                     if (elementPolicyIdNext === undefined) {
                         if (k === 0) {
                             dateMaxNext = resultPolicy[0].fecha_desde_poliza;

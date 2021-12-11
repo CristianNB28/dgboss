@@ -183,6 +183,18 @@
 </script>
 
 <script>
+    $(document).ready(function () {
+        $('#fecha_desde_colectivo').change(function () {
+            var extraer = $('#fecha_desde_colectivo').val();
+            var fecha = new Date(extraer);
+            fecha.setFullYear(fecha.getFullYear() + 1);
+            fecha = fecha.toISOString().substring(0, 10);
+            $('#fecha_hasta_colectivo').val(fecha);
+        });
+    });
+</script>
+
+<script>
     var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreTomador() {
@@ -348,12 +360,11 @@
                 var premiumMonthly = collective.prima_anual_colectivo / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").value = '';
             } else if (getSelectValue === 'BIMENSUAL') {
-                var premiumBimonthly = collective.prima_anual_colectivo / 6;
+                var premiumBimonthly = collective.prima_anual_colectivo / 5;
                 premiumBimonthly = premiumBimonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBimonthly;
-                document.getElementById("numero_pago_recibo").value = 6;
+                document.getElementById("numero_pago_recibo").value = 5;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 var premiumQuarterly = collective.prima_anual_colectivo / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);

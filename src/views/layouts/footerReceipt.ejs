@@ -1,0 +1,171 @@
+        </br>
+        </br>
+        </br>
+        <div class="footer">
+            <strong>Desarrollado</strong> por 1B7
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+    <script src="/js/jquery-3.1.1.min.js"></script>
+    <script src="/js/jquery-2.1.1.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Flot -->
+    <script src="/js/plugins/flot/jquery.flot.js"></script>
+    <script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="/js/plugins/flot/jquery.flot.pie.js"></script>
+
+    <!-- Peity -->
+    <script src="/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="/js/demo/peity-demo.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/js/inspinia.js"></script>
+    <script src="/js/plugins/pace/pace.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- GITTER -->
+    <script src="/js/plugins/gritter/jquery.gritter.min.js"></script>
+
+    <!-- Sparkline -->
+    <script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="/js/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="/js/plugins/chartJs/Chart.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="/js/plugins/toastr/toastr.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if(typeof alert != 'undefined') { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            }).then(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
+    <script>
+        var separador = document.getElementsByClassName('number_format');
+        for (var i = 0 ; i < separador.length; i++) {
+            separador[i].addEventListener('input', (e) => {
+                var entrada = e.target.value.split(','),
+                parteEntera = entrada[0].replace(/\./g, ''),
+                parteDecimal = entrada[1],
+                salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+            }, false); 
+        }
+    </script>
+
+    <script>
+        window.addEventListener("load", function() {
+            document.getElementById("radioContainer").addEventListener("click", function() {
+                document.getElementById("active-select-1").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
+                document.getElementById("active-select-2").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
+            });
+        });
+    </script>
+
+    <script>
+        function premiumCalculation() {
+            var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
+            var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
+            if (getSelectValue === 'BIMENSUAL') {
+                document.getElementById("numero_pago_recibo").value = 5;
+            } else if (getSelectValue === 'TRIMESTRAL') {
+                document.getElementById("numero_pago_recibo").value = 4;
+            } else if (getSelectValue === 'SEMESTRAL') {
+                document.getElementById("numero_pago_recibo").value = 2;
+            }
+            if (checkboxDivision === false) {
+                document.getElementById("numero_pago_recibo").value = 0;
+            }
+        }
+    </script>
+
+
+    <script>
+        var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+        var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
+        var ownAgents = <%- JSON.stringify(ownAgents) %>;
+        function pasarAgentePropio() {
+            var idRif = document.getElementById("id_rif_asegurado").value;
+            if (idRif.startsWith('J') || idRif.startsWith('G')) {
+                for (let i = 0; i < legalInsureds.length; i++) {
+                    let elementLegalInsured = legalInsureds[i];
+                    if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                        for (const ownAgent of ownAgents) { 
+                            if (elementLegalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = ownAgent.nombre_agente_propio + ' ' + ownAgent.apellido_agente_propio;
+                                document.getElementById("porcentaje_agente_propio").value = ownAgent.porcentaje_agente_propio;
+                                break;
+                            } else {
+                                document.getElementById("nombre_agente_propio").value = '';
+                                document.getElementById("porcentaje_agente_propio").value = '';
+                            }
+                        }
+                        document.getElementById("nombre_razon_asegurado").value = elementLegalInsured.razon_social_per_jur;
+                        if (document.getElementById("nombre_agente_propio").value !== '') {
+                            break;
+                        }
+                    } else {
+                        document.getElementById("nombre_agente_propio").value = '';
+                        document.getElementById("porcentaje_agente_propio").value = '';
+                        document.getElementById("nombre_razon_asegurado").value = '';
+                    }
+                }
+            } else {
+                for (let i = 0; i < naturalInsureds.length; i++) {
+                    let elementNaturalInsured = naturalInsureds[i];
+                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                        for (const ownAgent of ownAgents) { 
+                            if (elementNaturalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = ownAgent.nombre_agente_propio + ' ' + ownAgent.apellido_agente_propio;
+                                document.getElementById("porcentaje_agente_propio").value = ownAgent.porcentaje_agente_propio;
+                                break;
+                            } else {
+                                document.getElementById("nombre_agente_propio").value = '';
+                                document.getElementById("porcentaje_agente_propio").value = '';
+                            }   
+                        }
+                        document.getElementById("nombre_razon_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                        if (document.getElementById("nombre_agente_propio").value !== '') {
+                            break;
+                        }
+                    } else {
+                        document.getElementById("nombre_agente_propio").value = '';
+                        document.getElementById("porcentaje_agente_propio").value = '';
+                        document.getElementById("nombre_razon_asegurado").value = '';
+                    }  
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
