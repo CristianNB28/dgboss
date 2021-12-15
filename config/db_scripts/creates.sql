@@ -109,8 +109,7 @@ CREATE TABLE Aseguradora(
 
 CREATE TABLE Agente_Propio(
     id_agente_propio INT PRIMARY KEY AUTO_INCREMENT,
-    cedula_agente_propio VARCHAR(255),
-    rif_agente_propio VARCHAR(255),
+    cedula_agente_propio VARCHAR(255) NOT NULL,
     nombre_agente_propio VARCHAR(255) NOT NULL,
     apellido_agente_propio VARCHAR(255) NOT NULL,
     celular_agente_propio VARCHAR(255) NOT NULL,
@@ -188,6 +187,7 @@ CREATE TABLE Recibo(
     monto_prima_recibo DECIMAL(20,4) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
     numero_pago_recibo INT,
+    fecha_pago_recibo DATE,
     obser_deshabilitar_recibo VARCHAR(500),
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT,

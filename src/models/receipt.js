@@ -86,7 +86,7 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postReceiptForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, receipt) => {
+    postReceiptForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, receipt) => {
         let policyId = await new Promise((resolve, reject) => {
             db.query(`SELECT id_poliza 
                     FROM Poliza 
@@ -101,9 +101,9 @@ module.exports = {
             });
         });
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, poliza_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, policyId[0].id_poliza], 
+            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, poliza_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, policyId[0].id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -112,11 +112,11 @@ module.exports = {
             });
         });
     },
-    postReceiptPolicyForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, policyId, receipt) => {
+    postReceiptPolicyForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, receipt) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, poliza_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, policyId[0].id_poliza], 
+            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, poliza_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, policyId[0].id_poliza], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -125,11 +125,11 @@ module.exports = {
             });
         });
     },
-    postReceiptCollectiveForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, collectiveId, receipt) => {
+    postReceiptCollectiveForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, collectiveId, receipt) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, colectivo_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, collectiveId[0].id_colectivo], 
+            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, colectivo_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, collectiveId[0].id_colectivo], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -139,12 +139,12 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateReceiptPolicy: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, collectiveId, policyId, receipt) => {
+    updateReceiptPolicy: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, collectiveId, policyId, receipt) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Recibo 
-                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, poliza_id=?, colectivo_id=? 
+                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, fecha_pago_recibo=?, poliza_id=?, colectivo_id=? 
                     WHERE id_recibo=?`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, policyId[0].id_poliza, collectiveId, receipt.id_recibo], 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaPagoRecibo, policyId[0].id_poliza, collectiveId, receipt.id_recibo], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -153,12 +153,12 @@ module.exports = {
             });
         });
     },
-    updateReceiptCollective: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, policyId, collectiveId, receipt) => {
+    updateReceiptCollective: (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, collectiveId, receipt) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Recibo 
-                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, poliza_id=?, colectivo_id=? 
+                    SET numero_recibo=?, tipo_recibo=?, fecha_desde_recibo=?, fecha_hasta_recibo=?, fraccionamiento_boolean_recibo=?, tipo_fraccionamiento_recibo=?, metodo_pago_recibo=?, monto_prima_recibo=?, monto_comision_recibo=?, numero_pago_recibo=?, fecha_pago_recibo=?, poliza_id=?, colectivo_id=? 
                     WHERE id_recibo=?`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, policyId, collectiveId[0].id_colectivo, receipt.id_recibo], 
+            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaPagoRecibo, policyId, collectiveId[0].id_colectivo, receipt.id_recibo], 
             (error, rows) => {
                 if (error) {
                     reject(error)

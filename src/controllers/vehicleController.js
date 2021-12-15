@@ -12,8 +12,8 @@ module.exports = {
         let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
         let cedulaConductor = '';
         let rifConductor = '';
-        let gradoBlindaje = parseInt(req.body.grado_blindaje_vehiculo)
-        let montoBlindaje = req.body.monto_blindaje_vehiculo;
+        let gradoBlindaje;
+        let montoBlindaje;
         let fechaVehiculoDesde = new Date(req.body.fecha_desde_vehiculo);
         let fechaVehiculoHasta = new Date(req.body.fecha_hasta_vehiculo);
         let yearVehicle = new Date(req.body.year_vehiculo);
@@ -23,16 +23,26 @@ module.exports = {
         } else {
             cedulaConductor = req.body.id_rif_conductor;
         }
-        if ((montoBlindaje.indexOf(',') !== -1) && (montoBlindaje.indexOf('.') !== -1)) {
-            montoBlindaje = montoBlindaje.replace(",", ".");
-            montoBlindaje = montoBlindaje.replace(".", ",");
-            montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
-        } else if (montoBlindaje.indexOf(',') !== -1) {
-            montoBlindaje = montoBlindaje.replace(",", ".");
-            montoBlindaje = parseFloat(montoBlindaje);
-        } else if (montoBlindaje.indexOf('.') !== -1) {
-            montoBlindaje = montoBlindaje.replace(".", ",");
-            montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+        if (req.body.grado_blindaje_vehiculo === '') {
+            gradoBlindaje = 0;
+        } else {
+            gradoBlindaje = parseInt(req.body.grado_blindaje_vehiculo)
+        }
+        if (req.body.monto_blindaje_vehiculo === '') {
+            montoBlindaje = 0;
+        } else {
+            montoBlindaje = req.body.monto_blindaje_vehiculo;
+            if ((montoBlindaje.indexOf(',') !== -1) && (montoBlindaje.indexOf('.') !== -1)) {
+                montoBlindaje = montoBlindaje.replace(",", ".");
+                montoBlindaje = montoBlindaje.replace(".", ",");
+                montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+            } else if (montoBlindaje.indexOf(',') !== -1) {
+                montoBlindaje = montoBlindaje.replace(",", ".");
+                montoBlindaje = parseFloat(montoBlindaje);
+            } else if (montoBlindaje.indexOf('.') !== -1) {
+                montoBlindaje = montoBlindaje.replace(".", ",");
+                montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+            }
         }
         let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, rifConductor, gradoBlindaje, montoBlindaje, fechaVehiculoDesde, fechaVehiculoHasta, yearVehicle, req.body);
         await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);

@@ -82,6 +82,19 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha de Pago</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="date"
+                                                    name="fecha_pago_recibo"
+                                                    id="fecha_pago_recibo"
+                                                    value="<%= fechaPagoRecibo %>" 
+                                                    class="form-control"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <div class="hr-line-dashed"></div>
                                     <% if (collective === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
                                             <div class="col-sm-9">
@@ -153,19 +166,6 @@
                                                 value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text" 
-                                                name="monto_prima_recibo"
-                                                id="monto_prima_recibo"
-                                                value="<%= primaRecibo %>" 
-                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -244,6 +244,19 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="monto_prima_recibo"
+                                                id="monto_prima_recibo"
+                                                value="<%= primaRecibo %>" 
+                                                class="form-control number_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <% if (naturalInsured === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
                                             <div class="col-sm-9">
@@ -286,21 +299,19 @@
                                             >
                                         </div>
                                     </div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="hidden"
-                                                name="id_recibo"
-                                                id="id_recibo"
-                                                value="<%= receipt.id_recibo %>"
-                                                class="form-control"
-                                            >
-                                        </div>
-                                    </div>
-                                    </br>
-                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_recibo"
+                                id="id_recibo"
+                                value="<%= receipt.id_recibo %>"
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

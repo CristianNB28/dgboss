@@ -55,7 +55,15 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-        await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
+        let idPolicy = await policyModel.getPolicyLast();
+        let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
+        } else {
+            await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
+        }
         res.redirect('/sistema/add-vehicle-policy');
     },
     postHealthReceiptForm: async (req, res) => {
@@ -75,9 +83,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -102,9 +111,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -129,9 +139,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -156,9 +167,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -183,9 +195,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -210,9 +223,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -237,9 +251,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -264,9 +279,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idPolicy = await policyModel.getPolicyLast();
         let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, req.body);
+        let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
         if (resultPII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -291,9 +307,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();
         let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, idCollective, req.body);
         if (resultCII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultCII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -318,9 +335,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();
         let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, idCollective, req.body);
         if (resultCII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultCII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -345,9 +363,10 @@ module.exports = {
         }
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let idCollective = await collectiveModel.getCollectiveLast();
         let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, idCollective, req.body);
+        let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, idCollective, req.body);
         if (resultCII[0].asegurado_per_jur_id === null) {
             await receiptInsuredModel.postReceiptNaturalInsured(resultCII[0].asegurado_per_nat_id, receipt.insertId);
         } else {
@@ -368,6 +387,7 @@ module.exports = {
         let rifAseguradoJuridico = '';
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let resultPolicyId = await policyModel.getPolicyNumberId(req.body.numero_poliza_colectivo);
         let resultCollectiveId = await collectiveModel.getCollectiveNumberId(req.body.numero_poliza_colectivo);
         if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
@@ -398,7 +418,7 @@ module.exports = {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
         }
         if (resultPolicyId.length === 0) {
-            let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, resultCollectiveId, req.body);
+            let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollectiveId, req.body);
             if (rifAseguradoJuridico === '') {
                 let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);
                 await receiptInsuredModel.postReceiptNaturalInsured(resultNaturalId[0].id_asegurado_per_nat, receipt.insertId);
@@ -407,7 +427,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultLegalId[0].id_asegurado_per_jur, receipt.insertId);
             }
         } else {
-            let receipt = await receiptModel.postReceiptPolicyForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, resultPolicyId, req.body);
+            let receipt = await receiptModel.postReceiptPolicyForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicyId, req.body);
             if (rifAseguradoJuridico === '') {
                 let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);
                 await receiptInsuredModel.postReceiptNaturalInsured(resultNaturalId[0].id_asegurado_per_nat, receipt.insertId);
@@ -450,6 +470,7 @@ module.exports = {
             let resultOwnAgent = [];
             let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo.toISOString().substring(0, 10);
             let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo.toISOString().substring(0, 10);
+            let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo.toISOString().substring(0, 10);
             let primaRecibo = resultReceipt[0].monto_prima_recibo;
             primaRecibo = new Intl.NumberFormat('de-DE').format(primaRecibo);
             let comisionRecibo = resultReceipt[0].monto_comision_recibo;
@@ -483,6 +504,7 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 fechaDesdeRecibo: fechaDesdeRecibo,
                 fechaHastaRecibo: fechaHastaRecibo,
+                fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
                 policy: resultPolicy[0],
@@ -504,6 +526,7 @@ module.exports = {
         let numeroPago = parseInt(req.body.numero_pago_recibo);
         let fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
         let fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+        let fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
         let resultPolicyId = await policyModel.getPolicyNumberId(req.body.numero_poliza_colectivo);
         let resultCollectiveId = await collectiveModel.getCollectiveNumberId(req.body.numero_poliza_colectivo);
         let cedulaAseguradoNatural = '';
@@ -537,7 +560,7 @@ module.exports = {
         }
         if (resultPolicyId.length === 0) {
             let policyId = null;
-            await receiptModel.updateReceiptCollective(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, policyId, resultCollectiveId, req.body);
+            await receiptModel.updateReceiptCollective(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, resultCollectiveId, req.body);
             if (rifAseguradoJuridico === '') {
                 let legalId = null;
                 let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);
@@ -549,7 +572,7 @@ module.exports = {
             }
         } else {
             let collectiveId = null;
-            await receiptModel.updateReceiptPolicy(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, collectiveId, resultPolicyId, req.body);
+            await receiptModel.updateReceiptPolicy(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, collectiveId, resultPolicyId, req.body);
             if (rifAseguradoJuridico === '') {
                 let legalId = null;
                 let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);

@@ -37,11 +37,11 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postOwnAgentForm: (cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, ownAgent) => {
+    postOwnAgentForm: (porcentajeAgentePropio, ownAgent) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Agente_Propio (cedula_agente_propio, rif_agente_propio, nombre_agente_propio, apellido_agente_propio, celular_agente_propio, correo_agente_propio, direccion_agente_propio, porcentaje_agente_propio)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [cedulaAgentePropio, rifAgentePropio, ownAgent.nombre_agente_propio, ownAgent.apellido_agente_propio, ownAgent.celular_agente_propio, ownAgent.correo_agente_propio, ownAgent.direccion_agente_propio, porcentajeAgentePropio], 
+            db.query(`INSERT INTO Agente_Propio (cedula_agente_propio, nombre_agente_propio, apellido_agente_propio, celular_agente_propio, correo_agente_propio, direccion_agente_propio, porcentaje_agente_propio)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+            [ownAgent.cedula_agente_propio, ownAgent.nombre_agente_propio, ownAgent.apellido_agente_propio, ownAgent.celular_agente_propio, ownAgent.correo_agente_propio, ownAgent.direccion_agente_propio, porcentajeAgentePropio], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -51,12 +51,12 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateOwnAgent: (cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, ownAgent) => {
+    updateOwnAgent: (porcentajeAgentePropio, ownAgent) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Agente_Propio 
-                    SET cedula_agente_propio=?, rif_agente_propio=?, nombre_agente_propio=?, apellido_agente_propio=?, celular_agente_propio=?, correo_agente_propio=?, direccion_agente_propio=?, porcentaje_agente_propio=?       
+                    SET cedula_agente_propio=?, nombre_agente_propio=?, apellido_agente_propio=?, celular_agente_propio=?, correo_agente_propio=?, direccion_agente_propio=?, porcentaje_agente_propio=?       
                     WHERE id_agente_propio=?`, 
-            [cedulaAgentePropio, rifAgentePropio, ownAgent.nombre_agente_propio, ownAgent.apellido_agente_propio, ownAgent.celular_agente_propio, ownAgent.correo_agente_propio, ownAgent.direccion_agente_propio, porcentajeAgentePropio, ownAgent.id_agente_propio], 
+            [ownAgent.cedula_agente_propio, ownAgent.nombre_agente_propio, ownAgent.apellido_agente_propio, ownAgent.celular_agente_propio, ownAgent.correo_agente_propio, ownAgent.direccion_agente_propio, porcentajeAgentePropio, ownAgent.id_agente_propio], 
             (error, rows) => {
                 if (error) {
                     reject(error)

@@ -94,7 +94,9 @@
         function premiumCalculation() {
             var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
             var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
-            if (getSelectValue === 'BIMENSUAL') {
+            if (getSelectValue === 'MENSUAL') {
+                document.getElementById("numero_pago_recibo").value = document.getElementById("numero_pago_recibo").value;
+            } else if (getSelectValue === 'BIMENSUAL') {
                 document.getElementById("numero_pago_recibo").value = 5;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 document.getElementById("numero_pago_recibo").value = 4;

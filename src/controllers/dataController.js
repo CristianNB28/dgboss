@@ -55,8 +55,6 @@ module.exports = {
         });
     },
     postOwnAgentForm: async (req, res) => {
-        let cedulaAgentePropio = '';
-        let rifAgentePropio = '';
         let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
         if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
             porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
@@ -69,12 +67,7 @@ module.exports = {
             porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
             porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
         }
-        if ((req.body.id_rif_agente_propio.startsWith('J')) || (req.body.id_rif_agente_propio.startsWith('V')) || (req.body.id_rif_agente_propio.startsWith('G'))) {
-            rifAgentePropio = req.body.id_rif_agente_propio;
-        } else {
-            cedulaAgentePropio = req.body.id_rif_agente_propio;
-        }
-        await ownAgentModel.postOwnAgentForm(cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, req.body);
+        await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, req.body);
         res.render('ownAgentForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -147,8 +140,6 @@ module.exports = {
         res.redirect('/sistema');
     },
     updateOwnAgent: async (req, res) => {
-        let cedulaAgentePropio = '';
-        let rifAgentePropio = '';
         let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
         if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
             porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
@@ -161,20 +152,7 @@ module.exports = {
             porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
             porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
         }
-        if ((typeof(req.body.rif_agente_propio) !== 'undefined')) {
-            if ((!req.body.rif_agente_propio.startsWith('J')) && (!req.body.rif_agente_propio.startsWith('G')) && (!req.body.rif_agente_propio.startsWith('V'))) {
-                cedulaAgentePropio = req.body.rif_agente_propio;
-            } else if (((req.body.rif_agente_propio.startsWith('J')) || (req.body.rif_agente_propio.startsWith('G')) || (req.body.rif_agente_propio.startsWith('V')))) {
-                rifAgentePropio = req.body.rif_agente_propio;
-            }
-        } else {
-            if ((req.body.cedula_agente_propio.startsWith('J')) || (req.body.cedula_agente_propio.startsWith('G')) || (req.body.cedula_agente_propio.startsWith('V'))) {
-                rifAgentePropio = req.body.cedula_agente_propio;
-            } else if ((!req.body.cedula_agente_propio.startsWith('J')) && (!req.body.cedula_agente_propio.startsWith('G')) && (!req.body.cedula_agente_propio.startsWith('V'))) {
-                cedulaAgentePropio = req.body.cedula_agente_propio;
-            } 
-        }
-        await ownAgentModel.updateOwnAgent(cedulaAgentePropio, rifAgentePropio, porcentajeAgentePropio, req.body);
+        await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, req.body);
         res.redirect('/sistema');
     },
     updateExecutive: async (req, res) => {
