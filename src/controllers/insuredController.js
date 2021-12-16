@@ -33,9 +33,16 @@ module.exports = {
     },
 /*                 POST                  */
     postNaturalInsuredForm: async (req, res) => {
-        let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
-        let nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
-        let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio;
+        let nombresAgentePropio;
+        let apellidosAgentePropio;
+        if (nombreCompletoAgentePropio.split(" ").length === 2) {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 1).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(1,2).join(' ');
+        } else {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        }
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (agentePropio[0] !== undefined) {
@@ -68,8 +75,15 @@ module.exports = {
     },
     postLegalInsuredForm: async (req, res) => {
         let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
-        let nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
-        let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        let nombresAgentePropio;
+        let apellidosAgentePropio;
+        if (nombreCompletoAgentePropio.split(" ").length === 2) {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 1).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(1,2).join(' ');
+        } else {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        }
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (agentePropio[0] !== undefined) {
@@ -137,8 +151,15 @@ module.exports = {
     },
     updateNaturalInsured: async (req, res) => {
         let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
-        let nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
-        let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        let nombresAgentePropio;
+        let apellidosAgentePropio;
+        if (nombreCompletoAgentePropio.split(" ").length === 2) {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 1).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(1,2).join(' ');
+        } else {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        }
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let idAgentePropio = agentePropio[0].id_agente_propio;
         await insuredModel.updateNaturalInsured(idAgentePropio, req.body);
@@ -146,8 +167,15 @@ module.exports = {
     },
     updateLegalInsured: async (req, res) => {
         let nombreCompletoAgentePropio = req.body.nombre_com_agente_propio
-        let nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
-        let apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        let nombresAgentePropio;
+        let apellidosAgentePropio;
+        if (nombreCompletoAgentePropio.split(" ").length === 2) {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 1).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(1,2).join(' ');
+        } else {
+            nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
+            apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
+        }
         let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
         let idAgentePropio = agentePropio[0].id_agente_propio;
         await insuredModel.updateLegalInsured(idAgentePropio, req.body);

@@ -24,6 +24,10 @@
 <!-- Jquery Validate -->
 <script src="/js/plugins/validate/jquery.validate.min.js"></script>
 
+<!-- DataTables -->
+<script src="/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
 <script src="/js/plugins/jquery.cookie/jquery.cookie.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -354,6 +358,62 @@
                 document.getElementById("numero_pago_recibo").value = 0;
             }
         }
+    </script>
+<% } %>
+
+<% if (typeof(data) !== 'undefined') { %>
+    <script>
+        var lista = <%- JSON.stringify(data) %>;
+        var tablaBeneficiario = null;
+        $(document).ready(function(){
+            tablaBeneficiario = $('#tablaBeneficiarios').DataTable({
+                pageLength: 25,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                processing: true,
+                serverSide: false,
+                columns: [
+                    {"data": "nombre_beneficiario"},
+                    {"data": "apellido_beneficiario"},
+                    {"data": "parentesco_beneficiario"}
+                ],
+                buttons: [
+                    {
+                        extend: 'print',
+                        customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        },
+                        text: 'Imprimir'
+                    }
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+            tablaBeneficiario.rows.add(lista);
+            tablaBeneficiario.draw();
+        });
     </script>
 <% } %>
 

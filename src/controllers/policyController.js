@@ -3,7 +3,7 @@ const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const ownAgentModel = require('../models/own_agent');
-const polInsInsurerBenef = require('../models/pol_aseg_asegurado_benef');
+const polInsInsurerBenefModel = require('../models/pol_aseg_asegurado_benef');
 const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 const receiptModel = require('../models/receipt');
 const beneficiaryModel = require('../models/beneficiary');
@@ -59,7 +59,9 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultsBeneficiaries = [];
             let resultReceipt = await receiptModel.getReceiptLast();
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -67,10 +69,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
@@ -195,7 +202,9 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultsBeneficiaries = [];
             let resultReceipt = await receiptModel.getReceiptLast();
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -203,10 +212,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
@@ -229,7 +243,9 @@ module.exports = {
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultOwnAgent = [];
+            let resultsBeneficiaries = [];
             let resultReceipt = await receiptModel.getReceiptLast();
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
             if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
@@ -237,10 +253,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
@@ -344,7 +365,7 @@ module.exports = {
         if (idPolicy.match(valoresAceptados)) {
             let resultsBeneficiaries = [];
             let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy);
-            let resultsPIIB = await polInsInsurerBenef.getPolInsuInsuredBenef(resultPII[0].id_paa);
+            let resultsPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenef(resultPII[0].id_paa);
             for (const resultPIIB of resultsPIIB) {
                 let resultBenefiary = await beneficiaryModel.getBeneficiary(resultPIIB.beneficiario_id);
                 resultsBeneficiaries.push(resultBenefiary[0]);
@@ -1083,11 +1104,11 @@ module.exports = {
         await policyModel.disablePolicy(req.params.id, disablePolicy);
         await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
         let disablePII = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.params.id);
-        let resultPIIB = await polInsInsurerBenef.getPolInsuInsuredBenef(disablePII[0].id_paa);
+        let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenef(disablePII[0].id_paa);
         let resultPIIV = await polInsuInsuredVehiModel.getPolInsuInsuredVehi(disablePII[0].id_paa);
         if (resultPIIV.length === 0) {
             for (const itemPIIB of resultPIIB) {
-                await polInsInsurerBenef.disablePolInsuInsuredBenef(itemPIIB.id_paab, disablePIIB);
+                await polInsInsurerBenefModel.disablePolInsuInsuredBenef(itemPIIB.id_paab, disablePIIB);
             }
         } else if (resultPIIB.length === 0) {
             for (const itemPIIV of resultPIIV) {
