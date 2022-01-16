@@ -1,5 +1,5 @@
         <div class="footer">
-            <strong>Desarrollado</strong> por 1B7
+            
         </div>
     </div>
 </div>
@@ -299,37 +299,122 @@
 <% if (typeof(policy) !== 'undefined') { %>
     <script>
         var policy = <%- JSON.stringify(policy) %>;
-        function premiumCalculation() {
+        function premiumCalculationDate() {
             var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
             var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
             if (getSelectValue === 'MENSUAL') {
+                $(document).ready(function () {
+                    $('#tipo_fraccionamiento_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
                 var premiumMonthly = policy.prima_anual_poliza / 12;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").value = document.getElementById("numero_pago_recibo").value;
-            } else if (getSelectValue === 'BIMENSUAL') {
-                var premiumBimonthly = policy.prima_anual_poliza / 5;
-                premiumBimonthly = premiumBimonthly.toFixed(2);
-                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
-                document.getElementById("numero_pago_recibo").value = 5;
+                document.getElementById("numero_pago_recibo").setAttribute("value", '');
             } else if (getSelectValue === 'TRIMESTRAL') {
+                $(document).ready(function () {
+                    $('#tipo_fraccionamiento_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumQuarterly;
                 document.getElementById("numero_pago_recibo").value = 4;
             } else if (getSelectValue === 'SEMESTRAL') {
+                $(document).ready(function () {
+                    $('#tipo_fraccionamiento_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 6);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
                 var premiumBiannual = policy.prima_anual_poliza / 2;
                 premiumBiannual = premiumBiannual.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBiannual;
                 document.getElementById("numero_pago_recibo").value = 2;
+            } else if (getSelectValue === 'ANUAL') {
+                $(document).ready(function () {
+                    $('#tipo_fraccionamiento_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                var annualPremium = policy.prima_anual_poliza / 1;
+                annualPremium = annualPremium.toFixed(2);
+                document.getElementById("monto_prima_recibo").value = annualPremium;
+                document.getElementById("numero_pago_recibo").value = 1;
             }
             if (checkboxDivision === false) {
                 document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza;
                 document.getElementById("numero_pago_recibo").value = 0;
+                document.getElementById("tipo_fraccionamiento_recibo").value = '';
+                document.getElementById("fecha_pago_recibo").value = '';
             }
         }
     </script>
 <% } %>
+
+    <script>
+        function automaticDates() {
+            var getSelectValue = document.getElementById("tipo_fecha_recibo").value;
+            if (getSelectValue === 'MENSUAL') {
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+            } else if (getSelectValue === 'TRIMESTRAL') {
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+            } else if (getSelectValue === 'SEMESTRAL') {
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 6);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+            }  else if (getSelectValue === 'ANUAL') {
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+            }
+        }
+    </script>
 
 </body>
 

@@ -27,7 +27,21 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="numero_poliza_colectivo" required>
+                                                <option value="">Seleccione *</option>
+                                                <% policies.forEach((policy) => { %>
+                                                    <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
+                                                <% }); %>
+                                                <% collectives.forEach((collective) => { %>
+                                                    <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
+                                                <% }); %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número Recibo</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="number"
@@ -37,6 +51,18 @@
                                                 class="form-control"
                                                 required
                                             >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Fecha</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_fecha_recibo" id="tipo_fecha_recibo" required onchange="automaticDates()">
+                                                <option value="">Seleccione</option>
+                                                <option value="MENSUAL">MENSUAL</option>
+                                                <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                <option value="SEMESTRAL">SEMESTRAL</option>
+                                                <option value="ANUAL">ANUAL</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -56,7 +82,7 @@
                                         <label class="col-sm-3 col-form-label">Fraccionamiento</label>
                                         <div class="col-sm-9">
                                             <div>
-                                                <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculation()">  
+                                                <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculationDate()">  
                                                         ¿Aplica Fraccionamiento?
                                                 </label>
                                             </div>
@@ -66,12 +92,12 @@
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
+                                                <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculationDate()">
                                                     <option value="">Seleccione</option>
                                                     <option value="MENSUAL">MENSUAL</option>
-                                                    <option value="BIMENSUAL">BIMENSUAL</option>
                                                     <option value="TRIMESTRAL">TRIMESTRAL</option>
                                                     <option value="SEMESTRAL">SEMESTRAL</option>
+                                                    <option value="ANUAL">ANUAL</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -89,20 +115,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" name="numero_poliza_colectivo" required>
-                                                <option value="">Seleccione *</option>
-                                                <% policies.forEach((policy) => { %>
-                                                    <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
-                                                <% }); %>
-                                                <% collectives.forEach((collective) => { %>
-                                                    <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
-                                                <% }); %>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -112,7 +124,7 @@
                                                 onkeyup="pasarAgentePropio();"
                                                 placeholder="Cédula/Rif *" 
                                                 class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -149,18 +161,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="date"
-                                                name="fecha_hasta_recibo"
-                                                id="fecha_hasta_recibo"
-                                                class="form-control"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="metodo_pago_recibo" required>
@@ -177,22 +177,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div id="active-select-2">
-                                        <div class="hr-line-dashed"></div>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="number"
-                                                    step="0.01" 
-                                                    name="numero_pago_recibo"
-                                                    id="numero_pago_recibo"
-                                                    value="0" 
-                                                    class="form-control"
-                                                    onchange="premiumCalculation()"
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
                                         <div class="col-sm-9">
@@ -200,8 +184,21 @@
                                                 type="text" 
                                                 name="monto_comision_recibo"
                                                 id="monto_comision_recibo"
-                                                placeholder="Comisión Asociada *" 
+                                                placeholder="Comisión Asociada *"
+                                                value="10"  
                                                 class="form-control number_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_hasta_recibo"
+                                                id="fecha_hasta_recibo"
+                                                class="form-control"
                                                 required
                                             >
                                         </div>
@@ -217,6 +214,22 @@
                                                 class="form-control number_format"
                                                 required
                                             >
+                                        </div>
+                                    </div>
+                                    <div id="active-select-2">
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="number"
+                                                    step="0.01" 
+                                                    name="numero_pago_recibo"
+                                                    id="numero_pago_recibo"
+                                                    value="0" 
+                                                    class="form-control"
+                                                    onchange="premiumCalculationDate()"
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>

@@ -62,7 +62,7 @@
                                                 onkeyup="pasarNombreAsegurado();"
                                                 placeholder="Cédula/Rif del Asegurado *" 
                                                 class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>

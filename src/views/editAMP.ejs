@@ -64,7 +64,7 @@
                                                     onkeyup="pasarNombreAsegurado();"
                                                     value="<%= legalInsured.rif_asegurado_per_jur %>" 
                                                     class="form-control"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -79,6 +79,7 @@
                                                     onkeyup="pasarNombreAsegurado();"
                                                     value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
                                                     class="form-control number_format"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>

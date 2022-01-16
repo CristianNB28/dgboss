@@ -57,7 +57,7 @@
                                                         onkeyup="pasarNombreTomador2();"
                                                         placeholder="Cédula/Rif *" 
                                                         class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -72,7 +72,6 @@
                                                         id="correo_tomador"
                                                         placeholder="Correo *" 
                                                         class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -151,10 +150,9 @@
                                                         type="text"
                                                         name="grupo_colectivo"
                                                         id="grupo_colectivo"
-                                                        placeholder="Grupo *" 
+                                                        placeholder="Grupo" 
                                                         class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
                                                     >
                                                 </div>
                                             </div>
@@ -303,6 +301,19 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Fecha</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_fecha_recibo" id="tipo_fecha_recibo" required onchange="automaticDates()">
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="MENSUAL">MENSUAL</option>
+                                                        <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                        <option value="SEMESTRAL">SEMESTRAL</option>
+                                                        <option value="ANUAL">ANUAL</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -320,7 +331,7 @@
                                                 <label class="col-sm-3 col-form-label">Fraccionamiento</label>
                                                 <div class="col-sm-9">
                                                     <div>
-                                                        <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculation()"> 
+                                                        <label><input type="checkbox" name="fraccionamiento_boolean_recibo" id="fraccionamiento_boolean_recibo" onclick="premiumCalculationDate()"> 
                                                                 ¿Aplica Fraccionamiento?
                                                         </label>
                                                     </div>
@@ -329,19 +340,6 @@
                                         </div>
                                         <div id="active-select-1">
                                             <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
-                                                    <div class="col-sm-9">
-                                                        <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculation()">
-                                                            <option value="">Seleccione</option>
-                                                            <option value="MENSUAL">MENSUAL</option>
-                                                            <option value="BIMENSUAL">BIMENSUAL</option>
-                                                            <option value="TRIMESTRAL">TRIMESTRAL</option>
-                                                            <option value="SEMESTRAL">SEMESTRAL</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha de Pago</label>
                                                     <div class="col-sm-9">
                                                         <input 
@@ -349,7 +347,7 @@
                                                             name="fecha_pago_recibo"
                                                             id="fecha_pago_recibo" 
                                                             class="form-control"
-                                                            required
+                                                            onchange="premiumCalculationDate()"
                                                         >
                                                     </div>
                                                 </div>
@@ -395,8 +393,25 @@
                                                         <option value="">Seleccione *</option>
                                                         <option value="EMISIÓN">EMISIÓN</option>
                                                         <option value="RENOVACIÓN">RENOVACIÓN</option>
-                                                        <option value="INCLUSIÓN">INCLUSIÓN</option>
-                                                        <option value="EXCLUSIÓN">EXCLUSIÓN</option>
+                                                        <option value="MODIFICACIÓN">MODIFICACIÓN</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="metodo_pago_recibo" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+                                                        <option value="ZELLE">ZELLE</option>
+                                                        <option value="EFECTIVO">EFECTIVO</option>
+                                                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
+                                                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
+                                                        <option value="PAYPAL">PAYPAL</option>
+                                                        <option value="DEPOSITO BANCARIO">DEPOSITO BANCARIO</option>
+                                                        <option value="FINANCIAMIENTO">FINANCIAMIENTO</option>
+                                                        <option value="OTROS">OTROS</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -414,24 +429,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Método de Pago</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="metodo_pago_recibo" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="TRANSFERENCIA">TRANSFERENCIA</option>
-                                                        <option value="ZELLE">ZELLE</option>
-                                                        <option value="EFECTIVO">EFECTIVO</option>
-                                                        <option value="TARJETA DE DÉBITO">TARJETA DE DÉBITO</option>
-                                                        <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
-                                                        <option value="PAYPAL">PAYPAL</option>
-                                                        <option value="DEPOSITO BANCARIO">DEPOSITO BANCARIO</option>
-                                                        <option value="OTROS">OTROS</option>
-                                                    </select>
+                                        <div id="active-select-2">
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculationDate()">
+                                                            <option value="">Seleccione</option>
+                                                            <option value="MENSUAL">MENSUAL</option>
+                                                            <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                            <option value="SEMESTRAL">SEMESTRAL</option>
+                                                            <option value="ANUAL">ANUAL</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div id="active-select-2">
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
                                                     <div class="col-sm-9">
@@ -442,7 +453,7 @@
                                                             id="numero_pago_recibo"
                                                             value="0" 
                                                             class="form-control"
-                                                            onchange="premiumCalculation()"
+                                                            onchange="premiumCalculationDate()"
                                                         >
                                                     </div>
                                                 </div>
@@ -455,7 +466,8 @@
                                                         type="text" 
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
-                                                        placeholder="Comisión Asociada *" 
+                                                        placeholder="Comisión Asociada *"
+                                                        value="10" 
                                                         class="form-control number_format"
                                                         required
                                                     >
