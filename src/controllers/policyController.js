@@ -346,7 +346,7 @@ module.exports = {
             for (let index = 0; index < resultsPolicies.length; index++) {
                 let elementPolicy = resultsPolicies[index];
                 if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde_poliza) !== 'string')) {
-                    elementPolicy.prima_anual_poliza = new Intl.NumberFormat('de-DE').format(elementPolicy.prima_anual_poliza);
+                    elementPolicy.prima_anual_poliza = elementPolicy.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                     elementPolicy.fecha_desde_poliza = elementPolicy.fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
                     elementPolicy.fecha_hasta_poliza = elementPolicy.fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementPolicy.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
@@ -1056,7 +1056,7 @@ module.exports = {
             let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
             let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             let primaAnual = resultPolicy[0].prima_anual_poliza;
-            primaAnual = new Intl.NumberFormat('de-DE').format(primaAnual);
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let insurers = await insurerModel.getInsurers();
             let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);

@@ -42,19 +42,19 @@ module.exports = {
         let totalPremium = 0;
         if ((totalPremiumPolicy[0].primaTotal !== null) && (totalPremiumCollective[0].primaTotal !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotal + totalPremiumCollective[0].primaTotal;
-            totalPremium = totalPremium.toFixed(2);
+            totalPremium = totalPremium.toFixed(2).toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         } else if ((totalPremiumPolicy[0].primaTotal === null) && (totalPremiumCollective[0].primaTotal === null)) {
             totalPremium = 0;
         } else if (totalPremiumPolicy[0].primaTotal === null){
-            totalPremium = totalPremiumCollective[0].primaTotal;
+            totalPremium = totalPremiumCollective[0].primaTotal.toFixed(2).toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         } else if (totalPremiumCollective[0].primaTotal === null) {
-            totalPremium = totalPremiumPolicy[0].primaTotal;
+            totalPremium = totalPremiumPolicy[0].primaTotal.toFixed(2).toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         }
         if (totalCommission[0].comisionTotal === null) {
             totalCommission[0].comisionTotal = 0;
             totalCommission = totalCommission[0].comisionTotal;
         } else {
-            totalCommission = totalCommission[0].comisionTotal.toLocaleString();
+            totalCommission = totalCommission[0].comisionTotal.toFixed(2).toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         }
         for (let i = 0; i < resultPolicyInsuInsured.length; i++) {
             let element = resultPolicyInsuInsured[i];

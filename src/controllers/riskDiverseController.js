@@ -47,7 +47,7 @@ module.exports = {
             let resultCIIRD = await colInsInsurerRiskDiverModel.getColInsuInsuredRiesDiverId(idRiskDiverse);
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIRD[0].caa_id);
             let sumaAsegurada = resultRiskDiverse[0].suma_asegurada_riesgo_diverso;
-            sumaAsegurada = new Intl.NumberFormat('de-DE').format(sumaAsegurada);
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             res.render('editRiskDiverse', {
                 riskDiverse: resultRiskDiverse[0],
                 idCollective: resultCII[0],

@@ -46,16 +46,18 @@ module.exports = {
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
         for (const itemFile of dataExcel) {
-            let dateFile = itemFile['Fecha de Nacimiento'];
+            let dateFile = itemFile['Fecha de nacimiento'];
             let clientFile = itemFile['Tipo de Cliente'];
+            let directionFile = itemFile['Dirección'];
+            let telephoneFile = itemFile['Teléfono'];
             let accountTypeFile = itemFile['Tipo de Cuenta'];
-            let accountNumberFile = itemFile['Nro. de Cuenta'];
+            let accountNumberFile = itemFile['Nro. De Cuenta.'];
             let idCollective = await collectiveModel.getCollectiveLast();
             if (clientFile === 'TITULAR') {
                 let idNaturalInsured = await insuredModel.getNaturalInsuredId(itemFile.Cedula);
                 await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
             } else {
-                let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(dateFile, accountTypeFile, accountNumberFile, req.body, itemFile);
+                let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(dateFile, directionFile, telephoneFile, accountTypeFile, accountNumberFile, req.body, itemFile);
                 let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
                 await colInsInsurerBenefModel.postColInsuInsuredBenef(collectiveInsurerInsured[0].id_caa, beneficiary.insertId);
             }

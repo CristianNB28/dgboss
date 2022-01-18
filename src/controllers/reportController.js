@@ -20,7 +20,7 @@ module.exports = {
             let elementPII = resultsPII[i];
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
-            let primaAnualPoliza = new Intl.NumberFormat('de-DE').format(resultPolicy[0].prima_anual_poliza);
+            let primaAnualPoliza = resultPolicy[0].prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (elementPII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -53,7 +53,7 @@ module.exports = {
             let elementCII = resultsCII[i];
             let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
             let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
-            let primaAnualColectivo = new Intl.NumberFormat('de-DE').format(resultCollective[0].prima_anual_colectivo);
+            let primaAnualColectivo = resultCollective[0].prima_anual_colectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (elementCII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -97,7 +97,7 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
             let resultReceiptCommission = await receiptModel.getReceiptCommissionPolicy(elementPII.poliza_id);
-            let reciboComisionPoliza = new Intl.NumberFormat('de-DE').format(resultReceiptCommission[0].monto_comision_recibo);
+            let reciboComisionPoliza = resultReceiptCommission[0].monto_comision_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (elementPII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -133,7 +133,7 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
             let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
             let resultReceiptCommission = await receiptModel.getReceiptCommissionCollective(elementCII.colectivo_id);
-            let reciboComisionColectivo = new Intl.NumberFormat('de-DE').format(resultReceiptCommission[0].monto_comision_recibo);
+            let reciboComisionColectivo = resultReceiptCommission[0].monto_comision_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (elementCII.asegurado_per_nat_id !== null) {
                 let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                 let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -251,7 +251,7 @@ module.exports = {
             let resultCommission = await commissionModel.getComissionPolicy(elementPII.poliza_id);
             let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
             if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
-                let primaPorcentajeVerificacion = new Intl.NumberFormat('de-DE').format(resultVerificationFactor[0].porcentaje_prima_factor_verificacion);
+                let primaPorcentajeVerificacion = resultVerificationFactor[0].porcentaje_prima_factor_verificacion.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 if (elementPII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -290,7 +290,7 @@ module.exports = {
             let resultCommission = await commissionModel.getComissionCollective(elementCII.colectivo_id);
             let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
             if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
-                let primaPorcentajeVerificacion = new Intl.NumberFormat('de-DE').format(resultVerificationFactor[0].porcentaje_prima_factor_verificacion);
+                let primaPorcentajeVerificacion = resultVerificationFactor[0].porcentaje_prima_factor_verificacion.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 if (elementCII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);

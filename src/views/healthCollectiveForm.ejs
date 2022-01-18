@@ -128,15 +128,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="searchinput" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura / Suma</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
-                                                        name="cobertura_colectivo"
-                                                        id="cobertura_colectivo"
-                                                        placeholder="Cobertura" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        name="cobertura_suma_asegurada_colectivo"
+                                                        id="cobertura_suma_asegurada_colectivo"
+                                                        placeholder="Cobertura / Suma Asegurada" 
+                                                        class="form-control number_format"
                                                     >
                                                 </div>
                                             </div>
@@ -466,8 +465,7 @@
                                                         type="text" 
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
-                                                        placeholder="Comisión Asociada *"
-                                                        value="10" 
+                                                        placeholder="Comisión Asociada *" 
                                                         class="form-control number_format"
                                                         required
                                                     >

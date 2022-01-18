@@ -60,7 +60,7 @@
                                                 name="id_rif_asegurado"
                                                 id="id_rif_asegurado"
                                                 onkeyup="pasarNombreAsegurado();"
-                                                placeholder="Cédula/Rif del Asegurado *" 
+                                                placeholder="Cédula/Rif del Titular *" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                 required
@@ -94,11 +94,16 @@
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número Siniestro</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
-                                                    <option value="">Seleccione *</option>
-                                                </select>
+                                                <input 
+                                                    type="text"
+                                                    name="numero_siniestro_emergencia"
+                                                    id="numero_siniestro_emergencia" 
+                                                    placeholder="Número de Siniestro *"
+                                                    class="form-control"
+                                                    required
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -146,13 +151,13 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Titular</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="nombre_razon_asegurado"
                                                 id="nombre_razon_asegurado"
-                                                placeholder="Nombre o Razón Social del Asegurado *"
+                                                placeholder="Nombre o Razón Social del Titular *"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required

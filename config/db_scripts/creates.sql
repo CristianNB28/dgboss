@@ -148,14 +148,13 @@ CREATE TABLE Colectivo(
     tipo_moneda_colectivo VARCHAR(255) NOT NULL,
     prima_anual_colectivo DECIMAL(20,4) NOT NULL,
     estatus_colectivo VARCHAR(255),
-    cobertura_colectivo VARCHAR(255),
+    cobertura_suma_asegurada_colectivo DECIMAL(20,4),
     tipo_canal_colectivo VARCHAR(255),
     deducible_colectivo DECIMAL(20,4),
     grupo_colectivo VARCHAR(255),
     maternidad_colectivo VARCHAR(255),
     plazo_espera_colectivo VARCHAR(255),
     detalle_cliente_colectivo VARCHAR(255),
-    suma_asegurada_colectivo DECIMAL(20,4),
     obser_deshabilitar_colectivo VARCHAR(500),
     deshabilitar_colectivo BOOLEAN NOT NULL DEFAULT FALSE
 );

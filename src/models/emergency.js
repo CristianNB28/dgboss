@@ -62,9 +62,9 @@ module.exports = {
         }
         if (legalInsuredId[0] !== undefined) {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, siniestro_nombre_emergencia, asegurado_per_jur_id) 
+                db.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, numero_siniestro_emergencia, asegurado_per_jur_id) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.siniestro_nombre, legalInsuredId[0].id_asegurado_per_jur], 
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.numero_siniestro_emergencia, legalInsuredId[0].id_asegurado_per_jur], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -74,9 +74,9 @@ module.exports = {
             });
         } else {
             return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, siniestro_nombre_emergencia, asegurado_per_nat_id) 
+                db.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, numero_siniestro_emergencia, asegurado_per_nat_id) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.siniestro_nombre, naturalInsuredId[0].id_asegurado_per_nat], 
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.numero_siniestro_emergencia, naturalInsuredId[0].id_asegurado_per_nat], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -121,9 +121,9 @@ module.exports = {
             naturalInsuredId = null;
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE Emergencia 
-                        SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, siniestro_nombre_emergencia=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, numero_siniestro_emergencia=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
                         WHERE id_emergencia=?`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.siniestro_nombre, naturalInsuredId, legalInsuredId[0].id_asegurado_per_jur, emergency.id_emergencia], 
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.numero_siniestro_emergencia, naturalInsuredId, legalInsuredId[0].id_asegurado_per_jur, emergency.id_emergencia], 
                 (error, rows) => {
                     if (error) {
                         reject(error);
@@ -135,9 +135,9 @@ module.exports = {
             legalInsuredId = null;
             return new Promise((resolve, reject) => {
                 db.query(`UPDATE Emergencia 
-                        SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, siniestro_nombre_emergencia=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, numero_siniestro_emergencia=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
                         WHERE id_emergencia=?`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.siniestro_nombre, naturalInsuredId[0].id_asegurado_per_nat, legalInsuredId, emergency.id_emergencia], 
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_emergencia, emergency.estatus, emergency.numero_siniestro_emergencia, naturalInsuredId[0].id_asegurado_per_nat, legalInsuredId, emergency.id_emergencia], 
                 (error, rows) => {
                     if (error) {
                         reject(error);

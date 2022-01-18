@@ -112,31 +112,18 @@
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
-                                        <% if (naturalInsured === undefined) { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
-                                                        <option value="<%= refund.siniestro_nombre_reembolso %>"><%= refund.siniestro_nombre_reembolso %></option>
-                                                        <option value="<%= legalInsured.razon_social_per_jur %>"><%= legalInsured.razon_social_per_jur %></option>
-                                                        <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
-                                                            <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número Siniestro</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="numero_siniestro_reembolso"
+                                                    id="numero_siniestro_reembolso" 
+                                                    value="<%= refund.numero_siniestro_reembolso %>"
+                                                    class="form-control"
+                                                    required
+                                                >
                                             </div>
-                                        <% } else if (legalInsured === undefined) { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="siniestro_nombre" id="siniestro_nombre" required>
-                                                        <option value="<%= refund.siniestro_nombre_reembolso %>"><%= refund.siniestro_nombre_reembolso %></option>
-                                                        <option value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"><%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %></option>
-                                                        <% arrayBeneficiaryName.forEach((BeneficiaryName) => { %>
-                                                            <option value="<%= BeneficiaryName %>"><%= BeneficiaryName %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        <% } %>
+                                        </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Observaciones</label>
@@ -183,7 +170,7 @@
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <% if (naturalInsured === undefined) { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Titular</label>
                                             <div class="col-sm-9">
                                                 <input 
                                                     type="text"
@@ -197,7 +184,7 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Titular</label>
                                             <div class="col-sm-9">
                                                 <input 
                                                     type="text"

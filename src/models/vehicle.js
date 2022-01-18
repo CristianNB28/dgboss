@@ -30,11 +30,11 @@ module.exports = {
             });
         });
     },
-    postVehicleCollectiveForm: (fileVersion, fileTransmission, fileShield, fileBody, fileYear, fileVehicleType, fileSumInsured, fileSerialEngine, movementType, vehicle) => {
+    postVehicleCollectiveForm: (fileTransmission, fileShield, fileBody, fileYear, fileVehicleType, fileSumInsured, fileSerialEngine, movementType, vehicle) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Vehiculo (numero_placa, year_vehiculo, marca_vehiculo, modelo_vehiculo, version_vehiculo, tipo_transmision_vehiculo, blindaje_boolean_vehiculo, tipo_vehiculo, color_vehiculo, serial_motor, serial_carroceria, capacidad_carga, nombre_conductor_vehiculo, suma_asegurada_vehiculo, tipo_movimiento_vehiculo)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [vehicle.Placa, fileYear, vehicle.Marca, vehicle.Modelo, fileVersion, fileTransmission, fileShield, fileVehicleType, vehicle.Color, fileSerialEngine, fileBody, vehicle.Carga, vehicle.Conductor, fileSumInsured, movementType.tipo_movimiento_vehiculo],                          
+            [vehicle.Placa, fileYear, vehicle.Marca, vehicle.Modelo, vehicle.Version, fileTransmission, fileShield, fileVehicleType, vehicle.Color, fileSerialEngine, fileBody, vehicle.Carga, vehicle.Conductor, fileSumInsured, movementType.tipo_movimiento_vehiculo],                          
             (error, rows) => {
                 if (error) {
                     reject(error)

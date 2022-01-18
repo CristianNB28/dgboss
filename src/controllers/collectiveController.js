@@ -142,7 +142,7 @@ module.exports = {
             for (let index = 0; index < resultsCollectives.length; index++) {
                 let elementCollective = resultsCollectives[index];
                 if ((index < elementCII.id_caa) && (typeof(elementCollective.fecha_desde_colectivo) !== 'string')) {
-                    elementCollective.prima_anual_colectivo = new Intl.NumberFormat('de-DE').format(elementCollective.prima_anual_colectivo);
+                    elementCollective.prima_anual_colectivo = elementCollective.prima_anual_colectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                     elementCollective.fecha_desde_colectivo = elementCollective.fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
                     elementCollective.fecha_hasta_colectivo = elementCollective.fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementCollective.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
@@ -187,6 +187,7 @@ module.exports = {
                 let resultsVariousRisk = [];
                 for (const resultCIIRD of resultsCIIRD) {
                     let resultRiskDiverse = await riskDiverseModel.getRiskDiverse(resultCIIRD.riesgo_diverso_id);
+                    resultRiskDiverse[0].suma_asegurada_riesgo_diverso = resultRiskDiverse[0].suma_asegurada_riesgo_diverso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.')
                     resultsVariousRisk.push(resultRiskDiverse[0]);
                 }
                 res.render('variousRisk', {
@@ -202,6 +203,7 @@ module.exports = {
     postHealthCollectiveForm: async (req, res) => {
         let montoPrimaAnual = req.body.prima_anual_colectivo;
         let deducible = req.body.deducible_colectivo;
+        let coberturaSumaAsegurada = req.body.cobertura_suma_asegurada_colectivo;
         let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
         let tipoColectivo = 'SALUD';
@@ -238,13 +240,29 @@ module.exports = {
             deducible = deducible.replace(".", ",");
             deducible = parseFloat(deducible.replace(/,/g,''));
         }
-        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+        if (coberturaSumaAsegurada === '') {
+            coberturaSumaAsegurada = 0;
+        } else {
+            if ((coberturaSumaAsegurada.indexOf(',') !== -1) && (coberturaSumaAsegurada.indexOf('.') !== -1)) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            } else if (coberturaSumaAsegurada.indexOf(',') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada);
+            } else if (coberturaSumaAsegurada.indexOf('.') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            }
+        }
+        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
         await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
         res.redirect('/sistema/add-health-collective');
     },
     postVehicleCollectiveForm: async (req, res) => {
         let montoPrimaAnual = req.body.prima_anual_colectivo;
         let deducible = req.body.deducible_colectivo;
+        let coberturaSumaAsegurada = req.body.cobertura_suma_asegurada_colectivo;
         let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
         let tipoColectivo = 'AUTOMÓVIL';
@@ -288,13 +306,29 @@ module.exports = {
             deducible = deducible.replace(".", ",");
             deducible = parseFloat(deducible.replace(/,/g,''));
         }
-        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+        if (coberturaSumaAsegurada === '') {
+            coberturaSumaAsegurada = 0;
+        } else {
+            if ((coberturaSumaAsegurada.indexOf(',') !== -1) && (coberturaSumaAsegurada.indexOf('.') !== -1)) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            } else if (coberturaSumaAsegurada.indexOf(',') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada);
+            } else if (coberturaSumaAsegurada.indexOf('.') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            }
+        }
+        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
         await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
         res.redirect('/sistema/add-vehicle-collective');
     },
     postRiskDiverseCollectiveForm: async (req, res) => {
         let montoPrimaAnual = req.body.prima_anual_colectivo;
         let deducible = req.body.deducible_colectivo;
+        let coberturaSumaAsegurada = req.body.cobertura_suma_asegurada_colectivo;
         let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
         let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
         let tipoColectivo = 'RIESGOS DIVERSOS';
@@ -338,7 +372,22 @@ module.exports = {
             deducible = deducible.replace(".", ",");
             deducible = parseFloat(deducible.replace(/,/g,''));
         }
-        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+        if (coberturaSumaAsegurada === '') {
+            coberturaSumaAsegurada = 0;
+        } else {
+            if ((coberturaSumaAsegurada.indexOf(',') !== -1) && (coberturaSumaAsegurada.indexOf('.') !== -1)) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            } else if (coberturaSumaAsegurada.indexOf(',') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada);
+            } else if (coberturaSumaAsegurada.indexOf('.') !== -1) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+            }
+        }
+        let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
         await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
         res.redirect('/sistema/add-risk-diverse-collective');
     },
@@ -352,7 +401,7 @@ module.exports = {
             let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
             let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
             let primaAnual = resultCollective[0].prima_anual_colectivo;
-            primaAnual = new Intl.NumberFormat('de-DE').format(primaAnual);
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let insurers = await insurerModel.getInsurers();
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
             let resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);

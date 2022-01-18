@@ -109,8 +109,8 @@ module.exports = {
         let resultsRefunds = await refundModel.getRefunds();
         for (let i = 0; i < resultsRefunds.length; i++) {
             let elementRefund = resultsRefunds[i];
-            elementRefund.monto_reclamo_reembolso = new Intl.NumberFormat('de-DE').format(elementRefund.monto_reclamo_reembolso);
-            elementRefund.monto_pagado_reembolso = new Intl.NumberFormat('de-DE').format(elementRefund.monto_pagado_reembolso);
+            elementRefund.monto_reclamo_reembolso = elementRefund.monto_reclamo_reembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            elementRefund.monto_pagado_reembolso = elementRefund.monto_pagado_reembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             elementRefund.fecha_ocurrencia_reembolso = elementRefund.fecha_ocurrencia_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementRefund.fecha_notificacion_reembolso = elementRefund.fecha_notificacion_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -123,8 +123,8 @@ module.exports = {
         let resultsLettersGuarentee = await letterGuaranteeModel.getLettersGuarantee();
         for (let i = 0; i < resultsLettersGuarentee.length; i++) {
             let elementLettersGuarantee = resultsLettersGuarentee[i];
-            elementLettersGuarantee.monto_reclamado_carta_aval = new Intl.NumberFormat('de-DE').format(elementLettersGuarantee.monto_reclamado_carta_aval);
-            elementLettersGuarantee.monto_pagado_carta_aval = new Intl.NumberFormat('de-DE').format(elementLettersGuarantee.monto_pagado_carta_aval);
+            elementLettersGuarantee.monto_reclamado_carta_aval = elementLettersGuarantee.monto_reclamado_carta_aval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            elementLettersGuarantee.monto_pagado_carta_aval = elementLettersGuarantee.monto_pagado_carta_aval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             elementLettersGuarantee.fecha_ocurrencia_carta_aval = elementLettersGuarantee.fecha_ocurrencia_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementLettersGuarantee.fecha_notificacion_carta_aval = elementLettersGuarantee.fecha_notificacion_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -137,8 +137,8 @@ module.exports = {
         let resultsEmergencies = await emergencyModel.getEmergencies();
         for (let i = 0; i < resultsEmergencies.length; i++) {
             let elementEmergencies = resultsEmergencies[i];
-            elementEmergencies.monto_reclamado_emergencia = new Intl.NumberFormat('de-DE').format(elementEmergencies.monto_reclamado_emergencia);
-            elementEmergencies.monto_pagado_emergencia = new Intl.NumberFormat('de-DE').format(elementEmergencies.monto_pagado_emergencia);
+            elementEmergencies.monto_reclamado_emergencia = elementEmergencies.monto_reclamado_emergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            elementEmergencies.monto_pagado_emergencia = elementEmergencies.monto_pagado_emergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             elementEmergencies.fecha_ocurrencia_emergencia = elementEmergencies.fecha_ocurrencia_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementEmergencies.fecha_notificacion_emergencia = elementEmergencies.fecha_notificacion_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -151,8 +151,8 @@ module.exports = {
         let resultsAMP = await ampModel.getAMP(); 
         for (let i = 0; i < resultsAMP.length; i++) {
             let elementAMP = resultsAMP[i];
-            elementAMP.monto_reclamado_amp = new Intl.NumberFormat('de-DE').format(elementAMP.monto_reclamado_amp);
-            elementAMP.monto_pagado_amp = new Intl.NumberFormat('de-DE').format(elementAMP.monto_pagado_amp);
+            elementAMP.monto_reclamado_amp = elementAMP.monto_reclamado_amp.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            elementAMP.monto_pagado_amp = elementAMP.monto_pagado_amp.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             elementAMP.fecha_ocurrencia_amp = elementAMP.fecha_ocurrencia_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementAMP.fecha_notificacion_amp = elementAMP.fecha_notificacion_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -433,8 +433,8 @@ module.exports = {
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
-            montoReclamoReembolso = new Intl.NumberFormat('de-DE').format(montoReclamoReembolso);
-            montoPagadoReembolso = new Intl.NumberFormat('de-DE').format(montoPagadoReembolso);
+            montoReclamoReembolso = montoReclamoReembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            montoPagadoReembolso = montoPagadoReembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (resultRefund[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultRefund[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
@@ -550,8 +550,8 @@ module.exports = {
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
-            montoReclamoCartaAval = new Intl.NumberFormat('de-DE').format(montoReclamoCartaAval);
-            montoPagadoCartaAval = new Intl.NumberFormat('de-DE').format(montoPagadoCartaAval);
+            montoReclamoCartaAval = montoReclamoCartaAval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            montoPagadoCartaAval = montoPagadoCartaAval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (resultLetterGuarentee[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultLetterGuarentee[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
@@ -667,8 +667,8 @@ module.exports = {
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
-            montoReclamoEmergencia = new Intl.NumberFormat('de-DE').format(montoReclamoEmergencia);
-            montoPagadoEmergencia = new Intl.NumberFormat('de-DE').format(montoPagadoEmergencia);
+            montoReclamoEmergencia = montoReclamoEmergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            montoPagadoEmergencia = montoPagadoEmergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (resultEmergency[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultEmergency[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
@@ -784,8 +784,8 @@ module.exports = {
             let resultLegalInsured = [];
             let arrayBeneficiaryId = [];
             let arrayBeneficiaryName = [];
-            montoReclamoAMP = new Intl.NumberFormat('de-DE').format(montoReclamoAMP);
-            montoPagadoAMP = new Intl.NumberFormat('de-DE').format(montoPagadoAMP);
+            montoReclamoAMP = montoReclamoAMP.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            montoPagadoAMP = montoPagadoAMP.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             if (resultAMP[0].asegurado_per_nat_id === null) {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultAMP[0].asegurado_per_jur_id);
                 for (const itemPII of resultsPII) {
