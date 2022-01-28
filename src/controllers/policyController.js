@@ -1102,7 +1102,6 @@ module.exports = {
         let disablePIIV = 1;
         await policyModel.updateDisablePolicy(req.params.id, req.body);
         await policyModel.disablePolicy(req.params.id, disablePolicy);
-        await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
         let disablePII = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.params.id);
         let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenef(disablePII[0].id_paa);
         let resultPIIV = await polInsuInsuredVehiModel.getPolInsuInsuredVehi(disablePII[0].id_paa);
@@ -1115,6 +1114,7 @@ module.exports = {
                 await polInsuInsuredVehiModel.disablePolInsuInsuredVehi(itemPIIV.id_paav, disablePIIV);
             }
         }
+        await policyInsurerInsuredModel.disablePolicyInsurerInsured(req.params.id, disablePolicyInsurerInsured);
         res.redirect('/sistema/policies');
     }
 }

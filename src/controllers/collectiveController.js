@@ -447,7 +447,6 @@ module.exports = {
         let disableCIIRD = 1;
         await collectiveModel.updateDisableCollective(req.params.id, req.body);
         await collectiveModel.disableCollective(req.params.id, disableCollective);
-        await collectiveInsurerInsuredModel.disableCollectiveInsurerInsured(req.params.id, disableCollectiveInsurerInsured);
         let disableCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(req.params.id);
         let resultCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(disableCII[0].id_caa);
         let resultCIIV = await colInsInsurerVehi.getColInsuInsuredVehi(disableCII[0].id_caa);
@@ -465,6 +464,7 @@ module.exports = {
                 await colInsInsurerRiskDiver.disableColInsuInsuredRiesDiver(itemCIIRD.id_caard, disableCIIRD);
             }
         }
+        await collectiveInsurerInsuredModel.disableCollectiveInsurerInsured(req.params.id, disableCollectiveInsurerInsured);
         res.redirect('/sistema/collectives');
     }
 }
