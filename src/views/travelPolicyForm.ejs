@@ -26,7 +26,7 @@
                     <h5>Póliza Individual Viaje</h5>
                 </div>
                 <div class="ibox-content">
-                    <div id="form" class="wizard-big">
+                    <div id="form-travel" class="wizard-big">
                         <h1><i class="fa fa-window-maximize"></i> Póliza</h1>
                         <fieldset>
                             <form id="policy-form" action="/sistema/add-travel-policy" method="POST">
@@ -56,7 +56,7 @@
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador();"
                                                         placeholder="Cédula/Rif *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
@@ -72,7 +72,7 @@
                                                         id="id_rif_asegurado"
                                                         onkeyup="pasarNombreAsegurado();"
                                                         placeholder="Cédula/Rif *" 
-                                                        class="form-control"
+                                                        class="form-control number_format"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
