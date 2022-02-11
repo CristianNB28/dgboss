@@ -94,6 +94,7 @@ module.exports = {
                 ruta: 'sistema',
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado del agente propio');
         } catch (error) {
             console.log(error);
             res.render('ownAgentForm', {
@@ -107,7 +108,6 @@ module.exports = {
                 name: req.session.name
             });
             next(error);
-            throw new Error('Error, valor duplicado del agente propio');
         }
     },
     postExecutiveForm: async (req, res) => {
