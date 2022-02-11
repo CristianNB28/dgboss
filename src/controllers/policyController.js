@@ -460,6 +460,7 @@ module.exports = {
             let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-vehicle-policy');
+            throw new Error('Error, valor duplicado de póliza individual vehiculo');
         } catch (error) {
             console.log(error);
             res.render('vehiclePolicyForm', {
@@ -475,7 +476,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual vehiculo');
         }
     },
     postHealthPolicyForm: async (req, res) => {
@@ -544,6 +544,7 @@ module.exports = {
             let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-health-policy');
+            throw new Error('Error, valor duplicado de póliza individual salud');
         } catch (error) {
             console.log(error);
             res.render('healthPolicyForm', {
@@ -559,7 +560,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual salud');
         }
     },
     postPatrimonialPolicyForm: async (req, res) => {
@@ -640,6 +640,7 @@ module.exports = {
             let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-patrimonial-policy');
+            throw new Error('Error, valor duplicado de póliza individual patrimonial');
         } catch (error) {
             console.log(error);
             res.render('patrimonialPolicyForm', {
@@ -655,7 +656,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual patrimonial');
         }
     },
     postBailPolicyForm: async (req, res) => {
@@ -736,6 +736,7 @@ module.exports = {
             let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-bail-policy');
+            throw new Error('Error, valor duplicado de póliza individual fianza');
         } catch (error) {
             console.log(error);
             res.render('bailPolicyForm', {
@@ -751,7 +752,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual fianza');
         }
     },
     postAnotherBranchPolicyForm: async (req, res) => {
@@ -832,6 +832,7 @@ module.exports = {
             let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-another-branch-policy');
+            throw new Error('Error, valor duplicado de póliza individual otro ramos');
         } catch (error) {
             console.log(error);
             res.render('anotherBranchPolicyForm', {
@@ -847,7 +848,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual otro ramos');
         }
     },
     postFuneralPolicyForm: async (req, res) => {
@@ -928,6 +928,7 @@ module.exports = {
             let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-funeral-policy');
+            throw new Error('Error, valor duplicado de póliza individual funerario');
         } catch (error) {
             console.log(error);
             res.render('funeralPolicyForm', {
@@ -943,7 +944,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual funerario');
         }
     },
     postLifePolicyForm: async (req, res) => {
@@ -1024,6 +1024,7 @@ module.exports = {
             let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-life-policy');
+            throw new Error('Error, valor duplicado de póliza individual vida');
         } catch (error) {
             console.log(error);
             res.render('lifePolicyForm', {
@@ -1039,7 +1040,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual vida');
         }
     },
     postAPPolicyForm: async (req, res) => {
@@ -1120,6 +1120,7 @@ module.exports = {
             let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-ap-policy');
+            throw new Error('Error, valor duplicado de póliza individual AP');
         } catch (error) {
             console.log(error);
             res.render('apPolicyForm', {
@@ -1135,7 +1136,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual AP');
         }
     },
     postTravelPolicyForm: async (req, res) => {
@@ -1216,6 +1216,7 @@ module.exports = {
             let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-travel-policy');
+            throw new Error('Error, valor duplicado de póliza individual viaje');
         } catch (error) {
             console.log(error);
             res.render('travelPolicyForm', {
@@ -1231,7 +1232,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual viaje');
         }
     },
 /*                  PUT                  */
@@ -1311,6 +1311,7 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de póliza individual');
         } catch (error) {
             console.log(error);
             res.render('editPolicy', {
@@ -1331,7 +1332,6 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual');
         }
     },
 /*               DELETE                  */

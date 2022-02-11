@@ -83,6 +83,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-vehicle-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('vehiclePolicyForm', {
@@ -98,7 +99,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postHealthReceiptForm: async (req, res) => {
@@ -141,6 +141,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-health-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('healthPolicyForm', {
@@ -156,7 +157,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postPatrimonialReceiptForm: async (req, res) => {
@@ -199,6 +199,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-patrimonial-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('patrimonialPolicyForm', {
@@ -214,7 +215,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postBailReceiptForm: async (req, res) => {
@@ -257,6 +257,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-bail-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('bailPolicyForm', {
@@ -272,7 +273,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postAnotherBranchReceiptForm: async (req, res) => {
@@ -315,6 +315,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-another-branch-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('anotherBranchPolicyForm', {
@@ -330,7 +331,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postFuneralReceiptForm: async (req, res) => {
@@ -373,6 +373,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-funeral-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('funeralPolicyForm', {
@@ -388,7 +389,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postLifeReceiptForm: async (req, res) => {
@@ -431,6 +431,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-life-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('lifePolicyForm', {
@@ -446,7 +447,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postAPReceiptForm: async (req, res) => {
@@ -489,6 +489,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-ap-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('apPolicyForm', {
@@ -504,7 +505,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postTravelReceiptForm: async (req, res) => {
@@ -547,6 +547,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-travel-policy');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('travelPolicyForm', {
@@ -562,7 +563,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postHealthReceiptCollectiveForm: async (req, res) => {
@@ -605,6 +605,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-health-collective');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('healthCollectiveForm', {
@@ -620,7 +621,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postVehicleReceiptCollectiveForm: async (req, res) => {
@@ -663,6 +663,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-vehicle-collective');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('vehicleCollectiveForm', {
@@ -678,7 +679,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postRiskDiverseReceiptCollectiveForm: async (req, res) => {
@@ -721,6 +721,7 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-risk-diverse-collective');
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('riskDiverseCollectiveForm', {
@@ -736,7 +737,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
     postReceiptForm: async (req, res) => {
@@ -826,6 +826,7 @@ module.exports = {
                 collectives: resultsCollectives,
                 ownAgents: resultsOwnAgents,
             });
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('travelPolicyForm', {
@@ -843,7 +844,6 @@ module.exports = {
                 collectives: resultsCollectives,
                 ownAgents: resultsOwnAgents,
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
 /*                  PUT                  */
@@ -1051,6 +1051,7 @@ module.exports = {
                 receipt: resultReceipt[0],
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('editReceipt', {
@@ -1079,7 +1080,6 @@ module.exports = {
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         }
     },
 /*               DELETE                  */

@@ -74,6 +74,7 @@ module.exports = {
                     name: req.session.name
                 });
             }
+            throw new Error('Error, valor duplicado de asegurado persona natural');
         } catch (error) {
             console.log(error);
             res.render('naturalInsuredForm', {
@@ -87,7 +88,6 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de asegurado persona natural');
         }
     },
     postLegalInsuredForm: async (req, res) => {
@@ -131,6 +131,7 @@ module.exports = {
                     name: req.session.name
                 });
             }
+            throw new Error('Error, valor duplicado de asegurado persona jurídico');
         } catch (error) {
             console.log(error);
             res.render('legalInsuredForm', {
@@ -144,7 +145,6 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de asegurado persona jurídico');
         }
     },
 /*                  PUT                  */
@@ -219,6 +219,7 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de asegurado persona natural');
         } catch (error) {
             console.log(error);
             res.render('editNaturalInsured', {
@@ -235,7 +236,6 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de asegurado persona natural');
         }
     },
     updateLegalInsured: async (req, res) => {
@@ -270,6 +270,7 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de asegurado persona jurídico');
         } catch (error) {
             console.log(error);
             res.render('editLegalInsured', {
@@ -285,7 +286,6 @@ module.exports = {
                 ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de asegurado persona jurídico');
         }
     },
 /*               DELETE                  */

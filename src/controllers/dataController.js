@@ -54,6 +54,7 @@ module.exports = {
                 ruta: 'sistema',
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de la aseguradora');
         } catch (error) {
             console.log(error);
             res.render('insurerForm', {
@@ -66,10 +67,9 @@ module.exports = {
                 ruta: 'sistema/add-insurer',
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de la aseguradora');
         }
     },
-    postOwnAgentForm: async (req, res, next) => {
+    postOwnAgentForm: async (req, res) => {
         try {
             let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
             if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
@@ -107,7 +107,6 @@ module.exports = {
                 ruta: 'sistema/add-own-agent',
                 name: req.session.name
             });
-            next(error);
         }
     },
     postExecutiveForm: async (req, res) => {
@@ -123,6 +122,7 @@ module.exports = {
                 ruta: 'sistema',
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado del ejecutivo');
         } catch (error) {
             console.log(error);
             res.render('executiveForm', {
@@ -135,7 +135,6 @@ module.exports = {
                 ruta: 'sistema/add-executive',
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado del ejecutivo');
         }
     },
 /*                  PUT                  */
@@ -197,6 +196,7 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de la aseguradora');
         } catch (error) {
             console.log(error);
             res.render('editInsurer', {
@@ -210,7 +210,6 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de la aseguradora');
         }
     },
     updateOwnAgent: async (req, res) => {
@@ -242,6 +241,7 @@ module.exports = {
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado del agente propio');
         } catch (error) {
             console.log(error);
             res.render('editOwnAgent', {
@@ -256,7 +256,6 @@ module.exports = {
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado del agente propio');
         }
     },
     updateExecutive: async (req, res) => {
@@ -275,6 +274,7 @@ module.exports = {
                 executive: resultExecutive[0],
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado del ejecutivo');
         } catch (error) {
             console.log(error);
             res.render('editExecutive', {
@@ -288,7 +288,6 @@ module.exports = {
                 executive: resultExecutive[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado del ejecutivo');
         }
     },
 /*               DELETE                  */

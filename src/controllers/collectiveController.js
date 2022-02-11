@@ -285,6 +285,7 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-health-collective');
+            throw new Error('Error, valor duplicado de póliza colectivo salud');
         } catch (error) {
             console.log(error);
             res.render('healthCollectiveForm', {
@@ -300,7 +301,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza colectivo salud');
         }
     },
     postVehicleCollectiveForm: async (req, res) => {
@@ -372,6 +372,7 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-vehicle-collective');
+            throw new Error('Error, valor duplicado de póliza colectivo vehiculo');
         } catch (error) {
             console.log(error);
             res.render('vehicleCollectiveForm', {
@@ -387,7 +388,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza colectivo vehiculo');
         }
     },
     postRiskDiverseCollectiveForm: async (req, res) => {
@@ -459,6 +459,7 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-risk-diverse-collective');
+            throw new Error('Error, valor duplicado de póliza colectivo riesgo diverso');
         } catch (error) {
             console.log(error);
             res.render('riskDiverseCollectiveForm', {
@@ -474,7 +475,6 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza colectivo riesgo diverso');
         }
     },
 /*                  PUT                  */
@@ -550,6 +550,7 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
+            throw new Error('Error, valor duplicado de póliza colectivo');
         } catch (error) {
             console.log(error);
             res.render('editCollective', {
@@ -569,7 +570,6 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza colectivo');
         }
     },
 /*               DELETE                  */
