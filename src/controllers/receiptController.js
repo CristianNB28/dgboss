@@ -829,7 +829,7 @@ module.exports = {
             throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
-            res.render('travelPolicyForm', {
+            res.render('receiptForm', {
                 alert: true,
                 alertTitle: 'Error',
                 alertMessage: 'Valor duplicado de número de recibo',
