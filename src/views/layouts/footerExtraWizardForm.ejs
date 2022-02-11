@@ -666,7 +666,6 @@
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreAsegurado() {
         var idRif = document.getElementById("id_rif_asegurado").value;
-        console.log(idRif)
         if (idRif.startsWith('J') || idRif.startsWith('G')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
@@ -699,6 +698,27 @@
         }
     }
 </script>
+
+<script>
+    var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+    function pasarNombreAseguradoConductor() {
+        var cedulaConductor = document.getElementById("cedula_conductor").value;
+        for (let i = 0; i < naturalInsureds.length; i++) {
+            let elementNaturalInsured = naturalInsureds[i];
+            if (cedulaConductor.match(/^\d/)) {
+                if (cedulaConductor === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    document.getElementById("nombre_conductor_vehiculo").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
+                    break;
+                } else {
+                    document.getElementById("nombre_conductor_vehiculo").value = '';
+                }
+            } else if (cedulaConductor.startsWith('')) {
+                document.getElementById("nombre_conductor_vehiculo").value = '';
+            }
+        }
+    }
+</script>
+
 
 <script>
     function showInput() {
@@ -738,10 +758,22 @@
                         $('#fecha_pago_recibo').val(fecha);
                     });
                 });
-                var premiumMonthly = policy.prima_anual_poliza / 12;
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+                var numberMonthly = document.getElementById("numero_pago_recibo").value;
+                if ((numberMonthly === '') || (numberMonthly === '0')) {
+                    numberMonthly = 1;
+                }
+                var premiumMonthly = policy.prima_anual_poliza / numberMonthly;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").setAttribute("value", '');
             } else if (getSelectValue === 'TRIMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -750,6 +782,15 @@
                         fecha.setMonth(fecha.getMonth() + 4);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
@@ -766,11 +807,20 @@
                         $('#fecha_pago_recibo').val(fecha);
                     });
                 });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 6);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
                 var premiumBiannual = policy.prima_anual_poliza / 2;
                 premiumBiannual = premiumBiannual.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBiannual;
                 document.getElementById("numero_pago_recibo").value = 2;
-            } else if (getSelectValue === 'ANUAL') {
+            }  else if (getSelectValue === 'ANUAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
@@ -778,6 +828,15 @@
                         fecha.setFullYear(fecha.getFullYear() + 1);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
                 var annualPremium = policy.prima_anual_poliza / 1;
@@ -790,6 +849,8 @@
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
                 document.getElementById("fecha_pago_recibo").value = '';
+                document.getElementById("fecha_desde_recibo").value = '';
+                document.getElementById("fecha_hasta_recibo").value = '';
             }
         }
     </script>

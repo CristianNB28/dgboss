@@ -42,55 +42,100 @@ module.exports = {
     },
 /*                  POST                  */
     postInsurerForm: async (req, res) => {
-        await insurerModel.postInsurerForm(req.body);
-        res.render('insurerForm', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se registraron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        try {
+            await insurerModel.postInsurerForm(req.body);
+            res.render('insurerForm', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se registraron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('insurerForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de la aseguradora',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-insurer',
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de la aseguradora');
+        }
     },
     postOwnAgentForm: async (req, res) => {
-        let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
-        if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
-        } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
-        } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        try {
+            let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
+            if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+            } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            }
+            await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, req.body);
+            res.render('ownAgentForm', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se registraron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('ownAgentForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado del agente propio',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-own-agent',
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado del agente propio');
         }
-        await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, req.body);
-        res.render('ownAgentForm', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se registraron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
     },
     postExecutiveForm: async (req, res) => {
-        await executiveModel.postExecutiveForm(req.body);
-        res.render('executiveForm', {
-            alert: true,
-            alertTitle: 'Exitoso',
-            alertMessage: 'Se registraron los datos exitosamente',
-            alertIcon: 'success',
-            showConfirmButton: false,
-            timer: 1500,
-            ruta: 'sistema',
-            name: req.session.name
-        });
+        try {
+            await executiveModel.postExecutiveForm(req.body);
+            res.render('executiveForm', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se registraron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('executiveForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado del ejecutivo',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-executive',
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado del ejecutivo');
+        }
     },
 /*                  PUT                  */
     putInsurer: async (req, res, next) => {
@@ -112,7 +157,7 @@ module.exports = {
         if (idOwnAgent.match(valoresAceptados)) {
             let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-            porcentajeAgentePropio = new Intl.NumberFormat('de-DE').format(porcentajeAgentePropio);
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             res.render('editOwnAgent', {
                 ownAgent: resultOwnAgent[0],
                 porcentajeAgentePropio: porcentajeAgentePropio,
@@ -136,28 +181,114 @@ module.exports = {
         }
     },
     updateInsurer: async (req, res) => {
-        await insurerModel.updateInsurer(req.body);
-        res.redirect('/sistema');
+        let idInsurer = req.body.id_aseguradora;
+        let resultInsurer = await insurerModel.getInsurer(idInsurer);
+        try {
+            await insurerModel.updateInsurer(req.body);
+            res.render('editInsurer', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                insurer: resultInsurer[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editInsurer', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de la aseguradora',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-insurer/${idInsurer}`,
+                insurer: resultInsurer[0],
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de la aseguradora');
+        }
     },
     updateOwnAgent: async (req, res) => {
+        let idOwnAgent = req.body.id_agente_propio;
+        let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
         let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
-        if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
-        } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
-        } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
-            porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-            porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+        try {
+            if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+            } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            }
+            await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, req.body);
+            res.render('editOwnAgent', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                ownAgent: resultOwnAgent[0],
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editOwnAgent', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado del agente propio',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-own-agent/${idOwnAgent}`,
+                ownAgent: resultOwnAgent[0],
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado del agente propio');
         }
-        await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, req.body);
-        res.redirect('/sistema');
     },
     updateExecutive: async (req, res) => {
-        await executiveModel.updateExecutive(req.body);
-        res.redirect('/sistema');
+        let idExecutive = req.body.id_ejecutivo;
+        let resultExecutive = await executiveModel.getExecutive(idExecutive);
+        try {
+            await executiveModel.updateExecutive(req.body);
+            res.render('editExecutive', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                executive: resultExecutive[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editExecutive', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado del ejecutivo',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-executive/${idExecutive}`,
+                executive: resultExecutive[0],
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado del ejecutivo');
+        }
     },
 /*               DELETE                  */
     disableInsurer: async (req, res) => {

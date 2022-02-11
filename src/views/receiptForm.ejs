@@ -54,25 +54,30 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Fecha</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_fecha_recibo" id="tipo_fecha_recibo" required onchange="automaticDates()">
-                                                <option value="">Seleccione</option>
-                                                <option value="MENSUAL">MENSUAL</option>
-                                                <option value="TRIMESTRAL">TRIMESTRAL</option>
-                                                <option value="SEMESTRAL">SEMESTRAL</option>
-                                                <option value="ANUAL">ANUAL</option>
-                                            </select>
+                                            <input 
+                                                type="text"
+                                                name="id_rif_asegurado"
+                                                id="id_rif_asegurado"
+                                                onkeyup="pasarAgentePropio();"
+                                                placeholder="Cédula/Rif *" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                required
+                                            >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="date"
-                                                name="fecha_desde_recibo"
-                                                id="fecha_desde_recibo" 
+                                                type="text"
+                                                name="nombre_agente_propio"
+                                                id="nombre_agente_propio"
+                                                placeholder="Nombre del Agente Propio *"
                                                 class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
@@ -102,6 +107,17 @@
                                             </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="date"
+                                                    name="fecha_desde_recibo"
+                                                    id="fecha_desde_recibo" 
+                                                    class="form-control"
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha de Pago</label>
                                             <div class="col-sm-9">
                                                 <input 
@@ -113,36 +129,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="id_rif_asegurado"
-                                                id="id_rif_asegurado"
-                                                onkeyup="pasarAgentePropio();"
-                                                placeholder="Cédula/Rif *" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="nombre_agente_propio"
-                                                id="nombre_agente_propio"
-                                                placeholder="Nombre del Agente Propio *"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -177,26 +163,28 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="text" 
-                                                name="monto_comision_recibo"
-                                                id="monto_comision_recibo"
-                                                placeholder="Comisión Asociada *" 
-                                                class="form-control number_format"
+                                                type="text"
+                                                name="nombre_razon_asegurado"
+                                                id="nombre_razon_asegurado"
+                                                placeholder="Nombre o Razón Social del Asegurado *"
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Porcentaje</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="date"
-                                                name="fecha_hasta_recibo"
-                                                id="fecha_hasta_recibo"
-                                                class="form-control"
+                                                type="text" 
+                                                name="porcentaje_agente_propio"
+                                                id="porcentaje_agente_propio"
+                                                placeholder="Porcentaje Agente Propio *"
+                                                class="form-control number_format"
                                                 required
                                             >
                                         </div>
@@ -229,29 +217,26 @@
                                                 >
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="nombre_razon_asegurado"
-                                                id="nombre_razon_asegurado"
-                                                placeholder="Nombre o Razón Social del Asegurado *"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="date"
+                                                    name="fecha_hasta_recibo"
+                                                    id="fecha_hasta_recibo"
+                                                    class="form-control"
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Porcentaje</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text" 
-                                                name="porcentaje_agente_propio"
-                                                id="porcentaje_agente_propio"
-                                                placeholder="Porcentaje Agente Propio *"
+                                                name="monto_comision_recibo"
+                                                id="monto_comision_recibo"
+                                                placeholder="Comisión Asociada *" 
                                                 class="form-control number_format"
                                                 required
                                             >

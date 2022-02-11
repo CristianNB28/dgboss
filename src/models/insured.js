@@ -77,11 +77,11 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postNaturalInsuredForm: (idAgentePropio, naturalInsured) => {
+    postNaturalInsuredForm: (fechaNacPerNat, idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Asegurado_Persona_Natural (cedula_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, telefono_asegurado_per_nat, correo_asegurado_per_nat, celular_per_nat, nombre_emergencia_per_nat, telefono_emergencia_per_nat, direccion_asegurado_per_nat, agente_propio_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [naturalInsured.cedula_asegurado_per_nat, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio], 
+            db.query(`INSERT INTO Asegurado_Persona_Natural (cedula_asegurado_per_nat, nombre_asegurado_per_nat, apellido_asegurado_per_nat, fec_nac_per_nat, telefono_asegurado_per_nat, correo_asegurado_per_nat, celular_per_nat, nombre_emergencia_per_nat, telefono_emergencia_per_nat, direccion_asegurado_per_nat, agente_propio_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [naturalInsured.cedula_asegurado_per_nat, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, fechaNacPerNat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -104,12 +104,12 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateNaturalInsured: (idAgentePropio, naturalInsured) => {
+    updateNaturalInsured: (fechaNacPerNat, idAgentePropio, naturalInsured) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Asegurado_Persona_Natural 
-                    SET cedula_asegurado_per_nat=?, nombre_asegurado_per_nat=?, apellido_asegurado_per_nat=?, telefono_asegurado_per_nat=?, correo_asegurado_per_nat=?, celular_per_nat=?, nombre_emergencia_per_nat=?, telefono_emergencia_per_nat=?, direccion_asegurado_per_nat=?, agente_propio_id=?
+                    SET cedula_asegurado_per_nat=?, nombre_asegurado_per_nat=?, apellido_asegurado_per_nat=?, fec_nac_per_nat=?, telefono_asegurado_per_nat=?, correo_asegurado_per_nat=?, celular_per_nat=?, nombre_emergencia_per_nat=?, telefono_emergencia_per_nat=?, direccion_asegurado_per_nat=?, agente_propio_id=?
                     WHERE id_asegurado_per_nat=?`, 
-            [naturalInsured.cedula_asegurado_per_nat, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio, naturalInsured.id_asegurado_per_nat], 
+            [naturalInsured.cedula_asegurado_per_nat, naturalInsured.nombre_asegurado_per_nat, naturalInsured.apellido_asegurado_per_nat, fechaNacPerNat, naturalInsured.telefono_asegurado_per_nat, naturalInsured.correo_asegurado_per_nat, naturalInsured.celular_per_nat, naturalInsured.nombre_emergencia_per_nat, naturalInsured.telefono_emergencia_per_nat, naturalInsured.direccion_asegurado_per_nat, idAgentePropio, naturalInsured.id_asegurado_per_nat], 
             (error, rows) => {
                 if (error) {
                     reject(error)

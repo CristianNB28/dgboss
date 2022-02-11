@@ -521,7 +521,6 @@
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreAsegurado() {
         var idRif = document.getElementById("id_rif_asegurado").value;
-        console.log(idRif)
         if (idRif.startsWith('J') || idRif.startsWith('G')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
@@ -631,10 +630,22 @@
                         $('#fecha_pago_recibo').val(fecha);
                     });
                 });
-                var premiumMonthly = collective.prima_anual_colectivo / 12;
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+                var numberMonthly = document.getElementById("numero_pago_recibo").value;
+                if ((numberMonthly === '') || (numberMonthly === '0')) {
+                    numberMonthly = 1;
+                }
+                var premiumMonthly = collective.prima_anual_colectivo / numberMonthly;
                 premiumMonthly = premiumMonthly.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
-                document.getElementById("numero_pago_recibo").setAttribute("value", '');
             } else if (getSelectValue === 'TRIMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -643,6 +654,15 @@
                         fecha.setMonth(fecha.getMonth() + 4);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
                 var premiumQuarterly = collective.prima_anual_colectivo / 4;
@@ -659,11 +679,20 @@
                         $('#fecha_pago_recibo').val(fecha);
                     });
                 });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 6);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
                 var premiumBiannual = collective.prima_anual_colectivo / 2;
                 premiumBiannual = premiumBiannual.toFixed(2);
                 document.getElementById("monto_prima_recibo").value = premiumBiannual;
                 document.getElementById("numero_pago_recibo").value = 2;
-            } else if (getSelectValue === 'ANUAL') {
+            }  else if (getSelectValue === 'ANUAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
@@ -671,6 +700,15 @@
                         fecha.setFullYear(fecha.getFullYear() + 1);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
                 var annualPremium = collective.prima_anual_colectivo / 1;
@@ -683,6 +721,8 @@
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
                 document.getElementById("fecha_pago_recibo").value = '';
+                document.getElementById("fecha_desde_recibo").value = '';
+                document.getElementById("fecha_hasta_recibo").value = '';
             }
         }
     </script>

@@ -212,7 +212,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -252,7 +252,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -282,7 +282,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -317,7 +317,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -338,7 +338,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -381,7 +381,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -411,7 +411,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -450,8 +450,8 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
-                        if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
+                        if ((commissionReceipt.length !== 0) && (lengt.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     }
@@ -492,7 +492,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -522,7 +522,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -557,7 +557,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -578,7 +578,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -621,7 +621,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {
@@ -651,7 +651,7 @@ module.exports = {
                     let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
                     let commissionReceipt = await receiptModel.getReceiptCommissionPolicy(elementPolicyId.poliza_id);
                     let commissionPercentage = await commissionModel.getOwnAgentPercentage(elementPolicyId.poliza_id);
-                    if (commissionReceipt.length !== 0) {
+                    if ((commissionReceipt.length !== 0) && (commissionPercentage.length !== 0)) {
                         sumOwnAgentCommisions = (commissionReceipt[0].monto_comision_recibo.toFixed(2) * (commissionPercentage[0].porcentaje_agente_comision / 100) + sumOwnAgentCommisions);
                     }
                     if (elementPolicyIdNext === undefined) {

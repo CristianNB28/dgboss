@@ -27,8 +27,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="cedula_asegurado_per_nat"
@@ -40,8 +40,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="nombre_asegurado_per_nat"
@@ -54,8 +54,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="apellido_asegurado_per_nat"
@@ -68,8 +68,21 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Nacimiento</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fec_nac_per_nat"
+                                                id="fec_nac_per_nat"
+                                                value="<%= fechaNacNaturalInsured %>"
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="tel"
                                                 name="telefono_asegurado_per_nat"
@@ -80,8 +93,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="email" 
                                                 name="correo_asegurado_per_nat"
@@ -100,8 +113,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Celular</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="tel"
                                                 name="celular_per_nat"
@@ -113,8 +126,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="nombre_emergencia_per_nat"
@@ -127,8 +140,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Teléfono</label>
+                                        <div class="col-sm-9">
                                             <input 
                                                 type="tel"
                                                 name="telefono_emergencia_per_nat"
@@ -140,8 +153,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Agente</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                        <div class="col-sm-9">
                                             <select class="form-control" name="nombre_com_agente_propio" required>
                                                 <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                 <% ownAgents.forEach((ownAgent) => { %>
@@ -151,8 +164,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
-                                        <div class="col-sm-10">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Dirección</label>
+                                        <div class="col-sm-9">
                                             <textarea 
                                                 name="direccion_asegurado_per_nat"
                                                 id="direccion_asegurado_per_nat" 
@@ -162,18 +175,20 @@
                                             ><%= naturalInsured.direccion_asegurado_per_nat %></textarea>
                                         </div>
                                     </div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="hidden" 
+                                                name="id_asegurado_per_nat"
+                                                id="id_asegurado_per_nat"
+                                                value="<%= naturalInsured.id_asegurado_per_nat %>"
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    </br>
+                                    </br>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
-                            <div class="col-sm-10">
-                                <input 
-                                    type="hidden" 
-                                    name="id_asegurado_per_nat"
-                                    id="id_asegurado_per_nat"
-                                    value="<%= naturalInsured.id_asegurado_per_nat %>"
-                                    class="form-control"
-                                >
                             </div>
                         </div>
                     </div>

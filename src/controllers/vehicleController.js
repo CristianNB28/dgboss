@@ -10,19 +10,11 @@ module.exports = {
 /*                 POST                  */
     postVehicleForm: async (req, res) => {
         let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-        let cedulaConductor = '';
-        let rifConductor = '';
+        let cedulaConductor = req.body.cedula_conductor;
         let gradoBlindaje;
         let montoBlindaje;
-        let fechaVehiculoDesde = new Date(req.body.fecha_desde_vehiculo);
-        let fechaVehiculoHasta = new Date(req.body.fecha_hasta_vehiculo);
         let yearVehicle = new Date(req.body.year_vehiculo);
         yearVehicle = yearVehicle.getUTCFullYear();
-        if (((req.body.id_rif_conductor.startsWith('J')) || (req.body.id_rif_conductor.startsWith('G')) || (req.body.id_rif_conductor.startsWith('V')))) {
-            rifConductor = req.body.id_rif_conductor;
-        } else {
-            cedulaConductor = req.body.id_rif_conductor;
-        }
         if (req.body.grado_blindaje_vehiculo === '') {
             gradoBlindaje = 0;
         } else {
@@ -44,7 +36,7 @@ module.exports = {
                 montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
             }
         }
-        let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, rifConductor, gradoBlindaje, montoBlindaje, fechaVehiculoDesde, fechaVehiculoHasta, yearVehicle, req.body);
+        let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
         await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
         res.redirect('/sistema/add-vehicle-policy');
     },
@@ -59,15 +51,15 @@ module.exports = {
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
         for (const itemFile of dataExcel) {
-            let fileTransmission = itemFile['transmisión'];
-            let fileShield = itemFile['Blindaje'];
+            let fileTransmission = itemFile['transmisión( automatico o sincro)'];
+            let fileShield = itemFile['Blindaje( si o no)'];
             let fileBody = itemFile['Carrocería'];
             let fileYear = itemFile['Año'];
             let fileVehicleType = itemFile['Tipo de vehículo'];
             let fileSumInsured = itemFile['Suma Asegurada'];
             let fileSerialEngine = itemFile['Serial del moto'];
             let idCollective = await collectiveModel.getCollectiveLast();
-            if (fileShield === 'SÍ') {
+            if (fileShield === 'si') {
                 fileShield = 1;
             } else {
                 fileShield = 0;

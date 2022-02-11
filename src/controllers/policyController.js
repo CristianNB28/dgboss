@@ -383,667 +383,856 @@ module.exports = {
     },
 /*                 POST                  */
     postVehiclePolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'AUTOMÓVIL';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-vehicle-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('vehiclePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual vehiculo',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-vehicle-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual vehiculo');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'AUTOMÓVIL';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-vehicle-policy');
     },
     postHealthPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'SALUD';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-health-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('healthPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual salud',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-health-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual salud');
         }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'SALUD';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-health-policy');
     },
     postPatrimonialPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'PATRIMONIAL';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-patrimonial-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('patrimonialPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual patrimonial',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-patrimonial-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual patrimonial');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'PATRIMONIAL';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-patrimonial-policy');
     },
     postBailPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'FIANZA';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-bail-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('bailPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual fianza',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-bail-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual fianza');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'FIANZA';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-bail-policy');
     },
     postAnotherBranchPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'OTROS RAMOS';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-another-branch-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('anotherBranchPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual otro ramos',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-another-branch-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual otro ramos');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'OTROS RAMOS';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-another-branch-policy');
     },
     postFuneralPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'FUNERARIO';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-funeral-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('funeralPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual funerario',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-funeral-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual funerario');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'FUNERARIO';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-funeral-policy');
     },
     postLifePolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'VIDA';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-life-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('lifePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual vida',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-life-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual vida');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'VIDA';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-life-policy');
     },
     postAPPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'AP';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-ap-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('apPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual AP',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-ap-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual AP');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'AP';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-ap-policy');
     },
     postTravelPolicyForm: async (req, res) => {
-        let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-        let montoTasa = req.body.tasa_poliza;
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        let deducible = req.body.deducible_poliza;
-        let sumaAsegurada = req.body.suma_asegurada_poliza;
-        if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-        } else if (montoTasa.indexOf(',') !== -1) {
-            montoTasa = montoTasa.replace(",", ".");
-            montoTasa = parseFloat(montoTasa);
-        } else if (montoTasa.indexOf('.') !== -1) {
-            montoTasa = montoTasa.replace(".", ",");
-            montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoTasa = req.body.tasa_poliza;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            } else if (montoTasa.indexOf(',') !== -1) {
+                montoTasa = montoTasa.replace(",", ".");
+                montoTasa = parseFloat(montoTasa);
+            } else if (montoTasa.indexOf('.') !== -1) {
+                montoTasa = montoTasa.replace(".", ",");
+                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
+            }
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'VIAJE';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
+            res.redirect('/sistema/add-travel-policy');
+        } catch (error) {
+            console.log(error);
+            res.render('travelPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual viaje',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-travel-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual viaje');
         }
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        }
-        if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
-            deducible = deducible.replace(",", ".");
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        } else if (deducible.indexOf(',') !== -1) {
-            deducible = deducible.replace(",", ".");
-            deducible = parseFloat(deducible);
-        } else if (deducible.indexOf('.') !== -1) {
-            deducible = deducible.replace(".", ",");
-            deducible = parseFloat(deducible.replace(/,/g,''));
-        }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
-        let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
-        let tipoIndividualPoliza = 'VIAJE';
-        let cedulaAseguradoNatural = '';
-        let rifAseguradoJuridico = '';
-        let estatusPoliza = '';
-        let diasExpiracion = 0;
-        let fechaActual = new Date();
-        let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-        let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-        diasExpiracion = diferenciaDias.toFixed(0);
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
-            rifAseguradoJuridico = req.body.id_rif_asegurado;
-        } else {
-            cedulaAseguradoNatural = req.body.id_rif_asegurado;
-        }
-        if (diasExpiracion > 0) {
-            estatusPoliza = 'VIGENTE';
-        } else {
-            estatusPoliza = 'ANULADO';
-        }
-        let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
-        await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-        res.redirect('/sistema/add-travel-policy');
     },
 /*                  PUT                  */
     putPolicy: async (req, res, next) => {
@@ -1076,23 +1265,74 @@ module.exports = {
         }
     },
     updatePolicy: async (req, res) => {
-        let fechaDesdePoliza = new Date(req.body.fecha_desde_poliza);
-        let fechaHastaPoliza = new Date(req.body.fecha_hasta_poliza);
-        let montoPrimaAnual = req.body.prima_anual_poliza;
-        if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
-        } else if (montoPrimaAnual.indexOf(',') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(",", ".");
-            montoPrimaAnual = parseFloat(montoPrimaAnual);
-        } else if (montoPrimaAnual.indexOf('.') !== -1) {
-            montoPrimaAnual = montoPrimaAnual.replace(".", ",");
-            montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+        let idPolicy = req.body.id_poliza;
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        let resultPolicies = await policyModel.getPolicies();
+        let resultsTaker = await policyModel.getPolicyHolder();
+        let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        let insurers = await insurerModel.getInsurers();
+        let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        try {
+            let fechaDesdePoliza = new Date(req.body.fecha_desde_poliza);
+            let fechaHastaPoliza = new Date(req.body.fecha_hasta_poliza);
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, req.body);
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
+            res.render('editPolicy', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: 'sistema',
+                policy: resultPolicy[0],
+                policies: resultPolicies,
+                takerNames: resultsTaker,
+                fechaDesdePoliza: fechaDesdePoliza,
+                fechaHastaPoliza: fechaHastaPoliza,
+                primaAnual: primaAnual,
+                insurers: insurers,
+                insurer: resultInsurer[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicy', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: 'Valor duplicado de póliza individual',
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy/${idPolicy}`,
+                policy: resultPolicy[0],
+                policies: resultPolicies,
+                takerNames: resultsTaker,
+                fechaDesdePoliza: fechaDesdePoliza,
+                fechaHastaPoliza: fechaHastaPoliza,
+                primaAnual: primaAnual,
+                insurers: insurers,
+                insurer: resultInsurer[0],
+                name: req.session.name
+            });
+            throw new Error('Error, valor duplicado de póliza individual');
         }
-        await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, req.body);
-        await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
-        res.redirect('/sistema');
     },
 /*               DELETE                  */
     disablePolicy: async (req, res) => {
