@@ -69,7 +69,7 @@ module.exports = {
             throw new Error('Error, valor duplicado de la aseguradora');
         }
     },
-    postOwnAgentForm: async (req, res) => {
+    postOwnAgentForm: async (req, res, next) => {
         try {
             let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
             if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
@@ -106,6 +106,7 @@ module.exports = {
                 ruta: 'sistema/add-own-agent',
                 name: req.session.name
             });
+            next(error);
             throw new Error('Error, valor duplicado del agente propio');
         }
     },
