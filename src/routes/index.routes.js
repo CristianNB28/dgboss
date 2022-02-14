@@ -189,6 +189,9 @@ router.post('/update-beneficiary', requireAuth, beneficiaryController.updateBene
 router.post('/remove-policy-beneficiary/:id', requireAuth, beneficiaryController.disablePolicyBeneficiary);
 router.get('/edit-policy-beneficiary/:id', requireAuth, beneficiaryController.putPolicyBeneficiary);
 router.post('/update-policy-beneficiary', requireAuth, beneficiaryController.updatePolicyBeneficiary);
+router.post('/remove-health-beneficiary/:id', requireAuth, beneficiaryController.disableHealthBeneficiary);
+router.post('/remove-funeral-beneficiary/:id', requireAuth, beneficiaryController.disableFuneralBeneficiary);
+router.post('/remove-life-beneficiary/:id', requireAuth, beneficiaryController.disableLifeBeneficiary);
 // Rutas de Vehiculos
 router.post('/remove-vehicle/:id', requireAuth, vehicleController.disableVehicle);
 router.get('/edit-vehicle/:id', requireAuth, vehicleController.putVehicle);

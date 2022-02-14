@@ -856,21 +856,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -925,7 +913,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-funeral-policy');
             throw new Error('Error, valor duplicado de póliza individual funerario');
@@ -952,21 +940,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -1021,7 +997,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-life-policy');
             throw new Error('Error, valor duplicado de póliza individual vida');
@@ -1048,21 +1024,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -1117,7 +1081,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-ap-policy');
             throw new Error('Error, valor duplicado de póliza individual AP');
@@ -1144,21 +1108,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -1213,7 +1165,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-travel-policy');
             throw new Error('Error, valor duplicado de póliza individual viaje');

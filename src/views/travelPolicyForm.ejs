@@ -55,8 +55,8 @@
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control number_format"
+                                                        placeholder="Cédula/Rif (Cédula escribir con puntos de miles) *" 
+                                                        class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
@@ -71,8 +71,8 @@
                                                         name="id_rif_asegurado"
                                                         id="id_rif_asegurado"
                                                         onkeyup="pasarNombreAsegurado();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control number_format"
+                                                        placeholder="Cédula/Rif (Cédula escribir con puntos de miles) *" 
+                                                        class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
@@ -159,20 +159,6 @@
                                                         <option value="COMBINADO EMPRESARIAL">COMBINADO EMPRESARIAL</option>
                                                         <option value="COMBINADO RESIDENCIAL">COMBINADO RESIDENCIAL</option>
                                                     </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="tasa_poliza"
-                                                        id="tasa_poliza"
-                                                        placeholder="Tasa Póliza *" 
-                                                        class="form-control number_format"
-                                                        required
-                                                    >
                                                 </div>
                                             </div>
                                         </div>

@@ -18,13 +18,11 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
-        //let e = '';
         if (resultCollective.length === 0) {
             res.render('healthCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
-                //error: e,
                 name: req.session.name
             });
         } else {
@@ -38,7 +36,6 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
-                    //error: e,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_nat_id === null) {
@@ -51,7 +48,6 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
-                    //error: e,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
@@ -64,7 +60,6 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
-                    //error: e,
                     name: req.session.name
                 });
             }

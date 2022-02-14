@@ -6,3 +6,4 @@ CREATE UNIQUE INDEX Indice_Asegurado_Persona_Juridica ON Asegurado_Persona_Jurid
 CREATE UNIQUE INDEX Indice_Poliza ON Poliza(numero_poliza);
 CREATE UNIQUE INDEX Indice_Colectivo ON Colectivo(numero_colectivo);
 CREATE UNIQUE INDEX Indice_Recibo ON Recibo(numero_recibo);
+CREATE UNIQUE INDEX Indice_Beneficiario ON Beneficiario(cedula_beneficiario);

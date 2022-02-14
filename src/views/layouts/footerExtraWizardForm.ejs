@@ -906,9 +906,9 @@
 <% if (typeof(data) !== 'undefined') { %>
     <script>
         var lista = <%- JSON.stringify(data) %>;
-        var tablaBeneficiario = null;
+        var tablaBeneficiarioSalud = null;
         $(document).ready(function(){
-            tablaBeneficiario = $('#tablaBeneficiarios').DataTable({
+            tablaBeneficiarioSalud = $('#tablaBeneficiariosSalud').DataTable({
                 pageLength: 25,
                 responsive: true,
                 dom: '<"html5buttons"B>lTfgitp',
@@ -917,7 +917,33 @@
                 columns: [
                     {"data": "nombre_beneficiario"},
                     {"data": "apellido_beneficiario"},
-                    {"data": "parentesco_beneficiario"}
+                    {"data": "parentesco_beneficiario"},
+                    {
+                        "data": "",
+                        "render": (data, type, row) => {
+                                return `<form class="form-inline" method="post" action="/sistema/remove-health-beneficiary/${row.id_beneficiario}">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                    <button 
+                                                        class="btn btn-danger" 
+                                                        type="submit"
+                                                    >
+                                                        <i class="fa fa-ban"></i>
+                                                    </button>
+                                                </div> 
+                                                <div class="col-sm-6 col-lg-12">
+                                                    <textarea 
+                                                        name="obser_deshabilitar_beneficiario"
+                                                        id="obser_deshabilitar_beneficiario" 
+                                                        placeholder="Observaciones de Deshabilitar *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </form>`;
+                        }
+                    }
                 ],
                 buttons: [
                     {
@@ -953,8 +979,168 @@
                     }
                 }
             });
-            tablaBeneficiario.rows.add(lista);
-            tablaBeneficiario.draw();
+            tablaBeneficiarioSalud.rows.add(lista);
+            tablaBeneficiarioSalud.draw();
+        });
+    </script>
+
+    <script>
+        var lista = <%- JSON.stringify(data) %>;
+        var tablaBeneficiarioFunerario = null;
+        $(document).ready(function(){
+            tablaBeneficiarioFunerario = $('#tablaBeneficiariosFunerario').DataTable({
+                pageLength: 25,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                processing: true,
+                serverSide: false,
+                columns: [
+                    {"data": "nombre_beneficiario"},
+                    {"data": "apellido_beneficiario"},
+                    {"data": "parentesco_beneficiario"},
+                    {
+                        "data": "",
+                        "render": (data, type, row) => {
+                                return `<form class="form-inline" method="post" action="/sistema/remove-funeral-beneficiary/${row.id_beneficiario}">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                    <button 
+                                                        class="btn btn-danger" 
+                                                        type="submit"
+                                                    >
+                                                        <i class="fa fa-ban"></i>
+                                                    </button>
+                                                </div> 
+                                                <div class="col-sm-6 col-lg-12">
+                                                    <textarea 
+                                                        name="obser_deshabilitar_beneficiario"
+                                                        id="obser_deshabilitar_beneficiario" 
+                                                        placeholder="Observaciones de Deshabilitar *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </form>`;
+                        }
+                    }
+                ],
+                buttons: [
+                    {
+                        extend: 'print',
+                        customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        },
+                        text: 'Imprimir'
+                    }
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+            tablaBeneficiarioFunerario.rows.add(lista);
+            tablaBeneficiarioFunerario.draw();
+        });
+    </script>
+
+    <script>
+        var lista = <%- JSON.stringify(data) %>;
+        var tablaBeneficiarioVida = null;
+        $(document).ready(function(){
+            tablaBeneficiarioVida = $('#tablaBeneficiariosVida').DataTable({
+                pageLength: 25,
+                responsive: true,
+                dom: '<"html5buttons"B>lTfgitp',
+                processing: true,
+                serverSide: false,
+                columns: [
+                    {"data": "nombre_beneficiario"},
+                    {"data": "apellido_beneficiario"},
+                    {"data": "parentesco_beneficiario"},
+                    {
+                        "data": "",
+                        "render": (data, type, row) => {
+                                return `<form class="form-inline" method="post" action="/sistema/remove-life-beneficiary/${row.id_beneficiario}">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                    <button 
+                                                        class="btn btn-danger" 
+                                                        type="submit"
+                                                    >
+                                                        <i class="fa fa-ban"></i>
+                                                    </button>
+                                                </div> 
+                                                <div class="col-sm-6 col-lg-12">
+                                                    <textarea 
+                                                        name="obser_deshabilitar_beneficiario"
+                                                        id="obser_deshabilitar_beneficiario" 
+                                                        placeholder="Observaciones de Deshabilitar *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+                                        </form>`;
+                        }
+                    }
+                ],
+                buttons: [
+                    {
+                        extend: 'print',
+                        customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        },
+                        text: 'Imprimir'
+                    }
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+            tablaBeneficiarioVida.rows.add(lista);
+            tablaBeneficiarioVida.draw();
         });
     </script>
 <% } %>

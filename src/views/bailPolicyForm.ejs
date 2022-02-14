@@ -55,8 +55,8 @@
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control number_format"
+                                                        placeholder="Cédula/Rif (Cédula escribir con puntos de miles) *" 
+                                                        class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
@@ -71,8 +71,8 @@
                                                         name="id_rif_asegurado"
                                                         id="id_rif_asegurado"
                                                         onkeyup="pasarNombreAsegurado();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control number_format"
+                                                        placeholder="Cédula/Rif (Cédula escribir con puntos de miles) *" 
+                                                        class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
@@ -158,6 +158,9 @@
                                                         <option value="RIESGOS DIVERSOS">RIESGOS DIVERSOS</option>
                                                         <option value="COMBINADO EMPRESARIAL">COMBINADO EMPRESARIAL</option>
                                                         <option value="COMBINADO RESIDENCIAL">COMBINADO RESIDENCIAL</option>
+                                                        <option value="FIANZA LABORAL">FIANZA LABORAL</option>
+                                                        <option value="FIANZA DE FIEL CUMPLIMIENTO">FIANZA DE FIEL CUMPLIMIENTO</option>
+                                                        <option value="FIANZA DE ANTICIPO">FIANZA DE ANTICIPO</option>
                                                     </select>
                                                 </div>
                                             </div>
