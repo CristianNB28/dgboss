@@ -3,42 +3,65 @@ const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const colInsInsurerVehiModel = require('../models/col_insu_insured_vehi');
+const insurerModel = require('../models/insurer');
+const insuredModel = require('../models/insured');
 const xlsx = require('xlsx');
 
 module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postVehicleForm: async (req, res) => {
-        let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-        let cedulaConductor = req.body.cedula_conductor;
-        let gradoBlindaje;
-        let montoBlindaje;
-        let yearVehicle = new Date(req.body.year_vehiculo);
-        yearVehicle = yearVehicle.getUTCFullYear();
-        if (req.body.grado_blindaje_vehiculo === '') {
-            gradoBlindaje = 0;
-        } else {
-            gradoBlindaje = parseInt(req.body.grado_blindaje_vehiculo)
-        }
-        if (req.body.monto_blindaje_vehiculo === '') {
-            montoBlindaje = 0;
-        } else {
-            montoBlindaje = req.body.monto_blindaje_vehiculo;
-            if ((montoBlindaje.indexOf(',') !== -1) && (montoBlindaje.indexOf('.') !== -1)) {
-                montoBlindaje = montoBlindaje.replace(",", ".");
-                montoBlindaje = montoBlindaje.replace(".", ",");
-                montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
-            } else if (montoBlindaje.indexOf(',') !== -1) {
-                montoBlindaje = montoBlindaje.replace(",", ".");
-                montoBlindaje = parseFloat(montoBlindaje);
-            } else if (montoBlindaje.indexOf('.') !== -1) {
-                montoBlindaje = montoBlindaje.replace(".", ",");
-                montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        try {
+            let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
+            let cedulaConductor = req.body.cedula_conductor;
+            let gradoBlindaje;
+            let montoBlindaje;
+            let yearVehicle = new Date(req.body.year_vehiculo);
+            yearVehicle = yearVehicle.getUTCFullYear();
+            if (req.body.grado_blindaje_vehiculo === '') {
+                gradoBlindaje = 0;
+            } else {
+                gradoBlindaje = parseInt(req.body.grado_blindaje_vehiculo)
             }
+            if (req.body.monto_blindaje_vehiculo === '') {
+                montoBlindaje = 0;
+            } else {
+                montoBlindaje = req.body.monto_blindaje_vehiculo;
+                if ((montoBlindaje.indexOf(',') !== -1) && (montoBlindaje.indexOf('.') !== -1)) {
+                    montoBlindaje = montoBlindaje.replace(",", ".");
+                    montoBlindaje = montoBlindaje.replace(".", ",");
+                    montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+                } else if (montoBlindaje.indexOf(',') !== -1) {
+                    montoBlindaje = montoBlindaje.replace(",", ".");
+                    montoBlindaje = parseFloat(montoBlindaje);
+                } else if (montoBlindaje.indexOf('.') !== -1) {
+                    montoBlindaje = montoBlindaje.replace(".", ",");
+                    montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
+                }
+            }
+            let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
+            await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
+            res.redirect('/sistema/add-vehicle-policy');
+            throw new Error('Error');
+        } catch (error) {
+            console.log(error);
+            res.render('vehiclePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-vehicle-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                name: req.session.name
+            });
         }
-        let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
-        await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
-        res.redirect('/sistema/add-vehicle-policy');
     },
     postVehicleCollectiveForm: async (req, res) => {
         const workbook = xlsx.readFile(req.file.path, {
