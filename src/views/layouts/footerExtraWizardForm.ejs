@@ -82,8 +82,7 @@
                     $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
                     return $("#policy-form").valid();
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
                     $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#receipt-form').valid();
@@ -95,8 +94,6 @@
             onStepChanged: (event, currentIndex, priorIndex) => {
                 if (currentIndex === 1) {
                     $('#policy-form').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
                 } else if (currentIndex === 3) {
                     $('#receipt-form').submit();
                 } else if (currentIndex === 4) {
@@ -150,6 +147,18 @@
             }    
         });
         $("#commission-form").on('keyup','.number_format',function(){
+            var separador = $(this);
+            for (var i = 0 ; i < separador.length; i++) {
+                separador[i].addEventListener('input', (e) => {
+                    var entrada = e.target.value.split(','),
+                    parteEntera = entrada[0].replace(/\./g, ''),
+                    parteDecimal = entrada[1],
+                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+                }, false); 
+            }    
+        });
+        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -293,6 +302,18 @@
                 }, false); 
             }    
         });
+        $("#verification-form").on('keyup','.number_format',function(){
+            var separador = $(this);
+            for (var i = 0 ; i < separador.length; i++) {
+                separador[i].addEventListener('input', (e) => {
+                    var entrada = e.target.value.split(','),
+                    parteEntera = entrada[0].replace(/\./g, ''),
+                    parteDecimal = entrada[1],
+                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+                }, false); 
+            }    
+        });
     });
 </script>
 
@@ -346,8 +367,7 @@
                     $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
                     return $("#policy-form").valid();
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
                     $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#receipt-form').valid();
@@ -359,8 +379,6 @@
             onStepChanged: (event, currentIndex, priorIndex) => {
                 if (currentIndex === 1) {
                     $('#policy-form').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
                 } else if (currentIndex === 3) {
                     $('#receipt-form').submit();
                 } else if (currentIndex === 4) {
@@ -425,6 +443,18 @@
                 }, false); 
             }    
         });
+        $("#verification-form").on('keyup','.number_format',function(){
+            var separador = $(this);
+            for (var i = 0 ; i < separador.length; i++) {
+                separador[i].addEventListener('input', (e) => {
+                    var entrada = e.target.value.split(','),
+                    parteEntera = entrada[0].replace(/\./g, ''),
+                    parteDecimal = entrada[1],
+                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+                }, false); 
+            }    
+        });
     });
 </script>
 
@@ -478,8 +508,7 @@
                     $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
                     return $("#policy-form").valid();
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
                     $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#receipt-form').valid();
@@ -491,8 +520,6 @@
             onStepChanged: (event, currentIndex, priorIndex) => {
                 if (currentIndex === 1) {
                     $('#policy-form').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
                 } else if (currentIndex === 3) {
                     $('#receipt-form').submit();
                 } else if (currentIndex === 4) {
@@ -546,6 +573,18 @@
             }    
         });
         $("#commission-form").on('keyup','.number_format',function(){
+            var separador = $(this);
+            for (var i = 0 ; i < separador.length; i++) {
+                separador[i].addEventListener('input', (e) => {
+                    var entrada = e.target.value.split(','),
+                    parteEntera = entrada[0].replace(/\./g, ''),
+                    parteDecimal = entrada[1],
+                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+                }, false); 
+            }    
+        });
+        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -773,7 +812,32 @@
                 }
                 var premiumMonthly = policy.prima_anual_poliza / numberMonthly;
                 premiumMonthly = premiumMonthly.toFixed(2);
+                premiumMonthly = premiumMonthly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("monto_prima_recibo").value = premiumMonthly;
+            } else if (getSelectValue === 'BIMESTRAL') {
+                $(document).ready(function () {
+                    $('#tipo_fraccionamiento_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 2);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_pago_recibo').val(fecha);
+                    });
+                });
+                $(document).ready(function () {
+                    $('#fecha_desde_recibo').change(function () {
+                        var extraer = $('#fecha_desde_recibo').val();
+                        var fecha = new Date(extraer);
+                        fecha.setMonth(fecha.getMonth() + 2);
+                        fecha = fecha.toISOString().substring(0, 10);
+                        $('#fecha_hasta_recibo').val(fecha);
+                    });
+                });
+                var premiumBimonthly = policy.prima_anual_poliza / 6;
+                premiumBimonthly = premiumBimonthly.toFixed(2);
+                premiumBimonthly = premiumBimonthly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+                document.getElementById("numero_pago_recibo").value = 6;
             } else if (getSelectValue === 'TRIMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -795,6 +859,7 @@
                 });
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
                 premiumQuarterly = premiumQuarterly.toFixed(2);
+                premiumQuarterly = premiumQuarterly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("monto_prima_recibo").value = premiumQuarterly;
                 document.getElementById("numero_pago_recibo").value = 4;
             } else if (getSelectValue === 'SEMESTRAL') {
@@ -818,6 +883,7 @@
                 });
                 var premiumBiannual = policy.prima_anual_poliza / 2;
                 premiumBiannual = premiumBiannual.toFixed(2);
+                premiumBiannual = premiumBiannual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("monto_prima_recibo").value = premiumBiannual;
                 document.getElementById("numero_pago_recibo").value = 2;
             }  else if (getSelectValue === 'ANUAL') {
@@ -841,6 +907,7 @@
                 });
                 var annualPremium = policy.prima_anual_poliza / 1;
                 annualPremium = annualPremium.toFixed(2);
+                annualPremium = annualPremium.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("monto_prima_recibo").value = annualPremium;
                 document.getElementById("numero_pago_recibo").value = 1;
             }

@@ -158,6 +158,7 @@ CREATE TABLE Colectivo(
 
 CREATE TABLE Riesgo_Diverso(
     id_riesgo_diverso INT PRIMARY KEY AUTO_INCREMENT,
+    numero_certificado_riesgo_diverso VARCHAR(255) NOT NULL,
     nom_razon_riesgo_diverso VARCHAR(255) NOT NULL,
     cedula_riesgo_diverso VARCHAR(255),
     rif_riesgo_diverso VARCHAR(255),
@@ -269,6 +270,17 @@ CREATE TABLE Recibo_Asegurado(
     CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
+CREATE TABLE Asegurado_Beneficiario(
+    id_asegurado_beneficiario INT PRIMARY KEY AUTO_INCREMENT,
+    desahabilitar_asegurado_beneficiario BOOLEAN NOT NULL DEFAULT FALSE,
+    asegurado_per_nat_id INT,
+    asegurado_per_jur_id INT,
+    beneficiario_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+);
+
 CREATE TABLE Usuario_Rol(
     id_usuario_rol INT PRIMARY KEY AUTO_INCREMENT,
     deshabilitar_usuario_rol BOOLEAN NOT NULL DEFAULT FALSE,
@@ -335,10 +347,8 @@ CREATE TABLE Reembolso(
     estatus_reembolso VARCHAR(255) NOT NULL,
     numero_siniestro_reembolso VARCHAR(255) NOT NULL,
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
-    asegurado_per_nat_id INT,
-    asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    asegurado_beneficiario_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
 );
 
 CREATE TABLE AMP(
@@ -355,10 +365,8 @@ CREATE TABLE AMP(
     estatus_amp VARCHAR(255) NOT NULL,
     numero_siniestro_amp VARCHAR(255) NOT NULL,
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
-    asegurado_per_nat_id INT,
-    asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    asegurado_beneficiario_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
 );
 
 CREATE TABLE Emergencia(
@@ -375,10 +383,8 @@ CREATE TABLE Emergencia(
     estatus_emergencia VARCHAR(255) NOT NULL,
     numero_siniestro_emergencia VARCHAR(255) NOT NULL,
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
-    asegurado_per_nat_id INT,
-    asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    asegurado_beneficiario_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
 );
 
 CREATE TABLE Carta_Aval(
@@ -395,10 +401,8 @@ CREATE TABLE Carta_Aval(
     estatus_carta_aval VARCHAR(255) NOT NULL,
     numero_siniestro_carta_aval VARCHAR(255) NOT NULL,
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
-    asegurado_per_nat_id INT,
-    asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    asegurado_beneficiario_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(

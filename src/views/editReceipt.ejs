@@ -138,6 +138,7 @@
                                             <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculationDate()">
                                                 <option value="<%= receipt.tipo_fraccionamiento_recibo %>"><%= receipt.tipo_fraccionamiento_recibo %></option>
                                                 <option value="MENSUAL">MENSUAL</option>
+                                                <option value="BIMESTRAL">BIMESTRAL</option>
                                                 <option value="TRIMESTRAL">TRIMESTRAL</option>
                                                 <option value="SEMESTRAL">SEMESTRAL</option>
                                                 <option value="ANUAL">ANUAL</option>
@@ -239,7 +240,7 @@
                                                 type="text" 
                                                 name="porcentaje_agente_propio"
                                                 id="porcentaje_agente_propio"
-                                                value="<%= ownAgent.porcentaje_agente_propio %>"
+                                                value="<%= ownAgentPercentage %>"
                                                 class="form-control number_format"
                                                 required
                                             >
@@ -262,12 +263,11 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
                                         <div class="col-sm-9">
                                             <input 
-                                                type="number"
-                                                step="0.01" 
+                                                type="text"
                                                 name="numero_pago_recibo"
                                                 id="numero_pago_recibo"
                                                 value="<%= receipt.numero_pago_recibo %>" 
-                                                class="form-control"
+                                                class="form-control number_format"
                                                 onkeyup="premiumCalculationDate();"
                                             >
                                         </div>

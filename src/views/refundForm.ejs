@@ -74,7 +74,8 @@
                                                 type="text"
                                                 name="cedula_beneficiario"
                                                 id="cedula_beneficiario"
-                                                placeholder="Cédula del Beneficiario (separa por ,)"
+                                                onkeyup="pasarNombreAsegurado();"
+                                                placeholder="Cédula del Beneficiario"
                                                 class="form-control number_format"
                                             >
                                         </div>
@@ -171,7 +172,7 @@
                                                 type="text"
                                                 name="nombre_beneficiario"
                                                 id="nombre_beneficiario"
-                                                placeholder="Nombre del Beneficiario (separa por ,)"
+                                                placeholder="Nombre del Beneficiario"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 class="form-control"
                                             >

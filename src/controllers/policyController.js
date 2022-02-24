@@ -33,6 +33,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -40,6 +49,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -73,6 +85,15 @@ module.exports = {
                 let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -81,6 +102,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -108,6 +132,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -115,6 +148,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -142,6 +178,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -149,6 +194,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -176,6 +224,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -183,6 +240,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -216,6 +276,15 @@ module.exports = {
                 let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -224,6 +293,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -257,6 +329,15 @@ module.exports = {
                 let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -265,6 +346,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -292,6 +376,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -299,6 +392,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -326,6 +422,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -333,6 +438,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }

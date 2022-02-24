@@ -49,7 +49,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -62,6 +62,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -107,7 +118,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -120,6 +131,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -165,7 +187,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -178,6 +200,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -223,7 +256,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -236,6 +269,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -281,7 +325,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -294,6 +338,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -339,7 +394,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -352,6 +407,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -397,7 +463,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -410,6 +476,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -455,7 +532,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -468,6 +545,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -513,7 +601,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -526,6 +614,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -571,7 +670,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -584,6 +683,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -629,7 +739,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -642,6 +752,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -687,7 +808,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = parseFloat(req.body.monto_prima_recibo);
+            let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
             let fechaDesdeRecibo = null;
             let fechaHastaRecibo = null;
@@ -700,6 +821,17 @@ module.exports = {
             }
             if (req.body.fecha_hasta_recibo !== '') {
                 fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
+            }
+            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
+            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
+            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
+                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
+                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
             }
             if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
                 montoComisionAsociado = montoComisionAsociado.replace(",", ".");
@@ -862,9 +994,9 @@ module.exports = {
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let resultOwnAgent = [];
-            let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo.toISOString().substring(0, 10);
-            let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo.toISOString().substring(0, 10);
-            let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo
+            let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo;
+            let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo;
+            let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo;
             let primaRecibo = resultReceipt[0].monto_prima_recibo;
             primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = resultReceipt[0].monto_comision_recibo;
@@ -873,6 +1005,16 @@ module.exports = {
                 fechaPagoRecibo = '';
             } else {
                 fechaPagoRecibo = fechaPagoRecibo.toISOString().substring(0, 10);
+            }
+            if (fechaDesdeRecibo === null) {
+                fechaDesdeRecibo = '';
+            } else {
+                fechaDesdeRecibo = fechaDesdeRecibo.toISOString().substring(0, 10);
+            }
+            if (fechaHastaRecibo === null) {
+                fechaHastaRecibo = '';
+            } else {
+                fechaHastaRecibo = fechaHastaRecibo.toISOString().substring(0, 10);
             }
             if (resultReceipt[0].colectivo_id === null) {
                 resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
@@ -895,6 +1037,8 @@ module.exports = {
                     resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
                 }
             }
+            let ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
+            ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             res.render('editReceipt', {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
@@ -906,6 +1050,7 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
+                ownAgentPercentage: ownAgentPercentage,
                 policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
@@ -931,8 +1076,8 @@ module.exports = {
         let resultNaturalInsured = [];
         let resultLegalInsured = [];
         let resultOwnAgent = [];
-        let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo.toISOString().substring(0, 10);
-        let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo.toISOString().substring(0, 10);
+        let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo;
+        let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo;
         let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo
         let primaRecibo = resultReceipt[0].monto_prima_recibo;
         primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
@@ -942,6 +1087,16 @@ module.exports = {
             fechaPagoRecibo = '';
         } else {
             fechaPagoRecibo = fechaPagoRecibo.toISOString().substring(0, 10);
+        }
+        if (fechaDesdeRecibo === null) {
+            fechaDesdeRecibo = '';
+        } else {
+            fechaDesdeRecibo = fechaDesdeRecibo.toISOString().substring(0, 10);
+        }
+        if (fechaHastaRecibo === null) {
+            fechaHastaRecibo = '';
+        } else {
+            fechaHastaRecibo = fechaHastaRecibo.toISOString().substring(0, 10);
         }
         if (resultReceipt[0].colectivo_id === null) {
             resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
@@ -964,6 +1119,8 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
         }
+        let ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
+        ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -1044,6 +1201,7 @@ module.exports = {
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
                 policy: resultPolicy[0],
+                ownAgentPercentage: ownAgentPercentage,
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
@@ -1074,6 +1232,7 @@ module.exports = {
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
                 policy: resultPolicy[0],
+                ownAgentPercentage: ownAgentPercentage,
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],

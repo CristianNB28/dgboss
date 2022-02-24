@@ -29,6 +29,20 @@ module.exports = {
             });
         });
     },
+    getIdBeneficiary: (Idbeneficiary) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT * 
+                    FROM Beneficiario 
+                    WHERE cedula_beneficiario=? AND deshabilitar_beneficiario=0`,
+            [Idbeneficiary], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postBeneficiaryForm: async (fechaNacBeneficiario, beneficiary) => {
         return new Promise((resolve, reject) => {

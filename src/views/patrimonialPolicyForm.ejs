@@ -341,6 +341,7 @@
                                                         <select class="form-control" name="tipo_fraccionamiento_recibo" id="tipo_fraccionamiento_recibo" onchange="premiumCalculationDate()">
                                                             <option value="">Seleccione</option>
                                                             <option value="MENSUAL">MENSUAL</option>
+                                                            <option value="BIMESTRAL">BIMESTRAL</option>
                                                             <option value="TRIMESTRAL">TRIMESTRAL</option>
                                                             <option value="SEMESTRAL">SEMESTRAL</option>
                                                             <option value="ANUAL">ANUAL</option>
@@ -381,7 +382,7 @@
                                                             type="text" 
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
-                                                            value="<%= policy.prima_anual_poliza %>" 
+                                                            value="<%= primaPoliza %>" 
                                                             class="form-control number_format"
                                                             required
                                                         >
@@ -493,12 +494,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text"
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
-                                                            value="<%= ownAgent.porcentaje_agente_propio %>"
-                                                            class="form-control"
+                                                            value="<%= porcentajeAgentePropio %>"
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -535,7 +535,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text" 
+                                                        type="text"
                                                         name="porcentaje_ejecutivo_suscripcion"
                                                         id="porcentaje_ejecutivo_suscripcion"
                                                         placeholder="Porcentaje Ejecutivo de Suscripción *" 
@@ -563,7 +563,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Fundatina</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text" 
+                                                        type="text"
                                                         name="porcentaje_fundatina_comision"
                                                         id="porcentaje_fundatina_comision"
                                                         value="0,35" 
@@ -579,7 +579,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Director</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text" 
+                                                        type="text"
                                                         name="porcentaje_director_comision"
                                                         id="porcentaje_director_comision"
                                                         value="2,5" 
@@ -593,7 +593,7 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Operativa Socio</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text" 
+                                                        type="text"
                                                         name="porcentaje_socio_comision"
                                                         id="porcentaje_socio_comision"
                                                         value="2,5" 
@@ -636,12 +636,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text"
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
-                                                            value="<%= receipt.monto_comision_recibo %>" 
-                                                            class="form-control"
+                                                            value="<%= comisionRecibo %>" 
+                                                            class="form-control number_format"
                                                             required
                                                         >
                                                     </div>
@@ -677,12 +676,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">% Prima</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text"
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
-                                                            value="<%= policy.prima_anual_poliza %>" 
-                                                            class="form-control"
+                                                            value="<%= primaPoliza %>" 
+                                                            class="form-control number_format"
                                                         >
                                                     </div>
                                                 </div>
@@ -692,12 +690,11 @@
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">% Prima</label>
                                                     <div class="col-sm-9">
                                                         <input 
-                                                            type="number"
-                                                            step="0.01" 
+                                                            type="text"
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
                                                             placeholder="Porcentaje en dólares por prima *" 
-                                                            class="form-control"
+                                                            class="form-control number_format"
                                                         >
                                                     </div>
                                                 </div>

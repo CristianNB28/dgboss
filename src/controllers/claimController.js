@@ -10,6 +10,7 @@ const collectiveInsurerInsuredModel = require('../models/collective_insurer_insu
 const colInsInsurerBenef = require('../models/col_aseg_asegurado_benef');
 const collectiveModel = require('../models/collective');
 const beneficiaryModel = require('../models/beneficiary');
+const insuredBeneficiaryModel = require('../models/insured_beneficiary');
 
 module.exports = {
 /*                  GET                  */
@@ -176,6 +177,8 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
         if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
             montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
@@ -203,7 +206,14 @@ module.exports = {
                 montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
             }
         }
-        await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        let resultAseguradoBeneficiario = await insuredBeneficiaryModel.postAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario); 
+        await refundModel.postRefundForm(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, resultAseguradoBeneficiario.insertId, req.body);
         res.render('refundForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -425,83 +435,22 @@ module.exports = {
         let idRefund = req.params.id;
         if (idRefund.match(valoresAceptados)) {
             let resultRefund = await refundModel.getRefund(idRefund);
+            let resultInsuredBeneficiary = await insuredBeneficiaryModel.getAseguradoBeneficiario(resultRefund[0].asegurado_beneficiario_id);
             let fechaOcurrenciaReembolso = resultRefund[0].fecha_ocurrencia_reembolso.toISOString().substring(0, 10);
             let fechaNotificacionReembolso = resultRefund[0].fecha_notificacion_reembolso.toISOString().substring(0, 10);
             let montoReclamoReembolso = resultRefund[0].monto_reclamo_reembolso;
             let montoPagadoReembolso = resultRefund[0].monto_pagado_reembolso;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
-            let arrayBeneficiaryId = [];
-            let arrayBeneficiaryName = [];
+            let resultBeneficiary = [];
             montoReclamoReembolso = montoReclamoReembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             montoPagadoReembolso = montoPagadoReembolso.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            if (resultRefund[0].asegurado_per_nat_id === null) {
-                resultLegalInsured = await insuredModel.getLegalInsured(resultRefund[0].asegurado_per_jur_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_jur_id === resultRefund[0].asegurado_per_jur_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if (resultInsuredBeneficiary[0].asegurado_per_nat_id === null) {
+                resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             } else {
-                resultNaturalInsured = await insuredModel.getNaturalInsured(resultRefund[0].asegurado_per_nat_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                for (const itemCII of resultsCII) {
-                    if (itemCII.asegurado_per_nat_id === resultRefund[0].asegurado_per_nat_id) {
-                        for (const itemCollective of resultsCollectives) {
-                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'SALUD') {
-                                    for (const itemCIIB of resultsCIIB) {
-                                        if (itemCII.id_caa === itemCIIB.caa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
             res.render('editRefund', {
                 refund: resultRefund[0],
@@ -513,6 +462,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                beneficiary: resultBeneficiary[0],
                 resultsPII: resultsPII,
                 resultsPIIB: resultsPIIB,
                 policies: resultsPolicies,
@@ -520,8 +470,6 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                arrayBeneficiaryId: arrayBeneficiaryId,
-                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -884,6 +832,9 @@ module.exports = {
         let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let resultRefund = await refundModel.getRefund(req.body.id_reembolso);
         if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
             montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
@@ -906,7 +857,14 @@ module.exports = {
             montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
             montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
         }
-        await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultRefund[0].asegurado_beneficiario_id);
+        await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, resultRefund[0].asegurado_beneficiario_id, req.body);
         res.redirect('/sistema');
     },
     updateLetterGuarentee: async (req, res) => {
@@ -1002,6 +960,9 @@ module.exports = {
 /*               DELETE                  */
     disableRefund: async (req, res) => {
         let disableRefund = 1;
+        let disableInsuredBeneficiary = 1;
+        let resultRefund = await refundModel.getRefund(req.params.id);
+        await insuredBeneficiaryModel.disableAseguradoBeneficiario(resultRefund[0].asegurado_beneficiario_id, disableInsuredBeneficiary);
         await refundModel.updateDisableRefund(req.params.id, req.body);
         await refundModel.disableRefund(req.params.id, disableRefund);
         res.redirect('/sistema/refunds');

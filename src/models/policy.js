@@ -317,9 +317,9 @@ module.exports = {
     },
     postTravelPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, nombre_tomador_poliza, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [policy.numero_poliza, tomadorAsegurado, policy.nombre_tomador_poliza, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],                          
+            db.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, nombre_tomador_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [policy.numero_poliza, tomadorAsegurado, policy.nombre_tomador_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],                          
             (error, rows) => {
                 if (error) {
                     reject(error)
