@@ -248,6 +248,8 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
         if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
@@ -275,7 +277,14 @@ module.exports = {
                 montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
             }
         }
-        await letterGuaranteeModel.postLetterGuaranteeForm(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        let resultAseguradoBeneficiario = await insuredBeneficiaryModel.postAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario); 
+        await letterGuaranteeModel.postLetterGuaranteeForm(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, resultAseguradoBeneficiario.insertId, req.body);
         res.render('letterGuaranteeForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -310,6 +319,8 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
         if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
@@ -337,7 +348,14 @@ module.exports = {
                 montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
             }
         }
-        await emergencyModel.postEmergencyForm(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        let resultAseguradoBeneficiario = await insuredBeneficiaryModel.postAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario); 
+        await emergencyModel.postEmergencyForm(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, resultAseguradoBeneficiario.insertId, req.body);
         res.render('emergencyForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -372,6 +390,8 @@ module.exports = {
         let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenefs();
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
         if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
             montoReclamoAMP = montoReclamoAMP.replace(",", ".");
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
@@ -399,7 +419,14 @@ module.exports = {
                 montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
             }
         }
-        await ampModel.postAMPForm(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        let resultAseguradoBeneficiario = await insuredBeneficiaryModel.postAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario); 
+        await ampModel.postAMPForm(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, resultAseguradoBeneficiario.insertId, req.body);
         res.render('ampForm', {
             alert: true,
             alertTitle: 'Exitoso',
@@ -490,83 +517,22 @@ module.exports = {
         let idLetterGuarentee = req.params.id;
         if (idLetterGuarentee.match(valoresAceptados)) {
             let resultLetterGuarentee = await letterGuaranteeModel.getLetterGuarantee(idLetterGuarentee);
+            let resultInsuredBeneficiary = await insuredBeneficiaryModel.getAseguradoBeneficiario(resultLetterGuarentee[0].asegurado_beneficiario_id);
             let fechaOcurrenciaCartaAval = resultLetterGuarentee[0].fecha_ocurrencia_carta_aval.toISOString().substring(0, 10);
             let fechaNotificacionCartaAval = resultLetterGuarentee[0].fecha_notificacion_carta_aval.toISOString().substring(0, 10);
             let montoReclamoCartaAval = resultLetterGuarentee[0].monto_reclamado_carta_aval;
             let montoPagadoCartaAval = resultLetterGuarentee[0].monto_pagado_carta_aval;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
-            let arrayBeneficiaryId = [];
-            let arrayBeneficiaryName = [];
+            let resultBeneficiary = [];
             montoReclamoCartaAval = montoReclamoCartaAval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             montoPagadoCartaAval = montoPagadoCartaAval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            if (resultLetterGuarentee[0].asegurado_per_nat_id === null) {
-                resultLegalInsured = await insuredModel.getLegalInsured(resultLetterGuarentee[0].asegurado_per_jur_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_jur_id === resultLetterGuarentee[0].asegurado_per_jur_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if (resultInsuredBeneficiary[0].asegurado_per_nat_id === null) {
+                resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             } else {
-                resultNaturalInsured = await insuredModel.getNaturalInsured(resultLetterGuarentee[0].asegurado_per_nat_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                for (const itemCII of resultsCII) {
-                    if (itemCII.asegurado_per_nat_id === resultLetterGuarentee[0].asegurado_per_nat_id) {
-                        for (const itemCollective of resultsCollectives) {
-                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'SALUD') {
-                                    for (const itemCIIB of resultsCIIB) {
-                                        if (itemCII.id_caa === itemCIIB.caa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
             res.render('editLetterGuarentee', {
                 letterGuarentee: resultLetterGuarentee[0],
@@ -578,6 +544,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                beneficiary: resultBeneficiary[0],
                 resultsPII: resultsPII,
                 resultsPIIB: resultsPIIB,
                 policies: resultsPolicies,
@@ -585,8 +552,6 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                arrayBeneficiaryId: arrayBeneficiaryId,
-                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -607,83 +572,22 @@ module.exports = {
         let idEmergency = req.params.id;
         if (idEmergency.match(valoresAceptados)) {
             let resultEmergency = await emergencyModel.getEmergency(idEmergency);
+            let resultInsuredBeneficiary = await insuredBeneficiaryModel.getAseguradoBeneficiario(resultEmergency[0].asegurado_beneficiario_id);
             let fechaOcurrenciaEmergencia = resultEmergency[0].fecha_ocurrencia_emergencia.toISOString().substring(0, 10);
             let fechaNotificacionEmergencia = resultEmergency[0].fecha_notificacion_emergencia.toISOString().substring(0, 10);
             let montoReclamoEmergencia = resultEmergency[0].monto_reclamado_emergencia;
             let montoPagadoEmergencia = resultEmergency[0].monto_pagado_emergencia;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
-            let arrayBeneficiaryId = [];
-            let arrayBeneficiaryName = [];
+            let resultBeneficiary = [];
             montoReclamoEmergencia = montoReclamoEmergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             montoPagadoEmergencia = montoPagadoEmergencia.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            if (resultEmergency[0].asegurado_per_nat_id === null) {
-                resultLegalInsured = await insuredModel.getLegalInsured(resultEmergency[0].asegurado_per_jur_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_jur_id === resultEmergency[0].asegurado_per_jur_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if (resultInsuredBeneficiary[0].asegurado_per_nat_id === null) {
+                resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             } else {
-                resultNaturalInsured = await insuredModel.getNaturalInsured(resultEmergency[0].asegurado_per_nat_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                for (const itemCII of resultsCII) {
-                    if (itemCII.asegurado_per_nat_id === resultEmergency[0].asegurado_per_nat_id) {
-                        for (const itemCollective of resultsCollectives) {
-                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'SALUD') {
-                                    for (const itemCIIB of resultsCIIB) {
-                                        if (itemCII.id_caa === itemCIIB.caa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
             res.render('editEmergency', {
                 emergency: resultEmergency[0],
@@ -695,6 +599,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                beneficiary: resultBeneficiary[0],
                 resultsPII: resultsPII,
                 resultsPIIB: resultsPIIB,
                 policies: resultsPolicies,
@@ -702,8 +607,6 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                arrayBeneficiaryId: arrayBeneficiaryId,
-                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -724,83 +627,22 @@ module.exports = {
         let idAMP = req.params.id;
         if (idAMP.match(valoresAceptados)) {
             let resultAMP = await ampModel.getAMPId(idAMP);
+            let resultInsuredBeneficiary = await insuredBeneficiaryModel.getAseguradoBeneficiario(resultAMP[0].asegurado_beneficiario_id);
             let fechaOcurrenciaAMP = resultAMP[0].fecha_ocurrencia_amp.toISOString().substring(0, 10);
             let fechaNotificacionAMP = resultAMP[0].fecha_notificacion_amp.toISOString().substring(0, 10);
             let montoReclamoAMP = resultAMP[0].monto_reclamado_amp;
             let montoPagadoAMP = resultAMP[0].monto_pagado_amp;
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
-            let arrayBeneficiaryId = [];
-            let arrayBeneficiaryName = [];
+            let resultBeneficiary = [];
             montoReclamoAMP = montoReclamoAMP.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             montoPagadoAMP = montoPagadoAMP.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            if (resultAMP[0].asegurado_per_nat_id === null) {
-                resultLegalInsured = await insuredModel.getLegalInsured(resultAMP[0].asegurado_per_jur_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_jur_id === resultAMP[0].asegurado_per_jur_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            if (resultInsuredBeneficiary[0].asegurado_per_nat_id === null) {
+                resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             } else {
-                resultNaturalInsured = await insuredModel.getNaturalInsured(resultAMP[0].asegurado_per_nat_id);
-                for (const itemPII of resultsPII) {
-                    if (itemPII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
-                        for (const itemPolicy of resultsPolicies) {
-                            if (itemPII.poliza_id === itemPolicy.id_poliza) {
-                                if ((itemPolicy.tipo_individual_poliza === 'SALUD') || (itemPolicy.tipo_individual_poliza === 'FUNERARIO') || (itemPolicy.tipo_individual_poliza === 'VIDA')) {
-                                    for (const itemPIIB of resultsPIIB) {
-                                        if (itemPII.id_paa === itemPIIB.paa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemPIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                for (const itemCII of resultsCII) {
-                    if (itemCII.asegurado_per_nat_id === resultAMP[0].asegurado_per_nat_id) {
-                        for (const itemCollective of resultsCollectives) {
-                            if (itemCII.colectivo_id === itemCollective.id_colectivo) {
-                                if (itemCollective.tipo_colectivo === 'SALUD') {
-                                    for (const itemCIIB of resultsCIIB) {
-                                        if (itemCII.id_caa === itemCIIB.caa_id) {
-                                            for (const itemBeneficiary of resultsBeneficiaries) {
-                                                if (itemCIIB.beneficiario_id === itemBeneficiary.id_beneficiario) {
-                                                    arrayBeneficiaryId.push(itemBeneficiary.cedula_beneficiario);
-                                                    var beneficiaryName = itemBeneficiary.nombre_beneficiario + ' ' + itemBeneficiary.apellido_beneficiario;
-                                                    arrayBeneficiaryName.push(beneficiaryName);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
             res.render('editAMP', {
                 amp: resultAMP[0],
@@ -812,6 +654,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsured,
                 naturalInsured: resultNaturalInsured[0],
                 legalInsured: resultLegalInsured[0],
+                beneficiary: resultBeneficiary[0],
                 resultsPII: resultsPII,
                 resultsPIIB: resultsPIIB,
                 policies: resultsPolicies,
@@ -819,8 +662,6 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                arrayBeneficiaryId: arrayBeneficiaryId,
-                arrayBeneficiaryName: arrayBeneficiaryName,
                 name: req.session.name
             });
         } else {
@@ -872,6 +713,9 @@ module.exports = {
         let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let resultLetterGuarantee = await letterGuaranteeModel.getLetterGuarantee(req.body.id_carta_aval);
         if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
@@ -894,7 +738,14 @@ module.exports = {
             montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
             montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
         }
-        await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultLetterGuarantee[0].asegurado_beneficiario_id);
+        await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, resultLetterGuarantee[0].asegurado_beneficiario_id, req.body);
         res.redirect('/sistema');
     },
     updateEmergency: async (req, res) => {
@@ -902,6 +753,9 @@ module.exports = {
         let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let resultEmergency = await emergencyModel.getEmergency(req.body.id_emergencia);
         if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
@@ -924,7 +778,14 @@ module.exports = {
             montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
             montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
         }
-        await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultEmergency[0].asegurado_beneficiario_id);
+        await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, resultEmergency[0].asegurado_beneficiario_id, req.body);
         res.redirect('/sistema');
     },
     updateAMP: async (req, res) => {
@@ -932,6 +793,9 @@ module.exports = {
         let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
+        let cedulaAseguradoNatural = '';
+        let rifAseguradoJuridico = '';
+        let resultAMP = await ampModel.getAMPId(req.body.id_amp);
         if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
             montoReclamoAMP = montoReclamoAMP.replace(",", ".");
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
@@ -954,7 +818,14 @@ module.exports = {
             montoPagadoAMP = montoPagadoAMP.replace(".", ",");
             montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
         }
-        await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, req.body);
+        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            rifAseguradoJuridico = req.body.id_rif_asegurado;
+        } else {
+            cedulaAseguradoNatural = req.body.id_rif_asegurado;
+        }
+        let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
+        await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultAMP[0].asegurado_beneficiario_id);
+        await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, resultAMP[0].asegurado_beneficiario_id, req.body);
         res.redirect('/sistema');
     },
 /*               DELETE                  */
@@ -969,18 +840,27 @@ module.exports = {
     },
     disableLetterGuarentee: async (req, res) => {
         let disableLetterGuarentee = 1;
+        let disableInsuredBeneficiary = 1;
+        let resultLetterGuarantee = await letterGuaranteeModel.getLetterGuarantee(req.params.id);
+        await insuredBeneficiaryModel.disableAseguradoBeneficiario(resultLetterGuarantee[0].asegurado_beneficiario_id, disableInsuredBeneficiary);
         await letterGuaranteeModel.updateDisableLetterGuarentee(req.params.id, req.body);
         await letterGuaranteeModel.disableLetterGuarentee(req.params.id, disableLetterGuarentee);
         res.redirect('/sistema/letters-guarentee');
     },
     disableEmergency: async (req, res) => {
         let disableEmergency = 1;
+        let disableInsuredBeneficiary = 1;
+        let resultEmergency = await emergencyModel.getEmergency(req.params.id);
+        await insuredBeneficiaryModel.disableAseguradoBeneficiario(resultEmergency[0].asegurado_beneficiario_id, disableInsuredBeneficiary);
         await emergencyModel.updateDisableEmergency(req.params.id, req.body);
         await emergencyModel.disableEmergency(req.params.id, disableEmergency);
         res.redirect('/sistema/emergencies');
     },
     disableAMP: async (req, res) => {
         let disableAMP = 1;
+        let disableInsuredBeneficiary = 1;
+        let resultAMP = await ampModel.getAMPId(req.params.id);
+        await insuredBeneficiaryModel.disableAseguradoBeneficiario(resultAMP[0].asegurado_beneficiario_id, disableInsuredBeneficiary);
         await ampModel.updateDisableAMP(req.params.id, req.body);
         await ampModel.disableAMP(req.params.id, disableAMP);
         res.redirect('/sistema/amp');

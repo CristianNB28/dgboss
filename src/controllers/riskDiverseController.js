@@ -18,6 +18,7 @@ module.exports = {
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
         for (const itemFile of dataExcel) {
+            let fileNumCerti = itemFile['Número de certificado'];
             let fileNomRazon = itemFile['Nombre o Razón Social'];
             let fileIdRif = itemFile['Cedula o Rif'];
             let fileAddress = itemFile['Dirección'];
@@ -32,7 +33,7 @@ module.exports = {
             } else {
                 cedulaArchivo = fileIdRif;
             }
-            let riskDiserve = await riskDiverseModel.postRiskDiverseForm(fileNomRazon, fileAddress, filePhone, fileSumInsured, cedulaArchivo, rifArchivo, req.body, itemFile);
+            let riskDiserve = await riskDiverseModel.postRiskDiverseForm(fileNumCerti, fileNomRazon, fileAddress, filePhone, fileSumInsured, cedulaArchivo, rifArchivo, req.body, itemFile);
             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
             await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(collectiveInsurerInsured[0].id_caa, riskDiserve.insertId);
         }

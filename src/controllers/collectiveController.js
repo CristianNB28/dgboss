@@ -30,17 +30,35 @@ module.exports = {
             let resultOwnAgent = [];
             let resultReceipt = await receiptModel.getReceiptLast();
             if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
+                let primaColectivo = resultCollective[0].prima_anual_colectivo;
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let comisionRecibo = 0;
+                if (resultReceipt.length !== 0) {
+                    comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                }
                 res.render('healthCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    primaColectivo: primaColectivo,
+                    comisionRecibo: comisionRecibo,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_nat_id === null) {
                 let resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
+                let primaColectivo = resultCollective[0].prima_anual_colectivo;
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let comisionRecibo = 0;
+                if (resultReceipt.length !== 0) {
+                    comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                }
                 res.render('healthCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
@@ -48,11 +66,23 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
+                    primaColectivo: primaColectivo,
+                    porcentajeAgentePropio: porcentajeAgentePropio,
+                    comisionRecibo: comisionRecibo,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                let primaColectivo = resultCollective[0].prima_anual_colectivo;
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let comisionRecibo = 0;
+                if (resultReceipt.length !== 0) {
+                    comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                }
                 res.render('healthCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
@@ -60,6 +90,9 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
+                    primaColectivo: primaColectivo,
+                    porcentajeAgentePropio: porcentajeAgentePropio,
+                    comisionRecibo: comisionRecibo,
                     name: req.session.name
                 });
             }
@@ -82,12 +115,21 @@ module.exports = {
             let resultOwnAgent = [];
             let resultReceipt = await receiptModel.getReceiptLast();
             if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
+                let primaColectivo = resultCollective[0].prima_anual_colectivo;
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let comisionRecibo = 0;
+                if (resultReceipt.length !== 0) {
+                    comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                }
                 res.render('vehicleCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    primaColectivo: primaColectivo,
+                    comisionRecibo: comisionRecibo,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
@@ -97,6 +139,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaColectivo = resultCollective[0].prima_anual_colectivo;
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('vehicleCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -104,6 +155,9 @@ module.exports = {
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaColectivo: primaColectivo,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -125,12 +179,21 @@ module.exports = {
             let resultOwnAgent = [];
             let resultReceipt = await receiptModel.getReceiptLast();
             if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
+                let primaColectivo = resultCollective[0].prima_anual_colectivo;
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                let comisionRecibo = 0;
+                if (resultReceipt.length !== 0) {
+                    comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                }
                 res.render('riskDiverseCollectiveForm', {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    primaColectivo: primaColectivo,
+                    comisionRecibo: comisionRecibo,
                     name: req.session.name
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
@@ -140,6 +203,15 @@ module.exports = {
                 let resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
+            let primaColectivo = resultCollective[0].prima_anual_colectivo;
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+            porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let comisionRecibo = 0;
+            if (resultReceipt.length !== 0) {
+                comisionRecibo = resultReceipt[0].monto_comision_recibo;
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('riskDiverseCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -147,6 +219,9 @@ module.exports = {
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                primaColectivo: primaColectivo,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }

@@ -306,11 +306,12 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Número</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="number"
+                                                        type="text"
                                                         name="numero_recibo"
                                                         id="numero_recibo"
                                                         placeholder="Número de Recibo *" 
                                                         class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>

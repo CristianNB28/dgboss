@@ -152,7 +152,7 @@
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -161,7 +161,7 @@
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -221,7 +221,7 @@
                 document.getElementById("numero_pago_recibo").value = 1;
             }
             if (checkboxDivision === false) {
-                document.getElementById("monto_prima_recibo").value = receipt.monto_prima_recibo;
+                document.getElementById("monto_prima_recibo").value = receipt.monto_prima_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
                 document.getElementById("fecha_pago_recibo").value = '';
@@ -280,7 +280,7 @@
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -289,7 +289,7 @@
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });

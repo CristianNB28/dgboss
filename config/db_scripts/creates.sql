@@ -32,6 +32,7 @@ CREATE TABLE Rol(
 
 CREATE TABLE Vehiculo(
     id_vehiculo INT PRIMARY KEY AUTO_INCREMENT,
+    numero_certificado_vehiculo VARCHAR(255),
     numero_placa VARCHAR(255) NOT NULL,
     year_vehiculo YEAR NOT NULL,
     marca_vehiculo VARCHAR(255) NOT NULL,
@@ -175,7 +176,7 @@ CREATE TABLE Riesgo_Diverso(
 
 CREATE TABLE Recibo(
     id_recibo INT PRIMARY KEY AUTO_INCREMENT,
-    numero_recibo INT NOT NULL,
+    numero_recibo VARCHAR(255) NOT NULL,
     tipo_recibo VARCHAR(255) NOT NULL,
     fecha_desde_recibo DATE,
     fecha_hasta_recibo DATE,

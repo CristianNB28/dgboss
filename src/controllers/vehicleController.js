@@ -74,13 +74,14 @@ module.exports = {
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
         for (const itemFile of dataExcel) {
-            let fileTransmission = itemFile['transmisión( automatico o sincro)'];
+            let fileNumCerti = itemFile['Número de certificado'];
+            let fileTransmission = itemFile['Transmisión( automatico o sincro)'];
             let fileShield = itemFile['Blindaje( si o no)'];
             let fileBody = itemFile['Carrocería'];
             let fileYear = itemFile['Año'];
             let fileVehicleType = itemFile['Tipo de vehículo'];
             let fileSumInsured = itemFile['Suma Asegurada'];
-            let fileSerialEngine = itemFile['Serial del moto'];
+            let fileSerialEngine = itemFile['Seria del motor'];
             let idCollective = await collectiveModel.getCollectiveLast();
             if (fileShield === 'si') {
                 fileShield = 1;
@@ -90,7 +91,7 @@ module.exports = {
             fileYear = fileYear.toString();
             fileYear = new Date(fileYear);
             fileYear = fileYear.getUTCFullYear();
-            let vehicle = await vehicleModel.postVehicleCollectiveForm(fileTransmission, fileShield, fileBody, fileYear, fileVehicleType, fileSumInsured, fileSerialEngine, req.body, itemFile);
+            let vehicle = await vehicleModel.postVehicleCollectiveForm(fileNumCerti, fileTransmission, fileShield, fileBody, fileYear, fileVehicleType, fileSumInsured, fileSerialEngine, req.body, itemFile);
             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
             await colInsInsurerVehiModel.postColInsuInsuredVehi(collectiveInsurerInsured[0].id_caa, vehicle.insertId);
         }

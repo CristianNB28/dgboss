@@ -843,7 +843,7 @@
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -852,7 +852,7 @@
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
                         var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
+                        fecha.setMonth(fecha.getMonth() + 3);
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -912,7 +912,7 @@
                 document.getElementById("numero_pago_recibo").value = 1;
             }
             if (checkboxDivision === false) {
-                document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza;
+                document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
                 document.getElementById("fecha_pago_recibo").value = '';
@@ -922,53 +922,6 @@
         }
     </script>
 <% } %>
-
-    <script>
-        function automaticDates() {
-            var getSelectValue = document.getElementById("tipo_fecha_recibo").value;
-            if (getSelectValue === 'MENSUAL') {
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 1);
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-            } else if (getSelectValue === 'TRIMESTRAL') {
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 4);
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-            } else if (getSelectValue === 'SEMESTRAL') {
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 6);
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-            }  else if (getSelectValue === 'ANUAL') {
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setFullYear(fecha.getFullYear() + 1);
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-            }
-        }
-    </script>
 
 <% if (typeof(data) !== 'undefined') { %>
     <script>

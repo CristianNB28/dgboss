@@ -92,7 +92,8 @@
                                                 type="text"
                                                 name="cedula_beneficiario"
                                                 id="cedula_beneficiario"
-                                                value="<%= arrayBeneficiaryId %>"
+                                                onkeyup="pasarNombreAsegurado();"
+                                                value="<%= beneficiary.cedula_beneficiario %>"
                                                 class="form-control number_format"
                                             >
                                         </div>
@@ -204,7 +205,7 @@
                                                 type="text"
                                                 name="nombre_beneficiario"
                                                 id="nombre_beneficiario"
-                                                value="<%= arrayBeneficiaryName %>"
+                                                value="<%= beneficiary.nombre_beneficiario %> <%= beneficiary.apellido_beneficiario %>"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
