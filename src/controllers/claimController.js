@@ -687,16 +687,21 @@ module.exports = {
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
             montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
         }
-        if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
-            montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
-            montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
-            montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
-        } else if (montoPagadoReembolso.indexOf(',') !== -1) {
-            montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
-            montoPagadoReembolso = parseFloat(montoPagadoReembolso);
-        } else if (montoPagadoReembolso.indexOf('.') !== -1) {
-            montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
-            montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+        if (req.body.monto_pagado_reembolso === '') {
+            montoPagadoReembolso = 0;
+        } else {
+            montoPagadoReembolso = req.body.monto_pagado_reembolso;
+            if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+                montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+            } else if (montoPagadoReembolso.indexOf(',') !== -1) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso);
+            } else if (montoPagadoReembolso.indexOf('.') !== -1) {
+                montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
+                montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
+            }
         }
         if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
@@ -727,16 +732,21 @@ module.exports = {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
             montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
         }
-        if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
-            montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
-            montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
-            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
-        } else if (montoPagadoCartaAval.indexOf(',') !== -1) {
-            montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
-            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval);
-        } else if (montoPagadoCartaAval.indexOf('.') !== -1) {
-            montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
-            montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+        if (req.body.monto_pagado_carta_aval === '') {
+            montoPagadoCartaAval = 0;
+        } else {
+            montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
+            if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+            } else if (montoPagadoCartaAval.indexOf(',') !== -1) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval);
+            } else if (montoPagadoCartaAval.indexOf('.') !== -1) {
+                montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
+                montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
+            }
         }
         if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
@@ -767,16 +777,21 @@ module.exports = {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
             montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
         }
-        if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
-            montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
-            montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
-            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
-        } else if (montoPagadoEmergencia.indexOf(',') !== -1) {
-            montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
-            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia);
-        } else if (montoPagadoEmergencia.indexOf('.') !== -1) {
-            montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
-            montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+        if (req.body.monto_pagado_emergencia === '') {
+            montoPagadoEmergencia = 0;
+        } else {
+            montoPagadoEmergencia = req.body.monto_pagado_emergencia;
+            if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+            } else if (montoPagadoEmergencia.indexOf(',') !== -1) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia);
+            } else if (montoPagadoEmergencia.indexOf('.') !== -1) {
+                montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
+                montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
+            }
         }
         if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
@@ -807,16 +822,21 @@ module.exports = {
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
             montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
         }
-        if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
-            montoPagadoAMP = montoPagadoAMP.replace(",", ".");
-            montoPagadoAMP = montoPagadoAMP.replace(".", ",");
-            montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
-        } else if (montoPagadoAMP.indexOf(',') !== -1) {
-            montoPagadoAMP = montoPagadoAMP.replace(",", ".");
-            montoPagadoAMP = parseFloat(montoPagadoAMP);
-        } else if (montoPagadoAMP.indexOf('.') !== -1) {
-            montoPagadoAMP = montoPagadoAMP.replace(".", ",");
-            montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+        if (req.body.monto_pagado_amp === '') {
+            montoPagadoAMP = 0;
+        } else {
+            montoPagadoAMP = req.body.monto_pagado_amp;
+            if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
+                montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+                montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+                montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+            } else if (montoPagadoAMP.indexOf(',') !== -1) {
+                montoPagadoAMP = montoPagadoAMP.replace(",", ".");
+                montoPagadoAMP = parseFloat(montoPagadoAMP);
+            } else if (montoPagadoAMP.indexOf('.') !== -1) {
+                montoPagadoAMP = montoPagadoAMP.replace(".", ",");
+                montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
+            }
         }
         if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;

@@ -80,7 +80,7 @@
                                                     id="id_rif_asegurado"
                                                     onkeyup="pasarAgentePropio();"
                                                     value="<%= legalInsured.rif_asegurado_per_jur %>" 
-                                                    class="form-control"
+                                                    class="form-control cedula_rif"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >
@@ -95,7 +95,7 @@
                                                     id="id_rif_asegurado"
                                                     onkeyup="pasarAgentePropio();"
                                                     value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                    class="form-control"
+                                                    class="form-control cedula_rif"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >

@@ -60,8 +60,8 @@
                                                 name="id_rif_asegurado"
                                                 id="id_rif_asegurado"
                                                 onkeyup="pasarNombreAsegurado();"
-                                                placeholder="Cédula/Rif del Titular (Cédula escribir con puntos de miles) *" 
-                                                class="form-control"
+                                                placeholder="Cédula/Rif del Titular *" 
+                                                class="form-control cedula_rif"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                 required
                                             >
@@ -76,7 +76,7 @@
                                                 id="cedula_beneficiario"
                                                 onkeyup="pasarNombreAsegurado();"
                                                 placeholder="Cédula del Beneficiario"
-                                                class="form-control number_format"
+                                                class="form-control cedula"
                                             >
                                         </div>
                                     </div>

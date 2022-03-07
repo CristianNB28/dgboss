@@ -63,7 +63,7 @@
                                                     id="id_rif_asegurado"
                                                     onkeyup="pasarNombreAsegurado();"
                                                     value="<%= legalInsured.rif_asegurado_per_jur %>" 
-                                                    class="form-control"
+                                                    class="form-control cedula_rif"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >
@@ -78,7 +78,7 @@
                                                     id="id_rif_asegurado"
                                                     onkeyup="pasarNombreAsegurado();"
                                                     value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                    class="form-control number_format"
+                                                    class="form-control cedula_rif"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                     required
                                                 >
@@ -94,7 +94,7 @@
                                                 id="cedula_beneficiario"
                                                 onkeyup="pasarNombreAsegurado();"
                                                 value="<%= beneficiary.cedula_beneficiario %>"
-                                                class="form-control number_format"
+                                                class="form-control cedula"
                                             >
                                         </div>
                                     </div>
@@ -233,7 +233,6 @@
                                                 id="monto_pagado_reembolso" 
                                                 value="<%= montoPagadoReembolso %>"
                                                 class="form-control number_format"
-                                                required
                                             >
                                         </div>
                                     </div>
