@@ -34,13 +34,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
@@ -86,13 +94,21 @@ module.exports = {
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
@@ -133,13 +149,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
@@ -179,13 +203,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
@@ -225,13 +257,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
@@ -277,13 +317,21 @@ module.exports = {
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
@@ -330,13 +378,21 @@ module.exports = {
                 resultsBeneficiaries.push(resultBeneficiary[0]);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
@@ -377,13 +433,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
@@ -423,13 +487,21 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
             let primaPoliza = resultPolicy[0].prima_anual_poliza;
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
             porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = 0;
             if (resultReceipt.length !== 0) {
                 comisionRecibo = resultReceipt[0].monto_comision_recibo;
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (comisionRecibo.toString().includes('.') === true) {
+                    comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                } else {
+                    comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                }
             }
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
@@ -454,7 +526,12 @@ module.exports = {
             for (let index = 0; index < resultsPolicies.length; index++) {
                 let elementPolicy = resultsPolicies[index];
                 if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde_poliza) !== 'string')) {
-                    elementPolicy.prima_anual_poliza = elementPolicy.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                    let primaPoliza = elementPolicy.prima_anual_poliza;
+                    if (primaPoliza.toString().includes('.') === true) {
+                        elementPolicy.prima_anual_poliza = elementPolicy.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                    } else {
+                        elementPolicy.prima_anual_poliza = String(elementPolicy.prima_anual_poliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                    }
                     elementPolicy.fecha_desde_poliza = elementPolicy.fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
                     elementPolicy.fecha_hasta_poliza = elementPolicy.fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementPolicy.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
@@ -496,21 +573,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -565,7 +630,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-vehicle-policy');
             throw new Error('Error, valor duplicado de póliza individual vehiculo');
@@ -676,21 +741,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -745,7 +798,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-patrimonial-policy');
             throw new Error('Error, valor duplicado de póliza individual patrimonial');
@@ -772,21 +825,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -841,7 +882,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-bail-policy');
             throw new Error('Error, valor duplicado de póliza individual fianza');
@@ -868,21 +909,9 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
-            let montoTasa = req.body.tasa_poliza;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
-            if ((montoTasa.indexOf(',') !== -1) && (montoTasa.indexOf('.') !== -1)) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            } else if (montoTasa.indexOf(',') !== -1) {
-                montoTasa = montoTasa.replace(",", ".");
-                montoTasa = parseFloat(montoTasa);
-            } else if (montoTasa.indexOf('.') !== -1) {
-                montoTasa = montoTasa.replace(".", ",");
-                montoTasa = parseFloat(montoTasa.replace(/,/g,''));
-            }
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -937,7 +966,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoTasa, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-another-branch-policy');
             throw new Error('Error, valor duplicado de póliza individual otro ramos');
@@ -1305,7 +1334,11 @@ module.exports = {
             let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
             let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             let primaAnual = resultPolicy[0].prima_anual_poliza;
-            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             let insurers = await insurerModel.getInsurers();
             let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
             let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);

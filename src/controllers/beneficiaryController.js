@@ -189,7 +189,18 @@ module.exports = {
                 let accountNumberFile = itemFile['Nro. De Cuenta.'];
                 let idCollective = await collectiveModel.getCollectiveLast();
                 if (clientFile === 'TITULAR') {
-                    let idNaturalInsured = await insuredModel.getNaturalInsuredId(itemFile.Cedula);
+                    let cedulaBeneficiary = itemFile.Cedula;
+                    let idNaturalInsured = [];
+                    if (typeof(cedulaBeneficiary) === 'number') {
+                        const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+                        const rep = '$1.';
+                        let arr = cedulaBeneficiary.toString().split('.');
+                        arr[0] = arr[0].replace(exp,rep);
+                        cedulaArchivo = arr[0];
+                        idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaArchivo);
+                    } else {
+                        idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaBeneficiary);
+                    }
                     await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
                 } else {
                     let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(dateFile, directionFile, telephoneFile, accountTypeFile, accountNumberFile, req.body, itemFile);

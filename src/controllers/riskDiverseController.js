@@ -31,7 +31,11 @@ module.exports = {
             if ((fileIdRif.startsWith('J')) || (fileIdRif.startsWith('G'))) {
                 rifArchivo = fileIdRif;
             } else {
-                cedulaArchivo = fileIdRif;
+                const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+                const rep = '$1.';
+                let arr = fileIdRif.toString().split('.');
+                arr[0] = arr[0].replace(exp,rep);
+                cedulaArchivo = arr[0];
             }
             let riskDiserve = await riskDiverseModel.postRiskDiverseForm(fileNumCerti, fileNomRazon, fileAddress, filePhone, fileSumInsured, cedulaArchivo, rifArchivo, req.body, itemFile);
             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);

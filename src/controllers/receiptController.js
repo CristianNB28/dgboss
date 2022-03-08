@@ -33,9 +33,19 @@ module.exports = {
             } else {
                 resultReceipt.fecha_desde_recibo = resultReceipt.fecha_desde_recibo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                 resultReceipt.fecha_hasta_recibo = resultReceipt.fecha_hasta_recibo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
-            }   
-            resultReceipt.monto_prima_recibo = resultReceipt.monto_prima_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            resultReceipt.monto_comision_recibo = resultReceipt.monto_comision_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
+            let primaReceipt = resultReceipt.monto_prima_recibo;
+            let comisionReceipt = resultReceipt.monto_comision_recibo;
+            if (primaReceipt.toString().includes('.') === true) {
+                resultReceipt.monto_prima_recibo = resultReceipt.monto_prima_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                resultReceipt.monto_prima_recibo = String(resultReceipt.monto_prima_recibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (comisionReceipt.toString().includes('.') === true) {
+                resultReceipt.monto_comision_recibo = resultReceipt.monto_comision_recibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                resultReceipt.monto_comision_recibo = String(resultReceipt.monto_comision_recibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         res.render('receipts', {
             data: resultsReceipts,
@@ -998,9 +1008,17 @@ module.exports = {
             let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo;
             let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo;
             let primaRecibo = resultReceipt[0].monto_prima_recibo;
-            primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             let comisionRecibo = resultReceipt[0].monto_comision_recibo;
-            comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            if (primaRecibo.toString().includes('.') === true) {
+                primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaRecibo = String(primaRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (comisionRecibo.toString().includes('.') === true) {
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             if (fechaPagoRecibo === null) {
                 fechaPagoRecibo = '';
             } else {

@@ -66,7 +66,7 @@ CREATE TABLE Poliza(
     fecha_desde_poliza DATE NOT NULL,
     fecha_hasta_poliza DATE NOT NULL,
     tipo_moneda_poliza VARCHAR(255) NOT NULL,
-    tasa_poliza DECIMAL(10,4),
+    tasa_poliza VARCHAR(255),
     prima_anual_poliza DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255),
     tipo_cobertura_poliza VARCHAR(255),
