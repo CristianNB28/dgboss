@@ -73,7 +73,9 @@ module.exports = {
         const workbookSheets = workbook.SheetNames;
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-        for (const itemFile of dataExcel) {
+        let i, j, temparray, chunk = dataExcel.length;
+        for (i = 0, j = dataExcel.length; i < j; i += chunk) {
+            const itemFile = dataExcel[i];
             let fileNumCerti = itemFile['Número de certificado'];
             let fileTransmission = itemFile['Transmisión( automatico o sincro)'];
             let fileShield = itemFile['Blindaje( si o no)'];
@@ -91,7 +93,27 @@ module.exports = {
             fileYear = fileYear.toString();
             fileYear = new Date(fileYear);
             fileYear = fileYear.getUTCFullYear();
-            let vehicle = await vehicleModel.postVehicleCollectiveForm(fileNumCerti, fileTransmission, fileShield, fileBody, fileYear, fileVehicleType, fileSumInsured, fileSerialEngine, req.body, itemFile);
+            temparray = dataExcel.slice(i, i + chunk).map(data => {
+                return [
+                        fileNumCerti, 
+                        data.Placa,
+                        fileYear, 
+                        data.Marca,
+                        data.Modelo,
+                        data.Version, 
+                        fileTransmission,
+                        fileShield,
+                        fileVehicleType,
+                        data.Color,
+                        fileSerialEngine,
+                        fileBody,
+                        data.Carga,
+                        data.Conductor,
+                        fileSumInsured,
+                        req.body.tipo_movimiento_vehiculo
+                    ]
+            });
+            let vehicle = await vehicleModel.postVehicleCollectiveForm(temparray);
             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
             await colInsInsurerVehiModel.postColInsuInsuredVehi(collectiveInsurerInsured[0].id_caa, vehicle.insertId);
         }

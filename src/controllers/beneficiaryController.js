@@ -180,7 +180,9 @@ module.exports = {
             const workbookSheets = workbook.SheetNames;
             const sheet = workbookSheets[0];
             const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-            for (const itemFile of dataExcel) {
+            let i, j, temparray, chunk = dataExcel.length;
+            for (i = 0, j = dataExcel.length; i < j; i += chunk) {
+                const itemFile = dataExcel[i];
                 let dateFile = itemFile['Fecha de nacimiento'];
                 let clientFile = itemFile['Tipo de Cliente'];
                 let directionFile = itemFile['Dirección'];
@@ -188,6 +190,23 @@ module.exports = {
                 let accountTypeFile = itemFile['Tipo de Cuenta'];
                 let accountNumberFile = itemFile['Nro. De Cuenta.'];
                 let idCollective = await collectiveModel.getCollectiveLast();
+                temparray = dataExcel.slice(1, 1 + chunk).map(data => {
+                    return [
+                            data.Nombre, 
+                            data.Apellido, 
+                            data.Cedula, 
+                            dateFile, 
+                            clientFile,
+                            data.Parentesco,
+                            directionFile,
+                            telephoneFile,
+                            data.Correo,
+                            data.Banco,
+                            accountTypeFile,
+                            accountNumberFile,
+                            req.body.tipo_movimiento_beneficiario
+                        ]
+                });
                 if (clientFile === 'TITULAR') {
                     let cedulaBeneficiary = itemFile.Cedula;
                     let idNaturalInsured = [];
@@ -203,7 +222,7 @@ module.exports = {
                     }
                     await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
                 } else {
-                    let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(dateFile, directionFile, telephoneFile, accountTypeFile, accountNumberFile, req.body, itemFile);
+                    let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(temparray);
                     let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
                     await colInsInsurerBenefModel.postColInsuInsuredBenef(collectiveInsurerInsured[0].id_caa, beneficiary.insertId);
                 }
