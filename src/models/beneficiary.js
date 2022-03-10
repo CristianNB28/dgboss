@@ -58,6 +58,7 @@ module.exports = {
         });
     },
     postExtensiveBeneficiaryForm: async (temparray) => {
+        console.log(temparray)
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Beneficiario (nombre_beneficiario, apellido_beneficiario, cedula_beneficiario, fec_nac_beneficiario, parentesco_beneficiario, direccion_beneficiario, telefono_beneficiario, correo_beneficiario, banco_beneficiario, tipo_cuenta_beneficiario, nro_cuenta_beneficiario, tipo_movimiento_beneficiario)
                     VALUES ?`, 

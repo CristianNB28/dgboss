@@ -29,6 +29,8 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    var collectives = <%- JSON.stringify(collectives) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -49,6 +51,26 @@
         min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
         step: $.validator.format("Por favor, escribe un múltiplo de {0}")
     });
+    function esRepetidoNumColectivo(value, element, param) {
+        let numberCollective = document.getElementById("numero_colectivo").value
+        const even = (collective) => collective.numero_colectivo === numberCollective;
+        if (collectives.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumcolectivo", esRepetidoNumColectivo, "Se repite el número de colectivo");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
     $(document).ready(function(){
         $("#wizard").steps();
         $("#form-health-collective").steps({
@@ -109,6 +131,24 @@
                 $('#verification-form').submit();
             }
         });
+        $().ready(function () {
+            $("#policy-form").validate({
+                rules: {
+                    numero_colectivo: {
+                        esrepetidonumcolectivo: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#receipt-form").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
         $("#policy-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
@@ -117,7 +157,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -145,7 +185,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -157,7 +197,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -169,7 +209,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -181,7 +221,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -277,7 +317,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -305,7 +345,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -317,7 +357,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -329,7 +369,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -341,7 +381,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -437,7 +477,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -465,7 +505,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -477,7 +517,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -489,7 +529,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });
@@ -501,7 +541,7 @@
                     parteEntera = entrada[0].replace(/\./g, ''),
                     parteDecimal = entrada[1],
                     salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : ",00");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
                 }, false); 
             }    
         });

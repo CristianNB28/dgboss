@@ -104,13 +104,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-vehicle-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('vehiclePolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -173,13 +172,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-health-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('healthPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -242,13 +240,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-patrimonial-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('patrimonialPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -311,13 +308,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-bail-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('bailPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -380,13 +376,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-another-branch-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('anotherBranchPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -449,13 +444,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-funeral-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('funeralPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -518,13 +512,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-life-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('lifePolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -587,13 +580,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-ap-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('apPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -656,13 +648,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-travel-policy');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('travelPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -725,13 +716,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-health-collective');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('healthCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -794,13 +784,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-vehicle-collective');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('vehicleCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -863,13 +852,12 @@ module.exports = {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
             res.redirect('/sistema/add-risk-diverse-collective');
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('riskDiverseCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -968,13 +956,12 @@ module.exports = {
                 collectives: resultsCollectives,
                 ownAgents: resultsOwnAgents,
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('receiptForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -1227,13 +1214,12 @@ module.exports = {
                 receipt: resultReceipt[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de número de recibo');
         } catch (error) {
             console.log(error);
             res.render('editReceipt', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de número de recibo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,

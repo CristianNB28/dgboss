@@ -15,11 +15,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -57,6 +61,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -69,11 +75,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -118,6 +128,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -130,11 +142,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -172,6 +188,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -184,11 +202,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -226,6 +248,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -238,11 +262,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -280,6 +308,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -292,11 +322,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -341,6 +375,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -353,11 +389,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -402,6 +442,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -414,11 +456,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -456,6 +502,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -468,11 +516,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -510,6 +562,8 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -571,6 +625,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -633,13 +689,12 @@ module.exports = {
             let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-vehicle-policy');
-            throw new Error('Error, valor duplicado de póliza individual vehiculo');
         } catch (error) {
             console.log(error);
             res.render('vehiclePolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual vehiculo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -647,6 +702,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -655,6 +712,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -717,13 +776,12 @@ module.exports = {
             let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-health-policy');
-            throw new Error('Error, valor duplicado de póliza individual salud');
         } catch (error) {
             console.log(error);
             res.render('healthPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual salud',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -731,6 +789,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -739,6 +799,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -801,13 +863,12 @@ module.exports = {
             let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-patrimonial-policy');
-            throw new Error('Error, valor duplicado de póliza individual patrimonial');
         } catch (error) {
             console.log(error);
             res.render('patrimonialPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual patrimonial',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -815,6 +876,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -823,6 +886,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -885,13 +950,12 @@ module.exports = {
             let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-bail-policy');
-            throw new Error('Error, valor duplicado de póliza individual fianza');
         } catch (error) {
             console.log(error);
             res.render('bailPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual fianza',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -899,6 +963,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -907,6 +973,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -969,13 +1037,12 @@ module.exports = {
             let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-another-branch-policy');
-            throw new Error('Error, valor duplicado de póliza individual otro ramos');
         } catch (error) {
             console.log(error);
             res.render('anotherBranchPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual otro ramos',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -983,6 +1050,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -991,6 +1060,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -1053,13 +1124,12 @@ module.exports = {
             let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-funeral-policy');
-            throw new Error('Error, valor duplicado de póliza individual funerario');
         } catch (error) {
             console.log(error);
             res.render('funeralPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual funerario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -1067,6 +1137,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -1075,6 +1147,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -1137,13 +1211,12 @@ module.exports = {
             let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-life-policy');
-            throw new Error('Error, valor duplicado de póliza individual vida');
         } catch (error) {
             console.log(error);
             res.render('lifePolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual vida',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -1151,6 +1224,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -1159,6 +1234,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -1221,13 +1298,12 @@ module.exports = {
             let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-ap-policy');
-            throw new Error('Error, valor duplicado de póliza individual AP');
         } catch (error) {
             console.log(error);
             res.render('apPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual AP',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -1235,6 +1311,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -1243,6 +1321,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
@@ -1305,13 +1385,12 @@ module.exports = {
             let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
             res.redirect('/sistema/add-travel-policy');
-            throw new Error('Error, valor duplicado de póliza individual viaje');
         } catch (error) {
             console.log(error);
             res.render('travelPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual viaje',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -1319,6 +1398,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -1404,13 +1485,12 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza individual');
         } catch (error) {
             console.log(error);
             res.render('editPolicy', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza individual',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,

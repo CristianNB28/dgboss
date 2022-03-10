@@ -19,6 +19,8 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -34,6 +36,23 @@ module.exports = {
         for (const beneficiary of polInsInsuredBef) {
             let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+        porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        let comisionRecibo = 0;
+        if (resultReceipt.length !== 0) {
+            comisionRecibo = resultReceipt[0].monto_comision_recibo;
+            if (comisionRecibo.toString().includes('.') === true) {
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
@@ -60,6 +79,11 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -69,6 +93,8 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -84,6 +110,23 @@ module.exports = {
         for (const beneficiary of polInsInsuredBef) {
             let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+        porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        let comisionRecibo = 0;
+        if (resultReceipt.length !== 0) {
+            comisionRecibo = resultReceipt[0].monto_comision_recibo;
+            if (comisionRecibo.toString().includes('.') === true) {
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
@@ -110,6 +153,11 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -119,6 +167,8 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPolicies();
+        let resultsReceipts = await receiptModel.getReceipts();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -134,6 +184,23 @@ module.exports = {
         for (const beneficiary of polInsInsuredBef) {
             let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        let porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
+        porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        let comisionRecibo = 0;
+        if (resultReceipt.length !== 0) {
+            comisionRecibo = resultReceipt[0].monto_comision_recibo;
+            if (comisionRecibo.toString().includes('.') === true) {
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
@@ -160,6 +227,11 @@ module.exports = {
                 policy: resultPolicy[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                primaPoliza: primaPoliza,
+                porcentajeAgentePropio: porcentajeAgentePropio,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }
@@ -170,6 +242,23 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
         let resultReceipt = await receiptModel.getReceiptLast();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let primaColectivo = resultCollective[0].prima_anual_colectivo;
+        if (primaColectivo.toString().includes('.') === true) {
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        let comisionRecibo = 0;
+        if (resultReceipt.length !== 0) {
+            comisionRecibo = resultReceipt[0].monto_comision_recibo;
+            if (comisionRecibo.toString().includes('.') === true) {
+                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+        }
         try {
             const workbook = xlsx.readFile(req.file.path, {
                 type: 'binary',
@@ -183,30 +272,26 @@ module.exports = {
             let i, j, temparray, chunk = dataExcel.length;
             for (i = 0, j = dataExcel.length; i < j; i += chunk) {
                 const itemFile = dataExcel[i];
-                let dateFile = itemFile['Fecha de nacimiento'];
                 let clientFile = itemFile['Tipo de Cliente'];
-                let directionFile = itemFile['Dirección'];
-                let telephoneFile = itemFile['Teléfono'];
-                let accountTypeFile = itemFile['Tipo de Cuenta'];
-                let accountNumberFile = itemFile['Nro. De Cuenta.'];
                 let idCollective = await collectiveModel.getCollectiveLast();
                 temparray = dataExcel.slice(1, 1 + chunk).map(data => {
                     return [
                             data.Nombre, 
                             data.Apellido, 
                             data.Cedula, 
-                            dateFile, 
-                            clientFile,
+                            data['Fecha de nacimiento'], 
+                            data['Tipo de Cliente'],
                             data.Parentesco,
-                            directionFile,
-                            telephoneFile,
+                            data['Dirección'],
+                            data['Teléfono'],
                             data.Correo,
                             data.Banco,
-                            accountTypeFile,
-                            accountNumberFile,
-                            req.body.tipo_movimiento_beneficiario
+                            data['Tipo de Cuenta'],
+                            data['Nro. De Cuenta.'],
+                            data['Estatus (Emisión, renovación, inclusión)']
                         ]
                 });
+                console.log('Hola')
                 if (clientFile === 'TITULAR') {
                     let cedulaBeneficiary = itemFile.Cedula;
                     let idNaturalInsured = [];
@@ -244,6 +329,10 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collective: resultCollective[0],
                 receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                primaColectivo: primaColectivo,
+                comisionRecibo: comisionRecibo,
                 name: req.session.name
             });
         }

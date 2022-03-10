@@ -18,11 +18,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('healthCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -51,6 +55,8 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -82,6 +88,8 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
@@ -114,6 +122,8 @@ module.exports = {
                     collective: resultCollective[0],
                     ownAgent: resultOwnAgent[0],
                     receipt: resultReceipt[0],
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
@@ -127,11 +137,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('vehicleCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -160,6 +174,8 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -195,6 +211,8 @@ module.exports = {
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -207,11 +225,15 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('riskDiverseCollectiveForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -240,6 +262,8 @@ module.exports = {
                     legalInsureds: resultsLegalInsureds,
                     collective: resultCollective[0],
                     receipt: resultReceipt[0],
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -275,6 +299,8 @@ module.exports = {
                 collective: resultCollective[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -358,6 +384,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -416,13 +444,12 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-health-collective');
-            throw new Error('Error, valor duplicado de póliza colectivo salud');
         } catch (error) {
             console.log(error);
             res.render('healthCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza colectivo salud',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -430,6 +457,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -438,6 +467,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -503,13 +534,12 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-vehicle-collective');
-            throw new Error('Error, valor duplicado de póliza colectivo vehiculo');
         } catch (error) {
             console.log(error);
             res.render('vehicleCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza colectivo vehiculo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -517,6 +547,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -525,6 +557,8 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -590,13 +624,12 @@ module.exports = {
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-risk-diverse-collective');
-            throw new Error('Error, valor duplicado de póliza colectivo riesgo diverso');
         } catch (error) {
             console.log(error);
             res.render('riskDiverseCollectiveForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza colectivo riesgo diverso',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -604,6 +637,8 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -685,13 +720,12 @@ module.exports = {
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado de póliza colectivo');
         } catch (error) {
             console.log(error);
             res.render('editCollective', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado de póliza colectivo',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
