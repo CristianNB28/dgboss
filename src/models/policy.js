@@ -15,6 +15,18 @@ module.exports = {
             });
         });
     },
+    getPoliciesNumbers: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT numero_poliza 
+                    FROM Poliza`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
     getPolicy: (idPolicy) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT id_poliza, numero_poliza, tipo_individual_poliza, nombre_tomador_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza 

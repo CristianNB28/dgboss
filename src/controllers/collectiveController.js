@@ -18,7 +18,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('healthCollectiveForm', {
@@ -137,7 +137,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('vehicleCollectiveForm', {
@@ -225,7 +225,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultCollective = await collectiveModel.getCollectiveLast();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultCollective.length === 0) {
             res.render('riskDiverseCollectiveForm', {
@@ -384,7 +384,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
@@ -467,7 +467,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
@@ -557,7 +557,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;

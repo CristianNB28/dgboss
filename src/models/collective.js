@@ -16,6 +16,18 @@ module.exports = {
             });
         });
     },
+    getCollectivesNumbers: () => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT numero_colectivo 
+                    FROM Colectivo`, 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
     getCollective: (idCollective) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT id_colectivo, numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo 

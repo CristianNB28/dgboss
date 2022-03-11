@@ -15,7 +15,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('vehiclePolicyForm', {
@@ -75,7 +75,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('healthPolicyForm', {
@@ -142,7 +142,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('patrimonialPolicyForm', {
@@ -202,7 +202,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('bailPolicyForm', {
@@ -262,7 +262,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('anotherBranchPolicyForm', {
@@ -322,7 +322,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('funeralPolicyForm', {
@@ -389,7 +389,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('lifePolicyForm', {
@@ -456,7 +456,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('apPolicyForm', {
@@ -516,7 +516,7 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         if (resultPolicy.length === 0) {
             res.render('travelPolicyForm', {
@@ -625,7 +625,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -712,7 +712,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -799,7 +799,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -886,7 +886,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -973,7 +973,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1060,7 +1060,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1147,7 +1147,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1234,7 +1234,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1321,7 +1321,7 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPolicies();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;

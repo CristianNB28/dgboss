@@ -2,61 +2,100 @@ const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const riskDiverseModel = require('../models/risk_diverse');
 const colInsInsurerRiskDiverModel = require('../models/col_insu_insured_ries_diver');
+const insurerModel = require('../models/insurer');
+const insuredModel = require('../models/insured');
+const receiptModel = require('../models/receipt');
 const xlsx = require('xlsx');
 
 module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postRiskDiverseForm: async (req, res) => {
-        const workbook = xlsx.readFile(req.file.path, {
-            type: 'binary',
-            cellDates: true,
-            cellNF: false,
-            cellText: false
-        });
-        const workbookSheets = workbook.SheetNames;
-        const sheet = workbookSheets[0];
-        const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-        let temparray, chunk = dataExcel.length;
-        const temparrayRiskDiverse = [];
-        let cedulaArchivo = '';
-        let rifArchivo = '';
-        let idCollective = await collectiveModel.getCollectiveLast();
-        temparray = dataExcel.slice(0, 0 + chunk).map(data => {
-            data['Cedula o Rif'] = data['Cedula o Rif'].toString();
-            if ((data['Cedula o Rif'].startsWith('J')) || (data['Cedula o Rif'].startsWith('G'))) {
-                rifArchivo = data['Cedula o Rif'];
-                cedulaArchivo = null;
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        try {
+            const urlFile = req.file.path;
+            const fileExtension =
+                urlFile.substring(urlFile.lastIndexOf('.') + 1, urlFile.length) || urlFile;
+            const workbook = xlsx.readFile(req.file.path, {
+                type: 'binary',
+                cellDates: true,
+                cellNF: false,
+                cellText: false
+            });
+            if (fileExtension === 'csv') {
+                const workbookSheets = workbook.SheetNames;
+                const sheet = workbookSheets[0];
+                const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
+                let temparray, chunk = dataExcel.length;
+                const temparrayRiskDiverse = [];
+                let cedulaArchivo = '';
+                let rifArchivo = '';
+                let idCollective = await collectiveModel.getCollectiveLast();
+                temparray = dataExcel.slice(0, 0 + chunk).map(data => {
+                    data['Cedula o Rif'] = data['Cedula o Rif'].toString();
+                    if ((data['Cedula o Rif'].startsWith('J')) || (data['Cedula o Rif'].startsWith('G'))) {
+                        rifArchivo = data['Cedula o Rif'];
+                        cedulaArchivo = null;
+                    } else {
+                        if (typeof(data['Cedula o Rif']) === 'string') {
+                            cedulaArchivo = data['Cedula o Rif'];
+                            rifArchivo = null;
+                        } else {
+                            const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+                            const rep = '$1.';
+                            let arr = data['Cedula o Rif'].toString().split('.');
+                            arr[0] = arr[0].replace(exp,rep);
+                            cedulaArchivo = arr[0];
+                            rifArchivo = null;
+                        }
+                    }
+                    return [
+                            data['Número de certificado'], 
+                            data['Nombre o Razón Social'], 
+                            cedulaArchivo,
+                            rifArchivo,
+                            data['Dirección'], 
+                            data['Teléfono'],
+                            data.Correo,
+                            data['Suma Asegurada'],
+                            data.Modelo,
+                            data.Serial,
+                            data['Estatus (Emisión, renovación, inclusión)']
+                        ]
+                });
+                let riskDiserve = await riskDiverseModel.postRiskDiverseForm(temparray);
+                let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+                for (let index = 0; index < temparray.length; index++) {
+                    let riskDiverseId = riskDiserve.insertId + index;
+                    temparrayRiskDiverse.push([collectiveInsurerInsured[0].id_caa, riskDiverseId]);
+                }
+                await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(temparrayRiskDiverse);
+                res.redirect('/sistema/add-risk-diverse-collective');
             } else {
-                const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-                const rep = '$1.';
-                let arr = data['Cedula o Rif'].toString().split('.');
-                arr[0] = arr[0].replace(exp,rep);
-                cedulaArchivo = arr[0];
-                rifArchivo = null;
+                throw new SyntaxError("Ingrese archivo de extensión .csv");
             }
-            return [
-                    data['Número de certificado'], 
-                    data['Nombre o Razón Social'], 
-                    cedulaArchivo,
-                    rifArchivo,
-                    data['Dirección'], 
-                    data['Teléfono'],
-                    data.Correo,
-                    data['Suma Asegurada'],
-                    data.Modelo,
-                    data.Serial,
-                    data['Estatus (Emisión, renovación, inclusión)']
-                ]
-        });
-        let riskDiserve = await riskDiverseModel.postRiskDiverseForm(temparray);
-        let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-        for (let index = 0; index < temparray.length; index++) {
-            let riskDiverseId = riskDiserve.insertId + index;
-            temparrayRiskDiverse.push([collectiveInsurerInsured[0].id_caa, riskDiverseId]);
+        } catch (error) {
+            console.log(error);
+            res.render('riskDiverseCollectiveForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-risk-diverse-collective',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                name: req.session.name
+            });
         }
-        await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(temparrayRiskDiverse);
-        res.redirect('/sistema/add-risk-diverse-collective');
     },
 /*                  PUT                  */
     putRiskDiverse: async (req, res, next) => {
