@@ -269,49 +269,57 @@ module.exports = {
             const workbookSheets = workbook.SheetNames;
             const sheet = workbookSheets[0];
             const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-            let i, j, temparray, chunk = dataExcel.length;
-            for (i = 0, j = dataExcel.length; i < j; i += chunk) {
-                const itemFile = dataExcel[i];
-                let clientFile = itemFile['Tipo de Cliente'];
-                let idCollective = await collectiveModel.getCollectiveLast();
-                temparray = dataExcel.slice(1, 1 + chunk).map(data => {
-                    return [
-                            data.Nombre, 
-                            data.Apellido, 
-                            data.Cedula, 
-                            data['Fecha de nacimiento'], 
-                            data['Tipo de Cliente'],
-                            data.Parentesco,
-                            data['Dirección'],
-                            data['Teléfono'],
-                            data.Correo,
-                            data.Banco,
-                            data['Tipo de Cuenta'],
-                            data['Nro. De Cuenta.'],
-                            data['Estatus (Emisión, renovación, inclusión)']
-                        ]
-                });
-                console.log('Hola')
-                if (clientFile === 'TITULAR') {
-                    let cedulaBeneficiary = itemFile.Cedula;
-                    let idNaturalInsured = [];
-                    if (typeof(cedulaBeneficiary) === 'number') {
-                        const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-                        const rep = '$1.';
-                        let arr = cedulaBeneficiary.toString().split('.');
-                        arr[0] = arr[0].replace(exp,rep);
-                        cedulaArchivo = arr[0];
-                        idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaArchivo);
-                    } else {
-                        idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaBeneficiary);
-                    }
-                    await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
-                } else {
-                    let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(temparray);
-                    let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-                    await colInsInsurerBenefModel.postColInsuInsuredBenef(collectiveInsurerInsured[0].id_caa, beneficiary.insertId);
+            let temparray, chunk = dataExcel.length;
+            const temparrayBeneficiary = [];
+            let idCollective = await collectiveModel.getCollectiveLast();
+            temparray = dataExcel.slice(1, 1 + chunk).map(data => {
+                return [
+                        data.Nombre, 
+                        data.Apellido, 
+                        data.Cedula, 
+                        data['Fecha de nacimiento'],
+                        data.Parentesco,
+                        data['Dirección'],
+                        data['Teléfono'],
+                        data.Correo,
+                        data.Banco,
+                        data['Tipo de Cuenta'],
+                        data['Nro. De Cuenta.'],
+                        data['Estatus (Emisión, renovación, inclusión)']
+                    ]
+            });
+            let cedulaBenef = '';
+            const cedulaBenefiario = dataExcel.map(data => {
+                if (data['Tipo de Cliente'] === 'TITULAR') {
+                    return data.Cedula;
+                }
+            });
+            for (let index = 0; index < cedulaBenefiario.length; index++) {
+                const elementCedula = cedulaBenefiario[index];
+                if (elementCedula !== undefined) {
+                    cedulaBenef = elementCedula;
                 }
             }
+            let cedulaBeneficiary = cedulaBenef;
+            let idNaturalInsured = [];
+            if (typeof(cedulaBeneficiary) === 'number') {
+                const exp = /(\d)(?=(\d{3})+(?!\d))/g;
+                const rep = '$1.';
+                let arr = cedulaBeneficiary.toString().split('.');
+                arr[0] = arr[0].replace(exp,rep);
+                cedulaArchivo = arr[0];
+                idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaArchivo);
+            } else {
+                idNaturalInsured = await insuredModel.getNaturalInsuredId(cedulaBeneficiary);
+            }
+            await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
+            let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(temparray);
+            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+            for (let index = 0; index < temparray.length; index++) {
+                let beneficiaryId = beneficiary.insertId + index;
+                temparrayBeneficiary.push([collectiveInsurerInsured[0].id_caa, beneficiaryId]);
+            }
+            await colInsInsurerBenefModel.postColInsuInsuredBenef(temparrayBeneficiary);
             res.redirect('/sistema/add-health-collective');
             throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {

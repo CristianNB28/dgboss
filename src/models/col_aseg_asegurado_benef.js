@@ -44,10 +44,11 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postColInsuInsuredBenef: async (caaId, BeneficiaryId) => {
+    postColInsuInsuredBenef: async (temparrayBeneficiary) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Col_Aseg_Asegurado_Benef (caa_id, beneficiario_id) 
-                    VALUES (?, ?)`, [caaId, BeneficiaryId], 
+                    VALUES ?`,
+            [temparrayBeneficiary], 
             (error, rows) => {
                 if (error) {
                     reject(error);

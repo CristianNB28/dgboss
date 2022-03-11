@@ -34,7 +34,8 @@ module.exports = {
     postColInsuInsuredRiesDiver: async (caaId, riskDiverseId) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Col_Aseg_Asegurado_Ries_Diver (caa_id, riesgo_diverso_id) 
-                    VALUES (?, ?)`, [caaId, riskDiverseId], 
+                    VALUES ?`, 
+            [caaId, riskDiverseId], 
             (error, rows) => {
                 if (error) {
                     reject(error);

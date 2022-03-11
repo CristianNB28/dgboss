@@ -31,10 +31,11 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postColInsuInsuredVehi: async (caaId, vehicleId) => {
+    postColInsuInsuredVehi: async (temparrayVehicle) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Col_Aseg_Asegurado_Vehi (caa_id, vehiculo_id) 
-                    VALUES (?, ?)`, [caaId, vehicleId], 
+                    VALUES ?`, 
+            [temparrayVehicle], 
             (error, rows) => {
                 if (error) {
                     reject(error);

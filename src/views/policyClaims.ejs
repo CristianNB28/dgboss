@@ -32,7 +32,8 @@
                                             id="id_rif_asegurado"
                                             onkeyup="pasarAsegurado();"
                                             placeholder="Cédula/Rif del Asegurado *" 
-                                            class="form-control"
+                                            class="form-control cedula_rif"
+                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                             required
                                         >
                                     </div>
@@ -46,13 +47,12 @@
                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Siniestro</label>
                                     <div class="col-sm-9">
                                         <input 
-                                            type="number"
-                                            step="0.01"
+                                            type="text"
                                             name="gasto_siniestro_incurrido"
                                             id="gasto_siniestro_incurrido" 
                                             placeholder="Gastos de siniestros incurridos *"
                                             onkeyup="pasarAsegurado();"
-                                            class="form-control"
+                                            class="form-control number_format"
                                             required
                                         >
                                     </div>
@@ -65,11 +65,10 @@
                     <div class="form-group row"><label class="col-sm-2 col-form-label">Porcentaje de Siniestralidad</label>
                         <div class="col-sm-10">
                             <input 
-                                type="number"
-                                step="0.01"
+                                type="text"
                                 name="porcentaje_siniestralidad"
                                 id="porcentaje_siniestralidad" 
-                                class="form-control"
+                                class="form-control number_format"
                                 required
                             >
                         </div>
@@ -142,17 +141,61 @@
         var incurredClaimAmount = document.getElementById("gasto_siniestro_incurrido").value
         for (var i = 0; i < insureds.length; i++) {
             var elementInsured = insureds[i];
+            var lossRatio = 0;
             if (idRif === elementInsured.insured) {
                 if (incurredClaimAmount === '') {
-                    var lossRatio = elementInsured.totalPremium / 1;
+                    lossRatio = elementInsured.totalPremium / 1;
                 } else {
-                    var lossRatio = elementInsured.totalPremium / incurredClaimAmount;
+                    if ((incurredClaimAmount.indexOf(',') !== -1) && (incurredClaimAmount.indexOf('.') !== -1)) {
+                        incurredClaimAmount = incurredClaimAmount.replace(",", ".");
+                        incurredClaimAmount = incurredClaimAmount.replace(".", ",");
+                        incurredClaimAmount = parseFloat(incurredClaimAmount.replace(/,/g,''));
+                    } else if (incurredClaimAmount.indexOf(',') !== -1) {
+                        incurredClaimAmount = incurredClaimAmount.replace(",", ".");
+                        incurredClaimAmount = parseFloat(incurredClaimAmount);
+                    } else if (incurredClaimAmount.indexOf('.') !== -1) {
+                        incurredClaimAmount = incurredClaimAmount.replace(".", ",");
+                        incurredClaimAmount = parseFloat(incurredClaimAmount.replace(/,/g,''));
+                    }
+                    lossRatio = elementInsured.totalPremium / incurredClaimAmount;
                 }
-                document.getElementById("porcentaje_siniestralidad").value = lossRatio.toFixed(2);
+                lossRatio = lossRatio.toFixed(2);
+                lossRatio = lossRatio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                document.getElementById("porcentaje_siniestralidad").value = lossRatio;
             } else if (idRif === '') {
                 document.getElementById("porcentaje_siniestralidad").value = '';
             }
         }
+    }
+</script>
+
+<script>
+    var separador = document.getElementsByClassName('number_format');
+    for (var i = 0 ; i < separador.length; i++) {
+        separador[i].addEventListener('input', (e) => {
+            var entrada = e.target.value.split(','),
+            parteEntera = entrada[0].replace(/\./g, ''),
+            parteDecimal = entrada[1],
+            salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+        }, false); 
+    } 
+</script>
+
+<script>
+    var separador = document.getElementsByClassName('cedula_rif');
+    for (var i = 0 ; i < separador.length; i++) {
+        separador[i].addEventListener('input', (e) => {
+            var entrada = e.target.value.split(',');
+            var parteEntera = entrada[0].replace(/\./g, '');
+            var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
+                var parteRif = entrada[0];
+                e.target.value = parteRif;
+            } else {
+                e.target.value = salida;
+            }
+        }, false); 
     }
 </script>
 

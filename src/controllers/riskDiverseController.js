@@ -17,30 +17,45 @@ module.exports = {
         const workbookSheets = workbook.SheetNames;
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-        for (const itemFile of dataExcel) {
-            let fileNumCerti = itemFile['Número de certificado'];
-            let fileNomRazon = itemFile['Nombre o Razón Social'];
-            let fileIdRif = itemFile['Cedula o Rif'];
-            let fileAddress = itemFile['Dirección'];
-            let filePhone = itemFile['Teléfono'];
-            let fileSumInsured = itemFile['Suma Asegurada'];
-            let cedulaArchivo = '';
-            let rifArchivo = '';
-            let idCollective = await collectiveModel.getCollectiveLast();
-            fileIdRif = fileIdRif.toString();
-            if ((fileIdRif.startsWith('J')) || (fileIdRif.startsWith('G'))) {
-                rifArchivo = fileIdRif;
+        let temparray, chunk = dataExcel.length;
+        const temparrayRiskDiverse = [];
+        let cedulaArchivo = '';
+        let rifArchivo = '';
+        let idCollective = await collectiveModel.getCollectiveLast();
+        temparray = dataExcel.slice(0, 0 + chunk).map(data => {
+            data['Cedula o Rif'] = data['Cedula o Rif'].toString();
+            if ((data['Cedula o Rif'].startsWith('J')) || (data['Cedula o Rif'].startsWith('G'))) {
+                rifArchivo = data['Cedula o Rif'];
+                cedulaArchivo = null;
             } else {
                 const exp = /(\d)(?=(\d{3})+(?!\d))/g;
                 const rep = '$1.';
-                let arr = fileIdRif.toString().split('.');
+                let arr = data['Cedula o Rif'].toString().split('.');
                 arr[0] = arr[0].replace(exp,rep);
                 cedulaArchivo = arr[0];
+                rifArchivo = null;
             }
-            let riskDiserve = await riskDiverseModel.postRiskDiverseForm(fileNumCerti, fileNomRazon, fileAddress, filePhone, fileSumInsured, cedulaArchivo, rifArchivo, req.body, itemFile);
-            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-            await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(collectiveInsurerInsured[0].id_caa, riskDiserve.insertId);
+            return [
+                    data['Número de certificado'], 
+                    data['Nombre o Razón Social'], 
+                    cedulaArchivo,
+                    rifArchivo,
+                    data['Dirección'], 
+                    data['Teléfono'],
+                    data.Correo,
+                    data['Suma Asegurada'],
+                    data.Modelo,
+                    data.Serial,
+                    data['Estatus (Emisión, renovación, inclusión)']
+                ]
+        });
+        let riskDiserve = await riskDiverseModel.postRiskDiverseForm(temparray);
+        let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+        for (let index = 0; index < temparray.length; index++) {
+            let riskDiverseId = riskDiserve.insertId + index;
+            temparrayRiskDiverse.push([collectiveInsurerInsured[0].id_caa, riskDiverseId]);
         }
+        await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(temparrayRiskDiverse);
         res.redirect('/sistema/add-risk-diverse-collective');
     },
 /*                  PUT                  */

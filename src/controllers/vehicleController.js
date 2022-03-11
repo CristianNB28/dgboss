@@ -73,50 +73,44 @@ module.exports = {
         const workbookSheets = workbook.SheetNames;
         const sheet = workbookSheets[0];
         const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-        let i, j, temparray, chunk = dataExcel.length;
-        for (i = 0, j = dataExcel.length; i < j; i += chunk) {
-            const itemFile = dataExcel[i];
-            let fileNumCerti = itemFile['Número de certificado'];
-            let fileTransmission = itemFile['Transmisión( automatico o sincro)'];
-            let fileShield = itemFile['Blindaje( si o no)'];
-            let fileBody = itemFile['Carrocería'];
-            let fileYear = itemFile['Año'];
-            let fileVehicleType = itemFile['Tipo de vehículo'];
-            let fileSumInsured = itemFile['Suma Asegurada'];
-            let fileSerialEngine = itemFile['Seria del motor'];
-            let idCollective = await collectiveModel.getCollectiveLast();
-            if (fileShield === 'si') {
-                fileShield = 1;
+        let temparray, chunk = dataExcel.length;
+        const temparrayVehicle = [];
+        let idCollective = await collectiveModel.getCollectiveLast();
+        temparray = dataExcel.slice(0, 0 + chunk).map(data => {
+            data['Año'] = data['Año'].toString();
+            data['Año'] = new Date(data['Año']);
+            data['Año'] = data['Año'].getUTCFullYear();
+            if (data['Blindaje( si o no)'] === 'si') {
+                data['Blindaje( si o no)'] = 1;
             } else {
-                fileShield = 0;
+                data['Blindaje( si o no)'] = 0;
             }
-            fileYear = fileYear.toString();
-            fileYear = new Date(fileYear);
-            fileYear = fileYear.getUTCFullYear();
-            temparray = dataExcel.slice(i, i + chunk).map(data => {
-                return [
-                        fileNumCerti, 
-                        data.Placa,
-                        fileYear, 
-                        data.Marca,
-                        data.Modelo,
-                        data.Version, 
-                        fileTransmission,
-                        fileShield,
-                        fileVehicleType,
-                        data.Color,
-                        fileSerialEngine,
-                        fileBody,
-                        data.Carga,
-                        data.Conductor,
-                        fileSumInsured,
-                        req.body.tipo_movimiento_vehiculo
-                    ]
-            });
-            let vehicle = await vehicleModel.postVehicleCollectiveForm(temparray);
-            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-            await colInsInsurerVehiModel.postColInsuInsuredVehi(collectiveInsurerInsured[0].id_caa, vehicle.insertId);
+            return [
+                    data['Número de certificado'], 
+                    data.Placa,
+                    data['Año'], 
+                    data.Marca,
+                    data.Modelo,
+                    data.Version, 
+                    data['Transmisión( automatico o sincro)'],
+                    data['Blindaje( si o no)'],
+                    data['Tipo de vehículo'],
+                    data.Color,
+                    data['Seria del motor'],
+                    data['Carrocería'],
+                    data.Carga,
+                    data.Conductor,
+                    data['Suma Asegurada'],
+                    data['Estatus (Emisión, renovación, inclusión)']
+                ]
+        });
+        let vehicle = await vehicleModel.postVehicleCollectiveForm(temparray);
+        let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+        for (let index = 0; index < temparray.length; index++) {
+            let vehicleId = vehicle.insertId + index;
+            temparrayVehicle.push([collectiveInsurerInsured[0].id_caa, vehicleId]);
         }
+        await colInsInsurerVehiModel.postColInsuInsuredVehi(temparrayVehicle);
         res.redirect('/sistema/add-vehicle-collective');
     },
 /*                  PUT                  */
