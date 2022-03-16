@@ -61,13 +61,12 @@ module.exports = {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
             res.redirect('/sistema/add-health-policy');
-            throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {
             console.log(error);
             res.render('healthPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado del beneficiario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -135,13 +134,12 @@ module.exports = {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
             res.redirect('/sistema/add-funeral-policy');
-            throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {
             console.log(error);
             res.render('funeralPolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado del beneficiario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -209,13 +207,12 @@ module.exports = {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
             res.redirect('/sistema/add-life-policy');
-            throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {
             console.log(error);
             res.render('lifePolicyForm', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado del beneficiario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -416,13 +413,12 @@ module.exports = {
                 idCollective: resultCII[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {
             console.log(error);
             res.render('editBeneficiary', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado del beneficiario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
@@ -456,13 +452,12 @@ module.exports = {
                 idPolicy: resultPII[0],
                 name: req.session.name
             });
-            throw new Error('Error, valor duplicado del beneficiario');
         } catch (error) {
             console.log(error);
             res.render('editPolicyBeneficiary', {
                 alert: true,
                 alertTitle: 'Error',
-                alertMessage: 'Valor duplicado del beneficiario',
+                alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,

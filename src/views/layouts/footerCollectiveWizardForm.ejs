@@ -28,6 +28,8 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="/js/moment.js"></script>
+
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
@@ -575,8 +577,11 @@
     $(document).ready(function () {
         $('#fecha_desde_colectivo').change(function () {
             var extraer = $('#fecha_desde_colectivo').val();
-            var fecha = new Date(extraer);
-            fecha.setFullYear(fecha.getFullYear() + 1);
+            extraer = extraer.split('-');
+            year = parseInt(extraer[0]);
+            month = parseInt(extraer[1]) - 1;
+            day = parseInt(extraer[2]);
+            var fecha = moment([year, month, day]).add(1, 'years');
             fecha = fecha.toISOString().substring(0, 10);
             $('#fecha_hasta_colectivo').val(fecha);
         });
@@ -748,8 +753,11 @@
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 1);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(1, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -757,8 +765,11 @@
                 $(document).ready(function () {
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 1);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(1, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -775,8 +786,11 @@
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 2);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(2, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -784,8 +798,11 @@
                 $(document).ready(function () {
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 2);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(2, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -799,8 +816,11 @@
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 3);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(3, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -808,8 +828,11 @@
                 $(document).ready(function () {
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 3);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(3, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -823,8 +846,11 @@
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 6);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(6, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -832,8 +858,11 @@
                 $(document).ready(function () {
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setMonth(fecha.getMonth() + 6);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(6, 'months');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
@@ -847,8 +876,11 @@
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(1, 'years');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_pago_recibo').val(fecha);
                     });
@@ -856,8 +888,11 @@
                 $(document).ready(function () {
                     $('#fecha_desde_recibo').change(function () {
                         var extraer = $('#fecha_desde_recibo').val();
-                        var fecha = new Date(extraer);
-                        fecha.setFullYear(fecha.getFullYear() + 1);
+                        extraer = extraer.split('-');
+                        year = parseInt(extraer[0]);
+                        month = parseInt(extraer[1]) - 1;
+                        day = parseInt(extraer[2]);
+                        var fecha = moment([year, month, day]).add(1, 'years');
                         fecha = fecha.toISOString().substring(0, 10);
                         $('#fecha_hasta_recibo').val(fecha);
                     });
