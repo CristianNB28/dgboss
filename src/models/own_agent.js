@@ -36,6 +36,18 @@ module.exports = {
             });
         });
     },
+    getOwnAgentIdCedula: (cedulaAgentePropio) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT id_agente_propio FROM Agente_Propio WHERE cedula_agente_propio=?', 
+            [cedulaAgentePropio],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postOwnAgentForm: (porcentajeAgentePropio, ownAgent) => {
         return new Promise((resolve, reject) => {

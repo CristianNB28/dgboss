@@ -144,6 +144,19 @@ module.exports = {
             });
         }
     },
+    postCollecInsuNaturalInsu: async (naturalInsuredId, insurerId, collectiveId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Colectivo_Aseguradora_Asegurado (colectivo_id, aseguradora_id, asegurado_per_nat_id) 
+                    VALUES (?, ?, ?)`, 
+            [collectiveId, insurerId, naturalInsuredId], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  PUT                  */
     updateCollectiveInsured: async (idNaturalInsured, idCollective) => {
         return new Promise((resolve, reject) => {
