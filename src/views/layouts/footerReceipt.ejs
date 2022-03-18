@@ -483,6 +483,27 @@
             }
         }
     </script>
+    
+    <script>
+        var ownAgents = <%- JSON.stringify(ownAgents) %>;
+        function pasarAgente() {
+            var nameOwnAgent = document.getElementById("nombre_agente_propio").value;
+            for (let i = 0; i < ownAgents.length; i++) {
+                let elementOwnAgent = ownAgents[i];
+                let names = elementOwnAgent.nombre_agente_propio + ' ' + elementOwnAgent.apellido_agente_propio;
+                console.log(names)
+                if (nameOwnAgent === names) {
+                    var percentajeOwnAgent = elementOwnAgent.porcentaje_agente_propio
+                    percentajeOwnAgent = percentajeOwnAgent.toFixed(2);
+                    percentajeOwnAgent = percentajeOwnAgent.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                    document.getElementById("porcentaje_agente_propio").value = percentajeOwnAgent;
+                    break;
+                } else {
+                    document.getElementById("porcentaje_agente_propio").value = '';
+                }
+            }
+        }
+    </script>
 
 </body>
 

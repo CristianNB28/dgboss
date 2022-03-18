@@ -160,6 +160,20 @@ module.exports = {
             });
         });
     },
+    updateOwnAgentNaturalInsured: (id, idOwnAgent) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Natural 
+                    SET agente_propio_id=?
+                    WHERE id_asegurado_per_nat=?`, 
+            [idOwnAgent, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableNaturalInsured: (id, disableNaturalInsured) => {
         return new Promise((resolve, reject) => {

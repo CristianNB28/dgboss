@@ -87,35 +87,69 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                        <% if (naturalInsureds.length > 0) { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarAgentePropio();"
+                                                        value="<%= idNaturalInsured %>" 
+                                                        class="form-control cedula_rif"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarAgentePropio();"
+                                                        value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
+                                                        class="form-control cedula_rif"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                    <div class="hr-line-dashed"></div>
+                                    <% if (ownAgent === undefined) { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                             <div class="col-sm-9">
                                                 <input 
                                                     type="text"
-                                                    name="id_rif_asegurado"
-                                                    id="id_rif_asegurado"
-                                                    onkeyup="pasarAgentePropio();"
-                                                    value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                    class="form-control cedula_rif"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                    name="nombre_agente_propio"
+                                                    id="nombre_agente_propio"
+                                                    placeholder="Nombre del Agente Propio *"
+                                                    onkeyup="pasarAgente();"
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_agente_propio"
+                                                    id="nombre_agente_propio"
+                                                    value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
                                         </div>
                                     <% } %>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="nombre_agente_propio"
-                                                id="nombre_agente_propio"
-                                                value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row" id="radioContainer">
                                         <label class="col-sm-3 col-form-label">Fraccionamiento</label>
@@ -155,7 +189,6 @@
                                                 id="fecha_desde_recibo"
                                                 value="<%= fechaDesdeRecibo %>" 
                                                 class="form-control"
-                                                required
                                             >
                                         </div>
                                     </div>
@@ -221,19 +254,35 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
+                                        <% if (naturalInsureds.length > 0) { %>
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="nombre_razon_asegurado"
-                                                    id="nombre_razon_asegurado"
-                                                    value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
-                                                    class="form-control"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    required
-                                                >
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= namesNaturalInsured %>"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
                                             </div>
-                                        </div>
+                                        <% } else { %>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Porcentaje</label>
@@ -283,7 +332,6 @@
                                                 id="fecha_hasta_recibo"
                                                 value="<%= fechaHastaRecibo %>"
                                                 class="form-control"
-                                                required
                                             >
                                         </div>
                                     </div>

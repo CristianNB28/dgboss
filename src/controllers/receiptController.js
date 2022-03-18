@@ -708,12 +708,16 @@ module.exports = {
                 montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
             }
             let idCollective = await collectiveModel.getCollectiveLast();
-            let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+            let resultsCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
             let receipt = await receiptModel.postReceiptCollectiveForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, idCollective, req.body);
-            if (resultCII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultCII[0].asegurado_per_nat_id, receipt.insertId);
+            if (resultsCII[0].asegurado_per_jur_id === null) {
+                for (const resultCII of resultsCII) {
+                    await receiptInsuredModel.postReceiptNaturalInsured(resultCII.asegurado_per_nat_id, receipt.insertId);
+                }
             } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
+                for (const resultCII of resultsCII) {
+                    await receiptInsuredModel.postReceiptLegalInsured(resultCII.asegurado_per_jur_id, receipt.insertId);
+                }
             }
             res.redirect('/sistema/add-health-collective');
         } catch (error) {
@@ -991,6 +995,9 @@ module.exports = {
             let resultNaturalInsured = [];
             let resultLegalInsured = [];
             let resultOwnAgent = [];
+            let resultsNaturalInsured = [];
+            let namesNaturalInsured = [];
+            let idNaturalInsured = []; 
             let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo;
             let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo;
             let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo;
@@ -1035,15 +1042,31 @@ module.exports = {
                 resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
                 let resultReceiptInsured = await receiptInsuredModel.getReceiptInsured(resultReceipt[0].id_recibo);
                 if (resultReceiptInsured[0].asegurado_per_jur_id === null) {
-                    resultNaturalInsured = await insuredModel.getNaturalInsured(resultReceiptInsured[0].asegurado_per_nat_id);
-                    resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                    if (resultReceiptInsured.length > 1) {
+                        for (const receiptInsured of resultReceiptInsured) {
+                            resultNaturalInsured = await insuredModel.getNaturalInsured(receiptInsured.asegurado_per_nat_id);
+                            resultsNaturalInsured.push(resultNaturalInsured);
+                            namesNaturalInsured = resultsNaturalInsured.map(naturalInsured => {
+                                let names = naturalInsured[0].nombre_asegurado_per_nat + naturalInsured[0].apellido_asegurado_per_nat;
+                                return names;
+                            });
+                            idNaturalInsured = resultsNaturalInsured.map(naturalInsured => naturalInsured[0].cedula_asegurado_per_nat);
+                            resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                        }
+                    } else {
+                        resultNaturalInsured = await insuredModel.getNaturalInsured(resultReceiptInsured[0].asegurado_per_nat_id);
+                        resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                    }
                 } else {
                     resultLegalInsured = await insuredModel.getLegalInsured(resultReceiptInsured[0].asegurado_per_jur_id);
                     resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
                 }
             }
-            let ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
-            ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            let ownAgentPercentage = 0;
+            if (resultOwnAgent.length !== 0) {
+                ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
+                ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            }
             res.render('editReceipt', {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
@@ -1059,6 +1082,9 @@ module.exports = {
                 policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
+                naturalInsureds: resultsNaturalInsured,
+                namesNaturalInsured: namesNaturalInsured,
+                idNaturalInsured: idNaturalInsured,
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
@@ -1081,13 +1107,24 @@ module.exports = {
         let resultNaturalInsured = [];
         let resultLegalInsured = [];
         let resultOwnAgent = [];
+        let resultsNaturalInsured = [];
+        let namesNaturalInsured = [];
+        let idNaturalInsured = []; 
         let fechaDesdeRecibo = resultReceipt[0].fecha_desde_recibo;
         let fechaHastaRecibo = resultReceipt[0].fecha_hasta_recibo;
-        let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo
+        let fechaPagoRecibo = resultReceipt[0].fecha_pago_recibo;
         let primaRecibo = resultReceipt[0].monto_prima_recibo;
-        primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         let comisionRecibo = resultReceipt[0].monto_comision_recibo;
-        comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        if (primaRecibo.toString().includes('.') === true) {
+            primaRecibo = primaRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaRecibo = String(primaRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (comisionRecibo.toString().includes('.') === true) {
+            comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         if (fechaPagoRecibo === null) {
             fechaPagoRecibo = '';
         } else {
@@ -1117,15 +1154,30 @@ module.exports = {
             resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
             let resultReceiptInsured = await receiptInsuredModel.getReceiptInsured(resultReceipt[0].id_recibo);
             if (resultReceiptInsured[0].asegurado_per_jur_id === null) {
-                resultNaturalInsured = await insuredModel.getNaturalInsured(resultReceiptInsured[0].asegurado_per_nat_id);
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                if (resultReceiptInsured.length > 1) {
+                    for (const receiptInsured of resultReceiptInsured) {
+                        resultNaturalInsured = await insuredModel.getNaturalInsured(receiptInsured.asegurado_per_nat_id);
+                        resultsNaturalInsured.push(resultNaturalInsured);
+                        namesNaturalInsured = resultsNaturalInsured.map(naturalInsured => {
+                            let names = naturalInsured[0].nombre_asegurado_per_nat + naturalInsured[0].apellido_asegurado_per_nat;
+                            return names;
+                        });
+                        idNaturalInsured = resultsNaturalInsured.map(naturalInsured => naturalInsured[0].cedula_asegurado_per_nat);
+                    }
+                } else {
+                    resultNaturalInsured = await insuredModel.getNaturalInsured(resultReceiptInsured[0].asegurado_per_nat_id);
+                    resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
+                }
             } else {
                 resultLegalInsured = await insuredModel.getLegalInsured(resultReceiptInsured[0].asegurado_per_jur_id);
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
         }
-        let ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
-        ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        let ownAgentPercentage = 0;
+        if (resultOwnAgent.length !== 0) {
+            ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
+            ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        }
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -1167,8 +1219,22 @@ module.exports = {
                 await receiptModel.updateReceiptCollective(fraccionamiento, montoPrimaRecibo, montoComisionRecibo, numeroPago, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, resultCollectiveId, req.body);
                 if (rifAseguradoJuridico === '') {
                     let legalId = null;
-                    let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);
-                    await receiptInsuredModel.updateReceiptNaturalInsured(legalId, resultNaturalId[0].id_asegurado_per_nat, req.body.id_recibo);
+                    if (cedulaAseguradoNatural.includes(',') === false) {
+                        let resultNaturalId = await insuredModel.getNaturalInsuredId(cedulaAseguradoNatural);
+                        await receiptInsuredModel.updateReceiptNaturalInsured(legalId, resultNaturalId[0].id_asegurado_per_nat, req.body.id_recibo);
+                    } else {
+                        arrIdNaturalInsured = cedulaAseguradoNatural.split(',');
+                        nombreCompletoAgentePropio = req.body.nombre_agente_propio;
+                        let nombreAgentePropio = nombreCompletoAgentePropio.split(' ', 1).join(' ');
+                        let apellidoAgentePropio = nombreCompletoAgentePropio.split(' ').slice(1,2).join(' ');
+                        let idAgentePropio = await ownAgentModel.getOwnAgentId(nombreAgentePropio, apellidoAgentePropio);
+                        for (const idNaturalInsured of arrIdNaturalInsured) {
+                            let resultNaturalId = await insuredModel.getNaturalInsuredId(idNaturalInsured);
+                            await insuredModel.updateOwnAgentNaturalInsured(resultNaturalId[0].id_asegurado_per_nat, idAgentePropio[0].id_agente_propio);
+                            let resultReceiptInsured = await receiptInsuredModel.getReceiptInsuredId(req.body.id_recibo, resultNaturalId[0].id_asegurado_per_nat);
+                            await receiptInsuredModel.updateReceiptInsured(resultReceiptInsured[0].id_recibo_asegurado, legalId, resultNaturalId[0].id_asegurado_per_nat, req.body.id_recibo);
+                        }
+                    }
                 } else {
                     let naturalId = null;
                     let resultLegalId = await insuredModel.getLegalInsuredId(rifAseguradoJuridico);
@@ -1195,6 +1261,7 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: 'sistema',
+                name: req.session.name,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policies: resultsPolicies,
@@ -1205,14 +1272,16 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
-                policy: resultPolicy[0],
                 ownAgentPercentage: ownAgentPercentage,
+                policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
+                naturalInsureds: resultsNaturalInsured,
+                namesNaturalInsured: namesNaturalInsured,
+                idNaturalInsured: idNaturalInsured,
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
-                receipt: resultReceipt[0],
-                name: req.session.name
+                receipt: resultReceipt[0]
             });
         } catch (error) {
             console.log(error);
@@ -1235,13 +1304,16 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
-                policy: resultPolicy[0],
                 ownAgentPercentage: ownAgentPercentage,
+                policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
+                naturalInsureds: resultsNaturalInsured,
+                namesNaturalInsured: namesNaturalInsured,
+                idNaturalInsured: idNaturalInsured,
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
-                receipt: resultReceipt[0],
+                receipt: resultReceipt[0]
             });
         }
     },

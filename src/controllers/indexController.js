@@ -204,7 +204,10 @@ module.exports = {
             if ((elementNaturalInsuredNext === undefined) && (i === 0)) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {
                     let elementPolicyId = resultPolicyId[j];
@@ -241,9 +244,15 @@ module.exports = {
             } else if ((i === 0) && (elementNaturalInsured.agente_propio_id !== elementNaturalInsuredNext.agente_propio_id)) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let ownAgentNext = await ownAgentModel.getOwnAgent(elementNaturalInsuredNext.agente_propio_id);
-                let fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                let fullNameOwnAgentNext = '';
+                if (ownAgentNext.length !== 0) {
+                    fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {
@@ -307,7 +316,10 @@ module.exports = {
             } else if (elementNaturalInsured.agente_propio_id === elementNaturalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 let date = 0;
@@ -370,9 +382,15 @@ module.exports = {
             } else if (elementNaturalInsured.agente_propio_id !== elementNaturalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementNaturalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let ownAgentNext = await ownAgentModel.getOwnAgent(elementNaturalInsuredNext.agente_propio_id);
-                let fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                let fullNameOwnAgentNext = '';
+                if (ownAgentNext.length !== 0) {
+                    fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {
@@ -442,7 +460,10 @@ module.exports = {
             if ((elementLegalInsuredNext === undefined) && (i === 0)) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {
                     let elementPolicyId = resultPolicyId[j];
@@ -481,9 +502,15 @@ module.exports = {
             } else if ((i === 0) && (elementLegalInsured.agente_propio_id !== elementLegalInsuredNext.agente_propio_id)) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let ownAgentNext = await ownAgentModel.getOwnAgent(elementLegalInsuredNext.agente_propio_id);
-                let fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                let fullNameOwnAgentNext = '';
+                if (ownAgentNext.length !== 0) {
+                    fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {
@@ -547,7 +574,10 @@ module.exports = {
             } else if (elementLegalInsured.agente_propio_id === elementLegalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 let date = 0;
@@ -610,9 +640,15 @@ module.exports = {
             } else if (elementLegalInsured.agente_propio_id !== elementLegalInsuredNext.agente_propio_id) {
                 let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
                 let ownAgent = await ownAgentModel.getOwnAgent(elementLegalInsured.agente_propio_id);
-                let fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                let fullNameOwnAgent = '';
+                if (ownAgent.length !== 0) {
+                    fullNameOwnAgent = ownAgent[0].nombre_agente_propio + ' ' + ownAgent[0].apellido_agente_propio;
+                }
                 let ownAgentNext = await ownAgentModel.getOwnAgent(elementLegalInsuredNext.agente_propio_id);
-                let fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                let fullNameOwnAgentNext = '';
+                if (ownAgentNext.length !== 0) {
+                    fullNameOwnAgentNext = ownAgentNext[0].nombre_agente_propio + ' ' + ownAgentNext[0].apellido_agente_propio;
+                }
                 let dateMax = 0;
                 let dateMaxNext = 0;
                 for (let j = 0; j < resultPolicyId.length; j++) {

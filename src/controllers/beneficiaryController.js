@@ -264,7 +264,8 @@ module.exports = {
                 type: 'binary',
                 cellDates: true,
                 cellNF: false,
-                cellText: false
+                cellText: false,
+                raw: true
             });
             if (fileExtension === 'csv') {
                 const workbookSheets = workbook.SheetNames;
@@ -328,8 +329,7 @@ module.exports = {
                                 data['Fecha de nacimiento'],
                                 data['Dirección'],
                                 data['Teléfono'],
-                                data.Correo,
-                                data['Agente Propio']
+                                data.Correo
                             ];
                         }
                     });
@@ -337,7 +337,7 @@ module.exports = {
                         const elementCedula = cedulaBenefiario[index];
                         if (elementCedula !== undefined) {
                             cedulaBenef = elementCedula[2];
-                            idOwnAgent = await ownAgentModel.getOwnAgentIdCedula(elementCedula[7]);
+                            idOwnAgent = null;
                             let dateString = String(elementCedula[3]);
                             let datePieces = dateString.split("/");
                             birthday = new Date(datePieces[2], (datePieces[1] - 1), datePieces[0]);
@@ -375,7 +375,7 @@ module.exports = {
                             await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
                         }
                     } else {
-                        let naturalInsured = await insuredModel.postNaturalInsuredForm(birthday, idOwnAgent[0].id_agente_propio, temparrayNaturalInsured[0]);
+                        let naturalInsured = await insuredModel.postNaturalInsuredForm(birthday, idOwnAgent, temparrayNaturalInsured[0]);
                         if (countHolder >= 2) {
                             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
                             await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(naturalInsured.insertId, collectiveInsurerInsured[0].aseguradora_id, idCollective[0].id_colectivo);
