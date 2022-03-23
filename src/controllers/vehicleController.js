@@ -78,7 +78,8 @@ module.exports = {
                 type: 'binary',
                 cellDates: true,
                 cellNF: false,
-                cellText: false
+                cellText: false,
+                raw: true
             });
             if (fileExtension === 'csv') {
                 const workbookSheets = workbook.SheetNames;
@@ -96,6 +97,19 @@ module.exports = {
                     } else {
                         data['Blindaje( si o no)'] = 0;
                     }
+                    data['Suma Asegurada'] = String(data['Suma Asegurada']);
+                    if ((data['Suma Asegurada'].indexOf(',') !== -1) && (data['Suma Asegurada'].indexOf('.') !== -1)) {
+                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(",", ".");
+                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(".", ",");
+                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada'].replace(/,/g,''));
+                    } else if (data['Suma Asegurada'].indexOf(',') !== -1) {
+                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(",", ".");
+                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada']);
+                    } else if (data['Suma Asegurada'].indexOf('.') !== -1) {
+                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(".", ",");
+                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada'].replace(/,/g,''));
+                    }
+                    data['Suma Asegurada'] = data['Suma Asegurada'].toFixed(2);
                     return [
                             data['Número de certificado'], 
                             data.Placa,
@@ -155,7 +169,11 @@ module.exports = {
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
             let sumaAsegurada = resultVehicle[0].suma_asegurada_vehiculo;
             let capacidadCarga = resultVehicle[0].capacidad_carga;
-            sumaAsegurada = new Intl.NumberFormat('de-DE').format(sumaAsegurada);
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
             capacidadCarga = new Intl.NumberFormat('de-DE').format(capacidadCarga);
             res.render('editVehicle', {
                 vehicle: resultVehicle[0],

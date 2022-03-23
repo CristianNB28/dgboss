@@ -140,11 +140,24 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postCollectiveForm: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+    postCollectiveHealthForm: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Colectivo (numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, cobertura_suma_asegurada_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, maternidad_colectivo, plazo_espera_colectivo, detalle_cliente_colectivo)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
             [collective.numero_colectivo, collective.nombre_tomador_colectivo, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, collective.detalle_cliente_colectivo],                          
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    postCollectiveForm: (montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO Colectivo (numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [collective.numero_colectivo, collective.nombre_tomador_colectivo, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo],                          
             (error, rows) => {
                 if (error) {
                     reject(error)
