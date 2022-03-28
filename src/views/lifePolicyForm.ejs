@@ -123,7 +123,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda_poliza" required>
+                                                    <select class="form-control" name="tipo_moneda_poliza" id="tipo_moneda_poliza" onchange="currencySignChange()" required>
                                                         <option value="">Seleccione *</option>
                                                         <option value="BOLÍVAR">BOLÍVAR</option>
                                                         <option value="DÓLAR">DÓLAR</option>
@@ -140,7 +140,7 @@
                                                         name="prima_anual_poliza"
                                                         id="prima_anual_poliza"
                                                         placeholder="Prima *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                         required
                                                     >
                                                 </div>
@@ -208,7 +208,7 @@
                                                         name="deducible_poliza"
                                                         id="deducible_poliza"
                                                         placeholder="Deducible *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                         required
                                                     >
                                                 </div>
@@ -261,7 +261,7 @@
                                                         name="suma_asegurada_poliza"
                                                         id="suma_asegurada_poliza"
                                                         placeholder="Suma Asegurada *"
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                         required
                                                     >
                                                 </div>
@@ -484,7 +484,7 @@
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             value="<%= primaPoliza %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -499,7 +499,7 @@
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             placeholder="Monto Prima *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -576,7 +576,7 @@
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
                                                         placeholder="Comisión Asociada *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format_number"
                                                         required
                                                     >
                                                 </div>
@@ -742,7 +742,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             value="<%= comisionRecibo %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -757,7 +757,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             placeholder="Comisión Asociada *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -782,7 +782,7 @@
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
                                                             value="<%= primaPoliza %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                         >
                                                     </div>
                                                 </div>
@@ -796,7 +796,7 @@
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
                                                             placeholder="Porcentaje en dólares por prima *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                         >
                                                     </div>
                                                 </div>

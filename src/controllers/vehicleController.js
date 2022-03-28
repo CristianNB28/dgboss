@@ -124,7 +124,8 @@ module.exports = {
                             data['Seria del motor'],
                             data['Carrocería'],
                             data.Carga,
-                            data.Conductor,
+                            data['Cédula'],
+                            data['Nombre y apellido'],
                             data['Suma Asegurada'],
                             data['Estatus (Emisión, renovación, inclusión)']
                         ]
@@ -164,6 +165,7 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let idVehicle = req.params.id;
         if (idVehicle.match(valoresAceptados)) {
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
             let resultVehicle = await vehicleModel.getVehicle(idVehicle);
             let resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(idVehicle);
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
@@ -174,12 +176,13 @@ module.exports = {
             } else {
                 sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
-            capacidadCarga = new Intl.NumberFormat('de-DE').format(capacidadCarga);
+            capacidadCarga = String(capacidadCarga).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             res.render('editVehicle', {
                 vehicle: resultVehicle[0],
                 idCollective: resultCII[0],
                 sumaAsegurada: sumaAsegurada,
                 capacidadCarga: capacidadCarga,
+                naturalInsureds: resultsNaturalInsureds,
                 name: req.session.name
             });
         } else {

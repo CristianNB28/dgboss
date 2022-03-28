@@ -14,7 +14,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -107,6 +108,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-vehicle-policy');
@@ -121,7 +133,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -214,6 +227,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-health-policy');
@@ -228,7 +252,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -321,6 +346,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-patrimonial-policy');
@@ -335,7 +371,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -428,6 +465,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-bail-policy');
@@ -442,7 +490,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -535,6 +584,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-another-branch-policy');
@@ -549,7 +609,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -642,6 +703,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-funeral-policy');
@@ -656,7 +728,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -749,6 +822,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-life-policy');
@@ -763,7 +847,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -856,6 +941,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-ap-policy');
@@ -870,7 +966,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -963,6 +1060,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
         res.redirect('/sistema/add-travel-policy');
@@ -977,7 +1085,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1071,6 +1180,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-health-collective');
@@ -1085,7 +1205,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1179,6 +1300,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-vehicle-collective');
@@ -1193,7 +1325,8 @@ module.exports = {
         let porcentajeDirectorComision = req.body.porcentaje_director_comision;
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = parseFloat(req.body.monto_comision_comision);
+        let montoComision = req.body.monto_comision_comision;
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1287,6 +1420,17 @@ module.exports = {
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
                 casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
             }
+        }
+        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        } else if (montoComision.indexOf(',') !== -1) {
+            montoComision = montoComision.replace(",", ".");
+            montoComision = parseFloat(montoComision);
+        } else if (montoComision.indexOf('.') !== -1) {
+            montoComision = montoComision.replace(".", ",");
+            montoComision = parseFloat(montoComision.replace(/,/g,''));
         }
         await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
         res.redirect('/sistema/add-risk-diverse-collective');

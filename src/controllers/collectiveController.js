@@ -343,6 +343,13 @@ module.exports = {
                     } else {
                         elementCollective.prima_anual_colectivo = String(elementCollective.prima_anual_colectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                     }
+                    if (elementCollective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                        elementCollective.prima_anual_colectivo = `Bs ${elementCollective.prima_anual_colectivo}`;
+                    } else if (elementCollective.tipo_moneda_colectivo === 'DÓLAR') {
+                        elementCollective.prima_anual_colectivo = `$ ${elementCollective.prima_anual_colectivo}`;
+                    } else if (elementCollective.tipo_moneda_colectivo === 'EUROS') {
+                        elementCollective.prima_anual_colectivo = `€ ${elementCollective.prima_anual_colectivo}`;
+                    }
                     elementCollective.fecha_desde_colectivo = elementCollective.fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
                     elementCollective.fecha_hasta_colectivo = elementCollective.fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
                     elementCollective.nombre_aseguradora = resultInsurer[0].nombre_aseguradora;
@@ -415,8 +422,12 @@ module.exports = {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
             let coberturaSumaAsegurada = req.body.cobertura_suma_asegurada_colectivo;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            coberturaSumaAsegurada = coberturaSumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
             let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
             let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
+            let fechaDetalleCliente = new Date(req.body.detalle_cliente_colectivo);
             let tipoColectivo = 'SALUD';
             let estatusPoliza = '';
             let diasExpiracion = 0;
@@ -466,7 +477,7 @@ module.exports = {
                     coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
                 }
             }
-            let collective = await collectiveModel.postCollectiveHealthForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+            let collective = await collectiveModel.postCollectiveHealthForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, req.body);
             await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
             res.redirect('/sistema/add-health-collective');
         } catch (error) {
@@ -497,6 +508,8 @@ module.exports = {
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
             let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
             let tipoColectivo = 'AUTOMÓVIL';
@@ -571,6 +584,8 @@ module.exports = {
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
             let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
             let tipoColectivo = 'RIESGOS DIVERSOS';
@@ -641,6 +656,10 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let idCollective = req.params.id;
         if (idCollective.match(valoresAceptados)) {
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsCollective = await collectiveModel.getCollectivesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
             let resultCollective = await collectiveModel.getCollective(idCollective);
             let resultsTaker = await collectiveModel.getCollectiveHolder();
             let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
@@ -662,6 +681,10 @@ module.exports = {
                 primaAnual: primaAnual,
                 insurers: insurers,
                 insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } else {
@@ -670,12 +693,20 @@ module.exports = {
     },
     updateCollective: async (req, res) => {
         let idCollective = req.body.id_colectivo;
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
         let resultCollective = await collectiveModel.getCollective(idCollective);
         let resultsTaker = await collectiveModel.getCollectiveHolder();
         let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
         let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
         let primaAnual = resultCollective[0].prima_anual_colectivo;
-        primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         let insurers = await insurerModel.getInsurers();
         let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
         let resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
@@ -683,6 +714,7 @@ module.exports = {
             let fechaDesdeColectivo = new Date(req.body.fecha_desde_colectivo);
             let fechaHastaColectivo = new Date(req.body.fecha_hasta_colectivo);
             let montoPrimaAnual = req.body.prima_anual_colectivo;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -711,6 +743,10 @@ module.exports = {
                 primaAnual: primaAnual,
                 insurers: insurers,
                 insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         } catch (error) {
@@ -730,6 +766,10 @@ module.exports = {
                 primaAnual: primaAnual,
                 insurers: insurers,
                 insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }

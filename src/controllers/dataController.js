@@ -72,16 +72,20 @@ module.exports = {
     postOwnAgentForm: async (req, res) => {
         try {
             let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
-            if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
-            } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
-            } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            if (porcentajeAgentePropio === '') {
+                porcentajeAgentePropio = 0;
+            } else {
+                if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+                } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+                } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+                }
             }
             await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, req.body);
             res.render('ownAgentForm', {

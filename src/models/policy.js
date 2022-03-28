@@ -43,7 +43,7 @@ module.exports = {
     },
     getPolicyLast: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_poliza, prima_anual_poliza 
+            db.query(`SELECT id_poliza, prima_anual_poliza, tipo_moneda_poliza 
                     FROM Poliza 
                     WHERE deshabilitar_poliza=0
                     ORDER BY id_poliza DESC
@@ -236,11 +236,11 @@ module.exports = {
             });
         });
     },
-    postHealthPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postHealthPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, nombre_tomador_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_cobertura_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, maternidad_poliza, plazo_espera_poliza, detalle_cliente_poliza)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [policy.numero_poliza, tomadorAsegurado, policy.nombre_tomador_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_cobertura_poliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, policy.detalle_cliente_poliza],                          
+            [policy.numero_poliza, tomadorAsegurado, policy.nombre_tomador_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, cobertura, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, fechaDetalleCliente],                          
             (error, rows) => {
                 if (error) {
                     reject(error)

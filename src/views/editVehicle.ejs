@@ -83,6 +83,20 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="cedula_conductor_vehiculo"
+                                                id="cedula_conductor_vehiculo"
+                                                value="<%= vehicle.cedula_conductor_vehiculo %>"
+                                                onkeyup="pasarNombreAseguradoConductor();"  
+                                                class="form-control cedula"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -115,20 +129,6 @@
                                                 <option value="AUTOMÁTICO">AUTOMÁTICO</option>
                                                 <option value="SINCRÓNICO">SINCRÓNICO</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
-                                            <div class="col-sm-9">
-                                                <div><label><input 
-                                                                type="checkbox" 
-                                                                name="blindaje_boolean_vehiculo" 
-                                                                id="blindaje_boolean_vehiculo"
-                                                                <%= vehicle.blindaje_boolean_vehiculo === 1 ? 'checked': '' %>
-                                                            > 
-                                                            ¿Tiene Blindaje?</label></div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -229,21 +229,33 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="hidden"
-                                                name="id_vehiculo"
-                                                id="id_vehiculo"  
-                                                value="<%= vehicle.id_vehiculo %>" 
-                                                class="form-control"
-                                            >
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
+                                            <div class="col-sm-9">
+                                                <div><label><input 
+                                                                type="checkbox" 
+                                                                name="blindaje_boolean_vehiculo" 
+                                                                id="blindaje_boolean_vehiculo"
+                                                                <%= vehicle.blindaje_boolean_vehiculo === 1 ? 'checked': '' %>
+                                                            > 
+                                                            ¿Tiene Blindaje?</label></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    </br>
-                                    </br>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input 
+                                type="hidden"
+                                name="id_vehiculo"
+                                id="id_vehiculo"  
+                                value="<%= vehicle.id_vehiculo %>" 
+                                class="form-control"
+                            >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

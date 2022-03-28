@@ -69,14 +69,14 @@ CREATE TABLE Poliza(
     tasa_poliza VARCHAR(255),
     prima_anual_poliza DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255),
-    tipo_cobertura_poliza VARCHAR(255),
+    tipo_cobertura_poliza DECIMAL(20,4),
     tipo_canal_poliza VARCHAR(255),
     suma_asegurada_poliza DECIMAL(20,4) NOT NULL,
     deducible_poliza DECIMAL(20,4),
     grupo_poliza VARCHAR(255),
     maternidad_poliza VARCHAR(255),
     plazo_espera_poliza VARCHAR(255),
-    detalle_cliente_poliza VARCHAR(255),
+    detalle_cliente_poliza DATE,
     obser_deshabilitar_poliza VARCHAR(500),
     tipo_producto_poliza VARCHAR(255),
     deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
@@ -152,7 +152,7 @@ CREATE TABLE Colectivo(
     grupo_colectivo VARCHAR(255),
     maternidad_colectivo VARCHAR(255),
     plazo_espera_colectivo VARCHAR(255),
-    detalle_cliente_colectivo VARCHAR(255),
+    detalle_cliente_colectivo DATE,
     obser_deshabilitar_colectivo VARCHAR(500),
     deshabilitar_colectivo BOOLEAN NOT NULL DEFAULT FALSE
 );

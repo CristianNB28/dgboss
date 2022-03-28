@@ -54,6 +54,8 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="/js/cleave-js/cleave.min.js"></script>
+
 <% if(typeof alert != 'undefined') { %>
 <script>
     Swal.fire({
@@ -258,6 +260,40 @@
             }
         }, false); 
     }
+</script>
+
+<script>
+    function currencySignChange() {
+        let coinType = document.getElementById("tipo_moneda_reclamo").value;
+        if (coinType === 'BOLÍVAR') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+            });
+        } else if (coinType === 'DÓLAR') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+            });
+        } else if (coinType === 'EUROS') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+            });
+        }
+    }   
 </script>
 
 </body>

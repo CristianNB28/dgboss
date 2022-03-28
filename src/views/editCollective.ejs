@@ -43,7 +43,7 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda_colectivo" required>
+                                            <select class="form-control" name="tipo_moneda_colectivo" id="tipo_moneda_colectivo" onchange="currencySignChange()" required>
                                                 <option value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
                                                 <option value="BOLÍVAR">BOLÍVAR</option>
                                                 <option value="DÓLAR">DÓLAR</option>
@@ -72,7 +72,7 @@
                                                 name="prima_anual_colectivo"
                                                 id="prima_anual_colectivo"
                                                 value="<%= primaAnual %>"
-                                                class="form-control number_format"
+                                                class="form-control currency_format currency_format_number"
                                                 required
                                             >
                                         </div>
@@ -168,4 +168,4 @@
     </div>
 </div>
 <!-- Se incluye el layout del footer -->
-<%- include('layouts/footer') %>
+<%- include('layouts/footerCollectiveWizardForm') %>

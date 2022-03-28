@@ -6,6 +6,7 @@ module.exports = {
 /*                 POST                  */
     postHealthVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -23,6 +24,7 @@ module.exports = {
     },
     postVehicleVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -40,6 +42,7 @@ module.exports = {
     },
     postPatrimonialVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -57,6 +60,7 @@ module.exports = {
     },
     postBailVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -74,6 +78,7 @@ module.exports = {
     },
     postAnotherBranchVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -91,6 +96,7 @@ module.exports = {
     },
     postFuneralVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -108,6 +114,7 @@ module.exports = {
     },
     postLifeVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -125,6 +132,7 @@ module.exports = {
     },
     postAPVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -142,6 +150,7 @@ module.exports = {
     },
     postTravelVerificationFactorForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -159,6 +168,7 @@ module.exports = {
     },
     postHealthVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -176,6 +186,7 @@ module.exports = {
     },
     postVehicleVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");
@@ -193,6 +204,7 @@ module.exports = {
     },
     postRiskDiverseVerificationFactorCollectiveForm: async (req, res) => {
         let porcentajePrima = req.body.porcentaje_prima_factor_verificacion;
+        porcentajePrima = porcentajePrima.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajePrima.indexOf(',') !== -1) && (porcentajePrima.indexOf('.') !== -1)) {
             porcentajePrima = porcentajePrima.replace(",", ".");
             porcentajePrima = porcentajePrima.replace(".", ",");

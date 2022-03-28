@@ -30,7 +30,7 @@
                                     <% if (collective === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="numero_poliza_colectivo" required>
+                                                <select class="form-control" name="numero_poliza_colectivo" id="numero_poliza_colectivo" onchange="premiumCalculationDate()" required>
                                                     <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
                                                     <% policies.forEach((policy) => { %>
                                                         <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
@@ -44,7 +44,7 @@
                                     <% } else if (policy === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="numero_poliza_colectivo" required>
+                                                <select class="form-control" name="numero_poliza_colectivo" id="numero_poliza_colectivo" onchange="premiumCalculationDate()" required>
                                                     <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
                                                     <% policies.forEach((policy) => { %>
                                                         <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <% if (naturalInsureds.length > 0) { %>
+                                        <% if (resultsNaturalInsured.length > 0) { %>
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -143,6 +143,7 @@
                                                     name="nombre_agente_propio"
                                                     id="nombre_agente_propio"
                                                     value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
+                                                    onkeyup="pasarAgente();"
                                                     class="form-control"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
@@ -254,7 +255,7 @@
                                             </div>
                                         </div>
                                     <% } else if (legalInsured === undefined) { %>
-                                        <% if (naturalInsureds.length > 0) { %>
+                                        <% if (resultsNaturalInsured.length > 0) { %>
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
                                                 <div class="col-sm-9">
                                                     <input 
@@ -305,7 +306,7 @@
                                                 name="monto_prima_recibo"
                                                 id="monto_prima_recibo"
                                                 value="<%= primaRecibo %>" 
-                                                class="form-control number_format"
+                                                class="form-control"
                                                 required
                                             >
                                         </div>
@@ -343,7 +344,7 @@
                                                 name="monto_comision_recibo"
                                                 id="monto_comision_recibo"
                                                 value="<%= comisionRecibo %>" 
-                                                class="form-control number_format"
+                                                class="form-control"
                                                 required
                                             >
                                         </div>

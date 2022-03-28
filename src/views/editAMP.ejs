@@ -102,7 +102,7 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_amp" required>
+                                                <select class="form-control" name="tipo_moneda_reclamo" id="tipo_moneda_reclamo" onchange="currencySignChange()" required>
                                                     <option value="<%= amp.tipo_moneda_amp %>"><%= amp.tipo_moneda_amp %></option>
                                                     <option value="BOLÍVAR">BOLÍVAR</option>
                                                     <option value="DÓLAR">DÓLAR</option>
@@ -151,7 +151,7 @@
                                                 name="monto_reclamado_amp"
                                                 id="monto_reclamado_amp" 
                                                 value="<%= montoReclamoAMP %>"
-                                                class="form-control number_format"
+                                                class="form-control currency_format"
                                                 required
                                             >
                                         </div>
@@ -246,7 +246,7 @@
                                                 name="monto_pagado_amp"
                                                 id="monto_pagado_amp" 
                                                 value="<%= montoPagadoAMP %>"
-                                                class="form-control number_format"
+                                                class="form-control currency_format"
                                             >
                                         </div>
                                     </div>

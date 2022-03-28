@@ -30,6 +30,8 @@
 
 <script src="/js/moment.js"></script>
 
+<script src="/js/cleave-js/cleave.min.js"></script>
+
 <script>
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
@@ -174,31 +176,7 @@
                 }, false); 
             }    
         });
-        $("#receipt-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -357,31 +335,7 @@
                 }, false); 
             }    
         });
-        $("#receipt-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -540,31 +494,7 @@
                 }, false); 
             }    
         });
-        $("#receipt-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -695,18 +625,6 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#policy-form").on('keyup','.cedula_rif',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
@@ -723,31 +641,7 @@
                 }, false); 
             }    
         });
-        $("#receipt-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -878,18 +772,6 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#policy-form").on('keyup','.cedula_rif',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
@@ -906,31 +788,7 @@
                 }, false); 
             }    
         });
-        $("#receipt-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
         $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#verification-form").on('keyup','.number_format',function(){
             var separador = $(this);
             for (var i = 0 ; i < separador.length; i++) {
                 separador[i].addEventListener('input', (e) => {
@@ -1100,6 +958,40 @@
     }   
 </script>
 
+<script>
+    function currencySignChange() {
+        let coinType = document.getElementById("tipo_moneda_poliza").value;
+        if (coinType === 'BOLÍVAR') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+            });
+        } else if (coinType === 'DÓLAR') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+            });
+        } else if (coinType === 'EUROS') {
+            $('.currency_format').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+            });
+        }
+    }   
+</script>
+
 <% if (typeof(policy) !== 'undefined') { %>
     <script>
         var policy = <%- JSON.stringify(policy) %>;
@@ -1136,9 +1028,32 @@
                     numberMonthly = 1;
                 }
                 var premiumMonthly = policy.prima_anual_poliza / numberMonthly;
-                premiumMonthly = premiumMonthly.toFixed(2);
-                premiumMonthly = premiumMonthly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("monto_prima_recibo").value = premiumMonthly;
+                premiumMonthly = String(premiumMonthly);
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(premiumMonthly);
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(premiumMonthly);
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(premiumMonthly);
+                }
             } else if (getSelectValue === 'BIMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -1165,10 +1080,33 @@
                     });
                 });
                 var premiumBimonthly = policy.prima_anual_poliza / 6;
-                premiumBimonthly = premiumBimonthly.toFixed(2);
-                premiumBimonthly = premiumBimonthly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("monto_prima_recibo").value = premiumBimonthly;
+                premiumBimonthly = String(premiumBimonthly);
                 document.getElementById("numero_pago_recibo").value = 6;
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(premiumBimonthly);
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(premiumBimonthly);
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(premiumBimonthly);
+                }
             } else if (getSelectValue === 'TRIMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -1195,10 +1133,33 @@
                     });
                 });
                 var premiumQuarterly = policy.prima_anual_poliza / 4;
-                premiumQuarterly = premiumQuarterly.toFixed(2);
-                premiumQuarterly = premiumQuarterly.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("monto_prima_recibo").value = premiumQuarterly;
+                premiumQuarterly = String(premiumQuarterly);
                 document.getElementById("numero_pago_recibo").value = 4;
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(premiumQuarterly);
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(premiumQuarterly);
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(premiumQuarterly);
+                }
             } else if (getSelectValue === 'SEMESTRAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -1225,10 +1186,33 @@
                     });
                 });
                 var premiumBiannual = policy.prima_anual_poliza / 2;
-                premiumBiannual = premiumBiannual.toFixed(2);
-                premiumBiannual = premiumBiannual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("monto_prima_recibo").value = premiumBiannual;
+                premiumBiannual = String(premiumBiannual);
                 document.getElementById("numero_pago_recibo").value = 2;
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(premiumBiannual);
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(premiumBiannual);
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(premiumBiannual);
+                }
             }  else if (getSelectValue === 'ANUAL') {
                 $(document).ready(function () {
                     $('#tipo_fraccionamiento_recibo').change(function () {
@@ -1255,13 +1239,60 @@
                     });
                 });
                 var annualPremium = policy.prima_anual_poliza / 1;
-                annualPremium = annualPremium.toFixed(2);
-                annualPremium = annualPremium.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("monto_prima_recibo").value = annualPremium;
+                annualPremium = String(annualPremium);
                 document.getElementById("numero_pago_recibo").value = 1;
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(annualPremium);
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(annualPremium);
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(annualPremium);
+                }
             }
             if (checkboxDivision === false) {
-                document.getElementById("monto_prima_recibo").value = policy.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                    cleave.setRawValue(String(policy.prima_anual_poliza));
+                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                    cleave.setRawValue(String(policy.prima_anual_poliza));
+                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    let cleave = new Cleave("#monto_prima_recibo", {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                    cleave.setRawValue(String(policy.prima_anual_poliza));
+                }
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
                 document.getElementById("fecha_pago_recibo").value = '';
@@ -1269,6 +1300,40 @@
                 document.getElementById("fecha_hasta_recibo").value = '';
             }
         }
+    </script>
+
+    <script>
+        var policy = <%- JSON.stringify(policy) %>;
+        window.onload = function() {
+            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                });
+            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                });
+            } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                });
+            }
+        }   
     </script>
 <% } %>
 

@@ -27,31 +27,64 @@ module.exports = {
                 } else {
                     primaAnualPoliza = String(primaAnualPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                 }
+                if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                    primaAnualPoliza = `Bs ${primaAnualPoliza}`;
+                } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                    primaAnualPoliza = `$ ${primaAnualPoliza}`;
+                } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                    primaAnualPoliza = `€ ${primaAnualPoliza}`;
+                }
                 if (elementPII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
-                    let premiumCollection = {
-                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
-                        company: ' ',
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualPoliza
-                    };
+                    let premiumCollection = {};
+                    if (resultsOwnAgentNatural.length !== 0) {
+                        premiumCollection = {
+                            ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                            company: '',
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualPoliza
+                        };
+                    } else {
+                        premiumCollection = {
+                            ownAgent: '',
+                            company: '',
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualPoliza
+                        };
+                    }
                     resultPremiumCollection.push(premiumCollection);
                 } else {
                     let resultInsuredLegal = await insuredModel.getLegalInsured(elementPII.asegurado_per_jur_id);
                     let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
-                    let premiumCollection = {
-                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
-                        company: resultInsuredLegal[0].razon_social_per_jur,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualPoliza
-                    };
+                    let premiumCollection = {};
+                    if (resultsOwnAgentLegal !== 0) {
+                        premiumCollection = {
+                            ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualPoliza
+                        };
+                    } else {
+                        premiumCollection = {
+                            ownAgent: '',
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualPoliza
+                        };
+                    }
                     resultPremiumCollection.push(premiumCollection);
                 }
             }
@@ -65,31 +98,64 @@ module.exports = {
                 } else {
                     primaAnualColectivo = String(primaAnualColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                 }
+                if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                    primaAnualColectivo = `Bs ${primaAnualColectivo}`;
+                } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                    primaAnualColectivo = `$ ${primaAnualColectivo}`;
+                } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                    primaAnualColectivo = `€ ${primaAnualColectivo}`;
+                }
                 if (elementCII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
-                    let premiumCollection = {
-                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
-                        company: '',
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualColectivo
-                    };
+                    let premiumCollection = {};
+                    if (resultsOwnAgentNatural.length !== 0) {
+                        premiumCollection = {
+                            ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                            company: '',
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualColectivo
+                        };
+                    } else {
+                        premiumCollection = {
+                            ownAgent: '',
+                            company: '',
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualColectivo
+                        };
+                    }
                     resultPremiumCollection.push(premiumCollection);
                 } else {
                     let resultInsuredLegal = await insuredModel.getLegalInsured(elementCII.asegurado_per_jur_id);
                     let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
-                    let premiumCollection = {
-                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
-                        company: resultInsuredLegal[0].razon_social_per_jur,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualColectivo
-                    };
+                    let premiumCollection = {};
+                    if (resultsOwnAgentLegal !== 0) {
+                        premiumCollection = {
+                            ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualColectivo
+                        };
+                    } else {
+                        premiumCollection = {
+                            ownAgent: '',
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            premium: primaAnualColectivo
+                        };
+                    }
                     resultPremiumCollection.push(premiumCollection);
                 }
             }
@@ -118,33 +184,68 @@ module.exports = {
                 } else {
                     reciboComisionPoliza = String(reciboComisionPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                 }
+                if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                    reciboComisionPoliza = `Bs ${reciboComisionPoliza}`;
+                } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                    reciboComisionPoliza = `$ ${reciboComisionPoliza}`;
+                } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                    reciboComisionPoliza = `€ ${reciboComisionPoliza}`;
+                }
                 if (elementPII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
-                    let commissionCollection = {
-                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
-                        company: ' ',
-                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionPoliza
-                    };
+                    let commissionCollection = {};
+                    if (resultsOwnAgentNatural.length !== 0) {
+                        commissionCollection = {
+                            ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                            company: '',
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionPoliza
+                        };
+                    } else {
+                        commissionCollection = {
+                            ownAgent: '',
+                            company: '',
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionPoliza
+                        };
+                    }
                     resultCommissionCollection.push(commissionCollection);
                 } else {
                     let resultInsuredLegal = await insuredModel.getLegalInsured(elementPII.asegurado_per_jur_id);
                     let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
-                    let commissionCollection = {
-                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
-                        company: resultInsuredLegal[0].razon_social_per_jur,
-                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionPoliza
-                    };
+                    let commissionCollection = {};
+                    if (resultsOwnAgentLegal !== 0) {
+                        commissionCollection = {
+                            ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionPoliza
+                        };
+                    } else {
+                        commissionCollection = {
+                            ownAgent: '',
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultPolicy[0].tipo_individual_poliza,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionPoliza
+                        };
+                    }
                     resultCommissionCollection.push(commissionCollection);
                 }
             }
@@ -159,33 +260,68 @@ module.exports = {
                 } else {
                     reciboComisionColectivo = String(reciboComisionColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                 }
+                if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                    reciboComisionColectivo = `Bs ${reciboComisionColectivo}`;
+                } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                    reciboComisionColectivo = `$ ${reciboComisionColectivo}`;
+                } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                    reciboComisionColectivo = `€ ${reciboComisionColectivo}`;
+                }
                 if (elementCII.asegurado_per_nat_id !== null) {
                     let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);
                     let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
-                    let commissionCollection = {
-                        ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
-                        company: ' ',
-                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionColectivo
-                    };
+                    let commissionCollection = {};
+                    if (resultsOwnAgentNatural.length !== 0) {
+                        commissionCollection = {
+                            ownAgent: resultsOwnAgentNatural[0].nombre_agente_propio + ' ' + resultsOwnAgentNatural[0].apellido_agente_propio,
+                            company: '',
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionColectivo
+                        };
+                    } else {
+                        commissionCollection = {
+                            ownAgent: '',
+                            company: '',
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionColectivo
+                        };
+                    }
                     resultCommissionCollection.push(commissionCollection);
                 } else {
                     let resultInsuredLegal = await insuredModel.getLegalInsured(elementCII.asegurado_per_jur_id);
                     let resultsOwnAgentLegal = await ownAgentModel.getOwnAgent(resultInsuredLegal[0].agente_propio_id);
-                    let commissionCollection = {
-                        ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
-                        company: resultInsuredLegal[0].razon_social_per_jur,
-                        executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionColectivo,
-                    };
+                    let commissionCollection = {};
+                    if (resultsOwnAgentLegal !== 0) {
+                        commissionCollection = {
+                            ownAgent: resultsOwnAgentLegal[0].nombre_agente_propio + ' ' + resultsOwnAgentLegal[0].apellido_agente_propio,
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionColectivo,
+                        };
+                    } else {
+                        commissionCollection = {
+                            ownAgent: '',
+                            company: resultInsuredLegal[0].razon_social_per_jur,
+                            executive: resultsExecutives[0].nombre_ejecutivo + ' ' + resultsExecutives[0].apellido_ejecutivo,
+                            bouquetType: resultCollective[0].tipo_colectivo,
+                            insurer: resultInsurer[0].nombre_aseguradora,
+                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
+                            commission: reciboComisionColectivo,
+                        };
+                    }
                     resultCommissionCollection.push(commissionCollection);
                 }
             }
@@ -286,6 +422,13 @@ module.exports = {
                     } else {
                         primaPorcentajeVerificacion = String(primaPorcentajeVerificacion).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
                     }
+                    if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                        primaPorcentajeVerificacion = `Bs ${primaPorcentajeVerificacion}`;
+                    } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                        primaPorcentajeVerificacion = `$ ${primaPorcentajeVerificacion}`;
+                    } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                        primaPorcentajeVerificacion = `€ ${primaPorcentajeVerificacion}`;
+                    }
                     if (elementPII.asegurado_per_nat_id !== null) {
                         let resultInsuredNatural = await insuredModel.getNaturalInsured(elementPII.asegurado_per_nat_id);
                         let resultsOwnAgentNatural = await ownAgentModel.getOwnAgent(resultInsuredNatural[0].agente_propio_id);
@@ -329,6 +472,13 @@ module.exports = {
                         primaPorcentajeVerificacion = primaPorcentajeVerificacion.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
                     } else {
                         primaPorcentajeVerificacion = String(primaPorcentajeVerificacion).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+                    }
+                    if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                        primaPorcentajeVerificacion = `Bs ${primaPorcentajeVerificacion}`;
+                    } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                        primaPorcentajeVerificacion = `$ ${primaPorcentajeVerificacion}`;
+                    } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                        primaPorcentajeVerificacion = `€ ${primaPorcentajeVerificacion}`;
                     }
                     if (elementCII.asegurado_per_nat_id !== null) {
                         let resultInsuredNatural = await insuredModel.getNaturalInsured(elementCII.asegurado_per_nat_id);

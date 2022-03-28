@@ -29,7 +29,7 @@
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="numero_poliza_colectivo" required>
+                                            <select class="form-control" name="numero_poliza_colectivo" id="numero_poliza_colectivo" onchange="premiumCalculationDate()" required>
                                                 <option value="">Seleccione *</option>
                                                 <% policies.forEach((policy) => { %>
                                                     <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
@@ -77,6 +77,7 @@
                                                 name="nombre_agente_propio"
                                                 id="nombre_agente_propio"
                                                 placeholder="Nombre del Agente Propio *"
+                                                onkeyup="pasarAgente();"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -200,7 +201,7 @@
                                                 name="monto_prima_recibo"
                                                 id="monto_prima_recibo"
                                                 placeholder="Monto Prima *" 
-                                                class="form-control number_format"
+                                                class="form-control"
                                                 required
                                             >
                                         </div>
@@ -239,7 +240,7 @@
                                                 name="monto_comision_recibo"
                                                 id="monto_comision_recibo"
                                                 placeholder="Comisión Asociada *" 
-                                                class="form-control number_format"
+                                                class="form-control"
                                                 required
                                             >
                                         </div>

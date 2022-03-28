@@ -84,7 +84,7 @@
                                     <div class="form-group">
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_moneda_reembolso" required>
+                                                <select class="form-control" name="tipo_moneda_reclamo" id="tipo_moneda_reclamo" onchange="currencySignChange()" required>
                                                     <option value="">Seleccione *</option>
                                                     <option value="BOLÍVAR">BOLÍVAR</option>
                                                     <option value="DÓLAR">DÓLAR</option>
@@ -134,7 +134,7 @@
                                                 name="monto_reclamo_reembolso"
                                                 id="monto_reclamo_reembolso" 
                                                 placeholder="Monto Reclamado *"
-                                                class="form-control number_format"
+                                                class="form-control currency_format"
                                                 required
                                             >
                                         </div>
@@ -199,7 +199,7 @@
                                                     name="monto_pagado_reembolso"
                                                     id="monto_pagado_reembolso" 
                                                     placeholder="Monto Pagado"
-                                                    class="form-control number_format"
+                                                    class="form-control currency_format"
                                                 >
                                             </div>
                                         </div>

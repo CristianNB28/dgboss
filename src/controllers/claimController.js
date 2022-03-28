@@ -122,6 +122,16 @@ module.exports = {
             } else {
                 elementRefund.monto_pagado_reembolso = String(elementRefund.monto_pagado_reembolso).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
+            if (elementRefund.tipo_moneda_reembolso === 'BOLÍVAR') {
+                elementRefund.monto_reclamo_reembolso = `Bs ${elementRefund.monto_reclamo_reembolso}`;
+                elementRefund.monto_pagado_reembolso = `Bs ${elementRefund.monto_pagado_reembolso}`;
+            } else if (elementRefund.tipo_moneda_reembolso === 'DÓLAR') {
+                elementRefund.monto_reclamo_reembolso = `$ ${elementRefund.monto_reclamo_reembolso}`;
+                elementRefund.monto_pagado_reembolso = `$ ${elementRefund.monto_pagado_reembolso}`;
+            } else if (elementRefund.tipo_moneda_reembolso === 'EUROS') {
+                elementRefund.monto_reclamo_reembolso = `€ ${elementRefund.monto_reclamo_reembolso}`;
+                elementRefund.monto_pagado_reembolso = `$ ${elementRefund.monto_pagado_reembolso}`;
+            }
             elementRefund.fecha_ocurrencia_reembolso = elementRefund.fecha_ocurrencia_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementRefund.fecha_notificacion_reembolso = elementRefund.fecha_notificacion_reembolso.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -145,6 +155,16 @@ module.exports = {
                 elementLettersGuarantee.monto_pagado_carta_aval = elementLettersGuarantee.monto_pagado_carta_aval.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             } else {
                 elementLettersGuarantee.monto_pagado_carta_aval = String(elementLettersGuarantee.monto_pagado_carta_aval).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (elementLettersGuarantee.tipo_moneda_carta_aval === 'BOLÍVAR') {
+                elementLettersGuarantee.monto_reclamado_carta_aval = `Bs ${elementLettersGuarantee.monto_reclamado_carta_aval}`;
+                elementLettersGuarantee.monto_pagado_carta_aval = `Bs ${elementLettersGuarantee.monto_pagado_carta_aval}`;
+            } else if (elementLettersGuarantee.tipo_moneda_carta_aval === 'DÓLAR') {
+                elementLettersGuarantee.monto_reclamado_carta_aval = `$ ${elementLettersGuarantee.monto_reclamado_carta_aval}`;
+                elementLettersGuarantee.monto_pagado_carta_aval = `$ ${elementLettersGuarantee.monto_pagado_carta_aval}`;
+            } else if (elementLettersGuarantee.tipo_moneda_carta_aval === 'EUROS') {
+                elementLettersGuarantee.monto_reclamado_carta_aval = `€ ${elementLettersGuarantee.monto_reclamado_carta_aval}`;
+                elementLettersGuarantee.monto_pagado_carta_aval = `$ ${elementLettersGuarantee.monto_pagado_carta_aval}`;
             }
             elementLettersGuarantee.fecha_ocurrencia_carta_aval = elementLettersGuarantee.fecha_ocurrencia_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementLettersGuarantee.fecha_notificacion_carta_aval = elementLettersGuarantee.fecha_notificacion_carta_aval.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
@@ -170,6 +190,16 @@ module.exports = {
             } else {
                 elementEmergencies.monto_pagado_emergencia = String(elementEmergencies.monto_pagado_emergencia).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
+            if (elementEmergencies.tipo_moneda_emergencia === 'BOLÍVAR') {
+                elementEmergencies.monto_reclamado_emergencia = `Bs ${elementEmergencies.monto_reclamado_emergencia}`;
+                elementEmergencies.monto_pagado_emergencia = `Bs ${elementEmergencies.monto_pagado_emergencia}`;
+            } else if (elementEmergencies.tipo_moneda_emergencia === 'DÓLAR') {
+                elementEmergencies.monto_reclamado_emergencia = `$ ${elementEmergencies.monto_reclamado_emergencia}`;
+                elementEmergencies.monto_pagado_emergencia = `$ ${elementEmergencies.monto_pagado_emergencia}`;
+            } else if (elementEmergencies.tipo_moneda_emergencia === 'EUROS') {
+                elementEmergencies.monto_reclamado_emergencia = `€ ${elementEmergencies.monto_reclamado_emergencia}`;
+                elementEmergencies.monto_pagado_emergencia = `$ ${elementEmergencies.monto_pagado_emergencia}`;
+            }
             elementEmergencies.fecha_ocurrencia_emergencia = elementEmergencies.fecha_ocurrencia_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementEmergencies.fecha_notificacion_emergencia = elementEmergencies.fecha_notificacion_emergencia.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -194,6 +224,16 @@ module.exports = {
             } else {
                 elementAMP.monto_pagado_amp = String(elementAMP.monto_pagado_amp).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
+            if (elementAMP.tipo_moneda_amp === 'BOLÍVAR') {
+                elementAMP.monto_reclamado_amp = `Bs ${elementAMP.monto_reclamado_amp}`;
+                elementAMP.monto_pagado_amp = `Bs ${elementAMP.monto_pagado_amp}`;
+            } else if (elementAMP.tipo_moneda_amp === 'DÓLAR') {
+                elementAMP.monto_reclamado_amp = `$ ${elementAMP.monto_reclamado_amp}`;
+                elementAMP.monto_pagado_amp = `$ ${elementAMP.monto_pagado_amp}`;
+            } else if (elementAMP.tipo_moneda_amp === 'EUROS') {
+                elementAMP.monto_reclamado_amp = `€ ${elementAMP.monto_reclamado_amp}`;
+                elementAMP.monto_pagado_amp = `$ ${elementAMP.monto_pagado_amp}`;
+            }
             elementAMP.fecha_ocurrencia_amp = elementAMP.fecha_ocurrencia_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             elementAMP.fecha_notificacion_amp = elementAMP.fecha_notificacion_amp.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
         }
@@ -205,7 +245,7 @@ module.exports = {
 /*                 POST                  */
     postRefundForm: async (req, res) => {
         let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
-        let montoPagadoReembolso;
+        let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -219,6 +259,8 @@ module.exports = {
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
+        montoReclamoReembolso = montoReclamoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoReembolso = montoPagadoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
             montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
@@ -230,10 +272,9 @@ module.exports = {
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
             montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_reembolso === '') {
+        if (montoPagadoReembolso === '') {
             montoPagadoReembolso = 0;
         } else {
-            montoPagadoReembolso = req.body.monto_pagado_reembolso;
             if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
                 montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
                 montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
@@ -276,7 +317,7 @@ module.exports = {
     },
     postLetterGuaranteeForm: async (req, res) => {
         let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
-        let montoPagadoCartaAval;
+        let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -290,6 +331,8 @@ module.exports = {
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
+        montoReclamoCartaAval = montoReclamoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoCartaAval = montoPagadoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
@@ -301,10 +344,9 @@ module.exports = {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
             montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_carta_aval === '') {
+        if (montoPagadoCartaAval === '') {
             montoPagadoCartaAval = 0;
         } else {
-            montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
             if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
                 montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
                 montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
@@ -347,7 +389,7 @@ module.exports = {
     },
     postEmergencyForm: async (req, res) => {
         let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
-        let montoPagadoEmergencia;
+        let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -361,6 +403,8 @@ module.exports = {
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
+        montoReclamoEmergencia = montoReclamoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoEmergencia = montoPagadoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
@@ -372,10 +416,9 @@ module.exports = {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
             montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_emergencia === '') {
+        if (montoPagadoEmergencia === '') {
             montoPagadoEmergencia = 0;
         } else {
-            montoPagadoEmergencia = req.body.monto_pagado_emergencia;
             if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
                 montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
                 montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
@@ -418,7 +461,7 @@ module.exports = {
     },
     postAMPForm: async (req, res) => {
         let montoReclamoAMP = req.body.monto_reclamado_amp;
-        let montoPagadoAMP;
+        let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         let resultsNaturalInsured = await insuredModel.getNaturalInsureds();
@@ -432,6 +475,8 @@ module.exports = {
         let resultsBeneficiaries = await beneficiaryModel.getBeneficiaries();
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
+        montoReclamoAMP = montoReclamoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoAMP = montoPagadoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
             montoReclamoAMP = montoReclamoAMP.replace(",", ".");
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
@@ -443,10 +488,9 @@ module.exports = {
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
             montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_amp === '') {
+        if (montoPagadoAMP === '') {
             montoPagadoAMP = 0;
         } else {
-            montoPagadoAMP = req.body.monto_pagado_amp;
             if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
                 montoPagadoAMP = montoPagadoAMP.replace(",", ".");
                 montoPagadoAMP = montoPagadoAMP.replace(".", ",");
@@ -527,6 +571,16 @@ module.exports = {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
                 resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
+            if (resultRefund[0].tipo_moneda_reembolso === 'BOLÍVAR') {
+                montoReclamoReembolso = `Bs ${montoReclamoReembolso}`;
+                montoPagadoReembolso = `Bs ${montoPagadoReembolso}`;
+            } else if (resultRefund[0].tipo_moneda_reembolso === 'DÓLAR') {
+                montoReclamoReembolso = `$ ${montoReclamoReembolso}`;
+                montoPagadoReembolso = `$ ${montoPagadoReembolso}`;
+            } else if (resultRefund[0].tipo_moneda_reembolso === 'EUROS') {
+                montoReclamoReembolso = `€ ${montoReclamoReembolso}`;
+                montoPagadoReembolso = `€ ${montoPagadoReembolso}`;
+            }
             res.render('editRefund', {
                 refund: resultRefund[0],
                 fechaOcurrenciaReembolso: fechaOcurrenciaReembolso,
@@ -589,6 +643,16 @@ module.exports = {
             } else {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
                 resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
+            }
+            if (resultLetterGuarentee[0].tipo_moneda_carta_aval === 'BOLÍVAR') {
+                montoReclamoCartaAval = `Bs ${montoReclamoCartaAval}`;
+                montoPagadoCartaAval = `Bs ${montoPagadoCartaAval}`;
+            } else if (resultLetterGuarentee[0].tipo_moneda_carta_aval === 'DÓLAR') {
+                montoReclamoCartaAval = `$ ${montoReclamoCartaAval}`;
+                montoPagadoCartaAval = `$ ${montoPagadoCartaAval}`;
+            } else if (resultLetterGuarentee[0].tipo_moneda_carta_aval === 'EUROS') {
+                montoReclamoCartaAval = `€ ${montoReclamoCartaAval}`;
+                montoPagadoCartaAval = `€ ${montoPagadoCartaAval}`;
             }
             res.render('editLetterGuarentee', {
                 letterGuarentee: resultLetterGuarentee[0],
@@ -653,6 +717,16 @@ module.exports = {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
                 resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
+            if (resultEmergency[0].tipo_moneda_emergencia === 'BOLÍVAR') {
+                montoReclamoEmergencia = `Bs ${montoReclamoEmergencia}`;
+                montoPagadoEmergencia = `Bs ${montoPagadoEmergencia}`;
+            } else if (resultEmergency[0].tipo_moneda_emergencia === 'DÓLAR') {
+                montoReclamoEmergencia = `$ ${montoReclamoEmergencia}`;
+                montoPagadoEmergencia = `$ ${montoPagadoEmergencia}`;
+            } else if (resultEmergency[0].tipo_moneda_emergencia === 'EUROS') {
+                montoReclamoEmergencia = `€ ${montoReclamoEmergencia}`;
+                montoPagadoEmergencia = `€ ${montoPagadoEmergencia}`;
+            }
             res.render('editEmergency', {
                 emergency: resultEmergency[0],
                 fechaOcurrenciaEmergencia: fechaOcurrenciaEmergencia,
@@ -716,6 +790,16 @@ module.exports = {
                 resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
                 resultBeneficiary = await beneficiaryModel.getBeneficiary(resultInsuredBeneficiary[0].beneficiario_id);
             }
+            if (resultAMP[0].tipo_moneda_amp === 'BOLÍVAR') {
+                montoReclamoAMP = `Bs ${montoReclamoAMP}`;
+                montoPagadoAMP = `Bs ${montoPagadoAMP}`;
+            } else if (resultAMP[0].tipo_moneda_amp === 'DÓLAR') {
+                montoReclamoAMP = `$ ${montoReclamoAMP}`;
+                montoPagadoAMP = `$ ${montoPagadoAMP}`;
+            } else if (resultAMP[0].tipo_moneda_amp === 'EUROS') {
+                montoReclamoAMP = `€ ${montoReclamoAMP}`;
+                montoPagadoAMP = `€ ${montoPagadoAMP}`;
+            }
             res.render('editAMP', {
                 amp: resultAMP[0],
                 fechaOcurrenciaAMP: fechaOcurrenciaAMP,
@@ -748,6 +832,8 @@ module.exports = {
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let resultRefund = await refundModel.getRefund(req.body.id_reembolso);
+        montoReclamoReembolso = montoReclamoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoReembolso = montoPagadoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
             montoReclamoReembolso = montoReclamoReembolso.replace(",", ".");
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
@@ -759,10 +845,9 @@ module.exports = {
             montoReclamoReembolso = montoReclamoReembolso.replace(".", ",");
             montoReclamoReembolso = parseFloat(montoReclamoReembolso.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_reembolso === '') {
+        if (montoPagadoReembolso === '') {
             montoPagadoReembolso = 0;
         } else {
-            montoPagadoReembolso = req.body.monto_pagado_reembolso;
             if ((montoPagadoReembolso.indexOf(',') !== -1) && (montoPagadoReembolso.indexOf('.') !== -1)) {
                 montoPagadoReembolso = montoPagadoReembolso.replace(",", ".");
                 montoPagadoReembolso = montoPagadoReembolso.replace(".", ",");
@@ -793,6 +878,8 @@ module.exports = {
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let resultLetterGuarantee = await letterGuaranteeModel.getLetterGuarantee(req.body.id_carta_aval);
+        montoReclamoCartaAval = montoReclamoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoCartaAval = montoPagadoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(",", ".");
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
@@ -804,10 +891,9 @@ module.exports = {
             montoReclamoCartaAval = montoReclamoCartaAval.replace(".", ",");
             montoReclamoCartaAval = parseFloat(montoReclamoCartaAval.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_carta_aval === '') {
+        if (montoPagadoCartaAval === '') {
             montoPagadoCartaAval = 0;
         } else {
-            montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
             if ((montoPagadoCartaAval.indexOf(',') !== -1) && (montoPagadoCartaAval.indexOf('.') !== -1)) {
                 montoPagadoCartaAval = montoPagadoCartaAval.replace(",", ".");
                 montoPagadoCartaAval = montoPagadoCartaAval.replace(".", ",");
@@ -838,6 +924,8 @@ module.exports = {
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let resultEmergency = await emergencyModel.getEmergency(req.body.id_emergencia);
+        montoReclamoEmergencia = montoReclamoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoEmergencia = montoPagadoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(",", ".");
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
@@ -849,10 +937,9 @@ module.exports = {
             montoReclamoEmergencia = montoReclamoEmergencia.replace(".", ",");
             montoReclamoEmergencia = parseFloat(montoReclamoEmergencia.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_emergencia === '') {
+        if (montoPagadoEmergencia === '') {
             montoPagadoEmergencia = 0;
         } else {
-            montoPagadoEmergencia = req.body.monto_pagado_emergencia;
             if ((montoPagadoEmergencia.indexOf(',') !== -1) && (montoPagadoEmergencia.indexOf('.') !== -1)) {
                 montoPagadoEmergencia = montoPagadoEmergencia.replace(",", ".");
                 montoPagadoEmergencia = montoPagadoEmergencia.replace(".", ",");
@@ -883,6 +970,8 @@ module.exports = {
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
         let resultAMP = await ampModel.getAMPId(req.body.id_amp);
+        montoReclamoAMP = montoReclamoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
+        montoPagadoAMP = montoPagadoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
             montoReclamoAMP = montoReclamoAMP.replace(",", ".");
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
@@ -894,10 +983,9 @@ module.exports = {
             montoReclamoAMP = montoReclamoAMP.replace(".", ",");
             montoReclamoAMP = parseFloat(montoReclamoAMP.replace(/,/g,''));
         }
-        if (req.body.monto_pagado_amp === '') {
+        if (montoPagadoAMP === '') {
             montoPagadoAMP = 0;
         } else {
-            montoPagadoAMP = req.body.monto_pagado_amp;
             if ((montoPagadoAMP.indexOf(',') !== -1) && (montoPagadoAMP.indexOf('.') !== -1)) {
                 montoPagadoAMP = montoPagadoAMP.replace(",", ".");
                 montoPagadoAMP = montoPagadoAMP.replace(".", ",");

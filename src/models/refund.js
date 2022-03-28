@@ -34,7 +34,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, observacion_reembolso, tipo_moneda_reembolso, estatus_reembolso, numero_siniestro_reembolso, asegurado_beneficiario_id) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reembolso, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId], 
+            [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId], 
             (error, rows) => {
                 if (error) {
                     reject(error);
@@ -49,7 +49,7 @@ module.exports = {
             db.query(`UPDATE Reembolso 
                     SET patologia_reembolso=?, fecha_ocurrencia_reembolso=?, fecha_notificacion_reembolso=?, monto_reclamo_reembolso=?, monto_pagado_reembolso=?, observacion_reembolso=?, tipo_moneda_reembolso=?, estatus_reembolso=?, numero_siniestro_reembolso=?, asegurado_beneficiario_id=? 
                     WHERE id_reembolso=?`, 
-            [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reembolso, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, refund.id_reembolso], 
+            [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, refund.id_reembolso], 
             (error, rows) => {
                 if (error) {
                     reject(error);

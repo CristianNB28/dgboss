@@ -43,7 +43,7 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_moneda_poliza" required>
+                                            <select class="form-control" name="tipo_moneda_poliza" id="tipo_moneda_poliza" onchange="currencySignChange()" required>
                                                 <option value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
                                                 <option value="BOLÍVAR">BOLÍVAR</option>
                                                 <option value="DÓLAR">DÓLAR</option>
@@ -72,7 +72,7 @@
                                                 name="prima_anual_poliza"
                                                 id="prima_anual_poliza"
                                                 value="<%= primaAnual %>"
-                                                class="form-control number_format"
+                                                class="form-control currency_format currency_format_number"
                                                 required
                                             >
                                         </div>
@@ -174,4 +174,4 @@
     </div>
 </div>
 <!-- Se incluye el layout del footer -->
-<%- include('layouts/footer') %>
+<%- include('layouts/footerWizardForm') %>

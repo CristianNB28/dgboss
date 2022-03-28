@@ -174,6 +174,20 @@ module.exports = {
             });
         });
     },
+    updateOwnAgentLegalInsured: (id, idOwnAgent) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Asegurado_Persona_Juridica 
+                    SET agente_propio_id=?
+                    WHERE id_asegurado_per_jur=?`, 
+            [idOwnAgent, id], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableNaturalInsured: (id, disableNaturalInsured) => {
         return new Promise((resolve, reject) => {

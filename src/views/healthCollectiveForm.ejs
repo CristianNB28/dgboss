@@ -93,7 +93,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda_colectivo" required>
+                                                    <select class="form-control" name="tipo_moneda_colectivo" id="tipo_moneda_colectivo" onchange="currencySignChange()" required>
                                                         <option value="">Seleccione *</option>
                                                         <option value="BOLÍVAR">BOLÍVAR</option>
                                                         <option value="DÓLAR">DÓLAR</option>
@@ -110,7 +110,7 @@
                                                         name="prima_anual_colectivo"
                                                         id="prima_anual_colectivo"
                                                         placeholder="Prima Anual *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                         required
                                                     >
                                                 </div>
@@ -135,7 +135,7 @@
                                                         name="cobertura_suma_asegurada_colectivo"
                                                         id="cobertura_suma_asegurada_colectivo"
                                                         placeholder="Cobertura / Suma Asegurada" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                     >
                                                 </div>
                                             </div>
@@ -179,7 +179,7 @@
                                                         name="deducible_colectivo"
                                                         id="deducible_colectivo"
                                                         placeholder="Deducible *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format"
                                                         required
                                                     >
                                                 </div>
@@ -238,12 +238,10 @@
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
                                                 <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
+                                                        type="date"
                                                         name="detalle_cliente_colectivo"
-                                                        id="detalle_cliente_colectivo"
-                                                        placeholder="Detalle desde cuando es cliente" 
+                                                        id="detalle_cliente_colectivo" 
                                                         class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
@@ -361,7 +359,7 @@
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             value="<%= primaColectivo %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -376,7 +374,7 @@
                                                             name="monto_prima_recibo"
                                                             id="monto_prima_recibo"
                                                             placeholder="Monto Prima *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -453,7 +451,7 @@
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
                                                         placeholder="Comisión Asociada *" 
-                                                        class="form-control number_format"
+                                                        class="form-control currency_format_number"
                                                         required
                                                     >
                                                 </div>
@@ -619,7 +617,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             value="<%= comisionRecibo %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -634,7 +632,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             placeholder="Comisión Asociada *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                             required
                                                         >
                                                     </div>
@@ -659,7 +657,7 @@
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
                                                             value="<%= primaColectivo %>" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                         >
                                                     </div>
                                                 </div>
@@ -673,7 +671,7 @@
                                                             name="porcentaje_prima_factor_verificacion"
                                                             id="porcentaje_prima_factor_verificacion"
                                                             placeholder="Porcentaje en dólares por prima *" 
-                                                            class="form-control number_format"
+                                                            class="form-control currency_format_number"
                                                         >
                                                     </div>
                                                 </div>
