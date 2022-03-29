@@ -147,6 +147,29 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_ejecutivos" multiple required>
+                                                        <% executives.forEach((executive) => { %>
+                                                            <% if (executive.tipo_ejecutivo === 'SUSCRIPCIÓN') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } else if (executive.tipo_ejecutivo === 'SINIESTROS') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } else if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">¿Maternidad?</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="maternidad_poliza" id="maternidad_poliza" onchange="showInput()" required>
@@ -167,29 +190,6 @@
                                                         placeholder="Cobertura"
                                                         class="form-control currency_format"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="plazo_espera_poliza" id="plazo_espera_poliza" onchange="showInput2()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="SÍ">SÍ</option>
-                                                        <option value="NO">NO</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="searchinput2" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="date"
-                                                        name="detalle_cliente_poliza"
-                                                        id="detalle_cliente_poliza"
-                                                        class="form-control"
                                                     >
                                                 </div>
                                             </div>
@@ -311,6 +311,29 @@
                                                         placeholder="Suma Asegurada *"
                                                         class="form-control currency_format"
                                                         required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="plazo_espera_poliza" id="plazo_espera_poliza" onchange="showInput2()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="SÍ">SÍ</option>
+                                                        <option value="NO">NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchinput2" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="detalle_cliente_poliza"
+                                                        id="detalle_cliente_poliza"
+                                                        class="form-control"
                                                     >
                                                 </div>
                                             </div>
@@ -660,7 +683,7 @@
                                                             type="text" 
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
-                                                            placeholder="Porcentaje Agente Propio *"
+                                                            value="0"
                                                             class="form-control number_format"
                                                             required
                                                         >

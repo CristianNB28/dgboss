@@ -165,16 +165,25 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos</label>
                                                 <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="tasa_poliza"
-                                                        id="tasa_poliza"
-                                                        placeholder="Tasa Póliza *" 
-                                                        class="form-control number_format"
-                                                        required
-                                                    >
+                                                    <select class="form-control" name="nombre_ejecutivos" multiple required>
+                                                        <% executives.forEach((executive) => { %>
+                                                            <% if (executive.tipo_ejecutivo === 'SUSCRIPCIÓN') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } else if (executive.tipo_ejecutivo === 'SINIESTROS') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } else if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
+                                                                <optgroup label="<%= executive.tipo_ejecutivo %>">
+                                                                    <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                                </optgroup>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -296,6 +305,20 @@
                                                         <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
                                                         <option value="AGENTE PROPIO">AGENTE PROPIO</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="tasa_poliza"
+                                                        id="tasa_poliza"
+                                                        placeholder="Tasa Póliza *" 
+                                                        class="form-control number_format"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -512,7 +535,7 @@
                                                             type="text" 
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
-                                                            placeholder="Porcentaje Agente Propio *"
+                                                            value="0"
                                                             class="form-control number_format"
                                                             required
                                                         >

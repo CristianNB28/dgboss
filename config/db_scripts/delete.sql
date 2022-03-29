@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Col_Aseg_Asegurado_Ejecu;
 DROP TABLE IF EXISTS Pol_Aseg_Asegurado_Ejecu;
 DROP TABLE IF EXISTS Col_Aseg_Asegurado_Ries_Diver;
 DROP TABLE IF EXISTS Col_Aseg_Asegurado_Vehi;

@@ -17,21 +17,6 @@ module.exports = {
             });
         });
     },
-/*
-    getColInsuInsuredBenefs: () => {
-        return new Promise((resolve, reject) => {
-            db.query(`SELECT * 
-                    FROM Col_Aseg_Asegurado_Benef 
-                    WHERE deshabilitar_caab=0`, 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
-                }
-                resolve(rows);
-            });
-        });
-    },
-*/
 /*                  POST                 */
     postAseguradoBeneficiario: async (cedulaAseguradoNatural, rifAseguradoJuridico, beneficiaryId) => {
         let naturalInsuredId = 0;

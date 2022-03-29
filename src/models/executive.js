@@ -25,6 +25,18 @@ module.exports = {
             });
         });
     },
+    getExecutiveId: (nombreEjecutivo, apellidoEjecutivo) => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT id_ejecutivo FROM Ejecutivo WHERE nombre_ejecutivo=? AND apellido_ejecutivo=?', 
+            [nombreEjecutivo, apellidoEjecutivo],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postExecutiveForm: (executive) => {
         return new Promise((resolve, reject) => {

@@ -6,6 +6,7 @@ const colInsInsurerVehiModel = require('../models/col_insu_insured_vehi');
 const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const receiptModel = require('../models/receipt');
+const executiveModel = require('../models/executive');
 const xlsx = require('xlsx');
 
 module.exports = {
@@ -15,6 +16,9 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
             let cedulaConductor = req.body.cedula_conductor;
@@ -60,6 +64,9 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }
@@ -70,6 +77,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             const urlFile = req.file.path;
             const fileExtension =
@@ -156,6 +164,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }

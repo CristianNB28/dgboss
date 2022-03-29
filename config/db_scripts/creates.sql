@@ -441,3 +441,12 @@ CREATE TABLE Pol_Aseg_Asegurado_Ejecu(
     CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
     CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
 );
+
+CREATE TABLE Col_Aseg_Asegurado_Ejecu(
+    id_caae INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_caae BOOLEAN NOT NULL DEFAULT FALSE,
+    caa_id INT NOT NULL,
+    ejecutivo_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+);

@@ -10,6 +10,8 @@ const receiptModel = require('../models/receipt');
 const beneficiaryModel = require('../models/beneficiary');
 const vehicleModel = require('../models/vehicle');
 const riskDiverseModel = require('../models/risk_diverse');
+const executiveModel = require('../models/executive');
+const colInsuInsuredExecModel = require('../models/col_insu_insured_executive');
 
 module.exports = {
 /*                  GET                  */
@@ -20,6 +22,7 @@ module.exports = {
         let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         if (resultCollective.length === 0) {
             res.render('healthCollectiveForm', {
                 insurers: resultsInsurers,
@@ -27,6 +30,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         } else {
@@ -57,6 +61,7 @@ module.exports = {
                     receipt: resultReceipt[0],
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
+                    executives: resultsExecutives,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -93,6 +98,7 @@ module.exports = {
                     receipt: resultReceipt[0],
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
+                    executives: resultsExecutives,
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
@@ -130,6 +136,7 @@ module.exports = {
                     receipt: resultReceipt[0],
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
+                    executives: resultsExecutives,
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
@@ -145,6 +152,7 @@ module.exports = {
         let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         if (resultCollective.length === 0) {
             res.render('vehicleCollectiveForm', {
                 insurers: resultsInsurers,
@@ -152,6 +160,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         } else {
@@ -183,6 +192,7 @@ module.exports = {
                     receipt: resultReceipt[0],
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
+                    executives: resultsExecutives,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -226,6 +236,7 @@ module.exports = {
                 receipt: resultReceipt[0],
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -240,6 +251,7 @@ module.exports = {
         let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         if (resultCollective.length === 0) {
             res.render('riskDiverseCollectiveForm', {
                 insurers: resultsInsurers,
@@ -247,6 +259,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         } else {
@@ -278,6 +291,7 @@ module.exports = {
                     receipt: resultReceipt[0],
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
+                    executives: resultsExecutives,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
                     name: req.session.name
@@ -321,6 +335,7 @@ module.exports = {
                 receipt: resultReceipt[0],
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -418,6 +433,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -478,7 +494,13 @@ module.exports = {
                 }
             }
             let collective = await collectiveModel.postCollectiveHealthForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, req.body);
-            await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
+            let caa = await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
+            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
+            }
             res.redirect('/sistema/add-health-collective');
         } catch (error) {
             console.log(error);
@@ -495,6 +517,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }
@@ -505,6 +528,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -554,7 +578,13 @@ module.exports = {
                 deducible = parseFloat(deducible.replace(/,/g,''));
             }
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
-            await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+            let caa = await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
+            }
             res.redirect('/sistema/add-vehicle-collective');
         } catch (error) {
             console.log(error);
@@ -571,6 +601,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }
@@ -581,6 +612,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -630,7 +662,13 @@ module.exports = {
                 deducible = parseFloat(deducible.replace(/,/g,''));
             }
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
-            await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+            let caa = await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
+            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
+            }
             res.redirect('/sistema/add-risk-diverse-collective');
         } catch (error) {
             console.log(error);
@@ -647,6 +685,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }
@@ -781,12 +820,17 @@ module.exports = {
         let disableCIIB = 1;
         let disableCIIV = 1;
         let disableCIIRD = 1;
+        let disableCIIE = 1;
         await collectiveModel.updateDisableCollective(req.params.id, req.body);
         await collectiveModel.disableCollective(req.params.id, disableCollective);
         let disableCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(req.params.id);
         let resultCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(disableCII[0].id_caa);
         let resultCIIV = await colInsInsurerVehi.getColInsuInsuredVehi(disableCII[0].id_caa);
         let resultCIIRD = await colInsInsurerRiskDiver.getColInsuInsuredRiesDiver(disableCII[0].id_caa);
+        let resultCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(disableCII[0].id_caa);
+        for (const itemCIIE of resultCIIE) {
+            await colInsuInsuredExecModel.disableColInsuInsuredExecutive(itemCIIE.id_caae, disableCIIE);
+        }
         if ((resultCIIV.length === 0) && (resultCIIRD.length === 0)) {
             for (const itemCIIB of resultCIIB) {
                 await colInsInsurerBenef.disableColInsuInsuredBenef(itemCIIB.id_caab, disableCIIB);

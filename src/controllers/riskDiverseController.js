@@ -16,6 +16,7 @@ module.exports = {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
         try {
             const urlFile = req.file.path;
             const fileExtension =
@@ -107,6 +108,7 @@ module.exports = {
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
                 name: req.session.name
             });
         }
