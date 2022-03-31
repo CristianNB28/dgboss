@@ -5,6 +5,8 @@ const colInsInsurerRiskDiverModel = require('../models/col_insu_insured_ries_div
 const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const receiptModel = require('../models/receipt');
+const executiveModel = require('../models/executive');
+const ownAgentModel = require('../models/own_agent');
 const xlsx = require('xlsx');
 
 module.exports = {
@@ -17,6 +19,7 @@ module.exports = {
         let resultsCollective = await collectiveModel.getCollectives();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             const urlFile = req.file.path;
             const fileExtension =
@@ -109,6 +112,7 @@ module.exports = {
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }

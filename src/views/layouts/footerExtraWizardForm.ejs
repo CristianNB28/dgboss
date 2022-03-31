@@ -893,6 +893,17 @@
 </script>
 
 <script>
+    function showList() {
+        var getSelectValue = document.getElementById("tipo_canal_poliza").value;
+        if (getSelectValue === 'AGENTE PROPIO') {
+            document.getElementById("searchList").style.display = "block";
+        } else {
+            document.getElementById("searchList").style.display = "none";
+        }
+    }   
+</script>
+
+<script>
     function currencySignChange() {
         let coinType = document.getElementById("tipo_moneda_poliza").value;
         if (coinType === 'BOLÍVAR') {

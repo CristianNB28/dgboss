@@ -9,6 +9,7 @@ const colInsInsurerBenefModel = require('../models/col_aseg_asegurado_benef');
 const insurerModel = require('../models/insurer');
 const ownAgentModel = require('../models/own_agent');
 const receiptModel = require('../models/receipt');
+const executiveModel = require('../models/executive');
 const xlsx = require('xlsx');
 
 module.exports = {
@@ -21,6 +22,8 @@ module.exports = {
         let resultPolicy = await policyModel.getPolicyLast();
         let resultsPolicies = await policyModel.getPolicies();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -87,6 +90,8 @@ module.exports = {
                 receipt: resultReceipt[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -101,6 +106,8 @@ module.exports = {
         let resultPolicy = await policyModel.getPolicyLast();
         let resultsPolicies = await policyModel.getPolicies();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -167,6 +174,8 @@ module.exports = {
                 receipt: resultReceipt[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -181,6 +190,8 @@ module.exports = {
         let resultPolicy = await policyModel.getPolicyLast();
         let resultsPolicies = await policyModel.getPolicies();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
         let resultOwnAgent = [];
         let resultsBeneficiaries = [];
@@ -247,6 +258,8 @@ module.exports = {
                 receipt: resultReceipt[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -262,6 +275,8 @@ module.exports = {
         let resultReceipt = await receiptModel.getReceiptLast();
         let resultsCollective = await collectiveModel.getCollectives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let primaColectivo = resultCollective[0].prima_anual_colectivo;
         if (primaColectivo.toString().includes('.') === true) {
             primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
@@ -433,6 +448,8 @@ module.exports = {
                 receipt: resultReceipt[0],
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaColectivo: primaColectivo,
                 comisionRecibo: comisionRecibo,
                 name: req.session.name

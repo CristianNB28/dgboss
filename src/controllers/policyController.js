@@ -9,6 +9,7 @@ const receiptModel = require('../models/receipt');
 const beneficiaryModel = require('../models/beneficiary');
 const executiveModel = require('../models/executive');
 const polInsuInsuredExecModel = require('../models/pol_insu_insured_executive');
+const policyAgentExecutiveModel = require('../models/policy_agent_executive');
 
 module.exports = {
 /*                  GET                  */
@@ -20,6 +21,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
@@ -28,6 +30,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -75,6 +78,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -90,6 +94,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
@@ -98,6 +103,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -152,6 +158,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -167,6 +174,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
@@ -175,6 +183,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -222,6 +231,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -237,6 +247,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
@@ -245,6 +256,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -292,6 +304,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -307,6 +320,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
@@ -315,6 +329,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -362,6 +377,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -377,6 +393,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
@@ -385,6 +402,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -439,6 +457,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -454,6 +473,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
@@ -462,6 +482,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -516,6 +537,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -531,6 +553,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
@@ -539,6 +562,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -586,6 +610,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -601,6 +626,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         if (resultPolicy.length === 0) {
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
@@ -609,6 +635,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         } else {
@@ -656,6 +683,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
@@ -727,11 +755,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -789,9 +820,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -814,6 +869,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -825,12 +881,15 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
             let cobertura = req.body.tipo_cobertura_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -905,9 +964,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -930,6 +1013,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -941,11 +1025,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1003,9 +1090,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1028,6 +1139,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1039,11 +1151,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1101,9 +1216,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1126,6 +1265,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1137,11 +1277,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1199,9 +1342,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1224,6 +1391,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1235,11 +1403,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1297,9 +1468,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1322,6 +1517,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1333,11 +1529,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1395,9 +1594,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1420,6 +1643,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1431,11 +1655,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1493,9 +1720,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1518,6 +1769,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1529,11 +1781,14 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
             let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let arrayAgenteEjecutivo = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
             deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
             sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1591,9 +1846,33 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
+            if (typeof(req.body.nombre_ejecutivos_suscripcion) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_suscripcion.concat(req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_siniestros) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_siniestros.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_cobranzas);
+            } else if (typeof(req.body.nombre_ejecutivos_cobranzas) === 'object') {
+                arrayEjecutivo = req.body.nombre_ejecutivos_cobranzas.concat(req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros);
+            } else {
+                arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            }
+            if (typeof(arrayAgenteEjecutivo) !== 'object') {
+                if (arrayAgenteEjecutivo === undefined) {
+                    arrayAgenteEjecutivo = '';
+                }
+                arrayAgenteEjecutivo = [arrayAgenteEjecutivo];
+            }
             let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            for (const nombreCompleto of arrayAgenteEjecutivo) {
+                if (nombreCompleto !== '') {
+                    let nombre = nombreCompleto.split(' ', 1).join(' ');
+                    let apellido = nombreCompleto.split(' ').slice(1,2).join(' ');
+                    let idEjecutivo = await executiveModel.getExecutiveId(nombre, apellido);
+                    let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                    await policyAgentExecutiveModel.postPolicyAgentExecutive(policy.insertId, idAgentePropio, idEjecutivo);
+                }
+            }
             let paa = await policyInsurerInsuredModel.postPolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, policy.insertId);
-            for (const nombreCompletoEjecutivo of req.body.nombre_ejecutivos) {
+            for (const nombreCompletoEjecutivo of arrayEjecutivo) {
                 let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
                 let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
                 let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
@@ -1616,6 +1895,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -1750,8 +2030,10 @@ module.exports = {
         let disablePIIB = 1;
         let disablePIIV = 1;
         let disablePIIE = 1;
+        let disablePAE = 1;
         await policyModel.updateDisablePolicy(req.params.id, req.body);
         await policyModel.disablePolicy(req.params.id, disablePolicy);
+        await policyAgentExecutiveModel.disablePolicyAgentExecutive(req.params.id, disablePAE);
         let disablePII = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.params.id);
         let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenef(disablePII[0].id_paa);
         let resultPIIV = await polInsuInsuredVehiModel.getPolInsuInsuredVehi(disablePII[0].id_paa);

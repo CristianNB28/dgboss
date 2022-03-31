@@ -7,6 +7,8 @@ const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const receiptModel = require('../models/receipt');
 const executiveModel = require('../models/executive');
+const ownAgentModel = require('../models/own_agent');
+const policyModel = require('../models/policy');
 const xlsx = require('xlsx');
 
 module.exports = {
@@ -19,6 +21,7 @@ module.exports = {
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
             let cedulaConductor = req.body.cedula_conductor;
@@ -67,6 +70,7 @@ module.exports = {
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
@@ -78,6 +82,7 @@ module.exports = {
         let resultsCollective = await collectiveModel.getCollectives();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             const urlFile = req.file.path;
             const fileExtension =
@@ -165,6 +170,7 @@ module.exports = {
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name
             });
         }
