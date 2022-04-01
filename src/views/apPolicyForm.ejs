@@ -165,7 +165,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Suscripción</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_suscripcion" multiple required>
+                                                    <select class="form-control js-multiple" name="nombre_ejecutivos_suscripcion" style="width: 100%" multiple required>
                                                         <% executives.forEach((executive) => { %>
                                                             <% if (executive.tipo_ejecutivo === 'SUSCRIPCIÓN') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
@@ -178,7 +178,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Siniestros</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_siniestros" multiple required>
+                                                    <select class="form-control js-multiple" name="nombre_ejecutivos_siniestros" style="width: 100%" multiple required>
                                                         <% executives.forEach((executive) => { %>
                                                             <% if (executive.tipo_ejecutivo === 'SINIESTROS') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
@@ -312,7 +312,7 @@
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Cobranzas</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_cobranzas" multiple required>
+                                                    <select class="form-control js-multiple" name="nombre_ejecutivos_cobranzas" style="width: 100%" multiple required>
                                                         <% executives.forEach((executive) => { %>
                                                             <% if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
@@ -325,7 +325,7 @@
                                         <div class="form-group" id="searchList" style="display:none">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios" multiple>
+                                                    <select class="form-control js-multiple" name="nombre_agentes_propios" style="width: 100%" multiple>
                                                         <% ownAgents.forEach((ownAgent) => { %>
                                                             <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                         <% }); %>

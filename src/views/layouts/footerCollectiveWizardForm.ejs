@@ -32,6 +32,8 @@
 
 <script src="/js/cleave-js/cleave.min.js"></script>
 
+<script src="/js/select2/js/select2.min.js"></script>
+
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
@@ -634,6 +636,12 @@
             document.getElementById("searchList").style.display = "none";
         }
     }   
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.js-multiple').select2();
+    });   
 </script>
 
 <script>
