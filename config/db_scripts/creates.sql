@@ -317,26 +317,22 @@ CREATE TABLE Colectivo_Aseguradora_Asegurado(
     CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
-CREATE TABLE Poliza_Agente_Ejecutivo(
-    id_pae INT PRIMARY KEY AUTO_INCREMENT,
-    deshabilitar_pae BOOLEAN NOT NULL DEFAULT FALSE,
+CREATE TABLE Poliza_Agente_Propio(
+    id_pap INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_pap BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
-    agente_propio_id INT,
-    ejecutivo_id INT,
+    agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio),
-    CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
-CREATE TABLE Colectivo_Agente_Ejecutivo(
-    id_cae INT PRIMARY KEY AUTO_INCREMENT,
-    deshabilitar_cae BOOLEAN NOT NULL DEFAULT FALSE,
+CREATE TABLE Colectivo_Agente_Propio(
+    id_cap INT PRIMARY KEY AUTO_INCREMENT,
+    deshabilitar_cap BOOLEAN NOT NULL DEFAULT FALSE,
     colectivo_id INT NOT NULL,
-    agente_propio_id INT,
-    ejecutivo_id INT,
+    agente_propio_id INT NOT NULL,
     CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo),
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio),
-    CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Benef(
