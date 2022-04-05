@@ -46,10 +46,16 @@ module.exports = {
                 nombresAgentePropio = nombreCompletoAgentePropio.split(' ', 2).join(' ');
                 apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
             }
+            let nombrePerNat = req.body.nombre_asegurado_per_nat;
+            let apellidoPerNat = req.body.apellido_asegurado_per_nat;
+            nombrePerNat = nombrePerNat.trimStart();
+            nombrePerNat = nombrePerNat.trimEnd();
+            apellidoPerNat = apellidoPerNat.trimStart();
+            apellidoPerNat = apellidoPerNat.trimEnd();
             let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
             if (agentePropio[0] !== undefined) {
                 let idAgentePropio = agentePropio[0].id_agente_propio;
-                await insuredModel.postNaturalInsuredForm(fechaNacPerNat, idAgentePropio, req.body);
+                await insuredModel.postNaturalInsuredForm(fechaNacPerNat, idAgentePropio, nombrePerNat, apellidoPerNat, req.body);
                 res.render('naturalInsuredForm', {
                     alert: true,
                     alertTitle: 'Exitoso',
@@ -104,9 +110,12 @@ module.exports = {
                 apellidosAgentePropio = nombreCompletoAgentePropio.split(' ').slice(2,4).join(' ');
             }
             let agentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+            let razonSocialPerJur = req.body.razon_social_per_jur;
+            razonSocialPerJur = razonSocialPerJur.trimStart();
+            razonSocialPerJur = razonSocialPerJur.trimEnd();
             if (agentePropio[0] !== undefined) {
                 let idAgentePropio = agentePropio[0].id_agente_propio;
-                await insuredModel.postLegalInsuredForm(idAgentePropio, req.body);
+                await insuredModel.postLegalInsuredForm(idAgentePropio, razonSocialPerJur, req.body);
                 res.render('legalInsuredForm', {
                     alert: true,
                     alertTitle: 'Exitoso',
@@ -204,7 +213,13 @@ module.exports = {
         let fechaNacNaturalInsured = resultNaturalInsured[0].fec_nac_per_nat.toISOString().substring(0, 10);
         try {
             let fechaNacPerNat = new Date(req.body.fec_nac_per_nat);
-            await insuredModel.updateNaturalInsured(fechaNacPerNat, idAgentePropio, req.body);
+            let nombrePerNat = req.body.nombre_asegurado_per_nat;
+            let apellidoPerNat = req.body.apellido_asegurado_per_nat;
+            nombrePerNat = nombrePerNat.trimStart();
+            nombrePerNat = nombrePerNat.trimEnd();
+            apellidoPerNat = apellidoPerNat.trimStart();
+            apellidoPerNat = apellidoPerNat.trimEnd();
+            await insuredModel.updateNaturalInsured(fechaNacPerNat, nombrePerNat, apellidoPerNat, idAgentePropio, req.body);
             res.render('editNaturalInsured', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -256,7 +271,10 @@ module.exports = {
         let resultOwnAgent = await ownAgentModel.getOwnAgent(idAgentePropio);
         let resultLegalInsured = await insuredModel.getLegalInsured(idLegalInsured);
         try {
-            await insuredModel.updateLegalInsured(idAgentePropio, req.body);
+            let razonSocialPerJur = req.body.razon_social_per_jur;
+            razonSocialPerJur = razonSocialPerJur.trimStart();
+            razonSocialPerJur = razonSocialPerJur.trimEnd();
+            await insuredModel.updateLegalInsured(idAgentePropio, razonSocialPerJur, req.body);
             res.render('editLegalInsured', {
                 alert: true,
                 alertTitle: 'Exitoso',

@@ -72,6 +72,12 @@ module.exports = {
     postOwnAgentForm: async (req, res) => {
         try {
             let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
+            let nombreAgentePropio = req.body.nombre_agente_propio;
+            let apellidoAgentePropio = req.body.apellido_agente_propio;
+            nombreAgentePropio = nombreAgentePropio.trimStart();
+            nombreAgentePropio = nombreAgentePropio.trimEnd();
+            apellidoAgentePropio = apellidoAgentePropio.trimStart();
+            apellidoAgentePropio = apellidoAgentePropio.trimEnd();
             if (porcentajeAgentePropio === '') {
                 porcentajeAgentePropio = 0;
             } else {
@@ -87,7 +93,7 @@ module.exports = {
                     porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
                 }
             }
-            await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, req.body);
+            await ownAgentModel.postOwnAgentForm(porcentajeAgentePropio, nombreAgentePropio, apellidoAgentePropio, req.body);
             res.render('ownAgentForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -115,7 +121,13 @@ module.exports = {
     },
     postExecutiveForm: async (req, res) => {
         try {
-            await executiveModel.postExecutiveForm(req.body);
+            let nombreEjecutivo = req.body.nombre_ejecutivo;
+            let apellidoEjecutivo = req.body.apellido_ejecutivo;
+            nombreEjecutivo = nombreEjecutivo.trimStart();
+            nombreEjecutivo = nombreEjecutivo.trimEnd();
+            apellidoEjecutivo = apellidoEjecutivo.trimStart();
+            apellidoEjecutivo = apellidoEjecutivo.trimEnd();
+            await executiveModel.postExecutiveForm(nombreEjecutivo, apellidoEjecutivo, req.body);
             res.render('executiveForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -221,6 +233,12 @@ module.exports = {
         let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
         let porcentajeAgentePropio = req.body.porcentaje_agente_propio;
         try {
+            let nombreAgentePropio = req.body.nombre_agente_propio;
+            let apellidoAgentePropio = req.body.apellido_agente_propio;
+            nombreAgentePropio = nombreAgentePropio.trimStart();
+            nombreAgentePropio = nombreAgentePropio.trimEnd();
+            apellidoAgentePropio = apellidoAgentePropio.trimStart();
+            apellidoAgentePropio = apellidoAgentePropio.trimEnd();
             if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
                 porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
                 porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
@@ -232,7 +250,7 @@ module.exports = {
                 porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
                 porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
             }
-            await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, req.body);
+            await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, nombreAgentePropio, apellidoAgentePropio, req.body);
             res.render('editOwnAgent', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -266,7 +284,13 @@ module.exports = {
         let idExecutive = req.body.id_ejecutivo;
         let resultExecutive = await executiveModel.getExecutive(idExecutive);
         try {
-            await executiveModel.updateExecutive(req.body);
+            let nombreEjecutivo = req.body.nombre_ejecutivo;
+            let apellidoEjecutivo = req.body.apellido_ejecutivo;
+            nombreEjecutivo = nombreEjecutivo.trimStart();
+            nombreEjecutivo = nombreEjecutivo.trimEnd();
+            apellidoEjecutivo = apellidoEjecutivo.trimStart();
+            apellidoEjecutivo = apellidoEjecutivo.trimEnd();
+            await executiveModel.updateExecutive(nombreEjecutivo, apellidoEjecutivo, req.body);
             res.render('editExecutive', {
                 alert: true,
                 alertTitle: 'Exitoso',
