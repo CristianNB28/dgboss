@@ -513,16 +513,30 @@ module.exports = {
             }
             let collective = await collectiveModel.postCollectiveHealthForm(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
-                let nombre = nombreCompletoAgente.split(' ', 1).join(' ');
-                let apellido = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
-                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
                 await collectiveOwnAgentModel.postCollectiveOwnAgent(collective.insertId, idAgentePropio);
             }
             let caa = await collectiveInsurerInsuredModel.postCollectiveInsurer(req.body.nombre_aseguradora, collective.insertId);
             for (const nombreCompletoEjecutivo of arrayEjecutivo) {
-                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
-                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
-                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
             res.redirect('/sistema/add-health-collective');
@@ -608,16 +622,30 @@ module.exports = {
             }
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
-                let nombre = nombreCompletoAgente.split(' ', 1).join(' ');
-                let apellido = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
-                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
                 await collectiveOwnAgentModel.postCollectiveOwnAgent(collective.insertId, idAgentePropio);
             }
             let caa = await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             for (const nombreCompletoEjecutivo of arrayEjecutivo) {
-                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
-                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
-                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
             res.redirect('/sistema/add-vehicle-collective');
@@ -703,16 +731,30 @@ module.exports = {
             }
             let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
-                let nombre = nombreCompletoAgente.split(' ', 1).join(' ');
-                let apellido = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
-                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombre, apellido);
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
                 await collectiveOwnAgentModel.postCollectiveOwnAgent(collective.insertId, idAgentePropio);
             }
             let caa = await collectiveInsurerInsuredModel.postCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, collective.insertId);
             for (const nombreCompletoEjecutivo of arrayEjecutivo) {
-                let nombreEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
-                let apellidoEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
-                let idEjecutivo = await executiveModel.getExecutiveId(nombreEjecutivo, apellidoEjecutivo);
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
             res.redirect('/sistema/add-risk-diverse-collective');
