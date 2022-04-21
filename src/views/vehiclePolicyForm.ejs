@@ -33,7 +33,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza No.</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
@@ -55,7 +55,7 @@
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador();"
-                                                        placeholder="Cédula/Rif *" 
+                                                        placeholder="Cédula/Rif Tomador *" 
                                                         class="form-control cedula_rif"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
@@ -64,16 +64,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
-                                                        name="id_rif_asegurado"
-                                                        id="id_rif_asegurado"
-                                                        onkeyup="pasarNombreAsegurado();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control cedula_rif"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        name="nombre_tomador_poliza"
+                                                        id="nombre_tomador_poliza"
+                                                        placeholder="Nombre/Razón Social Tomador *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -86,8 +85,48 @@
                                                         type="email"
                                                         name="correo_tomador"
                                                         id="correo_tomador"
-                                                        placeholder="Correo *" 
+                                                        placeholder="Correo Tomador *" 
                                                         class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Asegurado/Tomador</label>
+                                                <div class="col-sm-9">
+                                                    <div><label><input type="checkbox" name="tomador_asegurado_poliza" id="tomador_asegurado_poliza" onclick="pasarNombreTomador();"> 
+                                                                ¿Asegurado mismo tomador?</label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarNombreAsegurado();"
+                                                        placeholder="Cédula/Rif Asegurado *" 
+                                                        class="form-control cedula_rif"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_asegurado"
+                                                        id="nombre_asegurado"
+                                                        placeholder="Nombre/Razón Social Asegurado *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -100,10 +139,22 @@
                                                         type="email"
                                                         name="correo_asegurado"
                                                         id="correo_asegurado"
-                                                        placeholder="Correo *" 
+                                                        placeholder="Correo Asegurado *" 
                                                         class="form-control"
                                                         required
                                                     >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_aseguradora" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <% insurers.forEach((insurer) => { %>
+                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -121,25 +172,42 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_moneda_poliza" id="tipo_moneda_poliza" onchange="currencySignChange()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="BOLÍVAR">BOLÍVAR</option>
-                                                        <option value="DÓLAR">DÓLAR</option>
-                                                        <option value="EUROS">EUROS</option>
-                                                    </select>
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_poliza"
+                                                        id="fecha_hasta_poliza"
+                                                        class="form-control"
+                                                        required
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
-                                                        name="prima_anual_poliza"
-                                                        id="prima_anual_poliza"
-                                                        placeholder="Prima Anual *" 
+                                                        name="suma_asegurada_poliza"
+                                                        id="suma_asegurada_poliza"
+                                                        placeholder="Suma Asegurada *"
+                                                        class="form-control currency_format"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="deducible_poliza"
+                                                        id="deducible_poliza"
+                                                        placeholder="Deducible *" 
                                                         class="form-control currency_format"
                                                         required
                                                     >
@@ -156,6 +224,73 @@
                                                         <option value="RCV">RCV</option>
                                                         <option value="RCV CON GRÚA">RCV CON GRÚA</option>
                                                         <option value="RCG">RCG</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="tasa_poliza"
+                                                        id="tasa_poliza"
+                                                        placeholder="Tasa Póliza *" 
+                                                        class="form-control porcentaje_tasa"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="grupo_poliza"
+                                                        id="grupo_poliza"
+                                                        placeholder="Grupo" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_moneda_poliza" id="tipo_moneda_poliza" onchange="currencySignChange()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="BOLÍVAR">BOLÍVAR</option>
+                                                        <option value="DÓLAR">DÓLAR</option>
+                                                        <option value="EUROS">EUROS</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Prima Anual</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="prima_anual_poliza"
+                                                        id="prima_anual_poliza"
+                                                        placeholder="Prima Anual *" 
+                                                        class="form-control currency_format"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_canal_poliza" id="tipo_canal_poliza" onchange="showList()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
+                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
+                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
+                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -197,141 +332,6 @@
                                                             <% } %>
                                                         <% }); %>
                                                     </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row">
-                                                <label class="col-sm-3 col-form-label">Asegurado/Tomador</label>
-                                                <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="tomador_asegurado_poliza" id="tomador_asegurado_poliza" onclick="pasarNombreTomador();"> 
-                                                                ¿Asegurado mismo tomador?</label></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_tomador_poliza"
-                                                        id="nombre_tomador_poliza"
-                                                        placeholder="Nombre/Razón Social Tomador *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_asegurado"
-                                                        id="nombre_asegurado"
-                                                        placeholder="Nombre/Razón Social Asegurado *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="deducible_poliza"
-                                                        id="deducible_poliza"
-                                                        placeholder="Deducible *" 
-                                                        class="form-control currency_format"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="grupo_poliza"
-                                                        id="grupo_poliza"
-                                                        placeholder="Grupo" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="date"
-                                                        name="fecha_hasta_poliza"
-                                                        id="fecha_hasta_poliza"
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_aseguradora" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <% insurers.forEach((insurer) => { %>
-                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Suma Asegurada</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="suma_asegurada_poliza"
-                                                        id="suma_asegurada_poliza"
-                                                        placeholder="Suma Asegurada *"
-                                                        class="form-control currency_format"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal_poliza" id="tipo_canal_poliza" onchange="showList()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
-                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
-                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
-                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Tasa</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="tasa_poliza"
-                                                        id="tasa_poliza"
-                                                        placeholder="Tasa Póliza *" 
-                                                        class="form-control number_format"
-                                                        required
-                                                    >
                                                 </div>
                                             </div>
                                         </div>

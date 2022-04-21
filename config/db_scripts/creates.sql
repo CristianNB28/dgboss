@@ -90,7 +90,9 @@ CREATE TABLE Ejecutivo(
     celular_ejecutivo VARCHAR(255) NOT NULL,
     correo_ejecutivo VARCHAR(255) NOT NULL,
     direccion_ejecutivo VARCHAR(500) NOT NULL,
-    tipo_ejecutivo VARCHAR(255) NOT NULL,
+    cargo_ejecutivo VARCHAR(255) NOT NULL,
+    departamento_cargo_ejecutivo VARCHAR(255) NOT NULL,
+    porcentaje_ejecutivo DECIMAL(10,4) NOT NULL,
     obser_deshabilitar_ejecutivo VARCHAR(500),
     deshabilitar_ejecutivo BOOLEAN NOT NULL DEFAULT FALSE
 );

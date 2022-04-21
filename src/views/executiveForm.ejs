@@ -12,7 +12,7 @@
                 <a>Datos</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Ejecutivo</strong>
+                <strong>Agregar Ejecutivos</strong>
             </li>
         </ol>
     </div>
@@ -27,8 +27,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula</label>
+                                        <div class="col-sm-10">
                                             <input 
                                                 type="text"
                                                 name="cedula_ejecutivo"
@@ -40,8 +40,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
                                             <input 
                                                 type="text"
                                                 name="nombre_ejecutivo"
@@ -54,8 +54,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Apellido</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido</label>
+                                        <div class="col-sm-10">
                                             <input 
                                                 type="text"
                                                 name="apellido_ejecutivo"
@@ -69,13 +69,37 @@
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de ejecutivo</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="tipo_ejecutivo" required>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" name="cargo_ejecutivo" id="cargo_ejecutivo" required>
                                                     <option value="">Seleccione *</option>
-                                                    <option value="SUSCRIPCIÓN">SUSCRIPCIÓN</option>
-                                                    <option value="SINIESTROS">SINIESTROS</option>
-                                                    <option value="COBRANZAS">COBRANZAS</option>
+                                                    <option value="GERENTE">GERENTE</option>
+                                                    <option value="COORDINADOR">COORDINADOR</option>
+                                                    <option value="EJECUTIVO">EJECUTIVO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Departamento</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" name="departamento_cargo_ejecutivo" id="departamento_cargo_ejecutivo" required>
+                                                    <option value="">Seleccione *</option>
+                                                    <optgroup label="GERENTE" id="GERENTE">
+                                                        <option value="TÉCNICO">TÉCNICO</option>
+                                                    </optgroup>
+                                                    <optgroup label="COORDINADOR" id="COORDINADOR"> 
+                                                        <option value="SUSCRIPCIÓN INDIVIDUAL">SUSCRIPCIÓN INDIVIDUAL</option> 
+                                                        <option value="SUSCRIPCIÓN COLECTIVO">SUSCRIPCIÓN COLECTIVO</option> 
+                                                        <option value="SINIESTRO">SINIESTRO</option>
+                                                        <option value="ADMINISTRACIÓN">ADMINISTRACIÓN</option> 
+                                                    </optgroup> 
+                                                    <optgroup label="EJECUTIVO" id="EJECUTIVO"> 
+                                                        <option value="SUSCRIPCIÓN">SUSCRIPCIÓN</option>
+                                                        <option value="SINIESTROS">SINIESTROS</option>
+                                                        <option value="COBRANZAS">COBRANZAS</option> 
+                                                    </optgroup>
                                                 </select>
                                             </div>
                                         </div>
@@ -86,8 +110,8 @@
                         <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Celular</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Celular</label>
+                                        <div class="col-sm-10">
                                             <input 
                                                 type="tel"
                                                 name="celular_ejecutivo"
@@ -99,8 +123,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Correo</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Correo</label>
+                                        <div class="col-sm-10">
                                             <input 
                                                 type="email"
                                                 name="correo_ejecutivo"
@@ -113,8 +137,8 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Dirección</label>
-                                        <div class="col-sm-9">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
+                                        <div class="col-sm-10">
                                             <textarea 
                                                 name="direccion_ejecutivo"
                                                 id="direccion_ejecutivo" 
@@ -123,6 +147,18 @@
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
                                             ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Comisión</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="porcentaje_ejecutivo"
+                                                id="porcentaje_ejecutivo" 
+                                                placeholder="Comisión de Ejecutivo *" 
+                                                class="form-control porcentaje_comision"
+                                            >
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label"></label>

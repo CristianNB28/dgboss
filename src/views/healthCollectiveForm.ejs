@@ -33,13 +33,28 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza No.</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
                                                         name="numero_colectivo"
                                                         id="numero_colectivo"
                                                         placeholder="Número *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_tomador_colectivo"
+                                                        id="nombre_tomador_colectivo"
+                                                        placeholder="Nombre/Razón Social Tomador *" 
                                                         class="form-control"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
@@ -55,7 +70,7 @@
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador2();"
-                                                        placeholder="Cédula/Rif *" 
+                                                        placeholder="Cédula/Rif Tomador *" 
                                                         class="form-control cedula_rif"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
@@ -70,10 +85,22 @@
                                                         type="email"
                                                         name="correo_tomador"
                                                         id="correo_tomador"
-                                                        placeholder="Correo *" 
+                                                        placeholder="Correo Tomador *" 
                                                         class="form-control"
                                                         required
                                                     >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_aseguradora" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <% insurers.forEach((insurer) => { %>
+                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -86,6 +113,96 @@
                                                         id="fecha_desde_colectivo"
                                                         class="form-control"
                                                         required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_colectivo"
+                                                        id="fecha_hasta_colectivo"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="deducible_colectivo"
+                                                        id="deducible_colectivo"
+                                                        placeholder="Deducible *" 
+                                                        class="form-control currency_format"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">¿Maternidad?</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="SÍ">SÍ</option>
+                                                        <option value="NO">NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchinput" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura / Suma</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="cobertura_suma_asegurada_colectivo"
+                                                        id="cobertura_suma_asegurada_colectivo"
+                                                        placeholder="Cobertura / Suma Asegurada" 
+                                                        class="form-control currency_format"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="SÍ">SÍ</option>
+                                                        <option value="NO">NO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchinput2" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="detalle_cliente_colectivo"
+                                                        id="detalle_cliente_colectivo" 
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="grupo_colectivo"
+                                                        id="grupo_colectivo"
+                                                        placeholder="Grupo" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
@@ -117,26 +234,27 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">¿Maternidad?</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="maternidad_colectivo" id="maternidad_colectivo" onchange="showInput()" required>
+                                                    <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
                                                         <option value="">Seleccione *</option>
-                                                        <option value="SÍ">SÍ</option>
-                                                        <option value="NO">NO</option>
+                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
+                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
+                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
+                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group" id="searchinput" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Cobertura / Suma</label>
+                                        <div class="form-group" id="searchList" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
                                                 <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="cobertura_suma_asegurada_colectivo"
-                                                        id="cobertura_suma_asegurada_colectivo"
-                                                        placeholder="Cobertura / Suma Asegurada" 
-                                                        class="form-control currency_format"
-                                                    >
+                                                    <select class="form-control" name="nombre_agentes_propios">
+                                                        <option value="">Seleccione</option>
+                                                        <% ownAgents.forEach((ownAgent) => { %>
+                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,112 +286,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="grupo_colectivo"
-                                                        id="grupo_colectivo"
-                                                        placeholder="Grupo" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_tomador_colectivo"
-                                                        id="nombre_tomador_colectivo"
-                                                        placeholder="Nombre/Razón Social Tomador *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="deducible_colectivo"
-                                                        id="deducible_colectivo"
-                                                        placeholder="Deducible *" 
-                                                        class="form-control currency_format"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="date"
-                                                        name="fecha_hasta_colectivo"
-                                                        id="fecha_hasta_colectivo"
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_aseguradora" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <% insurers.forEach((insurer) => { %>
-                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
-                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
-                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
-                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Plazos de Espera</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="plazo_espera_colectivo" id="plazo_espera_colectivo" onchange="showInput2()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="SÍ">SÍ</option>
-                                                        <option value="NO">NO</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="searchinput2" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Detalle Cliente</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="date"
-                                                        name="detalle_cliente_colectivo"
-                                                        id="detalle_cliente_colectivo" 
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Cobranzas</label>
                                                 <div class="col-sm-9">
@@ -283,18 +295,6 @@
                                                             <% if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
                                                             <% } %>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="searchList" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios">
-                                                        <option value="">Seleccione</option>
-                                                        <% ownAgents.forEach((ownAgent) => { %>
-                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                         <% }); %>
                                                     </select>
                                                 </div>

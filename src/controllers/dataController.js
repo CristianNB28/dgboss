@@ -78,6 +78,7 @@ module.exports = {
             nombreAgentePropio = nombreAgentePropio.trimEnd();
             apellidoAgentePropio = apellidoAgentePropio.trimStart();
             apellidoAgentePropio = apellidoAgentePropio.trimEnd();
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(/[%]/g, '').replace(' ', '');
             if (porcentajeAgentePropio === '') {
                 porcentajeAgentePropio = 0;
             } else {
@@ -123,11 +124,24 @@ module.exports = {
         try {
             let nombreEjecutivo = req.body.nombre_ejecutivo;
             let apellidoEjecutivo = req.body.apellido_ejecutivo;
+            let montoPorcentajeEjecutivo = req.body.porcentaje_ejecutivo;
             nombreEjecutivo = nombreEjecutivo.trimStart();
             nombreEjecutivo = nombreEjecutivo.trimEnd();
             apellidoEjecutivo = apellidoEjecutivo.trimStart();
             apellidoEjecutivo = apellidoEjecutivo.trimEnd();
-            await executiveModel.postExecutiveForm(nombreEjecutivo, apellidoEjecutivo, req.body);
+            montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(/[%]/g, '').replace(' ', '');
+            if ((montoPorcentajeEjecutivo.indexOf(',') !== -1) && (montoPorcentajeEjecutivo.indexOf('.') !== -1)) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(",", ".");
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(".", ",");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo.replace(/,/g,''));
+            } else if (montoPorcentajeEjecutivo.indexOf(',') !== -1) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(",", ".");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo);
+            } else if (montoPorcentajeEjecutivo.indexOf('.') !== -1) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(".", ",");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo.replace(/,/g,''));
+            }
+            await executiveModel.postExecutiveForm(nombreEjecutivo, apellidoEjecutivo, montoPorcentajeEjecutivo, req.body);
             res.render('executiveForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -188,8 +202,11 @@ module.exports = {
         let idExecutive = req.params.id;
         if (idExecutive.match(valoresAceptados)) {
             let resultExecutive = await executiveModel.getExecutive(idExecutive);
+            let porcentajeEjecutivo = resultExecutive[0].porcentaje_ejecutivo;
+            porcentajeEjecutivo = porcentajeEjecutivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             res.render('editExecutive', {
                 executive: resultExecutive[0],
+                porcentajeEjecutivo,
                 name: req.session.name
             });
         } else {
@@ -239,16 +256,21 @@ module.exports = {
             nombreAgentePropio = nombreAgentePropio.trimEnd();
             apellidoAgentePropio = apellidoAgentePropio.trimStart();
             apellidoAgentePropio = apellidoAgentePropio.trimEnd();
-            if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
-            } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
-            } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
-                porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
-                porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(/[%]/g, '').replace(' ', '');
+            if (porcentajeAgentePropio === '') {
+                porcentajeAgentePropio = 0;
+            } else {
+                if ((porcentajeAgentePropio.indexOf(',') !== -1) && (porcentajeAgentePropio.indexOf('.') !== -1)) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+                } else if (porcentajeAgentePropio.indexOf(',') !== -1) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(",", ".");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio);
+                } else if (porcentajeAgentePropio.indexOf('.') !== -1) {
+                    porcentajeAgentePropio = porcentajeAgentePropio.replace(".", ",");
+                    porcentajeAgentePropio = parseFloat(porcentajeAgentePropio.replace(/,/g,''));
+                }
             }
             await ownAgentModel.updateOwnAgent(porcentajeAgentePropio, nombreAgentePropio, apellidoAgentePropio, req.body);
             res.render('editOwnAgent', {
@@ -283,14 +305,33 @@ module.exports = {
     updateExecutive: async (req, res) => {
         let idExecutive = req.body.id_ejecutivo;
         let resultExecutive = await executiveModel.getExecutive(idExecutive);
+        let porcentajeEjecutivo = resultExecutive[0].porcentaje_ejecutivo;
+        if (porcentajeEjecutivo.toString().includes('.') === true) {
+            porcentajeEjecutivo = porcentajeEjecutivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            porcentajeEjecutivo = String(porcentajeEjecutivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             let nombreEjecutivo = req.body.nombre_ejecutivo;
             let apellidoEjecutivo = req.body.apellido_ejecutivo;
+            let montoPorcentajeEjecutivo = req.body.porcentaje_ejecutivo;
             nombreEjecutivo = nombreEjecutivo.trimStart();
             nombreEjecutivo = nombreEjecutivo.trimEnd();
             apellidoEjecutivo = apellidoEjecutivo.trimStart();
             apellidoEjecutivo = apellidoEjecutivo.trimEnd();
-            await executiveModel.updateExecutive(nombreEjecutivo, apellidoEjecutivo, req.body);
+            montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(/[%]/g, '').replace(' ', '');
+            if ((montoPorcentajeEjecutivo.indexOf(',') !== -1) && (montoPorcentajeEjecutivo.indexOf('.') !== -1)) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(",", ".");
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(".", ",");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo.replace(/,/g,''));
+            } else if (montoPorcentajeEjecutivo.indexOf(',') !== -1) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(",", ".");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo);
+            } else if (montoPorcentajeEjecutivo.indexOf('.') !== -1) {
+                montoPorcentajeEjecutivo = montoPorcentajeEjecutivo.replace(".", ",");
+                montoPorcentajeEjecutivo = parseFloat(montoPorcentajeEjecutivo.replace(/,/g,''));
+            }
+            await executiveModel.updateExecutive(nombreEjecutivo, apellidoEjecutivo, montoPorcentajeEjecutivo, req.body);
             res.render('editExecutive', {
                 alert: true,
                 alertTitle: 'Exitoso',
@@ -300,6 +341,7 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema',
                 executive: resultExecutive[0],
+                porcentajeEjecutivo,
                 name: req.session.name
             });
             throw new Error('Error, valor duplicado del ejecutivo');
@@ -314,6 +356,7 @@ module.exports = {
                 timer: 1500,
                 ruta: `sistema/edit-executive/${idExecutive}`,
                 executive: resultExecutive[0],
+                porcentajeEjecutivo,
                 name: req.session.name
             });
         }

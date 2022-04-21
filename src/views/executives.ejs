@@ -36,7 +36,8 @@
                             <th>Apellido</th>
                             <th>Celular</th>
                             <th>Correo</th>
-                            <th>Tipo</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
                             <th>Dirección</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
@@ -52,7 +53,8 @@
                             <th>Apellido</th>
                             <th>Celular</th>
                             <th>Correo</th>
-                            <th>Tipo</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
                             <th>Dirección</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
@@ -137,7 +139,8 @@ $(document).ready(function(){
             {"data": "apellido_ejecutivo"},
             {"data": "celular_ejecutivo"},
             {"data": "correo_ejecutivo"},
-            {"data": "tipo_ejecutivo"},
+            {"data": "cargo_ejecutivo"},
+            {"data": "departamento_cargo_ejecutivo"},
             {"data": "direccion_ejecutivo"},
             {
                 "data": "",
@@ -156,6 +159,7 @@ $(document).ready(function(){
                                             <button 
                                                 class="btn btn-danger" 
                                                 type="submit"
+                                                onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
                                             >
                                                 <i class="fa fa-ban"></i>
                                             </button>

@@ -33,7 +33,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Póliza No.</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
@@ -54,8 +54,8 @@
                                                         type="text"
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
-                                                        onkeyup="pasarNombreTomador();"
-                                                        placeholder="Cédula/Rif *" 
+                                                        onkeyup="pasarNombreTomador2();"
+                                                        placeholder="Cédula/Rif Tomador *" 
                                                         class="form-control cedula_rif"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
@@ -64,16 +64,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
                                                 <div class="col-sm-9">
                                                     <input 
                                                         type="text"
-                                                        name="id_rif_asegurado"
-                                                        id="id_rif_asegurado"
-                                                        onkeyup="pasarNombreAsegurado();"
-                                                        placeholder="Cédula/Rif *" 
-                                                        class="form-control cedula_rif"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        name="nombre_tomador_colectivo"
+                                                        id="nombre_tomador_colectivo"
+                                                        placeholder="Nombre/Razón Social Tomador *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -86,8 +85,48 @@
                                                         type="email"
                                                         name="correo_tomador"
                                                         id="correo_tomador"
-                                                        placeholder="Correo *" 
+                                                        placeholder="Correo Tomador *" 
                                                         class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Asegurado/Tomador</label>
+                                                <div class="col-sm-9">
+                                                    <div><label><input type="checkbox" name="tomador_asegurado_colectivo" id="tomador_asegurado_colectivo" onclick="pasarNombreTomador();"> 
+                                                                ¿Asegurado mismo tomador?</label></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="id_rif_asegurado"
+                                                        id="id_rif_asegurado"
+                                                        onkeyup="pasarNombreAsegurado();"
+                                                        placeholder="Cédula/Rif Asegurado *" 
+                                                        class="form-control cedula_rif"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_asegurado"
+                                                        id="nombre_asegurado"
+                                                        placeholder="Nombre/Razón Social Asegurado *" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                         required
                                                     >
                                                 </div>
@@ -100,10 +139,22 @@
                                                         type="email"
                                                         name="correo_asegurado"
                                                         id="correo_asegurado"
-                                                        placeholder="Correo *" 
+                                                        placeholder="Correo Asegurado *" 
                                                         class="form-control"
                                                         required
                                                     >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_aseguradora" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <% insurers.forEach((insurer) => { %>
+                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
+                                                        <% }); %>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -116,6 +167,49 @@
                                                         id="fecha_desde_colectivo"
                                                         class="form-control"
                                                         required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="date"
+                                                        name="fecha_hasta_colectivo"
+                                                        id="fecha_hasta_colectivo"
+                                                        class="form-control"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="deducible_colectivo"
+                                                        id="deducible_colectivo"
+                                                        placeholder="Deducible *" 
+                                                        class="form-control currency_format"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="grupo_colectivo"
+                                                        id="grupo_colectivo"
+                                                        placeholder="Grupo" 
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     >
                                                 </div>
                                             </div>
@@ -147,6 +241,31 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
+                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
+                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
+                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="searchList" style="display:none">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_agentes_propios">
+                                                        <option value="">Seleccione</option>
+                                                        <% ownAgents.forEach((ownAgent) => { %>
+                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
+                                                        <% }); %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Suscripción</label>
                                                 <div class="col-sm-9">
                                                     <select class="form-control" name="nombre_ejecutivos_suscripcion" required>
@@ -174,113 +293,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row">
-                                                <label class="col-sm-3 col-form-label">Asegurado/Tomador</label>
-                                                <div class="col-sm-9">
-                                                    <div><label><input type="checkbox" name="tomador_asegurado_colectivo" id="tomador_asegurado_colectivo" onclick="pasarNombreTomador();"> 
-                                                                ¿Asegurado mismo tomador?</label></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_tomador_colectivo"
-                                                        id="nombre_tomador_colectivo"
-                                                        placeholder="Nombre/Razón Social Tomador *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Nombre/Razón</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_asegurado"
-                                                        id="nombre_asegurado"
-                                                        placeholder="Nombre/Razón Social Asegurado *" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="deducible_colectivo"
-                                                        id="deducible_colectivo"
-                                                        placeholder="Deducible *" 
-                                                        class="form-control currency_format"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="grupo_colectivo"
-                                                        id="grupo_colectivo"
-                                                        placeholder="Grupo" 
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia hasta</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="date"
-                                                        name="fecha_hasta_colectivo"
-                                                        id="fecha_hasta_colectivo"
-                                                        class="form-control"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Aseguradora</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_aseguradora" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <% insurers.forEach((insurer) => { %>
-                                                            <option value="<%= insurer.nombre_aseguradora %>"><%= insurer.nombre_aseguradora %></option>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
-                                                        <option value="">Seleccione *</option>
-                                                        <option value="REDES SOCIALES">REDES SOCIALES</option>
-                                                        <option value="PÁGINA WEB">PÁGINA WEB</option>
-                                                        <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
-                                                        <option value="AGENTE PROPIO">AGENTE PROPIO</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Cobranzas</label>
                                                 <div class="col-sm-9">
@@ -290,18 +302,6 @@
                                                             <% if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
                                                             <% } %>
-                                                        <% }); %>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="searchList" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios">
-                                                        <option value="">Seleccione</option>
-                                                        <% ownAgents.forEach((ownAgent) => { %>
-                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
                                                         <% }); %>
                                                     </select>
                                                 </div>

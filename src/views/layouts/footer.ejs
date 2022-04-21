@@ -54,6 +54,8 @@
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="/js/cleave-js/cleave.min.js"></script>
+
 <!-- Validacion de numero de Telefono -->
 
 <script src="/js/phone-validations/insurer.js"></script>
@@ -90,6 +92,13 @@
     });
     $("#correo_asegurado_per_nat").keyup(function() {
         $('.active-input-2').show();
+    });
+    new Cleave('.porcentaje_comision', {
+        numeral: true,
+        numeralDecimalMark: ',',
+        delimiter: '.',
+        prefix: '%',
+        tailPrefix: true
     });
 </script>
 
@@ -157,6 +166,16 @@
         }
     </script>
 <% } %>
+
+<script>
+    $(document).ready(function(){
+        $("#cargo_ejecutivo").change(function(){
+            var valor = $(this).val();
+            $("#departamento_cargo_ejecutivo optgroup").css('display', 'none');
+            $("#" + valor).css('display', 'block');
+        })
+    })
+</script>
 
 </body>
 

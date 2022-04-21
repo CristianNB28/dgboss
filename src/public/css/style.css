@@ -9672,3 +9672,7 @@ body.md-skin {
 .ltextOnwAgent {
   padding: 5px;
 }
+
+#departamento_cargo_ejecutivo optgroup{
+  display: none;
+}
