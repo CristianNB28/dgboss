@@ -233,16 +233,39 @@
 </script>
 
 <script>
-    var separador = document.getElementsByClassName('cedula');
-    for (var i = 0 ; i < separador.length; i++) {
-        separador[i].addEventListener('input', (e) => {
-            var entrada = e.target.value.split(','),
-            parteEntera = entrada[0].replace(/\./g, ''),
-            parteDecimal = entrada[1],
-            salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-            e.target.value = salida;
-        }, false); 
-    }
+    new Cleave('.input-numeral-cedula', {
+        numeral: true,
+        numeralDecimalMark: ',',
+        delimiter: '.'
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        new Cleave('.input-numeral', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.'
+        });
+
+        $('#select_box').change(function(){
+            if ((this.value === 'V') || (this.value === 'E')) {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.'
+                });
+                cleaveNumeral.setRawValue('');
+            } else {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: '!',
+                    delimiter: ''
+                });
+                cleaveNumeral.setRawValue('');
+            }
+        });
+    });
 </script>
 
 <script>

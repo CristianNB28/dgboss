@@ -103,6 +103,50 @@
 </script>
 
 <script>
+    new Cleave('.input-numeral-rif', {
+        numeral: true,
+        numeralDecimalMark: '.',
+        delimiter: ''
+    });
+</script>
+
+<script>
+    new Cleave('.input-numeral-cedula', {
+        numeral: true,
+        numeralDecimalMark: ',',
+        delimiter: '.'
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        new Cleave('.input-numeral', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.'
+        });
+
+        $('#select_box').change(function(){
+            if ((this.value === 'V') || (this.value === 'E')) {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.'
+                });
+                cleaveNumeral.setRawValue('');
+            } else {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: '!',
+                    delimiter: ''
+                });
+                cleaveNumeral.setRawValue('');
+            }
+        });
+    });
+</script>
+
+<script>
     var separador = document.getElementsByClassName('number_format');
     for (var i = 0 ; i < separador.length; i++) {
         separador[i].addEventListener('input', (e) => {

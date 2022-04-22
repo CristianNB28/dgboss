@@ -447,6 +447,58 @@
 <% } %>
 
 <script>
+    $(document).ready(function () {
+        new Cleave('.input-numeral', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.'
+        });
+
+        $('#select_box').change(function(){
+            if ((this.value === 'V') || (this.value === 'E')) {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.'
+                });
+                cleaveNumeral.setRawValue('');
+            } else {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: '!',
+                    delimiter: ''
+                });
+                cleaveNumeral.setRawValue('');
+            }
+        });
+        
+        new Cleave('.input-numeral2', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.'
+        });
+
+        $('#select_box2').change(function(){
+            if ((this.value === 'V') || (this.value === 'E')) {
+                var cleaveNumeral = new Cleave('.input-numeral2', {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.'
+                });
+                cleaveNumeral.setRawValue('');
+            } else {
+                var cleaveNumeral = new Cleave('.input-numeral2', {
+                    numeral: true,
+                    numeralDecimalMark: '!',
+                    delimiter: ''
+                });
+                cleaveNumeral.setRawValue('');
+            }
+        });   
+    });
+</script>
+
+<script>
     window.addEventListener("load", function() {
         document.getElementById("radioContainer").addEventListener("click", function() {
             document.getElementById("active-select-1").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";

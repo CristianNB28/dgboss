@@ -8,6 +8,8 @@ CREATE TABLE Usuario(
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     cedula_usuario VARCHAR(255),
     rif_usuario VARCHAR(255),
+    tipo_cedula_usuario CHAR(5),
+    tipo_rif_usuario CHAR(5),
     nombre_usuario VARCHAR(255) NOT NULL,
     username VARCHAR(255),
     password_usuario VARCHAR(255) NOT NULL,
@@ -47,6 +49,7 @@ CREATE TABLE Vehiculo(
     cantidad_pasajero INT,
     capacidad_carga INT,
     cedula_conductor_vehiculo VARCHAR(255),
+    tipo_cedula_vehiculo CHAR(5),
     nombre_conductor_vehiculo VARCHAR(255),
     suma_asegurada_vehiculo DECIMAL(20,4),
     tipo_movimiento_vehiculo VARCHAR(255),
@@ -85,6 +88,7 @@ CREATE TABLE Poliza(
 CREATE TABLE Ejecutivo(
     id_ejecutivo INT PRIMARY KEY AUTO_INCREMENT,
     cedula_ejecutivo VARCHAR(255) NOT NULL,
+    tipo_cedula_ejecutivo CHAR(5) NOT NULL,
     nombre_ejecutivo VARCHAR(255) NOT NULL,
     apellido_ejecutivo VARCHAR(255) NOT NULL,
     celular_ejecutivo VARCHAR(255) NOT NULL,
@@ -100,6 +104,7 @@ CREATE TABLE Ejecutivo(
 CREATE TABLE Aseguradora(
     id_aseguradora INT PRIMARY KEY AUTO_INCREMENT,
     rif_aseguradora VARCHAR(255) NOT NULL,
+    tipo_rif_aseguradora CHAR(5) NOT NULL,
     nombre_aseguradora VARCHAR(255) NOT NULL,
     direccion_aseguradora VARCHAR(255) NOT NULL,
     telefono_aseguradora VARCHAR(255),
@@ -110,6 +115,7 @@ CREATE TABLE Aseguradora(
 CREATE TABLE Agente_Propio(
     id_agente_propio INT PRIMARY KEY AUTO_INCREMENT,
     cedula_agente_propio VARCHAR(255) NOT NULL,
+    tipo_cedula_agente_propio CHAR(5) NOT NULL,
     nombre_agente_propio VARCHAR(255) NOT NULL,
     apellido_agente_propio VARCHAR(255) NOT NULL,
     celular_agente_propio VARCHAR(255) NOT NULL,
@@ -125,6 +131,7 @@ CREATE TABLE Beneficiario(
     nombre_beneficiario VARCHAR(255) NOT NULL,
     apellido_beneficiario VARCHAR(255) NOT NULL,
     cedula_beneficiario VARCHAR(255) NOT NULL,
+    tipo_cedula_beneficiario CHAR(5) NOT NULL,
     fec_nac_beneficiario DATE NOT NULL,
     parentesco_beneficiario VARCHAR(255) NOT NULL,
     direccion_beneficiario VARCHAR(500),
@@ -227,6 +234,7 @@ CREATE TABLE Factor_Verificacion(
 CREATE TABLE Asegurado_Persona_Natural(
     id_asegurado_per_nat INT PRIMARY KEY AUTO_INCREMENT,
     cedula_asegurado_per_nat VARCHAR(255) NOT NULL,
+    tipo_cedula_asegurado_per_nat CHAR(5) NOT NULL,
     nombre_asegurado_per_nat VARCHAR(255) NOT NULL,
     apellido_asegurado_per_nat VARCHAR(255) NOT NULL,
     fec_nac_per_nat DATE NOT NULL,
@@ -245,6 +253,7 @@ CREATE TABLE Asegurado_Persona_Natural(
 CREATE TABLE Asegurado_Persona_Juridica(
     id_asegurado_per_jur INT PRIMARY KEY AUTO_INCREMENT,
     rif_asegurado_per_jur VARCHAR(255) NOT NULL,
+    tipo_rif_asegurado_per_jur CHAR(5) NOT NULL,
     razon_social_per_jur VARCHAR(255) NOT NULL,
     telefono_asegurado_per_jur VARCHAR(255) NOT NULL,
     telefono_opcional_per_jur VARCHAR(255),

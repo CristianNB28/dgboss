@@ -49,15 +49,26 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Tomador</label>
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-9 field">
+                                                    <div class="numeral-selector selector">
+                                                        <div class="select-box-wrapper">
+                                                            <select id="select_box">
+                                                                <option value="V">V</option>
+                                                                <option value="E">E</option>
+                                                                <option value="J">J</option>
+                                                                <option value="G">G</option>
+                                                                <option value="I">I</option>
+                                                                <option value="F">F</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <input 
                                                         type="text"
                                                         name="id_rif_tomador"
                                                         id="id_rif_tomador"
                                                         onkeyup="pasarNombreTomador();"
                                                         placeholder="Cédula/Rif Tomador *" 
-                                                        class="form-control cedula_rif"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                        class="form-control input-numeral"
                                                         required
                                                     >
                                                 </div>
@@ -103,14 +114,26 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-9 field">
+                                                    <div class="numeral-selector selector">
+                                                        <div class="select-box-wrapper">
+                                                            <select id="select_box2">
+                                                                <option value="V">V</option>
+                                                                <option value="E">E</option>
+                                                                <option value="J">J</option>
+                                                                <option value="G">G</option>
+                                                                <option value="I">I</option>
+                                                                <option value="F">F</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <input 
                                                         type="text"
                                                         name="id_rif_asegurado"
                                                         id="id_rif_asegurado"
                                                         onkeyup="pasarNombreAsegurado();"
                                                         placeholder="Cédula/Rif Asegurado*" 
-                                                        class="form-control cedula_rif"
+                                                        class="form-control input-numeral2"
                                                         oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
                                                         required
                                                     >
