@@ -101,23 +101,37 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-patrimonial").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-patrimonial").valid();
                 } else if (newIndex === 2) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-patrimonial').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-patrimonial').valid();
                 } else if (newIndex === 3) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-patrimonial').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-patrimonial').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyPatrimonial();
+                    $('#policy-form-patrimonial').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptPatrimonial();
+                    $('#receipt-form-patrimonial').submit();
                 } else if (currentIndex === 3) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionPatrimonial();
+                    $('#commission-form-patrimonial').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -125,13 +139,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-patrimonial .steps a:eq(0)').click();
                 $('#form-patrimonial').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-patrimonial").validate({
                 rules: {
                     numero_poliza: {
                         esrepetidonumpoliza: true
@@ -140,7 +155,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-patrimonial").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -148,35 +163,7 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.porcentaje_tasa',function(){
+        $("#policy-form-patrimonial").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -185,17 +172,27 @@
                 tailPrefix: true
             });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#receipt-form-patrimonial").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });    
+        });
+        $("#commission-form-patrimonial").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -269,23 +266,37 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-bail").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-bail").valid();
                 } else if (newIndex === 2) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-bail').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-bail').valid();
                 } else if (newIndex === 3) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-bail').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-bail').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyBail();
+                    $('#policy-form-bail').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptBail();
+                    $('#receipt-form-bail').submit();
                 } else if (currentIndex === 3) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionBail();
+                    $('#commission-form-bail').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -293,13 +304,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-bail .steps a:eq(0)').click();
                 $('#form-bail').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-bail").validate({
                 rules: {
                     numero_poliza: {
                         esrepetidonumpoliza: true
@@ -308,7 +320,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-bail").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -316,35 +328,7 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.porcentaje_tasa',function(){
+        $("#policy-form-bail").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -353,17 +337,27 @@
                 tailPrefix: true
             });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#receipt-form-bail").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });    
+        });
+        $("#commission-form-bail").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -437,23 +431,37 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-another-branch").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-another-branch").valid();
                 } else if (newIndex === 2) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-another-branch').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-another-branch').valid();
                 } else if (newIndex === 3) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-another-branch').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-another-branch').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyAnotherBranch();
+                    $('#policy-form-another-branch').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptAnotherBranch();
+                    $('#receipt-form-another-branch').submit();
                 } else if (currentIndex === 3) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionAnotherBranch();
+                    $('#commission-form-another-branch').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -461,13 +469,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-another-branch .steps a:eq(0)').click();
                 $('#form-another-branch').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-another-branch").validate({
                 rules: {
                     numero_poliza: {
                         esrepetidonumpoliza: true
@@ -476,7 +485,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-another-branch").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -484,19 +493,7 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.porcentaje_tasa',function(){
+        $("#policy-form-another-branch").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -505,33 +502,27 @@
                 tailPrefix: true
             });    
         });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
+        $("#receipt-form-another-branch").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#commission-form-another-branch").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -605,23 +596,37 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-ap").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-ap").valid();
                 } else if (newIndex === 2) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-ap').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-ap').valid();
                 } else if (newIndex === 3) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-ap').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-ap').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyAp();
+                    $('#policy-form-ap').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptAp();
+                    $('#receipt-form-ap').submit();
                 } else if (currentIndex === 3) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionAp();
+                    $('#commission-form-ap').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -629,13 +634,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-ap .steps a:eq(0)').click();
                 $('#form-ap').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-ap").validate({
                 rules: {
                     numero_poliza: {
                         esrepetidonumpoliza: true
@@ -644,7 +650,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-ap").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -652,33 +658,25 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
+        $("#receipt-form-ap").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#commission-form-ap").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -752,23 +750,37 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-travel").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-travel").valid();
                 } else if (newIndex === 2) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-travel').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-travel').valid();
                 } else if (newIndex === 3) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-travel').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-travel').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyTravel();
+                    $('#policy-form-travel').submit();
                 } else if (currentIndex === 2) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptTravel();
+                    $('#receipt-form-travel').submit();
                 } else if (currentIndex === 3) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionTravel();
+                    $('#commission-form-travel').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -776,13 +788,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-travel .steps a:eq(0)').click();
                 $('#form-travel').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-travel").validate({
                 rules: {
                     numero_poliza: {
                         esrepetidonumpoliza: true
@@ -791,7 +804,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-travel").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -799,33 +812,25 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
+        $("#receipt-form-travel").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#commission-form-travel").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -844,55 +849,590 @@
     </script>
 <% } %>
 
+<!-- Poliza de Patrimonial -->
+<script>
+    function storeValuesPolicyPatrimonial() {
+        let formDataPolicyPatrimonial = [];
+        localStorage.removeItem('formDataPolicyPatrimonial');
+        $('#policy-form-patrimonial input[type=text]').each(function(){
+            formDataPolicyPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-patrimonial input[type=email]').each(function(){
+            formDataPolicyPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-patrimonial input[type=date]').each(function(){
+            formDataPolicyPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-patrimonial select').each(function(){
+            formDataPolicyPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-patrimonial #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyPatrimonial.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyPatrimonial", JSON.stringify(formDataPolicyPatrimonial));
+    }
+    function getPolicyPatrimonial() {
+        if(localStorage.formDataPolicyPatrimonial !== undefined){
+            formDataPolicyPatrimonial = JSON.parse(localStorage.formDataPolicyPatrimonial);
+            for (var i = 0; i < formDataPolicyPatrimonial.length; i++) {
+                $(`[name=${formDataPolicyPatrimonial[i].name}]`).val(formDataPolicyPatrimonial[i].value);
+                if ((formDataPolicyPatrimonial[i].name === 'tomador_asegurado_poliza') && (formDataPolicyPatrimonial[i].value === true)) {
+                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyPatrimonial[i].value;
+                }
+                if ((formDataPolicyPatrimonial[i].name === 'tipo_canal_poliza') && (formDataPolicyPatrimonial[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptPatrimonial() {
+        let formDataReceiptPatrimonial = [];
+        localStorage.removeItem('formDataReceiptPatrimonial');
+        $('#receipt-form-patrimonial input[type=text]').each(function(){
+            formDataReceiptPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-patrimonial input[type=number]').each(function(){
+            formDataReceiptPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-patrimonial input[type=date]').each(function(){
+            formDataReceiptPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-patrimonial select').each(function(){
+            formDataReceiptPatrimonial.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-patrimonial #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptPatrimonial.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptPatrimonial", JSON.stringify(formDataReceiptPatrimonial));
+    }
+    function getReceiptPatrimonial() {
+        if(localStorage.formDataReceiptPatrimonial !== undefined){
+            formDataReceiptPatrimonial = JSON.parse(localStorage.formDataReceiptPatrimonial);
+            for (var i = 0; i < formDataReceiptPatrimonial.length; i++) {
+                $(`[name=${formDataReceiptPatrimonial[i].name}]`).val(formDataReceiptPatrimonial[i].value);
+                if ((formDataReceiptPatrimonial[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptPatrimonial[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptPatrimonial[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionPatrimonial() {
+        let formCommissionPatrimonial = [];
+        localStorage.removeItem('formCommissionPatrimonial');
+        $('#commission-form-patrimonial input[type=text]').each(function(){
+            formCommissionPatrimonial.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionPatrimonial", JSON.stringify(formCommissionPatrimonial));
+    }
+    function getCommissionPatrimonial() {
+        if(localStorage.formCommissionPatrimonial !== undefined){
+            formCommissionPatrimonial = JSON.parse(localStorage.formCommissionPatrimonial);
+            for (var i = 0; i < formCommissionPatrimonial.length; i++) {
+                $(`[name=${formCommissionPatrimonial[i].name}]`).val(formCommissionPatrimonial[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Fianza -->
+<script>
+    function storeValuesPolicyBail() {
+        let formDataPolicyBail = [];
+        localStorage.removeItem('formDataPolicyBail');
+        $('#policy-form-bail input[type=text]').each(function(){
+            formDataPolicyBail.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-bail input[type=email]').each(function(){
+            formDataPolicyBail.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-bail input[type=date]').each(function(){
+            formDataPolicyBail.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-bail select').each(function(){
+            formDataPolicyBail.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-bail #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyBail.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyBail", JSON.stringify(formDataPolicyBail));
+    }
+    function getPolicyBail() {
+        if(localStorage.formDataPolicyBail !== undefined){
+            formDataPolicyBail = JSON.parse(localStorage.formDataPolicyBail);
+            for (var i = 0; i < formDataPolicyBail.length; i++) {
+                $(`[name=${formDataPolicyBail[i].name}]`).val(formDataPolicyBail[i].value);
+                if ((formDataPolicyBail[i].name === 'tomador_asegurado_poliza') && (formDataPolicyBail[i].value === true)) {
+                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyBail[i].value;
+                }
+                if ((formDataPolicyBail[i].name === 'tipo_canal_poliza') && (formDataPolicyBail[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptBail() {
+        let formDataReceiptBail = [];
+        localStorage.removeItem('formDataReceiptBail');
+        $('#receipt-form-bail input[type=text]').each(function(){
+            formDataReceiptBail.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-bail input[type=number]').each(function(){
+            formDataReceiptBail.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-bail input[type=date]').each(function(){
+            formDataReceiptBail.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-bail select').each(function(){
+            formDataReceiptBail.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-bail #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptBail.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptBail", JSON.stringify(formDataReceiptBail));
+    }
+    function getReceiptBail() {
+        if(localStorage.formDataReceiptBail !== undefined){
+            formDataReceiptBail = JSON.parse(localStorage.formDataReceiptBail);
+            for (var i = 0; i < formDataReceiptBail.length; i++) {
+                $(`[name=${formDataReceiptBail[i].name}]`).val(formDataReceiptBail[i].value);
+                if ((formDataReceiptBail[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptBail[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptBail[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionBail() {
+        let formCommissionBail = [];
+        localStorage.removeItem('formCommissionBail');
+        $('#commission-form-bail input[type=text]').each(function(){
+            formCommissionBail.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionBail", JSON.stringify(formCommissionBail));
+    }
+    function getCommissionBail() {
+        if(localStorage.formCommissionBail !== undefined){
+            formCommissionBail = JSON.parse(localStorage.formCommissionBail);
+            for (var i = 0; i < formCommissionBail.length; i++) {
+                $(`[name=${formCommissionBail[i].name}]`).val(formCommissionBail[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Otros Ramos -->
+<script>
+    function storeValuesPolicyAnotherBranch() {
+        let formDataPolicyAnotherBranch = [];
+        localStorage.removeItem('formDataPolicyAnotherBranch');
+        $('#policy-form-another-Branch input[type=text]').each(function(){
+            formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-another-Branch input[type=email]').each(function(){
+            formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-another-Branch input[type=date]').each(function(){
+            formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-another-Branch select').each(function(){
+            formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-another-Branch #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyAnotherBranch.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyAnotherBranch", JSON.stringify(formDataPolicyAnotherBranch));
+    }
+    function getPolicyAnotherBranch() {
+        if(localStorage.formDataPolicyAnotherBranch !== undefined){
+            formDataPolicyAnotherBranch = JSON.parse(localStorage.formDataPolicyAnotherBranch);
+            for (var i = 0; i < formDataPolicyAnotherBranch.length; i++) {
+                $(`[name=${formDataPolicyAnotherBranch[i].name}]`).val(formDataPolicyAnotherBranch[i].value);
+                if ((formDataPolicyAnotherBranch[i].name === 'tomador_asegurado_poliza') && (formDataPolicyAnotherBranch[i].value === true)) {
+                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyAnotherBranch[i].value;
+                }
+                if ((formDataPolicyAnotherBranch[i].name === 'tipo_canal_poliza') && (formDataPolicyAnotherBranch[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptAnotherBranch() {
+        let formDataReceiptAnotherBranch = [];
+        localStorage.removeItem('formDataReceiptAnotherBranch');
+        $('#receipt-form-another-branch input[type=text]').each(function(){
+            formDataReceiptAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-another-branch input[type=number]').each(function(){
+            formDataReceiptAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-another-branch input[type=date]').each(function(){
+            formDataReceiptAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-another-branch select').each(function(){
+            formDataReceiptAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-another-branch #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptAnotherBranch.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptAnotherBranch", JSON.stringify(formDataReceiptAnotherBranch));
+    }
+    function getReceiptAnotherBranch() {
+        if(localStorage.formDataReceiptAnotherBranch !== undefined){
+            formDataReceiptAnotherBranch = JSON.parse(localStorage.formDataReceiptAnotherBranch);
+            for (var i = 0; i < formDataReceiptAnotherBranch.length; i++) {
+                $(`[name=${formDataReceiptAnotherBranch[i].name}]`).val(formDataReceiptAnotherBranch[i].value);
+                if ((formDataReceiptAnotherBranch[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptAnotherBranch[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptAnotherBranch[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionAnotherBranch() {
+        let formCommissionAnotherBranch = [];
+        localStorage.removeItem('formCommissionAnotherBranch');
+        $('#commission-form-another-branch input[type=text]').each(function(){
+            formCommissionAnotherBranch.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionAnotherBranch", JSON.stringify(formCommissionAnotherBranch));
+    }
+    function getCommissionAnotherBranch() {
+        if(localStorage.formCommissionAnotherBranch !== undefined){
+            formCommissionAnotherBranch = JSON.parse(localStorage.formCommissionAnotherBranch);
+            for (var i = 0; i < formCommissionAnotherBranch.length; i++) {
+                $(`[name=${formCommissionAnotherBranch[i].name}]`).val(formCommissionAnotherBranch[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de AP -->
+<script>
+    function storeValuesPolicyAp() {
+        let formDataPolicyAp = [];
+        localStorage.removeItem('formDataPolicyAp');
+        $('#policy-form-ap input[type=text]').each(function(){
+            formDataPolicyAp.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-ap input[type=email]').each(function(){
+            formDataPolicyAp.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-ap input[type=date]').each(function(){
+            formDataPolicyAp.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-ap select').each(function(){
+            formDataPolicyAp.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-ap #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyAp.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyAp", JSON.stringify(formDataPolicyAp));
+    }
+    function getPolicyAp() {
+        if(localStorage.formDataPolicyAp !== undefined){
+            formDataPolicyAp = JSON.parse(localStorage.formDataPolicyAp);
+            for (var i = 0; i < formDataPolicyAp.length; i++) {
+                $(`[name=${formDataPolicyAp[i].name}]`).val(formDataPolicyAp[i].value);
+                if ((formDataPolicyAp[i].name === 'tomador_asegurado_poliza') && (formDataPolicyAp[i].value === true)) {
+                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyAp[i].value;
+                }
+                if ((formDataPolicyAp[i].name === 'tipo_canal_poliza') && (formDataPolicyAp[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptAp() {
+        let formDataReceiptAp = [];
+        localStorage.removeItem('formDataReceiptAp');
+        $('#receipt-form-ap input[type=text]').each(function(){
+            formDataReceiptAp.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-ap input[type=number]').each(function(){
+            formDataReceiptAp.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-ap input[type=date]').each(function(){
+            formDataReceiptAp.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-ap select').each(function(){
+            formDataReceiptAp.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-ap #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptAp.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptAp", JSON.stringify(formDataReceiptAp));
+    }
+    function getReceiptAp() {
+        if(localStorage.formDataReceiptAp !== undefined){
+            formDataReceiptAp = JSON.parse(localStorage.formDataReceiptAp);
+            for (var i = 0; i < formDataReceiptAp.length; i++) {
+                $(`[name=${formDataReceiptAp[i].name}]`).val(formDataReceiptAp[i].value);
+                if ((formDataReceiptAp[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptAp[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptAp[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionAp() {
+        let formCommissionAp = [];
+        localStorage.removeItem('formCommissionAp');
+        $('#commission-form-ap input[type=text]').each(function(){
+            formCommissionAp.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionAp", JSON.stringify(formCommissionAp));
+    }
+    function getCommissionAp() {
+        if(localStorage.formCommissionAp !== undefined){
+            formCommissionAp = JSON.parse(localStorage.formCommissionAp);
+            for (var i = 0; i < formCommissionAp.length; i++) {
+                $(`[name=${formCommissionAp[i].name}]`).val(formCommissionAp[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Viaje -->
+<script>
+    function storeValuesPolicyTravel() {
+        let formDataPolicyTravel = [];
+        localStorage.removeItem('formDataPolicyTravel');
+        $('#policy-form-travel input[type=text]').each(function(){
+            formDataPolicyTravel.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-travel input[type=email]').each(function(){
+            formDataPolicyTravel.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-travel input[type=date]').each(function(){
+            formDataPolicyTravel.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-travel select').each(function(){
+            formDataPolicyTravel.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-travel #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyTravel.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyTravel", JSON.stringify(formDataPolicyTravel));
+    }
+    function getPolicyTravel() {
+        if(localStorage.formDataPolicyTravel !== undefined){
+            formDataPolicyTravel = JSON.parse(localStorage.formDataPolicyTravel);
+            for (var i = 0; i < formDataPolicyTravel.length; i++) {
+                $(`[name=${formDataPolicyTravel[i].name}]`).val(formDataPolicyTravel[i].value);
+                if ((formDataPolicyTravel[i].name === 'tomador_asegurado_poliza') && (formDataPolicyTravel[i].value === true)) {
+                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyTravel[i].value;
+                }
+                if ((formDataPolicyTravel[i].name === 'tipo_canal_poliza') && (formDataPolicyTravel[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptTravel() {
+        let formDataReceiptTravel = [];
+        localStorage.removeItem('formDataReceiptTravel');
+        $('#receipt-form-travel input[type=text]').each(function(){
+            formDataReceiptTravel.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-travel input[type=number]').each(function(){
+            formDataReceiptTravel.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-travel input[type=date]').each(function(){
+            formDataReceiptTravel.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-travel select').each(function(){
+            formDataReceiptTravel.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-travel #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptTravel.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptTravel", JSON.stringify(formDataReceiptTravel));
+    }
+    function getReceiptTravel() {
+        if(localStorage.formDataReceiptTravel !== undefined){
+            formDataReceiptTravel = JSON.parse(localStorage.formDataReceiptTravel);
+            for (var i = 0; i < formDataReceiptTravel.length; i++) {
+                $(`[name=${formDataReceiptTravel[i].name}]`).val(formDataReceiptTravel[i].value);
+                if ((formDataReceiptTravel[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptTravel[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptTravel[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionTravel() {
+        let formCommissionTravel = [];
+        localStorage.removeItem('formCommissionTravel');
+        $('#commission-form-travel input[type=text]').each(function(){
+            formCommissionTravel.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionTravel", JSON.stringify(formCommissionTravel));
+    }
+    function getCommissionTravel() {
+        if(localStorage.formCommissionTravel !== undefined){
+            formCommissionTravel = JSON.parse(localStorage.formCommissionTravel);
+            for (var i = 0; i < formCommissionTravel.length; i++) {
+                $(`[name=${formCommissionTravel[i].name}]`).val(formCommissionTravel[i].value);
+            }
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function () {
-        new Cleave('.input-numeral', {
-            numeral: true,
-            numeralDecimalMark: ',',
-            delimiter: '.'
-        });
+        if ((document.getElementById("select_box").value === 'V') || (document.getElementById("select_box").value === 'E')) {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });
+        } else {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: '!',
+                delimiter: '',
+                stripLeadingZeroes: false
+            });
+        }
 
         $('#select_box').change(function(){
             if ((this.value === 'V') || (this.value === 'E')) {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: ',',
-                    delimiter: '.'
+                    delimiter: '.',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             } else {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: '!',
-                    delimiter: ''
+                    delimiter: '',
+                    stripLeadingZeroes: false,
                 });
                 cleaveNumeral.setRawValue('');
             }
         });
-        
-        new Cleave('.input-numeral2', {
-            numeral: true,
-            numeralDecimalMark: ',',
-            delimiter: '.'
-        });
+
+        if ((document.getElementById("select_box2").value === 'V') || (document.getElementById("select_box2").value === 'E')) {
+            var cleaveNumeral = new Cleave('.input-numeral2', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });
+        } else {
+            var cleaveNumeral = new Cleave('.input-numeral2', {
+                numeral: true,
+                numeralDecimalMark: '!',
+                delimiter: '',
+                stripLeadingZeroes: false
+            });
+        }
 
         $('#select_box2').change(function(){
             if ((this.value === 'V') || (this.value === 'E')) {
                 var cleaveNumeral = new Cleave('.input-numeral2', {
                     numeral: true,
                     numeralDecimalMark: ',',
-                    delimiter: '.'
+                    delimiter: '.',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             } else {
                 var cleaveNumeral = new Cleave('.input-numeral2', {
                     numeral: true,
                     numeralDecimalMark: '!',
-                    delimiter: ''
+                    delimiter: '',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             }
-        });   
+        });
+        
+        $('#fecha_desde_poliza').change(function () {
+            var extraer = $('#fecha_desde_poliza').val();
+            extraer = extraer.split('-');
+            year = parseInt(extraer[0]);
+            month = parseInt(extraer[1]) - 1;
+            day = parseInt(extraer[2]);
+            var fecha = moment([year, month, day]).add(1, 'years');
+            fecha = fecha.toISOString().substring(0, 10);
+            $('#fecha_hasta_poliza').val(fecha);
+        });
+
+        // Poliza Patrimonial
+        getPolicyPatrimonial();
+        getReceiptPatrimonial();
+        getCommissionPatrimonial();
+
+        // Poliza Fianza
+        getPolicyBail();
+        getReceiptBail();
+        getCommissionBail();
+
+        // Poliza Otros Ramos
+        getPolicyAnotherBranch();
+        getReceiptAnotherBranch();
+        getCommissionAnotherBranch();
+
+        // Poliza AP
+        getPolicyAp();
+        getReceiptAp();
+        getCommissionAp();
+
+        // Poliza Viaje
+        getPolicyTravel();
+        getReceiptTravel();
+        getCommissionTravel();
     });
 </script>
 
@@ -906,37 +1446,25 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $('#fecha_desde_poliza').change(function () {
-            var extraer = $('#fecha_desde_poliza').val();
-            extraer = extraer.split('-');
-            year = parseInt(extraer[0]);
-            month = parseInt(extraer[1]) - 1;
-            day = parseInt(extraer[2]);
-            var fecha = moment([year, month, day]).add(1, 'years');
-            fecha = fecha.toISOString().substring(0, 10);
-            $('#fecha_hasta_poliza').val(fecha);
-        });
-    });
-</script>
-
-<script>
     var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreTomador() {
         var idRif = document.getElementById("id_rif_tomador").value;
+        var selectBox = document.getElementById("select_box").value;
         var checkboxTomadorViejo = document.getElementById("tomador_asegurado_poliza").checked;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     document.getElementById("correo_tomador").value = elementLegalInsured.correo_asegurado_per_jur;
                     document.getElementById("nombre_tomador_poliza").value = elementLegalInsured.razon_social_per_jur;
                     if (checkboxTomadorViejo === true) {
+                        document.getElementById("select_box2").value = elementLegalInsured.tipo_rif_asegurado_per_jur;
                         document.getElementById("id_rif_asegurado").value = elementLegalInsured.rif_asegurado_per_jur;
                         document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
                         document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
                     } else {
+                        document.getElementById("select_box2").value = 'V';
                         document.getElementById("id_rif_asegurado").value = ''
                         document.getElementById("correo_asegurado").value = '';
                         document.getElementById("nombre_asegurado").value = '';
@@ -951,14 +1479,16 @@
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
                 if (idRif.match(/^\d/)) {
-                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    if ((selectBox === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                         document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_tomador_poliza").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         if (checkboxTomadorViejo === true) {
+                            document.getElementById("select_box2").value = elementNaturalInsured.tipo_cedula_asegurado_per_nat;
                             document.getElementById("id_rif_asegurado").value = elementNaturalInsured.cedula_asegurado_per_nat;
                             document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
                             document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         } else {
+                            document.getElementById("select_box2").value = 'V';
                             document.getElementById("id_rif_asegurado").value = ''
                             document.getElementById("correo_asegurado").value = '';
                             document.getElementById("nombre_asegurado").value = '';
@@ -982,10 +1512,11 @@
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreAsegurado() {
         var idRif = document.getElementById("id_rif_asegurado").value;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        var selectBox2 = document.getElementById("select_box2").value;
+        if ((selectBox2 === 'J') || (selectBox2 === 'G') || (selectBox2 === 'I') || (selectBox2 === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox2 === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
                     document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
                     break;
@@ -998,7 +1529,7 @@
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
                 if (idRif.match(/^\d/)) {
-                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    if ((selectBox2 === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                         document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         break;
@@ -1016,33 +1547,12 @@
 </script>
 
 <script>
-    function showInput() {
-        var getSelectValue = document.getElementById("maternidad_poliza").value;
-        if (getSelectValue === 'Sí') {
-            document.getElementById("searchinput").style.display = "block";
-        } else if (getSelectValue === 'No') {
-            document.getElementById("searchinput").style.display = "none";
-        }
-    }   
-</script>
-
-<script>
-    function showInput2() {
-        var getSelectValue = document.getElementById("plazo_espera_poliza").value;
-        if (getSelectValue === 'Sí') {
-            document.getElementById("searchinput2").style.display = "block";
-        } else if (getSelectValue === 'No') {
-            document.getElementById("searchinput2").style.display = "none";
-        }
-    }   
-</script>
-
-<script>
     function showList() {
         var getSelectValue = document.getElementById("tipo_canal_poliza").value;
         if (getSelectValue === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
         } else {
+            document.getElementById("nombre_agentes_propios").value = '';
             document.getElementById("searchList").style.display = "none";
         }
     }   

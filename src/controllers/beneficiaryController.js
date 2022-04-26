@@ -310,6 +310,7 @@ module.exports = {
                 let idCollective = await collectiveModel.getCollectiveLast();
                 let i, j;
                 let countHolder = 0;
+                let countCaa = 0;
                 let arrayData = [];
                 for (let k = 0; k < dataExcel.length; k += arrayData.length) {
                     const element = dataExcel[k];
@@ -333,6 +334,8 @@ module.exports = {
                     let cedulaBenef = '';
                     let idOwnAgent = '';
                     let birthday = '';
+                    let nombrePerNat = '';
+                    let apellidoPerNat = '';
                     const temparrayBeneficiary = [];
                     const temparrayNaturalInsured = [];
                     temparray = arrayData.slice(1, 1 + chunk).map(data => {
@@ -344,7 +347,8 @@ module.exports = {
                         return [
                                 data.Nombre, 
                                 data.Apellido, 
-                                data.Cedula, 
+                                data.Cedula,
+                                data['Tipo de Cedula'], 
                                 data['Fecha de nacimiento'],
                                 data.Parentesco,
                                 data['Dirección'],
@@ -361,7 +365,8 @@ module.exports = {
                             return [
                                 data.Nombre, 
                                 data.Apellido, 
-                                data.Cedula, 
+                                data.Cedula,
+                                data['Tipo de Cedula'], 
                                 data['Fecha de nacimiento'],
                                 data['Dirección'],
                                 data['Teléfono'],
@@ -374,19 +379,20 @@ module.exports = {
                         if (elementCedula !== undefined) {
                             cedulaBenef = elementCedula[2];
                             idOwnAgent = null;
-                            let dateString = String(elementCedula[3]);
+                            let dateString = String(elementCedula[4]);
                             let datePieces = dateString.split("/");
                             birthday = new Date(datePieces[2], (datePieces[1] - 1), datePieces[0]);
+                            nombrePerNat = elementCedula[0];
+                            apellidoPerNat = elementCedula[1];
                             let objectNaturalInsured = {
                                 cedula_asegurado_per_nat: cedulaBenef,
-                                nombre_asegurado_per_nat: elementCedula[0],
-                                apellido_asegurado_per_nat: elementCedula[1],
+                                tipo_cedula_asegurado_per_nat: elementCedula[3],
                                 telefono_asegurado_per_nat: null,
-                                correo_asegurado_per_nat: elementCedula[6],
-                                celular_per_nat: elementCedula[5],
+                                correo_asegurado_per_nat: elementCedula[7],
+                                celular_per_nat: elementCedula[6],
                                 nombre_emergencia_per_nat: null,
                                 telefono_emergencia_per_nat: null,
-                                direccion_asegurado_per_nat: elementCedula[4],
+                                direccion_asegurado_per_nat: elementCedula[5],
                             };
                             temparrayNaturalInsured.push(objectNaturalInsured);
                         }
@@ -411,7 +417,7 @@ module.exports = {
                             await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
                         }
                     } else {
-                        let naturalInsured = await insuredModel.postNaturalInsuredForm(birthday, idOwnAgent, temparrayNaturalInsured[0]);
+                        let naturalInsured = await insuredModel.postNaturalInsuredForm(birthday, idOwnAgent, nombrePerNat, apellidoPerNat, temparrayNaturalInsured[0]);
                         if (countHolder >= 2) {
                             let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
                             await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(naturalInsured.insertId, collectiveInsurerInsured[0].aseguradora_id, idCollective[0].id_colectivo);
@@ -423,9 +429,12 @@ module.exports = {
                     let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
                     for (let index = 0; index < temparray.length; index++) {
                         let beneficiaryId = beneficiary.insertId + index;
-                        temparrayBeneficiary.push([collectiveInsurerInsured[0].id_caa, beneficiaryId]);
+                        temparrayBeneficiary.push([collectiveInsurerInsured[countCaa].id_caa, beneficiaryId]);
                     }
                     await colInsInsurerBenefModel.postColInsuInsuredBenef(temparrayBeneficiary);
+                    if (element['Tipo de Cliente'] === 'TITULAR') {
+                        countCaa++;
+                    }
                 }
                 res.redirect('/sistema/add-health-collective');
             } else {

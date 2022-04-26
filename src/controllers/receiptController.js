@@ -7,6 +7,7 @@ const ownAgentModel = require('../models/own_agent');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const receiptInsuredModel = require('../models/receipt_insured');
+const executiveModel = require('../models/executive');
 
 module.exports = {
 /*                  GET                  */
@@ -53,27 +54,22 @@ module.exports = {
             } else {
                 resultReceipt.monto_comision_recibo = String(resultReceipt.monto_comision_recibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
+            resultReceipt.monto_comision_recibo = `${resultReceipt.monto_comision_recibo}%`;
             if (resultCollective.length === 0) {
                 if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     resultReceipt.monto_prima_recibo = `Bs ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `Bs ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                     resultReceipt.monto_prima_recibo = `$ ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `$ ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
                     resultReceipt.monto_prima_recibo = `€ ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `€ ${resultReceipt.monto_comision_recibo}`;
                 }
             } else {
                 if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     resultReceipt.monto_prima_recibo = `Bs ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `Bs ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     resultReceipt.monto_prima_recibo = `$ ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `$ ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
                     resultReceipt.monto_prima_recibo = `€ ${resultReceipt.monto_prima_recibo}`;
-                    resultReceipt.monto_comision_recibo = `€ ${resultReceipt.monto_comision_recibo}`;
                 }
             }
         }
@@ -87,6 +83,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -95,7 +95,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -149,6 +149,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -157,6 +161,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -165,7 +173,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -219,6 +227,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -227,6 +239,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -235,7 +251,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -289,6 +305,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -297,6 +317,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -305,7 +329,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -359,6 +383,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -367,6 +395,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -375,7 +407,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -429,6 +461,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -437,6 +473,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -445,7 +485,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -499,6 +539,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -507,6 +551,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -515,7 +563,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -569,6 +617,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -577,6 +629,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -585,7 +641,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -639,6 +695,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -647,6 +707,10 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsPolicies = await policyModel.getPolicies();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -655,7 +719,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -709,6 +773,10 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
+                policies: resultsPolicies,
                 name: req.session.name
             });
         }
@@ -717,6 +785,9 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -725,7 +796,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -783,6 +854,9 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -791,6 +865,9 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -799,7 +876,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -853,6 +930,9 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -861,6 +941,9 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsReceipts = await receiptModel.getReceipts();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -869,7 +952,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -923,6 +1006,9 @@ module.exports = {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
+                ownAgents: resultsOwnAgents,
+                executives: resultsExecutives,
+                receipts: resultsReceipts,
                 name: req.session.name
             });
         }
@@ -934,6 +1020,7 @@ module.exports = {
         let resultsCollectives = await collectiveModel.getCollectives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionAsociado = req.body.monto_comision_recibo;
@@ -943,7 +1030,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -977,7 +1064,7 @@ module.exports = {
                 montoComisionAsociado = montoComisionAsociado.replace(".", ",");
                 montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
             }
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1287,6 +1374,7 @@ module.exports = {
             ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         }
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
             let montoComisionRecibo = req.body.monto_comision_recibo;
@@ -1299,7 +1387,7 @@ module.exports = {
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionRecibo = montoComisionRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionRecibo = montoComisionRecibo.replace(/[%]/g, '').replace(' ', '');
             if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
                 montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
                 montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
@@ -1319,7 +1407,7 @@ module.exports = {
                 montoComisionRecibo = montoComisionRecibo.replace(".", ",");
                 montoComisionRecibo = parseFloat(montoComisionRecibo.replace(/,/g,''));
             }
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;

@@ -46,9 +46,9 @@ module.exports = {
 /*                  POST                 */
     postBeneficiaryForm: async (fechaNacBeneficiario, beneficiary) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Beneficiario (nombre_beneficiario, apellido_beneficiario, cedula_beneficiario, fec_nac_beneficiario, parentesco_beneficiario)
-                    VALUES (?, ?, ?, ?, ?)`, 
-            [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario], 
+            db.query(`INSERT INTO Beneficiario (nombre_beneficiario, apellido_beneficiario, cedula_beneficiario, tipo_cedula_beneficiario, fec_nac_beneficiario, parentesco_beneficiario)
+                    VALUES (?, ?, ?, ?, ?, ?)`, 
+            [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, beneficiary.tipo_cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -59,7 +59,7 @@ module.exports = {
     },
     postExtensiveBeneficiaryForm: async (temparray) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Beneficiario (nombre_beneficiario, apellido_beneficiario, cedula_beneficiario, fec_nac_beneficiario, parentesco_beneficiario, direccion_beneficiario, telefono_beneficiario, correo_beneficiario, banco_beneficiario, tipo_cuenta_beneficiario, nro_cuenta_beneficiario, tipo_movimiento_beneficiario)
+            db.query(`INSERT INTO Beneficiario (nombre_beneficiario, apellido_beneficiario, cedula_beneficiario, tipo_cedula_beneficiario, fec_nac_beneficiario, parentesco_beneficiario, direccion_beneficiario, telefono_beneficiario, correo_beneficiario, banco_beneficiario, tipo_cuenta_beneficiario, nro_cuenta_beneficiario, tipo_movimiento_beneficiario)
                     VALUES ?`, 
             [temparray], 
             (error, rows) => {

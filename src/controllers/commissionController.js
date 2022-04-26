@@ -6,7 +6,7 @@ module.exports = {
 /*                 POST                  */
     postVehicleCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision;
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -15,7 +15,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -93,10 +101,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -125,7 +132,7 @@ module.exports = {
     },
     postHealthCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -134,7 +141,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -212,10 +227,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -244,7 +258,7 @@ module.exports = {
     },
     postPatrimonialCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -253,7 +267,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -331,10 +353,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -363,7 +384,7 @@ module.exports = {
     },
     postBailCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -372,7 +393,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -450,10 +479,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -482,7 +510,7 @@ module.exports = {
     },
     postAnotherBranchCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -491,7 +519,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -569,10 +605,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -601,7 +636,7 @@ module.exports = {
     },
     postFuneralCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -610,7 +645,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -688,10 +731,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -720,7 +762,7 @@ module.exports = {
     },
     postLifeCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -729,7 +771,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -807,10 +857,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -839,7 +888,7 @@ module.exports = {
     },
     postAPCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -848,7 +897,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -926,10 +983,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -958,7 +1014,7 @@ module.exports = {
     },
     postTravelCommissionForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -967,7 +1023,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -1045,10 +1109,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -1077,7 +1140,7 @@ module.exports = {
     },
     postHealthCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -1086,7 +1149,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1165,10 +1236,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -1197,7 +1267,7 @@ module.exports = {
     },
     postVehicleCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -1206,7 +1276,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1285,10 +1363,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");
@@ -1317,7 +1394,7 @@ module.exports = {
     },
     postRiskDiverseCommissionCollectiveForm: async (req, res) => {
         let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision
+        let casoEspecialComision = req.body.caso_especial_comision;
         let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
         let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
         let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
@@ -1326,7 +1403,15 @@ module.exports = {
         let porcentajeSocioComision = req.body.porcentaje_socio_comision;
         let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
         let montoComision = req.body.monto_comision_comision;
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
+        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
+        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1405,10 +1490,9 @@ module.exports = {
             porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
             porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
         }
-        if (req.body.caso_especial_comision === '') {
+        if (casoEspecialComision === '') {
             casoEspecialComision = 0;
         } else {
-            casoEspecialComision = req.body.caso_especial_comision;
             if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
                 casoEspecialComision = casoEspecialComision.replace(",", ".");
                 casoEspecialComision = casoEspecialComision.replace(".", ",");

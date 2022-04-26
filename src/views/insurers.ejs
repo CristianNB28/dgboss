@@ -31,6 +31,7 @@
                         >
                         <thead>
                         <tr>
+                            <th>Tipo Rif</th>
                             <th>Rif</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
@@ -44,6 +45,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
+                            <th>Tipo Rif</th>
                             <th>Rif</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
@@ -126,6 +128,7 @@ $(document).ready(function(){
         processing: true,
         serverSide: false,
         columns: [
+            {"data": "tipo_rif_aseguradora"},
             {"data": "rif_aseguradora"},
             {"data": "nombre_aseguradora"},
             {"data": "telefono_aseguradora"},

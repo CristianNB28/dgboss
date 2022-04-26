@@ -757,6 +757,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -810,7 +811,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -820,7 +821,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -880,6 +881,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -951,7 +953,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -961,7 +963,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1021,6 +1023,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1074,7 +1077,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1084,7 +1087,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1144,6 +1147,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1197,7 +1201,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1207,7 +1211,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1267,6 +1271,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1320,7 +1325,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1330,7 +1335,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1390,6 +1395,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1443,7 +1449,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1453,7 +1459,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1513,6 +1519,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1566,7 +1573,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1576,7 +1583,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1636,6 +1643,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1689,7 +1697,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1699,7 +1707,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
@@ -1759,6 +1767,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
             let deducible = req.body.deducible_poliza;
@@ -1812,7 +1821,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -1822,7 +1831,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;

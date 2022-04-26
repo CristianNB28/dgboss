@@ -28,14 +28,24 @@
                             <div class="ibox">
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Rif</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-10 field">
+                                            <div class="numeral-selector selector">
+                                                <div class="select-box-wrapper">
+                                                    <select name="tipo_rif_aseguradora" id="select_box">
+                                                        <option value="<%= insurer.tipo_rif_aseguradora %>"><%= insurer.tipo_rif_aseguradora %></option>
+                                                        <option value="J">J</option>
+                                                        <option value="G">G</option>
+                                                        <option value="I">I</option>
+                                                        <option value="F">F</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <input 
                                                 type="text"
                                                 name="rif_aseguradora"
                                                 id="rif_aseguradora"
                                                 value="<%= insurer.rif_aseguradora %>"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                class="form-control input-numeral-rif"
                                                 required
                                             >
                                         </div>

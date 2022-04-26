@@ -24,7 +24,6 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-            let cedulaConductor = req.body.cedula_conductor;
             let gradoBlindaje;
             let montoBlindaje;
             let yearVehicle = new Date(req.body.year_vehiculo);
@@ -50,7 +49,7 @@ module.exports = {
                     montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
                 }
             }
-            let vehicle = await vehicleModel.postVehicleForm(blindaje, cedulaConductor, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
+            let vehicle = await vehicleModel.postVehicleForm(blindaje, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
             await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
             res.redirect('/sistema/add-vehicle-policy');
             throw new Error('Error');
@@ -138,6 +137,7 @@ module.exports = {
                             data['Carrocería'],
                             data.Carga,
                             data['Cédula'],
+                            data['Tipo de Cedula'],
                             data['Nombre y apellido'],
                             data['Suma Asegurada'],
                             data['Estatus (Emisión, renovación, inclusión)']

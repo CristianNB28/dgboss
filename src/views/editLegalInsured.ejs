@@ -12,7 +12,7 @@
                 <a>Asegurados</a>
             </li>
             <li class="breadcrumb-item active">
-                <strong>Agregar Asegurado Persona Jurídica</strong>
+                <strong>Editar Asegurado Persona Jurídica</strong>
             </li>
         </ol>
     </div>
@@ -28,14 +28,24 @@
                             <div class="ibox">
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Rif</label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 field">
+                                            <div class="numeral-selector selector">
+                                                <div class="select-box-wrapper">
+                                                    <select name="tipo_rif_asegurado_per_jur" id="select_box">
+                                                        <option value="<%= legalInsured.tipo_rif_asegurado_per_jur %>"><%= legalInsured.tipo_rif_asegurado_per_jur %></option>
+                                                        <option value="J">J</option>
+                                                        <option value="G">G</option>
+                                                        <option value="I">I</option>
+                                                        <option value="F">F</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <input 
                                                 type="text"
                                                 name="rif_asegurado_per_jur"
                                                 id="rif_asegurado_per_jur"
                                                 value="<%= legalInsured.rif_asegurado_per_jur %>" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                class="form-control input-numeral-rif"
                                                 required
                                             >
                                         </div>

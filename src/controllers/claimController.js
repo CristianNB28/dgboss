@@ -244,6 +244,7 @@ module.exports = {
     },
 /*                 POST                  */
     postRefundForm: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
         let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
@@ -287,7 +288,7 @@ module.exports = {
                 montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -316,6 +317,7 @@ module.exports = {
         });
     },
     postLetterGuaranteeForm: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
         let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
@@ -359,7 +361,7 @@ module.exports = {
                 montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -388,6 +390,7 @@ module.exports = {
         });
     },
     postEmergencyForm: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
         let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
@@ -431,7 +434,7 @@ module.exports = {
                 montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -460,6 +463,7 @@ module.exports = {
         });
     },
     postAMPForm: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoAMP = req.body.monto_reclamado_amp;
         let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
@@ -503,7 +507,7 @@ module.exports = {
                 montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -825,6 +829,7 @@ module.exports = {
         }
     },
     updateRefund: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
         let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
@@ -860,7 +865,7 @@ module.exports = {
                 montoPagadoReembolso = parseFloat(montoPagadoReembolso.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -871,6 +876,7 @@ module.exports = {
         res.redirect('/sistema');
     },
     updateLetterGuarentee: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
         let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
@@ -906,7 +912,7 @@ module.exports = {
                 montoPagadoCartaAval = parseFloat(montoPagadoCartaAval.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -917,6 +923,7 @@ module.exports = {
         res.redirect('/sistema');
     },
     updateEmergency: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
         let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
@@ -952,7 +959,7 @@ module.exports = {
                 montoPagadoEmergencia = parseFloat(montoPagadoEmergencia.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -963,6 +970,7 @@ module.exports = {
         res.redirect('/sistema');
     },
     updateAMP: async (req, res) => {
+        const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
         let montoReclamoAMP = req.body.monto_reclamado_amp;
         let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
@@ -998,7 +1006,7 @@ module.exports = {
                 montoPagadoAMP = parseFloat(montoPagadoAMP.replace(/,/g,''));
             }
         }
-        if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+        if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
             rifAseguradoJuridico = req.body.id_rif_asegurado;
         } else {
             cedulaAseguradoNatural = req.body.id_rif_asegurado;

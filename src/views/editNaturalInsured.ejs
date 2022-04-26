@@ -28,13 +28,22 @@
                             <div class="ibox">
                                 <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 field">
+                                            <div class="numeral-selector selector">
+                                                <div class="select-box-wrapper">
+                                                    <select name="tipo_cedula_asegurado_per_nat" id="select_box">
+                                                        <option value="<%= naturalInsured.tipo_cedula_asegurado_per_nat %>"><%= naturalInsured.tipo_cedula_asegurado_per_nat %></option>
+                                                        <option value="V">V</option>
+                                                        <option value="E">E</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <input 
                                                 type="text"
                                                 name="cedula_asegurado_per_nat"
                                                 id="cedula_asegurado_per_nat"
                                                 value="<%= naturalInsured.cedula_asegurado_per_nat %>" 
-                                                class="form-control cedula"
+                                                class="form-control input-numeral-cedula"
                                                 required
                                             >
                                         </div>

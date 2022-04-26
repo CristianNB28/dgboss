@@ -74,28 +74,50 @@
 
 <script>
     $(document).ready(function () {
-        new Cleave('.input-numeral', {
-            numeral: true,
-            numeralDecimalMark: ',',
-            delimiter: '.'
-        });
+        if ((document.getElementById("select_box").value === 'V') || (document.getElementById("select_box").value === 'E')) {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });
+        } else {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: '!',
+                delimiter: '',
+                stripLeadingZeroes: false
+            });
+        }
 
         $('#select_box').change(function(){
             if ((this.value === 'V') || (this.value === 'E')) {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: ',',
-                    delimiter: '.'
+                    delimiter: '.',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             } else {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: '!',
-                    delimiter: ''
+                    delimiter: '',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             }
+        });
+
+        $('.porcentaje_tasa').toArray().forEach(function(field) {
+            new Cleave(field, {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });
         });
     });
 </script>
@@ -109,23 +131,6 @@
             parteDecimal = entrada[1],
             salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
             e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-        }, false); 
-    }
-</script>
-
-<script>
-    var separador = document.getElementsByClassName('cedula_rif');
-    for (var i = 0 ; i < separador.length; i++) {
-        separador[i].addEventListener('input', (e) => {
-            var entrada = e.target.value.split(',');
-            var parteEntera = entrada[0].replace(/\./g, '');
-            var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-            if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                var parteRif = entrada[0];
-                e.target.value = parteRif;
-            } else {
-                e.target.value = salida;
-            }
         }, false); 
     }
 </script>
@@ -190,12 +195,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumMonthly);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -204,21 +203,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumMonthly);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -237,12 +224,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -251,21 +232,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -281,12 +250,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -295,21 +258,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -355,12 +306,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumBimonthly);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -369,21 +314,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumBimonthly);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -402,12 +335,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -416,21 +343,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -446,12 +361,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -460,21 +369,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -520,12 +417,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumQuarterly);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -534,21 +425,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumQuarterly);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -567,12 +446,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -581,21 +454,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -611,12 +472,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -625,21 +480,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -685,12 +528,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumBiannual);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -699,21 +536,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumBiannual);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -732,12 +557,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -746,21 +565,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -776,12 +583,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -790,21 +591,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -850,12 +639,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(annualPremium);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -864,21 +647,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(annualPremium);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -897,12 +668,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -911,21 +676,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -941,12 +694,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -955,21 +702,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -989,12 +724,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(receipt.monto_prima_recibo);
                         } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1003,21 +732,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(receipt.monto_prima_recibo);
                         } else if (policy.tipo_moneda_poliza === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1036,12 +753,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1050,21 +761,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1080,12 +779,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1094,21 +787,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1176,12 +857,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumMonthly);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1190,21 +865,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumMonthly);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1223,12 +886,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1237,21 +894,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1267,12 +912,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1281,21 +920,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumMonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1341,12 +968,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumBimonthly);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1355,21 +976,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumBimonthly);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1388,12 +997,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1402,21 +1005,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1432,12 +1023,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1446,21 +1031,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBimonthly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1506,12 +1079,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumQuarterly);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1520,21 +1087,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumQuarterly);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1553,12 +1108,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1567,21 +1116,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1597,12 +1134,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1611,21 +1142,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumQuarterly);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1671,12 +1190,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(premiumBiannual);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1685,21 +1198,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(premiumBiannual);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1718,12 +1219,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1732,21 +1227,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1762,12 +1245,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1776,21 +1253,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(premiumBiannual);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1836,12 +1301,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(annualPremium);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1850,21 +1309,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(annualPremium);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -1883,12 +1330,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1897,21 +1338,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1927,12 +1356,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -1941,21 +1364,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(annualPremium);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -1975,12 +1386,6 @@
                                 delimiter: '.',
                                 prefix: 'Bs ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: 'Bs ',
-                            });
                             cleave.setRawValue(receipt.monto_prima_recibo);
                         } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
                             let cleave = new Cleave("#monto_prima_recibo", {
@@ -1989,21 +1394,9 @@
                                 delimiter: '.',
                                 prefix: '$ ',
                             });
-                            new Cleave("#monto_comision_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '$ ',
-                            });
                             cleave.setRawValue(receipt.monto_prima_recibo);
                         } else if (collective.tipo_moneda_colectivo === 'EUROS') {
                             let cleave = new Cleave("#monto_prima_recibo", {
-                                numeral: true,
-                                numeralDecimalMark: ',',
-                                delimiter: '.',
-                                prefix: '€ ',
-                            });
-                            new Cleave("#monto_comision_recibo", {
                                 numeral: true,
                                 numeralDecimalMark: ',',
                                 delimiter: '.',
@@ -2022,12 +1415,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -2036,21 +1423,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -2066,12 +1441,6 @@
                                     delimiter: '.',
                                     prefix: 'Bs ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: 'Bs ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
@@ -2080,21 +1449,9 @@
                                     delimiter: '.',
                                     prefix: '$ ',
                                 });
-                                new Cleave("#monto_comision_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '$ ',
-                                });
                                 cleave.setRawValue(receipt.monto_prima_recibo);
                             } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                                 let cleave = new Cleave("#monto_prima_recibo", {
-                                    numeral: true,
-                                    numeralDecimalMark: ',',
-                                    delimiter: '.',
-                                    prefix: '€ ',
-                                });
-                                new Cleave("#monto_comision_recibo", {
                                     numeral: true,
                                     numeralDecimalMark: ',',
                                     delimiter: '.',
@@ -2131,12 +1488,6 @@
                         delimiter: '.',
                         prefix: 'Bs ',
                     });
-                    new Cleave("#monto_comision_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
                 } else if (arrayPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                     new Cleave("#monto_prima_recibo", {
                         numeral: true,
@@ -2144,20 +1495,8 @@
                         delimiter: '.',
                         prefix: '$ ',
                     });
-                    new Cleave("#monto_comision_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
                 } else if (arrayPolicy[0].tipo_moneda_poliza === 'EUROS') {
                     new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    new Cleave("#monto_comision_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
@@ -2172,12 +1511,6 @@
                         delimiter: '.',
                         prefix: 'Bs ',
                     });
-                    new Cleave("#monto_comision_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
                 } else if (arrayCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     new Cleave("#monto_prima_recibo", {
                         numeral: true,
@@ -2185,20 +1518,8 @@
                         delimiter: '.',
                         prefix: '$ ',
                     });
-                    new Cleave("#monto_comision_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
                 } else if (arrayCollective[0].tipo_moneda_colectivo === 'EUROS') {
                     new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    new Cleave("#monto_comision_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
@@ -2354,17 +1675,18 @@
     var ownAgents = <%- JSON.stringify(ownAgents) %>;
     function pasarAgentePropio() {
         let idRif = document.getElementById("id_rif_asegurado").value;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        var selectBox = document.getElementById("select_box").value;
+        if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     for (const ownAgent of ownAgents) { 
                         if (elementLegalInsured.agente_propio_id === ownAgent.id_agente_propio) {
                             document.getElementById("nombre_agente_propio").value = ownAgent.nombre_agente_propio + ' ' + ownAgent.apellido_agente_propio;
                             var percentajeOwnAgent = ownAgent.porcentaje_agente_propio
                             percentajeOwnAgent = percentajeOwnAgent.toFixed(2);
                             percentajeOwnAgent = percentajeOwnAgent.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                            document.getElementById("porcentaje_agente_propio").value = percentajeOwnAgent;
+                            document.getElementById("porcentaje_agente_propio").value = `${percentajeOwnAgent}%`;
                             break;
                         } else {
                             document.getElementById("nombre_agente_propio").value = '';
@@ -2384,14 +1706,14 @@
         } else {
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
-                if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                if ((selectBox === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                     for (const ownAgent of ownAgents) { 
                         if (elementNaturalInsured.agente_propio_id === ownAgent.id_agente_propio) {
                             document.getElementById("nombre_agente_propio").value = ownAgent.nombre_agente_propio + ' ' + ownAgent.apellido_agente_propio;
                             var percentajeOwnAgent = ownAgent.porcentaje_agente_propio
                             percentajeOwnAgent = percentajeOwnAgent.toFixed(2);
                             percentajeOwnAgent = percentajeOwnAgent.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                            document.getElementById("porcentaje_agente_propio").value = percentajeOwnAgent;
+                            document.getElementById("porcentaje_agente_propio").value = `${percentajeOwnAgent}%`;
                             break;
                         } else {
                             document.getElementById("nombre_agente_propio").value = '';
@@ -2423,7 +1745,7 @@
                 var percentajeOwnAgent = elementOwnAgent.porcentaje_agente_propio
                 percentajeOwnAgent = percentajeOwnAgent.toFixed(2);
                 percentajeOwnAgent = percentajeOwnAgent.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                document.getElementById("porcentaje_agente_propio").value = percentajeOwnAgent;
+                document.getElementById("porcentaje_agente_propio").value = `${percentajeOwnAgent}%`;
                 break;
             } else {
                 document.getElementById("porcentaje_agente_propio").value = '';

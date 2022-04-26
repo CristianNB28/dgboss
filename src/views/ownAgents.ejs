@@ -31,6 +31,7 @@
                         >
                         <thead>
                         <tr>
+                            <th>Tipo Cédula</th>
                             <th>Cédula</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
@@ -46,6 +47,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
+                            <th>Tipo Cédula</th>
                             <th>Cédula</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
@@ -130,6 +132,7 @@ $(document).ready(function(){
         processing: true,
         serverSide: false,
         columns: [
+            {"data": "tipo_cedula_agente_propio"},
             {"data": "cedula_agente_propio"},
             {"data": "nombre_agente_propio"},
             {"data": "apellido_agente_propio"},

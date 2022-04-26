@@ -56,7 +56,7 @@
         step: $.validator.format("Por favor, escribe un múltiplo de {0}")
     });
     function esRepetidoNumColectivo(value, element, param) {
-        let numberCollective = document.getElementById("numero_colectivo").value
+        let numberCollective = document.getElementById("numero_colectivo").value;
         const even = (collective) => collective.numero_colectivo === numberCollective;
         if (collectives.some(even) === true) {
             return false;
@@ -65,7 +65,7 @@
         }
     }
     function esRepetidoNumRecibo(value, element, param) {
-        let numberReceipt = document.getElementById("numero_recibo").value
+        let numberReceipt = document.getElementById("numero_recibo").value;
         const even = (receipt) => receipt.numero_recibo === numberReceipt;
         if (receipts.some(even) === true) {
             return false;
@@ -101,28 +101,47 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-health-collective").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-health-collective").valid();
                 } else if (newIndex === 2) {
                     $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#extra-form').valid();
                 } else if (newIndex === 3) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-health-collective').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-health-collective').valid();
                 } else if (newIndex === 4) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-health-collective').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-health-collective').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 3 && priorIndex === 4) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyHealth();
+                    $('#policy-form-health-collective').submit();
                 } else if (currentIndex === 2) {
                     $('#extra-form').submit();
                 } else if (currentIndex === 3) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptHealth();
+                    $('#receipt-form-health-collective').submit();
                 } else if (currentIndex === 4) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionHealth();
+                    $('#commission-form-health-collective').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -130,13 +149,14 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-health-collective .steps a:eq(0)').click();
                 $('#form-health-collective').hide();
                 $('#verification-form').submit();
             }
         });
         $().ready(function () {
-            $("#policy-form").validate({
+            $("#policy-form-health-collective").validate({
                 rules: {
                     numero_colectivo: {
                         esrepetidonumcolectivo: true
@@ -145,7 +165,7 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form").validate({
+            $("#receipt-form-health-collective").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -153,38 +173,32 @@
                 }
             });
         });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
-                    }
-                }, false); 
-            }    
+        $("#receipt-form-health-collective").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $("#commission-form-health-collective").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
 
 <script>
+    var collectives = <%- JSON.stringify(collectives) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -205,6 +219,26 @@
         min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
         step: $.validator.format("Por favor, escribe un múltiplo de {0}")
     });
+    function esRepetidoNumColectivo(value, element, param) {
+        let numberCollective = document.getElementById("numero_colectivo").value
+        const even = (collective) => collective.numero_colectivo === numberCollective;
+        if (collectives.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumcolectivo", esRepetidoNumColectivo, "Se repite el número de colectivo");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
     $(document).ready(function(){
         $("#wizard").steps();
         $("#form-vehicle-collective").steps({
@@ -231,28 +265,47 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-vehicle-collective").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-vehicle-collective").valid();
                 } else if (newIndex === 2) {
                     $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#extra-form').valid();
                 } else if (newIndex === 3) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-vehicle-collective').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-vehicle-collective').valid();
                 } else if (newIndex === 4) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-vehicle-collective').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-vehicle-collective').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 3 && priorIndex === 4) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyVehicle();
+                    $('#policy-form-vehicle-collective').submit();
                 } else if (currentIndex === 2) {
                     $('#extra-form').submit();
                 } else if (currentIndex === 3) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptVehicle();
+                    $('#receipt-form-vehicle-collective').submit();
                 } else if (currentIndex === 4) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionVehicle();
+                    $('#commission-form-vehicle-collective').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -260,55 +313,64 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-vehicle-collective .steps a:eq(0)').click();
                 $('#form-vehicle-collective').hide();
                 $('#verification-form').submit();
             }
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
+        $().ready(function () {
+            $("#policy-form-vehicle-collective").validate({
+                rules: {
+                    numero_colectivo: {
+                        esrepetidonumcolectivo: true
                     }
-                }, false); 
-            }    
+                }
+            });
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $().ready(function () {
+            $("#receipt-form-vehicle-collective").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#policy-form-vehicle-collective").on('keyup','.input-numeral2',function(){
+            new Cleave('.input-numeral2', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });   
+        });
+        $("#receipt-form-vehicle-collective").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+        $("#commission-form-vehicle-collective").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
 
 <script>
+    var collectives = <%- JSON.stringify(collectives) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -329,6 +391,26 @@
         min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
         step: $.validator.format("Por favor, escribe un múltiplo de {0}")
     });
+    function esRepetidoNumColectivo(value, element, param) {
+        let numberCollective = document.getElementById("numero_colectivo").value
+        const even = (collective) => collective.numero_colectivo === numberCollective;
+        if (collectives.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumcolectivo", esRepetidoNumColectivo, "Se repite el número de colectivo");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
     $(document).ready(function(){
         $("#wizard").steps();
         $("#form-risk-diverse").steps({
@@ -355,28 +437,47 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form").valid();
+                    $("#policy-form-risk-diverse").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-risk-diverse").valid();
                 } else if (newIndex === 2) {
                     $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
                     return $('#extra-form').valid();
                 } else if (newIndex === 3) {
-                    $('#receipt-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form').valid();
+                    $('#receipt-form-risk-diverse').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#receipt-form-risk-diverse').valid();
                 } else if (newIndex === 4) {
-                    $('#commission-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form').valid();
+                    $('#commission-form-risk-diverse').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#commission-form-risk-diverse').valid();
                 }
             },
             onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 3 && priorIndex === 4) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
                 if (currentIndex === 1) {
-                    $('#policy-form').submit();
+                    storeValuesPolicyRiskDiverse();
+                    $('#policy-form-risk-diverse').submit();
                 } else if (currentIndex === 2) {
                     $('#extra-form').submit();
                 } else if (currentIndex === 3) {
-                    $('#receipt-form').submit();
+                    storeValuesReceiptRiskDiverse();
+                    $('#receipt-form-risk-diverse').submit();
                 } else if (currentIndex === 4) {
-                    $('#commission-form').submit();
+                    storeValuesCommissionRiskDiverse();
+                    $('#commission-form-risk-diverse').submit();
                 }
             },
             onFinishing:(event, currentIndex) => {
@@ -384,50 +485,57 @@
                 return $('#verification-form').valid();
             },
             onFinished: (a) => {
+                localStorage.clear();
                 $('#form-risk-diverse .steps a:eq(0)').click();
                 $('#form-risk-diverse').hide();
                 $('#verification-form').submit();
             }
         });
-        $("#policy-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#policy-form").on('keyup','.cedula_rif',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(',');
-                    var parteEntera = entrada[0].replace(/\./g, '');
-                    var salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    if ((salida.charAt(0) === 'J') || (salida.charAt(0) === 'G') || (salida.charAt(0) === 'V')) {
-                        var parteRif = entrada[0];
-                        e.target.value = parteRif;
-                    } else {
-                        e.target.value = salida;
+        $().ready(function () {
+            $("#policy-form-risk-diverse").validate({
+                rules: {
+                    numero_colectivo: {
+                        esrepetidonumcolectivo: true
                     }
-                }, false); 
-            }    
+                }
+            });
         });
-        $("#commission-form").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
+        $().ready(function () {
+            $("#receipt-form-risk-diverse").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#policy-form-risk-diverse").on('keyup','.input-numeral2',function(){
+            new Cleave('.input-numeral2', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });   
+        });
+        $("#receipt-form-risk-diverse").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+        $("#commission-form-risk-diverse").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });
         });
     });
 </script>
@@ -446,55 +554,378 @@
     </script>
 <% } %>
 
+<!-- Poliza de Colectivo Salud -->
+<script>
+    function storeValuesPolicyHealth() {
+        let formDataPolicyHealth = [];
+        localStorage.removeItem('formDataPolicyHealth');
+        $('#policy-form-health-collective input[type=text]').each(function(){
+            formDataPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-collective input[type=email]').each(function(){
+            formDataPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-collective input[type=date]').each(function(){
+            formDataPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-collective select').each(function(){
+            formDataPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataPolicyHealth", JSON.stringify(formDataPolicyHealth));
+    }
+    function getPolicyHealth() {
+        if(localStorage.formDataPolicyHealth !== undefined){
+            formDataPolicyHealth = JSON.parse(localStorage.formDataPolicyHealth);
+            for (var i = 0; i < formDataPolicyHealth.length; i++) {
+                $(`[name=${formDataPolicyHealth[i].name}]`).val(formDataPolicyHealth[i].value);
+                if ((formDataPolicyHealth[i].name === 'maternidad_colectivo') && (formDataPolicyHealth[i].value === 'SÍ')) {
+                    document.getElementById("searchinput").style.display = "block";
+                }
+                if ((formDataPolicyHealth[i].name === 'plazo_espera_colectivo') && (formDataPolicyHealth[i].value === 'SÍ')) {
+                    document.getElementById("searchinput2").style.display = "block";
+                }
+                if ((formDataPolicyHealth[i].name === 'tipo_canal_colectivo') && (formDataPolicyHealth[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptHealth() {
+        let formDataReceiptHealth = [];
+        localStorage.removeItem('formDataReceiptHealth');
+        $('#receipt-form-health-collective input[type=text]').each(function(){
+            formDataReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective input[type=number]').each(function(){
+            formDataReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective input[type=date]').each(function(){
+            formDataReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective select').each(function(){
+            formDataReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptHealth.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptHealth", JSON.stringify(formDataReceiptHealth));
+    }
+    function getReceiptHealth() {
+        if(localStorage.formDataReceiptHealth !== undefined){
+            formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
+            for (var i = 0; i < formDataReceiptHealth.length; i++) {
+                $(`[name=${formDataReceiptHealth[i].name}]`).val(formDataReceiptHealth[i].value);
+                if ((formDataReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptHealth[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptHealth[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionHealth() {
+        let formCommissionHealth = [];
+        localStorage.removeItem('formCommissionHealth');
+        $('#commission-form-health-collective input[type=text]').each(function(){
+            formCommissionHealth.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionHealth", JSON.stringify(formCommissionHealth));
+    }
+    function getCommissionHealth() {
+        if(localStorage.formCommissionHealth !== undefined){
+            formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
+            for (var i = 0; i < formCommissionHealth.length; i++) {
+                $(`[name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Colectivo Vehiculo -->
+<script>
+    function storeValuesPolicyVehicle() {
+        let formDataPolicyVehicle = [];
+        localStorage.removeItem('formDataPolicyVehicle');
+        $('#policy-form-vehicle-collective input[type=text]').each(function(){
+            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-collective input[type=email]').each(function(){
+            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-collective input[type=date]').each(function(){
+            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-collective select').each(function(){
+            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-collective #tomador_asegurado_colectivo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyVehicle.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyVehicle", JSON.stringify(formDataPolicyVehicle));
+    }
+    function getPolicyVehicle() {
+        if(localStorage.formDataPolicyVehicle !== undefined){
+            formDataPolicyVehicle = JSON.parse(localStorage.formDataPolicyVehicle);
+            for (var i = 0; i < formDataPolicyVehicle.length; i++) {
+                $(`[name=${formDataPolicyVehicle[i].name}]`).val(formDataPolicyVehicle[i].value);
+                if ((formDataPolicyVehicle[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyVehicle[i].value === true)) {
+                    document.getElementById("tomador_asegurado_colectivo").checked = formDataPolicyVehicle[i].value;
+                }
+                if ((formDataPolicyVehicle[i].name === 'tipo_canal_colectivo') && (formDataPolicyVehicle[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptVehicle() {
+        let formDataReceiptVehicle = [];
+        localStorage.removeItem('formDataReceiptVehicle');
+        $('#receipt-form-vehicle-collective input[type=text]').each(function(){
+            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective input[type=number]').each(function(){
+            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective input[type=date]').each(function(){
+            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective select').each(function(){
+            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptVehicle.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptVehicle", JSON.stringify(formDataReceiptVehicle));
+    }
+    function getReceiptVehicle() {
+        if(localStorage.formDataReceiptVehicle !== undefined){
+            formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
+            for (var i = 0; i < formDataReceiptVehicle.length; i++) {
+                $(`[name=${formDataReceiptVehicle[i].name}]`).val(formDataReceiptVehicle[i].value);
+                if ((formDataReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptVehicle[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptVehicle[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionVehicle() {
+        let formCommissionVehicle = [];
+        localStorage.removeItem('formCommissionVehicle');
+        $('#commission-form-vehicle-collective input[type=text]').each(function(){
+            formCommissionVehicle.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionVehicle", JSON.stringify(formCommissionVehicle));
+    }
+    function getCommissionVehicle() {
+        if(localStorage.formCommissionVehicle !== undefined){
+            formCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
+            for (var i = 0; i < formCommissionVehicle.length; i++) {
+                $(`[name=${formCommissionVehicle[i].name}]`).val(formCommissionVehicle[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Colectivo Riesgos Diversos -->
+<script>
+    function storeValuesPolicyRiskDiverse() {
+        let formDataPolicyRiskDiverse = [];
+        localStorage.removeItem('formDataPolicyRiskDiverse');
+        $('#policy-form-risk-diverse input[type=text]').each(function(){
+            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-risk-diverse input[type=email]').each(function(){
+            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-risk-diverse input[type=date]').each(function(){
+            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-risk-diverse select').each(function(){
+            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-risk-diverse #tomador_asegurado_colectivo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyRiskDiverse.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataPolicyRiskDiverse", JSON.stringify(formDataPolicyRiskDiverse));
+    }
+    function getPolicyRiskDiverse() {
+        if(localStorage.formDataPolicyRiskDiverse !== undefined){
+            formDataPolicyRiskDiverse = JSON.parse(localStorage.formDataPolicyRiskDiverse);
+            for (var i = 0; i < formDataPolicyRiskDiverse.length; i++) {
+                $(`[name=${formDataPolicyRiskDiverse[i].name}]`).val(formDataPolicyRiskDiverse[i].value);
+                if ((formDataPolicyRiskDiverse[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyRiskDiverse[i].value === true)) {
+                    document.getElementById("tomador_asegurado_colectivo").checked = formDataPolicyRiskDiverse[i].value;
+                }
+                if ((formDataPolicyRiskDiverse[i].name === 'tipo_canal_colectivo') && (formDataPolicyRiskDiverse[i].value === 'AGENTE PROPIO')) {
+                    document.getElementById("searchList").style.display = "block";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesReceiptRiskDiverse() {
+        let formDataReceiptRiskDiverse = [];
+        localStorage.removeItem('formDataReceiptRiskDiverse');
+        $('#receipt-form-risk-diverse input[type=text]').each(function(){
+            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse input[type=number]').each(function(){
+            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse input[type=date]').each(function(){
+            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse select').each(function(){
+            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataReceiptRiskDiverse.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataReceiptRiskDiverse", JSON.stringify(formDataReceiptRiskDiverse));
+    }
+    function getReceiptRiskDiverse() {
+        if(localStorage.formDataReceiptRiskDiverse !== undefined){
+            formDataReceiptRiskDiverse = JSON.parse(localStorage.formDataReceiptRiskDiverse);
+            for (var i = 0; i < formDataReceiptRiskDiverse.length; i++) {
+                $(`[name=${formDataReceiptRiskDiverse[i].name}]`).val(formDataReceiptRiskDiverse[i].value);
+                if ((formDataReceiptRiskDiverse[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptRiskDiverse[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptRiskDiverse[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesCommissionRiskDiverse() {
+        let formCommissionRiskDiverse = [];
+        localStorage.removeItem('formCommissionRiskDiverse');
+        $('#commission-form-risk-diverse input[type=text]').each(function(){
+            formCommissionRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formCommissionRiskDiverse", JSON.stringify(formCommissionRiskDiverse));
+    }
+    function getCommissionRiskDiverse() {
+        if(localStorage.formCommissionRiskDiverse !== undefined){
+            formCommissionRiskDiverse = JSON.parse(localStorage.formCommissionRiskDiverse);
+            for (var i = 0; i < formCommissionRiskDiverse.length; i++) {
+                $(`[name=${formCommissionRiskDiverse[i].name}]`).val(formCommissionRiskDiverse[i].value);
+            }
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function () {
-        new Cleave('.input-numeral', {
-            numeral: true,
-            numeralDecimalMark: ',',
-            delimiter: '.'
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
+
+        $('#fecha_desde_colectivo').change(function () {
+            var extraer = $('#fecha_desde_colectivo').val();
+            extraer = extraer.split('-');
+            year = parseInt(extraer[0]);
+            month = parseInt(extraer[1]) - 1;
+            day = parseInt(extraer[2]);
+            var fecha = moment([year, month, day]).add(1, 'years');
+            fecha = fecha.toISOString().substring(0, 10);
+            $('#fecha_hasta_colectivo').val(fecha);
+        });
+
+        if ((document.getElementById("select_box").value === 'V') || (document.getElementById("select_box").value === 'E')) {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });
+        } else {
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: '!',
+                delimiter: '',
+                stripLeadingZeroes: false
+            });
+        }
 
         $('#select_box').change(function(){
             if ((this.value === 'V') || (this.value === 'E')) {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: ',',
-                    delimiter: '.'
+                    delimiter: '.',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             } else {
                 var cleaveNumeral = new Cleave('.input-numeral', {
                     numeral: true,
                     numeralDecimalMark: '!',
-                    delimiter: ''
+                    delimiter: '',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             }
         });
         
-        new Cleave('.input-numeral2', {
-            numeral: true,
-            numeralDecimalMark: ',',
-            delimiter: '.'
-        });
-
         $('#select_box2').change(function(){
             if ((this.value === 'V') || (this.value === 'E')) {
                 var cleaveNumeral = new Cleave('.input-numeral2', {
                     numeral: true,
                     numeralDecimalMark: ',',
-                    delimiter: '.'
+                    delimiter: '.',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             } else {
                 var cleaveNumeral = new Cleave('.input-numeral2', {
                     numeral: true,
                     numeralDecimalMark: '!',
-                    delimiter: ''
+                    delimiter: '',
+                    stripLeadingZeroes: false
                 });
                 cleaveNumeral.setRawValue('');
             }
-        });   
+        });
+
+        // Poliza Colectivo Salud
+        getPolicyHealth();
+        getReceiptHealth();
+        getCommissionHealth();
+
+        // Poliza Colectivo Vehiculo
+        getPolicyVehicle();
+        getReceiptVehicle();
+        getCommissionVehicle();
+
+        // Poliza Colectivo Riesgos Diversos
+        getPolicyRiskDiverse();
+        getReceiptRiskDiverse();
+        getCommissionRiskDiverse();
     });
 </script>
 
@@ -508,37 +939,25 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $('#fecha_desde_colectivo').change(function () {
-            var extraer = $('#fecha_desde_colectivo').val();
-            extraer = extraer.split('-');
-            year = parseInt(extraer[0]);
-            month = parseInt(extraer[1]) - 1;
-            day = parseInt(extraer[2]);
-            var fecha = moment([year, month, day]).add(1, 'years');
-            fecha = fecha.toISOString().substring(0, 10);
-            $('#fecha_hasta_colectivo').val(fecha);
-        });
-    });
-</script>
-
-<script>
     var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreTomador() {
         var idRif = document.getElementById("id_rif_tomador").value;
+        var selectBox = document.getElementById("select_box").value;
         var checkboxTomadorViejo = document.getElementById("tomador_asegurado_colectivo").checked;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     document.getElementById("correo_tomador").value = elementLegalInsured.correo_asegurado_per_jur;
                     document.getElementById("nombre_tomador_colectivo").value = elementLegalInsured.razon_social_per_jur;
                     if (checkboxTomadorViejo === true) {
+                        document.getElementById("select_box2").value = elementLegalInsured.tipo_rif_asegurado_per_jur;
                         document.getElementById("id_rif_asegurado").value = elementLegalInsured.rif_asegurado_per_jur;
                         document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
                         document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
                     } else {
+                        document.getElementById("select_box2").value = 'V';
                         document.getElementById("id_rif_asegurado").value = ''
                         document.getElementById("correo_asegurado").value = '';
                         document.getElementById("nombre_asegurado").value = '';
@@ -553,14 +972,16 @@
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
                 if (idRif.match(/^\d/)) {
-                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    if ((selectBox === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                         document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_tomador_colectivo").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         if (checkboxTomadorViejo === true) {
+                            document.getElementById("select_box2").value = elementNaturalInsured.tipo_cedula_asegurado_per_nat;
                             document.getElementById("id_rif_asegurado").value = elementNaturalInsured.cedula_asegurado_per_nat;
                             document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
                             document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         } else {
+                            document.getElementById("select_box2").value = 'V';
                             document.getElementById("id_rif_asegurado").value = ''
                             document.getElementById("correo_asegurado").value = '';
                             document.getElementById("nombre_asegurado").value = '';
@@ -584,10 +1005,11 @@
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreAsegurado() {
         var idRif = document.getElementById("id_rif_asegurado").value;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        var selectBox2 = document.getElementById("select_box2").value;
+        if ((selectBox2 === 'J') || (selectBox2 === 'G') || (selectBox2 === 'I') || (selectBox2 === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox2 === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     document.getElementById("correo_asegurado").value = elementLegalInsured.correo_asegurado_per_jur;
                     document.getElementById("nombre_asegurado").value = elementLegalInsured.razon_social_per_jur;
                     break;
@@ -600,7 +1022,7 @@
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
                 if (idRif.match(/^\d/)) {
-                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    if ((selectBox2 === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                         document.getElementById("correo_asegurado").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_asegurado").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         break;
@@ -622,10 +1044,11 @@
     var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
     function pasarNombreTomador2() {
         var idRif = document.getElementById("id_rif_tomador").value;
-        if (idRif.startsWith('J') || idRif.startsWith('G')) {
+        var selectBox = document.getElementById("select_box").value;
+        if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
             for (let i = 0; i < legalInsureds.length; i++) {
                 let elementLegalInsured = legalInsureds[i];
-                if (idRif === elementLegalInsured.rif_asegurado_per_jur) {
+                if ((selectBox === elementLegalInsured.tipo_rif_asegurado_per_jur) && (idRif === elementLegalInsured.rif_asegurado_per_jur)) {
                     document.getElementById("correo_tomador").value = elementLegalInsured.correo_asegurado_per_jur;
                     document.getElementById("nombre_tomador_colectivo").value = elementLegalInsured.razon_social_per_jur;
                     break;
@@ -638,7 +1061,7 @@
             for (let i = 0; i < naturalInsureds.length; i++) {
                 let elementNaturalInsured = naturalInsureds[i];
                 if (idRif.match(/^\d/)) {
-                    if (idRif === elementNaturalInsured.cedula_asegurado_per_nat) {
+                    if ((selectBox === elementNaturalInsured.tipo_cedula_asegurado_per_nat) && (idRif === elementNaturalInsured.cedula_asegurado_per_nat)) {
                         document.getElementById("correo_tomador").value = elementNaturalInsured.correo_asegurado_per_nat;
                         document.getElementById("nombre_tomador_colectivo").value = elementNaturalInsured.nombre_asegurado_per_nat + ' ' + elementNaturalInsured.apellido_asegurado_per_nat;
                         break;
@@ -661,6 +1084,7 @@
         if (getSelectValue === 'SÍ') {
             document.getElementById("searchinput").style.display = "block";
         } else if (getSelectValue === 'NO') {
+            document.getElementById("cobertura_suma_asegurada_colectivo").value = '';
             document.getElementById("searchinput").style.display = "none";
         }
     }   
@@ -672,6 +1096,7 @@
         if (getSelectValue === 'SÍ') {
             document.getElementById("searchinput2").style.display = "block";
         } else if (getSelectValue === 'NO') {
+            document.getElementById("detalle_cliente_colectivo").value = '';
             document.getElementById("searchinput2").style.display = "none";
         }
     }   
@@ -683,6 +1108,7 @@
         if (getSelectValue === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
         } else {
+            document.getElementById("nombre_agentes_propios").value = '';
             document.getElementById("searchList").style.display = "none";
         }
     }   
@@ -1034,7 +1460,6 @@
 
     <script>
         var collective = <%- JSON.stringify(collective) %>;
-        console.log(collective)
         window.onload = function() {
             if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
@@ -1067,15 +1492,6 @@
         }   
     </script>
 <% } %>
-
-<script>
-    $(document).ready(function(){
-        $('.custom-file-input').on('change', function() {
-            let fileName = $(this).val().split('\\').pop();
-            $(this).next('.custom-file-label').addClass("selected").html(fileName);
-        });
-    }); 
-</script>
 
 </body>
 

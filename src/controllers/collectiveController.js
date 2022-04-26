@@ -395,14 +395,21 @@ module.exports = {
         let valoresAceptados = /^[0-9]+$/;
         let idCollective = req.params.id;
         if (idCollective.match(valoresAceptados)) {
+            let resultCIIBeneficiary = [];
             let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
             let resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(resultCII[0].id_caa);
             let resultsCIIV = await colInsInsurerVehi.getColInsuInsuredVehi(resultCII[0].id_caa);
             let resultsCIIRD = await colInsInsurerRiskDiver.getColInsuInsuredRiesDiver(resultCII[0].id_caa);
             if ((resultsCIIV.length === 0) && (resultsCIIRD.length === 0)) {
                 let resultsBeneficiaries = [];
-                for (const resultCIIB of resultsCIIB) {
-                    let resultBenefiary = await beneficiaryModel.getBeneficiary(resultCIIB.beneficiario_id);
+                for (let index = 0; index < resultCII.length; index++) {
+                    const elementCII = resultCII[index];
+                    resultsCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(elementCII.id_caa);
+                    resultCIIBeneficiary.push(resultsCIIB.map((ciib) => ciib.beneficiario_id));
+                    resultCIIBeneficiary = resultCIIBeneficiary.flat(1);
+                }
+                for (const ciiBeneficiary of resultCIIBeneficiary) {
+                    let resultBenefiary = await beneficiaryModel.getBeneficiary(ciiBeneficiary);
                     resultsBeneficiaries.push(resultBenefiary[0]);
                 }
                 res.render('beneficiaries', {
@@ -473,7 +480,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -570,6 +577,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
             let arrayEjecutivo = [];
@@ -587,7 +595,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -597,7 +605,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -679,6 +687,7 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
             let arrayEjecutivo = [];
@@ -696,7 +705,7 @@ module.exports = {
             let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
             let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
             diasExpiracion = diferenciaDias.toFixed(0);
-            if ((req.body.id_rif_asegurado.startsWith('J')) || (req.body.id_rif_asegurado.startsWith('G'))) {
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
@@ -706,7 +715,7 @@ module.exports = {
             } else {
                 estatusPoliza = 'ANULADO';
             }
-            arrayEjecutivo = [req.body.nombre_ejecutivos_suscripcion, req.body.nombre_ejecutivos_siniestros, req.body.nombre_ejecutivos_cobranzas];
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");

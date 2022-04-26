@@ -29,7 +29,7 @@
                     <div id="form-risk-diverse" class="wizard-big wizard-health">
                         <h1><i class="fa fa-window-maximize"></i> Colectivo</h1>
                         <fieldset>
-                            <form id="policy-form" action="/sistema/add-risk-diverse-collective" method="POST">
+                            <form id="policy-form-risk-diverse" action="/sistema/add-risk-diverse-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -52,7 +52,7 @@
                                                 <div class="col-sm-9 field">
                                                     <div class="numeral-selector selector">
                                                         <div class="select-box-wrapper">
-                                                            <select id="select_box">
+                                                            <select name="tipo_id_rif_tomador" id="select_box">
                                                                 <option value="V">V</option>
                                                                 <option value="E">E</option>
                                                                 <option value="J">J</option>
@@ -117,7 +117,7 @@
                                                 <div class="col-sm-9 field">
                                                     <div class="numeral-selector selector">
                                                         <div class="select-box-wrapper">
-                                                            <select id="select_box2">
+                                                            <select name="tipo_id_rif_asegurado" id="select_box2">
                                                                 <option value="V">V</option>
                                                                 <option value="E">E</option>
                                                                 <option value="J">J</option>
@@ -278,7 +278,7 @@
                                         <div class="form-group" id="searchList" style="display:none">
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios">
+                                                    <select class="form-control" name="nombre_agentes_propios" id="nombre_agentes_propios">
                                                         <option value="">Seleccione</option>
                                                         <% ownAgents.forEach((ownAgent) => { %>
                                                             <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
@@ -288,12 +288,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Suscripción</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Coordinador Suscripción</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_suscripcion" required>
+                                                    <select class="form-control" name="nombre_ejecutivo_coordinador" required>
                                                         <option value="">Seleccione *</option>
                                                         <% executives.forEach((executive) => { %>
-                                                            <% if (executive.tipo_ejecutivo === 'SUSCRIPCIÓN') { %>
+                                                            <% if (executive.departamento_cargo_ejecutivo === 'SUSCRIPCIÓN COLECTIVO') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
                                                             <% } %>
                                                         <% }); %>
@@ -302,12 +302,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Siniestros</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo de Suscripción</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_siniestros" required>
+                                                    <select class="form-control" name="nombre_ejecutivo_suscripcion" required>
                                                         <option value="">Seleccione *</option>
                                                         <% executives.forEach((executive) => { %>
-                                                            <% if (executive.tipo_ejecutivo === 'SINIESTROS') { %>
+                                                            <% if (executive.departamento_cargo_ejecutivo === 'SUSCRIPCIÓN') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
                                                             <% } %>
                                                         <% }); %>
@@ -316,12 +316,26 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivos de Cobranzas</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo de Siniestros</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_ejecutivos_cobranzas" required>
+                                                    <select class="form-control" name="nombre_ejecutivo_siniestros" required>
                                                         <option value="">Seleccione *</option>
                                                         <% executives.forEach((executive) => { %>
-                                                            <% if (executive.tipo_ejecutivo === 'COBRANZAS') { %>
+                                                            <% if (executive.departamento_cargo_ejecutivo === 'SINIESTROS') { %>
+                                                                <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Ejecutivo de Cobranzas</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" name="nombre_ejecutivo_cobranzas" required>
+                                                        <option value="">Seleccione *</option>
+                                                        <% executives.forEach((executive) => { %>
+                                                            <% if (executive.departamento_cargo_ejecutivo === 'COBRANZAS') { %>
                                                                 <option value="<%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %>"><%= executive.nombre_ejecutivo %> <%= executive.apellido_ejecutivo %></option>
                                                             <% } %>
                                                         <% }); %>
@@ -363,7 +377,7 @@
                         </fieldset>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
-                            <form id="receipt-form" action="/sistema/add-risk-receipt-collective" method="POST">
+                            <form id="receipt-form-risk-diverse" action="/sistema/add-risk-receipt-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -534,7 +548,7 @@
                                                         name="monto_comision_recibo"
                                                         id="monto_comision_recibo"
                                                         placeholder="Comisión Asociada *" 
-                                                        class="form-control currency_format_number"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -546,7 +560,7 @@
                         </fieldset>
                         <h1><i class="fa fa-usd"></i> Comisión</h1>
                         <fieldset>
-                            <form id="commission-form" action="/sistema/add-risk-commission-collective" method="POST">
+                            <form id="commission-form-risk-diverse" action="/sistema/add-risk-commission-collective" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -558,7 +572,7 @@
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
                                                             value="<%= porcentajeAgentePropio %>"
-                                                            class="form-control number_format"
+                                                            class="form-control porcentaje_tasa"
                                                             required
                                                         >
                                                     </div>
@@ -571,7 +585,7 @@
                                                             name="porcentaje_agente_comision"
                                                             id="porcentaje_agente_comision"
                                                             value="0"
-                                                            class="form-control number_format"
+                                                            class="form-control porcentaje_tasa"
                                                             required
                                                         >
                                                     </div>
@@ -586,7 +600,7 @@
                                                         name="caso_especial_comision"
                                                         id="caso_especial_comision"
                                                         placeholder="Porcentaje Caso Especial" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                     >
                                                 </div>
                                             </div>
@@ -599,7 +613,7 @@
                                                         name="porcentaje_ejecutivo_suscripcion"
                                                         id="porcentaje_ejecutivo_suscripcion"
                                                         placeholder="Porcentaje Ejecutivo de Suscripción *" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -613,7 +627,7 @@
                                                         name="porcentaje_ejecutivo_siniestro"
                                                         id="porcentaje_ejecutivo_siniestro"
                                                         placeholder="Porcentaje Ejecutivo de Siniestros *" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -627,7 +641,7 @@
                                                         name="porcentaje_fundatina_comision"
                                                         id="porcentaje_fundatina_comision"
                                                         value="0,35" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -643,7 +657,7 @@
                                                         name="porcentaje_director_comision"
                                                         id="porcentaje_director_comision"
                                                         value="2,5" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -657,7 +671,7 @@
                                                         name="porcentaje_socio_comision"
                                                         id="porcentaje_socio_comision"
                                                         value="2,5" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -671,7 +685,7 @@
                                                         name="porcentaje_ejecutivo_cobranza"
                                                         id="porcentaje_ejecutivo_cobranza"
                                                         placeholder="Porcentaje Ejecutivo de Cobranzas *" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -685,7 +699,7 @@
                                                         name="porcentaje_atina_comision"
                                                         id="porcentaje_atina_comision"
                                                         placeholder="Porcentaje Atina *" 
-                                                        class="form-control number_format"
+                                                        class="form-control porcentaje_tasa"
                                                         required
                                                     >
                                                 </div>
@@ -700,7 +714,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             value="<%= comisionRecibo %>" 
-                                                            class="form-control currency_format_number"
+                                                            class="form-control porcentaje_tasa"
                                                             required
                                                         >
                                                     </div>
@@ -715,7 +729,7 @@
                                                             name="monto_comision_comision"
                                                             id="monto_comision_comision"
                                                             placeholder="Comisión Asociada *" 
-                                                            class="form-control currency_format_number"
+                                                            class="form-control porcentaje_tasa"
                                                             required
                                                         >
                                                     </div>

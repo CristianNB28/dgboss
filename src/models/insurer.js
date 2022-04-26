@@ -4,7 +4,7 @@ module.exports = {
 /*                  GET                  */
     getInsurers: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_aseguradora, rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora FROM Aseguradora WHERE deshabilitar_aseguradora=0', 
+            db.query('SELECT id_aseguradora, tipo_rif_aseguradora, rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora FROM Aseguradora WHERE deshabilitar_aseguradora=0', 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -15,7 +15,7 @@ module.exports = {
     },
     getInsurer: (idInsurer) => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_aseguradora, rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora FROM Aseguradora WHERE id_aseguradora=?', 
+            db.query('SELECT id_aseguradora, tipo_rif_aseguradora, rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora FROM Aseguradora WHERE id_aseguradora=?', 
             [idInsurer],
             (error, rows) => {
                 if (error) {
@@ -28,8 +28,9 @@ module.exports = {
 /*                  POST                 */
     postInsurerForm: (insurer) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Aseguradora (rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora)
-                    VALUES (?, ?, ?, ?)`, [insurer.rif_aseguradora, insurer.nombre_aseguradora, insurer.telefono_aseguradora, insurer.direccion_aseguradora], 
+            db.query(`INSERT INTO Aseguradora (rif_aseguradora, tipo_rif_aseguradora, nombre_aseguradora, telefono_aseguradora, direccion_aseguradora)
+                    VALUES (?, ?, ?, ?, ?)`, 
+            [insurer.rif_aseguradora, insurer.tipo_rif_aseguradora, insurer.nombre_aseguradora, insurer.telefono_aseguradora, insurer.direccion_aseguradora], 
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -41,8 +42,8 @@ module.exports = {
 /*                  PUT                  */
     updateInsurer: (insurer) => {
         return new Promise((resolve, reject) => {
-            db.query(`UPDATE Aseguradora SET rif_aseguradora=?, nombre_aseguradora=?, direccion_aseguradora=?, telefono_aseguradora=? WHERE id_aseguradora=?`, 
-            [insurer.rif_aseguradora, insurer.nombre_aseguradora, insurer.direccion_aseguradora, insurer.telefono_aseguradora, insurer.id_aseguradora], 
+            db.query(`UPDATE Aseguradora SET rif_aseguradora=?, tipo_rif_aseguradora=?, nombre_aseguradora=?, direccion_aseguradora=?, telefono_aseguradora=? WHERE id_aseguradora=?`, 
+            [insurer.rif_aseguradora, insurer.tipo_rif_aseguradora, insurer.nombre_aseguradora, insurer.direccion_aseguradora, insurer.telefono_aseguradora, insurer.id_aseguradora], 
             (error, rows) => {
                 if (error) {
                     reject(error)
