@@ -578,6 +578,7 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
             let arrayEjecutivo = [];
@@ -628,7 +629,7 @@ module.exports = {
                 deducible = deducible.replace(".", ",");
                 deducible = parseFloat(deducible.replace(/,/g,''));
             }
-            let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+            let collective = await collectiveModel.postCollectiveForm(tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
                 let apellidosAgentePropio;
@@ -688,6 +689,7 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
             let arrayEjecutivo = [];
@@ -738,7 +740,7 @@ module.exports = {
                 deducible = deducible.replace(".", ",");
                 deducible = parseFloat(deducible.replace(/,/g,''));
             }
-            let collective = await collectiveModel.postCollectiveForm(montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+            let collective = await collectiveModel.postCollectiveForm(tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
             if (nombreCompletoAgente !== '') {
                 let nombresAgentePropio;
                 let apellidosAgentePropio;
@@ -789,69 +791,344 @@ module.exports = {
         }
     },
 /*                  PUT                  */
-    putCollective: async (req, res, next) => {
+    putHealthCollective: async (req, res, next) => {
         let valoresAceptados = /^[0-9]+$/;
         let idCollective = req.params.id;
         if (idCollective.match(valoresAceptados)) {
+            let executives = [];
+            let resultOwnAgent = [];
+            const insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
             let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
             let resultsLegalInsureds = await insuredModel.getLegalInsureds();
             let resultsCollective = await collectiveModel.getCollectivesNumbers();
             let resultsReceipts = await receiptModel.getReceipts();
             let resultCollective = await collectiveModel.getCollective(idCollective);
-            let resultsTaker = await collectiveModel.getCollectiveHolder();
             let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
             let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
             let primaAnual = resultCollective[0].prima_anual_colectivo;
+            let coberturaSumaAsegurada = resultCollective[0].cobertura_suma_asegurada_colectivo;
+            let deducible = resultCollective[0].deducible_colectivo;
+            let fechaDetalleCliente = resultCollective[0].detalle_cliente_colectivo;
+            if (fechaDetalleCliente === null) {
+                fechaDetalleCliente = '';
+            } else {
+                fechaDetalleCliente = fechaDetalleCliente.toISOString().substring(0, 10);
+            }
             if (primaAnual.toString().includes('.') === true) {
                 primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             } else {
                 primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
-            let insurers = await insurerModel.getInsurers();
-            let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
-            let resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
-            res.render('editCollective', {
+            if (coberturaSumaAsegurada.toString().includes('.') === true) {
+                coberturaSumaAsegurada = coberturaSumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                coberturaSumaAsegurada = String(coberturaSumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                coberturaSumaAsegurada = `Bs ${coberturaSumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                coberturaSumaAsegurada = `$ ${coberturaSumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                coberturaSumaAsegurada = `€ ${coberturaSumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+            const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+            for (const resultCIIE of resultsCIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+            if (resultCollectiveOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+            }
+            res.render('editCollectiveHealth', {
                 collective: resultCollective[0],
-                takerNames: resultsTaker,
-                fechaDesdeColectivo: fechaDesdeColectivo,
-                fechaHastaColectivo: fechaHastaColectivo,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                fechaDetalleCliente,
+                primaAnual,
+                coberturaSumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         } else {
             next();
         }
     },
-    updateCollective: async (req, res) => {
-        let idCollective = req.body.id_colectivo;
+    putVehicleCollective: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idCollective = req.params.id;
+        if (idCollective.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            const insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsCollective = await collectiveModel.getCollectivesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let resultCollective = await collectiveModel.getCollective(idCollective);
+            let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+            let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
+            let primaAnual = resultCollective[0].prima_anual_colectivo;
+            let deducible = resultCollective[0].deducible_colectivo;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+            const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+            for (const resultCIIE of resultsCIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+            if (resultCollectiveOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+            }
+            if (resultCII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+            }
+            res.render('editCollectiveVehicle', {
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putRiskDiverseCollective: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idCollective = req.params.id;
+        if (idCollective.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            const insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsCollective = await collectiveModel.getCollectivesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let resultCollective = await collectiveModel.getCollective(idCollective);
+            let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+            let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
+            let primaAnual = resultCollective[0].prima_anual_colectivo;
+            let deducible = resultCollective[0].deducible_colectivo;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+            const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+            for (const resultCIIE of resultsCIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+            if (resultCollectiveOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+            }
+            if (resultCII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+            }
+            res.render('editCollectiveRiskDiverse', {
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    updateHealthCollective: async (req, res) => {
+        const idCollective = req.body.id_colectivo;
+        let executives = [];
+        let resultOwnAgent = [];
+        const insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultCollective = await collectiveModel.getCollective(idCollective);
-        let resultsTaker = await collectiveModel.getCollectiveHolder();
         let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
         let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
         let primaAnual = resultCollective[0].prima_anual_colectivo;
+        let coberturaSumaAsegurada = resultCollective[0].cobertura_suma_asegurada_colectivo;
+        let deducible = resultCollective[0].deducible_colectivo;
+        let fechaDetalleCliente = resultCollective[0].detalle_cliente_colectivo;
+        if (fechaDetalleCliente === null) {
+            fechaDetalleCliente = '';
+        } else {
+            fechaDetalleCliente = fechaDetalleCliente.toISOString().substring(0, 10);
+        }
         if (primaAnual.toString().includes('.') === true) {
             primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         } else {
             primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
         }
-        let insurers = await insurerModel.getInsurers();
-        let resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
-        let resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+        if (coberturaSumaAsegurada.toString().includes('.') === true) {
+            coberturaSumaAsegurada = coberturaSumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            coberturaSumaAsegurada = String(coberturaSumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            coberturaSumaAsegurada = `Bs ${coberturaSumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            coberturaSumaAsegurada = `$ ${coberturaSumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            coberturaSumaAsegurada = `€ ${coberturaSumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+        const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+        for (const resultCIIE of resultsCIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+        if (resultCollectiveOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+        }
         try {
-            let fechaDesdeColectivo = new Date(req.body.fecha_desde_colectivo);
-            let fechaHastaColectivo = new Date(req.body.fecha_hasta_colectivo);
             let montoPrimaAnual = req.body.prima_anual_colectivo;
+            let deducible = req.body.deducible_colectivo;
+            let coberturaSumaAsegurada = req.body.cobertura_suma_asegurada_colectivo;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            coberturaSumaAsegurada = coberturaSumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
+            let fechaDetalleCliente = new Date(req.body.detalle_cliente_colectivo);
+            let tipoColectivo = 'SALUD';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -863,50 +1140,542 @@ module.exports = {
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
                 montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
             }
-            await collectiveModel.updateCollective(fechaDesdeColectivo, fechaHastaColectivo, montoPrimaAnual, req.body);
-            await collectiveInsurerInsuredModel.updateCollectiveInsurer(req.body.nombre_aseguradora, req.body.id_colectivo);
-            res.render('editCollective', {
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if (coberturaSumaAsegurada === '') {
+                coberturaSumaAsegurada = 0;
+            } else {
+                if ((coberturaSumaAsegurada.indexOf(',') !== -1) && (coberturaSumaAsegurada.indexOf('.') !== -1)) {
+                    coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                    coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                    coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+                } else if (coberturaSumaAsegurada.indexOf(',') !== -1) {
+                    coberturaSumaAsegurada = coberturaSumaAsegurada.replace(",", ".");
+                    coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada);
+                } else if (coberturaSumaAsegurada.indexOf('.') !== -1) {
+                    coberturaSumaAsegurada = coberturaSumaAsegurada.replace(".", ",");
+                    coberturaSumaAsegurada = parseFloat(coberturaSumaAsegurada.replace(/,/g,''));
+                }
+            }
+            await collectiveModel.updateCollectiveHealth(montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length === 0) {
+                    await collectiveOwnAgentModel.postCollectiveOwnAgent(idCollective, idAgentePropio);
+                } else {
+                    await collectiveOwnAgentModel.updateCollectiveOwnAgent(idCollective, idAgentePropio);
+                } 
+            } else {
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length !== 0) {
+                    const disableCAP = 1;
+                    await collectiveOwnAgentModel.disableCollectiveOwnAgent(idCollective, disableCAP);
+                }
+            }
+            await collectiveInsurerInsuredModel.updateCollectiveInsurer(req.body.nombre_aseguradora, idCollective);
+            const resultCAA = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCAA[0].id_caa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await colInsuInsuredExecModel.updateColInsuInsuredExecutive(resultCIIE[index].id_caae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editCollectiveHealth', {
                 alert: true,
                 alertTitle: 'Exitoso',
                 alertMessage: 'Se actualizaron los datos exitosamente',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-collective-health/${idCollective}`,
                 collective: resultCollective[0],
-                takerNames: resultsTaker,
-                fechaDesdeColectivo: fechaDesdeColectivo,
-                fechaHastaColectivo: fechaHastaColectivo,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                fechaDetalleCliente,
+                primaAnual,
+                coberturaSumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         } catch (error) {
             console.log(error);
-            res.render('editCollective', {
+            res.render('editCollectiveHealth', {
                 alert: true,
                 alertTitle: 'Error',
                 alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
-                ruta: `sistema/edit-collective/${idCollective}`,
+                ruta: `sistema/edit-collective-health/${idCollective}`,
                 collective: resultCollective[0],
-                takerNames: resultsTaker,
-                fechaDesdeColectivo: fechaDesdeColectivo,
-                fechaHastaColectivo: fechaHastaColectivo,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                fechaDetalleCliente,
+                primaAnual,
+                coberturaSumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 collectives: resultsCollective,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateVehicleCollective: async (req, res) => {
+        const idCollective = req.body.id_colectivo;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        const insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultCollective = await collectiveModel.getCollective(idCollective);
+        let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+        let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
+        let primaAnual = resultCollective[0].prima_anual_colectivo;
+        let deducible = resultCollective[0].deducible_colectivo;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+        const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+        for (const resultCIIE of resultsCIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+        if (resultCollectiveOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+        }
+        if (resultCII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_colectivo;
+            let deducible = req.body.deducible_colectivo;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
+            let tipoColectivo = 'AUTOMÓVIL';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            await collectiveModel.updateCollective(tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length === 0) {
+                    await collectiveOwnAgentModel.postCollectiveOwnAgent(idCollective, idAgentePropio);
+                } else {
+                    await collectiveOwnAgentModel.updateCollectiveOwnAgent(idCollective, idAgentePropio);
+                } 
+            } else {
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length !== 0) {
+                    const disableCAP = 1;
+                    await collectiveOwnAgentModel.disableCollectiveOwnAgent(idCollective, disableCAP);
+                }
+            }
+            await collectiveInsurerInsuredModel.updateCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, idCollective);
+            const resultCAA = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCAA[0].id_caa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await colInsuInsuredExecModel.updateColInsuInsuredExecutive(resultCIIE[index].id_caae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editCollectiveVehicle', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-collective-vehicle/${idCollective}`,
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editCollectiveVehicle', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-collective-vehicle/${idCollective}`,
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateRiskDiverseCollective: async (req, res) => {
+        const idCollective = req.body.id_colectivo;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        const insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultCollective = await collectiveModel.getCollective(idCollective);
+        let fechaDesdeColectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+        let fechaHastaColectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
+        let primaAnual = resultCollective[0].prima_anual_colectivo;
+        let deducible = resultCollective[0].deducible_colectivo;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+        const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+        for (const resultCIIE of resultsCIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        const resultCollectiveOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+        if (resultCollectiveOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultCollectiveOA[0].agente_propio_id);
+        }
+        if (resultCII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_colectivo;
+            let deducible = req.body.deducible_colectivo;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_colectivo);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
+            let tipoColectivo = 'RIESGOS DIVERSOS';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            await collectiveModel.updateCollective(tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length === 0) {
+                    await collectiveOwnAgentModel.postCollectiveOwnAgent(idCollective, idAgentePropio);
+                } else {
+                    await collectiveOwnAgentModel.updateCollectiveOwnAgent(idCollective, idAgentePropio);
+                } 
+            } else {
+                let resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(idCollective);
+                if (resultCOA.length !== 0) {
+                    const disableCAP = 1;
+                    await collectiveOwnAgentModel.disableCollectiveOwnAgent(idCollective, disableCAP);
+                }
+            }
+            await collectiveInsurerInsuredModel.updateCollectiveInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, idCollective);
+            const resultCAA = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective);
+            const resultCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCAA[0].id_caa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await colInsuInsuredExecModel.updateColInsuInsuredExecutive(resultCIIE[index].id_caae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editCollectiveRiskDiverse', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-collective-risk-diverse/${idCollective}`,
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editCollectiveRiskDiverse', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-collective-risk-diverse/${idCollective}`,
+                collective: resultCollective[0],
+                fechaDesdeColectivo,
+                fechaHastaColectivo,
+                primaAnual,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }

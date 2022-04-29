@@ -31,6 +31,20 @@ module.exports = {
         });
     },
 /*                  PUT                  */
+    updateCollectiveOwnAgent: async (colectivoId, ownAgentId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Colectivo_Agente_Propio 
+                    SET agente_propio_id=? 
+                    WHERE colectivo_id=?`, 
+            [ownAgentId[0].id_agente_propio, colectivoId], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disableCollectiveOwnAgent: (id, disableCAP) => {
         return new Promise((resolve, reject) => {

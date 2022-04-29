@@ -303,7 +303,7 @@ module.exports = {
             alertIcon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            ruta: 'sistema',
+            ruta: 'sistema/add-refund',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
             resultsPII: resultsPII,
@@ -376,7 +376,7 @@ module.exports = {
             alertIcon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            ruta: 'sistema',
+            ruta: 'sistema/add-letter-guarantee',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
             resultsPII: resultsPII,
@@ -449,7 +449,7 @@ module.exports = {
             alertIcon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            ruta: 'sistema',
+            ruta: 'sistema/add-emergency',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
             resultsPII: resultsPII,
@@ -522,7 +522,7 @@ module.exports = {
             alertIcon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            ruta: 'sistema',
+            ruta: 'sistema/add-amp',
             naturalInsureds: resultsNaturalInsured,
             legalInsureds: resultsLegalInsured,
             resultsPII: resultsPII,
@@ -830,13 +830,14 @@ module.exports = {
     },
     updateRefund: async (req, res) => {
         const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+        const idRefund = req.body.id_reembolso;
         let montoReclamoReembolso = req.body.monto_reclamo_reembolso;
         let montoPagadoReembolso = req.body.monto_pagado_reembolso;
         let fechaOcurrenciaReembolso = new Date(req.body.fecha_ocurrencia_reembolso);
         let fechaNotificacionReembolso = new Date(req.body.fecha_notificacion_reembolso);
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
-        let resultRefund = await refundModel.getRefund(req.body.id_reembolso);
+        let resultRefund = await refundModel.getRefund(idRefund);
         montoReclamoReembolso = montoReclamoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
         montoPagadoReembolso = montoPagadoReembolso.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoReembolso.indexOf(',') !== -1) && (montoReclamoReembolso.indexOf('.') !== -1)) {
@@ -873,17 +874,18 @@ module.exports = {
         let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
         await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultRefund[0].asegurado_beneficiario_id);
         await refundModel.updateRefund(montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, resultRefund[0].asegurado_beneficiario_id, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-refund/${idRefund}`);
     },
     updateLetterGuarentee: async (req, res) => {
         const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+        const idLetterGuarentee = req.body.id_carta_aval;
         let montoReclamoCartaAval = req.body.monto_reclamado_carta_aval;
         let montoPagadoCartaAval = req.body.monto_pagado_carta_aval;
         let fechaOcurrenciaCartaAval = new Date(req.body.fecha_ocurrencia_carta_aval);
         let fechaNotificacionCartaAval = new Date(req.body.fecha_notificacion_carta_aval);
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
-        let resultLetterGuarantee = await letterGuaranteeModel.getLetterGuarantee(req.body.id_carta_aval);
+        let resultLetterGuarantee = await letterGuaranteeModel.getLetterGuarantee(idLetterGuarentee);
         montoReclamoCartaAval = montoReclamoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
         montoPagadoCartaAval = montoPagadoCartaAval.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoCartaAval.indexOf(',') !== -1) && (montoReclamoCartaAval.indexOf('.') !== -1)) {
@@ -920,17 +922,18 @@ module.exports = {
         let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
         await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultLetterGuarantee[0].asegurado_beneficiario_id);
         await letterGuaranteeModel.updateLetterGuarantee(montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, resultLetterGuarantee[0].asegurado_beneficiario_id, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-letter-guarantee/${idLetterGuarentee}`);
     },
     updateEmergency: async (req, res) => {
         const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+        const idEmergency = req.body.id_emergencia;
         let montoReclamoEmergencia = req.body.monto_reclamado_emergencia;
         let montoPagadoEmergencia = req.body.monto_pagado_emergencia;
         let fechaOcurrenciaEmergencia = new Date(req.body.fecha_ocurrencia_emergencia);
         let fechaNotificacionEmergencia = new Date(req.body.fecha_notificacion_emergencia);
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
-        let resultEmergency = await emergencyModel.getEmergency(req.body.id_emergencia);
+        let resultEmergency = await emergencyModel.getEmergency(idEmergency);
         montoReclamoEmergencia = montoReclamoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
         montoPagadoEmergencia = montoPagadoEmergencia.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoEmergencia.indexOf(',') !== -1) && (montoReclamoEmergencia.indexOf('.') !== -1)) {
@@ -967,17 +970,18 @@ module.exports = {
         let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
         await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultEmergency[0].asegurado_beneficiario_id);
         await emergencyModel.updateEmergency(montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, resultEmergency[0].asegurado_beneficiario_id, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-emergency/${idEmergency}`);
     },
     updateAMP: async (req, res) => {
         const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+        const idAmp = req.body.id_amp;
         let montoReclamoAMP = req.body.monto_reclamado_amp;
         let montoPagadoAMP = req.body.monto_pagado_amp;
         let fechaOcurrenciaAMP = new Date(req.body.fecha_ocurrencia_amp);
         let fechaNotificacionAMP = new Date(req.body.fecha_notificacion_amp);
         let cedulaAseguradoNatural = '';
         let rifAseguradoJuridico = '';
-        let resultAMP = await ampModel.getAMPId(req.body.id_amp);
+        let resultAMP = await ampModel.getAMPId(idAmp);
         montoReclamoAMP = montoReclamoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
         montoPagadoAMP = montoPagadoAMP.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((montoReclamoAMP.indexOf(',') !== -1) && (montoReclamoAMP.indexOf('.') !== -1)) {
@@ -1014,7 +1018,7 @@ module.exports = {
         let resultBeneficiary = await beneficiaryModel.getIdBeneficiary(req.body.cedula_beneficiario);
         await insuredBeneficiaryModel.updateAseguradoBeneficiario(cedulaAseguradoNatural, rifAseguradoJuridico, resultBeneficiary[0].id_beneficiario, resultAMP[0].asegurado_beneficiario_id);
         await ampModel.updateAMP(montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, resultAMP[0].asegurado_beneficiario_id, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-amp/${idAmp}`);
     },
 /*               DELETE                  */
     disableRefund: async (req, res) => {

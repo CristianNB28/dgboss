@@ -31,6 +31,20 @@ module.exports = {
         });
     },
 /*                  PUT                  */
+    updatePolicyOwnAgent: async (policyId, ownAgentId) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Poliza_Agente_Propio 
+                    SET agente_propio_id=? 
+                    WHERE poliza_id=?`, 
+            [ownAgentId[0].id_agente_propio, policyId], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*               DELETE                  */
     disablePolicyOwnAgent: (id, disablePAP) => {
         return new Promise((resolve, reject) => {

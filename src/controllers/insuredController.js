@@ -63,7 +63,7 @@ module.exports = {
                     alertIcon: 'success',
                     showConfirmButton: false,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-natural-insured',
                     ownAgents: resultsOwnAgents,
                     name: req.session.name
                 });
@@ -123,7 +123,7 @@ module.exports = {
                     alertIcon: 'success',
                     showConfirmButton: false,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-legal-insured',
                     ownAgents: resultsOwnAgents,
                     name: req.session.name
                 });
@@ -227,7 +227,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-natural-insured/${idNaturalInsured}`,
                 naturalInsured: resultNaturalInsured[0],
                 fechaNacNaturalInsured: fechaNacNaturalInsured,
                 ownAgent: resultOwnAgent[0],
@@ -282,7 +282,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-legal-insured/${idLegalInsured}`,
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,

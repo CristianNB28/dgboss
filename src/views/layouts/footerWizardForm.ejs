@@ -876,12 +876,12 @@
         if(localStorage.formDataPolicyPatrimonial !== undefined){
             formDataPolicyPatrimonial = JSON.parse(localStorage.formDataPolicyPatrimonial);
             for (var i = 0; i < formDataPolicyPatrimonial.length; i++) {
-                $(`[name=${formDataPolicyPatrimonial[i].name}]`).val(formDataPolicyPatrimonial[i].value);
+                $(`#policy-form-patrimonial [name=${formDataPolicyPatrimonial[i].name}]`).val(formDataPolicyPatrimonial[i].value);
                 if ((formDataPolicyPatrimonial[i].name === 'tomador_asegurado_poliza') && (formDataPolicyPatrimonial[i].value === true)) {
-                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyPatrimonial[i].value;
+                    $('#policy-form-patrimonial #tomador_asegurado_poliza').prop('checked', formDataPolicyPatrimonial[i].value);
                 }
                 if ((formDataPolicyPatrimonial[i].name === 'tipo_canal_poliza') && (formDataPolicyPatrimonial[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-patrimonial #searchList').css('display', 'block');
                 }
             }
         }
@@ -914,7 +914,7 @@
         if(localStorage.formDataReceiptPatrimonial !== undefined){
             formDataReceiptPatrimonial = JSON.parse(localStorage.formDataReceiptPatrimonial);
             for (var i = 0; i < formDataReceiptPatrimonial.length; i++) {
-                $(`[name=${formDataReceiptPatrimonial[i].name}]`).val(formDataReceiptPatrimonial[i].value);
+                $(`#receipt-form-patrimonial [name=${formDataReceiptPatrimonial[i].name}]`).val(formDataReceiptPatrimonial[i].value);
                 if ((formDataReceiptPatrimonial[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptPatrimonial[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptPatrimonial[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -938,7 +938,7 @@
         if(localStorage.formCommissionPatrimonial !== undefined){
             formCommissionPatrimonial = JSON.parse(localStorage.formCommissionPatrimonial);
             for (var i = 0; i < formCommissionPatrimonial.length; i++) {
-                $(`[name=${formCommissionPatrimonial[i].name}]`).val(formCommissionPatrimonial[i].value);
+                $(`#commission-form-patrimonial [name=${formCommissionPatrimonial[i].name}]`).val(formCommissionPatrimonial[i].value);
             }
         }
     }
@@ -971,12 +971,12 @@
         if(localStorage.formDataPolicyBail !== undefined){
             formDataPolicyBail = JSON.parse(localStorage.formDataPolicyBail);
             for (var i = 0; i < formDataPolicyBail.length; i++) {
-                $(`[name=${formDataPolicyBail[i].name}]`).val(formDataPolicyBail[i].value);
+                $(`#policy-form-bail [name=${formDataPolicyBail[i].name}]`).val(formDataPolicyBail[i].value);
                 if ((formDataPolicyBail[i].name === 'tomador_asegurado_poliza') && (formDataPolicyBail[i].value === true)) {
-                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyBail[i].value;
+                    $('#policy-form-bail #tomador_asegurado_poliza').prop('checked', formDataPolicyBail[i].value);
                 }
                 if ((formDataPolicyBail[i].name === 'tipo_canal_poliza') && (formDataPolicyBail[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-bail #searchList').css('display', 'block');
                 }
             }
         }
@@ -1009,7 +1009,7 @@
         if(localStorage.formDataReceiptBail !== undefined){
             formDataReceiptBail = JSON.parse(localStorage.formDataReceiptBail);
             for (var i = 0; i < formDataReceiptBail.length; i++) {
-                $(`[name=${formDataReceiptBail[i].name}]`).val(formDataReceiptBail[i].value);
+                $(`#receipt-form-bail [name=${formDataReceiptBail[i].name}]`).val(formDataReceiptBail[i].value);
                 if ((formDataReceiptBail[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptBail[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptBail[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -1033,7 +1033,7 @@
         if(localStorage.formCommissionBail !== undefined){
             formCommissionBail = JSON.parse(localStorage.formCommissionBail);
             for (var i = 0; i < formCommissionBail.length; i++) {
-                $(`[name=${formCommissionBail[i].name}]`).val(formCommissionBail[i].value);
+                $(`#commission-form-bail [name=${formCommissionBail[i].name}]`).val(formCommissionBail[i].value);
             }
         }
     }
@@ -1044,19 +1044,19 @@
     function storeValuesPolicyAnotherBranch() {
         let formDataPolicyAnotherBranch = [];
         localStorage.removeItem('formDataPolicyAnotherBranch');
-        $('#policy-form-another-Branch input[type=text]').each(function(){
+        $('#policy-form-another-branch input[type=text]').each(function(){
             formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
         });
-        $('#policy-form-another-Branch input[type=email]').each(function(){
+        $('#policy-form-another-branch input[type=email]').each(function(){
             formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
         });
-        $('#policy-form-another-Branch input[type=date]').each(function(){
+        $('#policy-form-another-branch input[type=date]').each(function(){
             formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
         });
-        $('#policy-form-another-Branch select').each(function(){
+        $('#policy-form-another-branch select').each(function(){
             formDataPolicyAnotherBranch.push({ name: this.name, value: this.value});
         });
-        $('#policy-form-another-Branch #tomador_asegurado_poliza').each(function(){
+        $('#policy-form-another-branch #tomador_asegurado_poliza').each(function(){
             let markedCheck = $(this).prop('checked');
             formDataPolicyAnotherBranch.push({ name: this.name, value: markedCheck});
         });
@@ -1066,12 +1066,12 @@
         if(localStorage.formDataPolicyAnotherBranch !== undefined){
             formDataPolicyAnotherBranch = JSON.parse(localStorage.formDataPolicyAnotherBranch);
             for (var i = 0; i < formDataPolicyAnotherBranch.length; i++) {
-                $(`[name=${formDataPolicyAnotherBranch[i].name}]`).val(formDataPolicyAnotherBranch[i].value);
+                $(`#policy-form-another-branch [name=${formDataPolicyAnotherBranch[i].name}]`).val(formDataPolicyAnotherBranch[i].value);
                 if ((formDataPolicyAnotherBranch[i].name === 'tomador_asegurado_poliza') && (formDataPolicyAnotherBranch[i].value === true)) {
-                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyAnotherBranch[i].value;
+                    $('#policy-form-another-branch #tomador_asegurado_poliza').prop('checked', formDataPolicyAnotherBranch[i].value);
                 }
                 if ((formDataPolicyAnotherBranch[i].name === 'tipo_canal_poliza') && (formDataPolicyAnotherBranch[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-another-branch #searchList').css('display', 'block');
                 }
             }
         }
@@ -1104,7 +1104,7 @@
         if(localStorage.formDataReceiptAnotherBranch !== undefined){
             formDataReceiptAnotherBranch = JSON.parse(localStorage.formDataReceiptAnotherBranch);
             for (var i = 0; i < formDataReceiptAnotherBranch.length; i++) {
-                $(`[name=${formDataReceiptAnotherBranch[i].name}]`).val(formDataReceiptAnotherBranch[i].value);
+                $(`#receipt-form-another-branch [name=${formDataReceiptAnotherBranch[i].name}]`).val(formDataReceiptAnotherBranch[i].value);
                 if ((formDataReceiptAnotherBranch[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptAnotherBranch[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptAnotherBranch[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -1128,7 +1128,7 @@
         if(localStorage.formCommissionAnotherBranch !== undefined){
             formCommissionAnotherBranch = JSON.parse(localStorage.formCommissionAnotherBranch);
             for (var i = 0; i < formCommissionAnotherBranch.length; i++) {
-                $(`[name=${formCommissionAnotherBranch[i].name}]`).val(formCommissionAnotherBranch[i].value);
+                $(`#commission-form-another-branch [name=${formCommissionAnotherBranch[i].name}]`).val(formCommissionAnotherBranch[i].value);
             }
         }
     }
@@ -1161,12 +1161,12 @@
         if(localStorage.formDataPolicyAp !== undefined){
             formDataPolicyAp = JSON.parse(localStorage.formDataPolicyAp);
             for (var i = 0; i < formDataPolicyAp.length; i++) {
-                $(`[name=${formDataPolicyAp[i].name}]`).val(formDataPolicyAp[i].value);
+                $(`#policy-form-ap [name=${formDataPolicyAp[i].name}]`).val(formDataPolicyAp[i].value);
                 if ((formDataPolicyAp[i].name === 'tomador_asegurado_poliza') && (formDataPolicyAp[i].value === true)) {
-                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyAp[i].value;
+                    $('#policy-form-ap #tomador_asegurado_poliza').prop('checked', formDataPolicyLife[i].value);
                 }
                 if ((formDataPolicyAp[i].name === 'tipo_canal_poliza') && (formDataPolicyAp[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-ap #searchList').css('display', 'block');
                 }
             }
         }
@@ -1199,7 +1199,7 @@
         if(localStorage.formDataReceiptAp !== undefined){
             formDataReceiptAp = JSON.parse(localStorage.formDataReceiptAp);
             for (var i = 0; i < formDataReceiptAp.length; i++) {
-                $(`[name=${formDataReceiptAp[i].name}]`).val(formDataReceiptAp[i].value);
+                $(`#receipt-form-ap [name=${formDataReceiptAp[i].name}]`).val(formDataReceiptAp[i].value);
                 if ((formDataReceiptAp[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptAp[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptAp[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -1223,7 +1223,7 @@
         if(localStorage.formCommissionAp !== undefined){
             formCommissionAp = JSON.parse(localStorage.formCommissionAp);
             for (var i = 0; i < formCommissionAp.length; i++) {
-                $(`[name=${formCommissionAp[i].name}]`).val(formCommissionAp[i].value);
+                $(`#commission-form-ap [name=${formCommissionAp[i].name}]`).val(formCommissionAp[i].value);
             }
         }
     }
@@ -1256,12 +1256,12 @@
         if(localStorage.formDataPolicyTravel !== undefined){
             formDataPolicyTravel = JSON.parse(localStorage.formDataPolicyTravel);
             for (var i = 0; i < formDataPolicyTravel.length; i++) {
-                $(`[name=${formDataPolicyTravel[i].name}]`).val(formDataPolicyTravel[i].value);
+                $(`#policy-form-travel [name=${formDataPolicyTravel[i].name}]`).val(formDataPolicyTravel[i].value);
                 if ((formDataPolicyTravel[i].name === 'tomador_asegurado_poliza') && (formDataPolicyTravel[i].value === true)) {
-                    document.getElementById("tomador_asegurado_poliza").checked = formDataPolicyTravel[i].value;
+                    $('#policy-form-travel #tomador_asegurado_poliza').prop('checked', formDataPolicyLife[i].value);
                 }
                 if ((formDataPolicyTravel[i].name === 'tipo_canal_poliza') && (formDataPolicyTravel[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-travel #searchList').css('display', 'block');
                 }
             }
         }
@@ -1294,7 +1294,7 @@
         if(localStorage.formDataReceiptTravel !== undefined){
             formDataReceiptTravel = JSON.parse(localStorage.formDataReceiptTravel);
             for (var i = 0; i < formDataReceiptTravel.length; i++) {
-                $(`[name=${formDataReceiptTravel[i].name}]`).val(formDataReceiptTravel[i].value);
+                $(`#receipt-form-travel [name=${formDataReceiptTravel[i].name}]`).val(formDataReceiptTravel[i].value);
                 if ((formDataReceiptTravel[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptTravel[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptTravel[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -1318,7 +1318,7 @@
         if(localStorage.formCommissionTravel !== undefined){
             formCommissionTravel = JSON.parse(localStorage.formCommissionTravel);
             for (var i = 0; i < formCommissionTravel.length; i++) {
-                $(`[name=${formCommissionTravel[i].name}]`).val(formCommissionTravel[i].value);
+                $(`#commission-form-travel [name=${formCommissionTravel[i].name}]`).val(formCommissionTravel[i].value);
             }
         }
     }
@@ -1326,6 +1326,10 @@
 
 <script>
     $(document).ready(function () {
+        if (document.getElementById('tipo_canal_poliza').value=== 'AGENTE PROPIO') {
+            document.getElementById("searchList").style.display = "block";
+        }
+
         if ((document.getElementById("select_box").value === 'V') || (document.getElementById("select_box").value === 'E')) {
             var cleaveNumeral = new Cleave('.input-numeral', {
                 numeral: true,
@@ -1433,6 +1437,14 @@
         getPolicyTravel();
         getReceiptTravel();
         getCommissionTravel();
+
+        new Cleave('.porcentaje_tasa', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
     });
 </script>
 

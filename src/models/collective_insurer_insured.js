@@ -191,6 +191,69 @@ module.exports = {
             });
         });
     },
+    updateCollectiveInsurerInsured: async (cedulaAseguradoNatural, rifAseguradoJuridico, nombre_aseguradora, collectiveId) => {
+        let naturalInsuredId = 0;
+        let legalInsuredId = 0;
+        if (cedulaAseguradoNatural === '') {
+            legalInsuredId = await new Promise((resolve, reject) => {
+                db.query('SELECT id_asegurado_per_jur FROM Asegurado_Persona_Juridica WHERE rif_asegurado_per_jur=? AND deshabilitar_asegurado_per_jur=0', 
+                [rifAseguradoJuridico], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(rows);
+                });
+            });
+        } else if (rifAseguradoJuridico === '') {
+            naturalInsuredId = await new Promise((resolve, reject) => {
+                db.query('SELECT id_asegurado_per_nat FROM Asegurado_Persona_Natural WHERE cedula_asegurado_per_nat=? AND deshabilitar_asegurado_per_nat=0', 
+                [cedulaAseguradoNatural], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(rows);
+                });
+            });
+        }
+        let insurerId = await  new Promise((resolve, reject) => {
+            db.query('SELECT id_aseguradora FROM Aseguradora WHERE nombre_aseguradora=? AND deshabilitar_aseguradora=0', [nombre_aseguradora], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+        if (legalInsuredId[0] !== undefined) {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Colectivo_Aseguradora_Asegurado 
+                        SET aseguradora_id=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        WHERE colectivo_id=?`, 
+                [insurerId[0].id_aseguradora, null, legalInsuredId[0].id_asegurado_per_jur, collectiveId], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Colectivo_Aseguradora_Asegurado 
+                        SET aseguradora_id=?, asegurado_per_nat_id=?, asegurado_per_jur_id=?
+                        WHERE colectivo_id=?`, 
+                [insurerId[0].id_aseguradora, naturalInsuredId[0].id_asegurado_per_nat, null, collectiveId], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        }
+    },
 /*               DELETE                  */
     disableCollectiveInsurerInsured: (idCollective, disableCollectiveInsurerInsured) => {
         return new Promise((resolve, reject) => {

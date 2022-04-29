@@ -124,8 +124,24 @@ router.post('/add-travel-commission', requireAuth, commissionController.postTrav
 router.post('/add-travel-verification-factor', requireAuth, verificationFactorController.postTravelVerificationFactorForm);
 router.get('/policies', requireAuth, policyController.getPolicies);
 router.post('/remove-policy/:id', requireAuth, policyController.disablePolicy);
-router.get('/edit-policy/:id', requireAuth, policyController.putPolicy);
-router.post('/update-policy', requireAuth, policyController.updatePolicy);
+router.get('/edit-policy-health/:id', requireAuth, policyController.putHealthPolicy);
+router.get('/edit-policy-vehicle/:id', requireAuth, policyController.putVehiclePolicy);
+router.get('/edit-policy-patrimonial/:id', requireAuth, policyController.putPatrimonialPolicy);
+router.get('/edit-policy-bail/:id', requireAuth, policyController.putBailPolicy);
+router.get('/edit-policy-another-branch/:id', requireAuth, policyController.putAnotherBranchPolicy);
+router.get('/edit-policy-funeral/:id', requireAuth, policyController.putFuneralPolicy);
+router.get('/edit-policy-life/:id', requireAuth, policyController.putLifePolicy);
+router.get('/edit-policy-ap/:id', requireAuth, policyController.putAPPolicy);
+router.get('/edit-policy-travel/:id', requireAuth, policyController.putTravelPolicy);
+router.post('/update-policy-health', requireAuth, policyController.updateHealthPolicy);
+router.post('/update-policy-vehicle', requireAuth, policyController.updateVehiclePolicy);
+router.post('/update-policy-patrimonial', requireAuth, policyController.updatePatrimomialPolicy);
+router.post('/update-policy-bail', requireAuth, policyController.updateBailPolicy);
+router.post('/update-policy-another-branch', requireAuth, policyController.updateAnotherBranchPolicy);
+router.post('/update-policy-funeral', requireAuth, policyController.updateFuneralPolicy);
+router.post('/update-policy-life', requireAuth, policyController.updateLifePolicy);
+router.post('/update-policy-ap', requireAuth, policyController.updateAPPolicy);
+router.post('/update-policy-travel', requireAuth, policyController.updateTravelPolicy);
 router.get('/policies-detail/:id', requireAuth, policyController.getPoliciesDetail);
 // Rutas de Colectivos
 router.get('/add-health-collective', requireAuth, collectiveController.getHealthCollectiveForm);
@@ -148,8 +164,12 @@ router.post('/add-risk-commission-collective', requireAuth, commissionController
 router.post('/add-risk-verification-collective', requireAuth, verificationFactorController.postRiskDiverseVerificationFactorCollectiveForm);
 router.get('/collectives', requireAuth, collectiveController.getCollectives);
 router.post('/remove-collective/:id', requireAuth, collectiveController.disableCollective);
-router.get('/edit-collective/:id', requireAuth, collectiveController.putCollective);
-router.post('/update-collective', requireAuth, collectiveController.updateCollective);
+router.get('/edit-collective-health/:id', requireAuth, collectiveController.putHealthCollective);
+router.get('/edit-collective-vehicle/:id', requireAuth, collectiveController.putVehicleCollective);
+router.get('/edit-collective-risk-diverse/:id', requireAuth, collectiveController.putRiskDiverseCollective);
+router.post('/update-collective-health', requireAuth, collectiveController.updateHealthCollective);
+router.post('/update-collective-vehicle', requireAuth, collectiveController.updateVehicleCollective);
+router.post('/update-collective-risk-diverse', requireAuth, collectiveController.updateRiskDiverseCollective);
 router.get('/collectives-detail/:id', requireAuth, collectiveController.getCollectivesDetail);
 // Rutas de Reclamos
 router.get('/add-refund', requireAuth, claimController.getRefundForm);

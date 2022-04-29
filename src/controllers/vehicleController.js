@@ -226,7 +226,7 @@ module.exports = {
         let yearVehicle = new Date(req.body.year_vehiculo);
         yearVehicle = yearVehicle.getUTCFullYear();
         await vehicleModel.updateVehicle(blindaje, capacidadCarga, sumaAsegurada, yearVehicle, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-vehicle/${req.body.id_vehiculo}`);
     },
 /*               DELETE                  */
     disableVehicle: async (req, res) => {

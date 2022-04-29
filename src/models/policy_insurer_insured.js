@@ -138,8 +138,10 @@ module.exports = {
         }
     },
 /*                  PUT                  */
-    updatePolicyInsurerInsured: async (nombreAseguradora, idPolicy) => {
-        let insurerId = await  new Promise((resolve, reject) => {
+    updatePolicyInsurerInsured: async (cedulaAseguradoNatural, rifAseguradoJuridico, nombreAseguradora, policyId) => {
+        let naturalInsuredId = 0;
+        let legalInsuredId = 0;
+        let insurerId = await new Promise((resolve, reject) => {
             db.query('SELECT id_aseguradora FROM Aseguradora WHERE nombre_aseguradora=?', [nombreAseguradora], 
             (error, rows) => {
                 if (error) {
@@ -148,16 +150,56 @@ module.exports = {
                 resolve(rows);
             });
         });
-        return new Promise((resolve, reject) => {
-            db.query(`UPDATE Poliza_Aseguradora_Asegurado SET aseguradora_id=? WHERE poliza_id=?`, 
-            [insurerId[0].id_aseguradora, idPolicy], 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
-                }
-                resolve(rows);
+        if (cedulaAseguradoNatural === '') {
+            legalInsuredId = await new Promise((resolve, reject) => {
+                db.query('SELECT id_asegurado_per_jur FROM Asegurado_Persona_Juridica WHERE rif_asegurado_per_jur=? AND deshabilitar_asegurado_per_jur=0', 
+                [rifAseguradoJuridico], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(rows);
+                });
             });
-        });
+        } else if (rifAseguradoJuridico === '') {
+            naturalInsuredId = await new Promise((resolve, reject) => {
+                db.query('SELECT id_asegurado_per_nat FROM Asegurado_Persona_Natural WHERE cedula_asegurado_per_nat=? AND deshabilitar_asegurado_per_nat=0', 
+                [cedulaAseguradoNatural], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(rows);
+                });
+            });
+        }
+        if (legalInsuredId[0] !== undefined) {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Poliza_Aseguradora_Asegurado 
+                        SET aseguradora_id=?, asegurado_per_nat_id=?, asegurado_per_jur_id=? 
+                        WHERE poliza_id=?`, 
+                [insurerId[0].id_aseguradora, null, legalInsuredId[0].id_asegurado_per_jur, policyId], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                db.query(`UPDATE Poliza_Aseguradora_Asegurado 
+                        SET aseguradora_id=?, asegurado_per_nat_id=?, asegurado_per_jur_id=?
+                        WHERE poliza_id=?`, 
+                [insurerId[0].id_aseguradora, naturalInsuredId[0].id_asegurado_per_nat, null, policyId], 
+                (error, rows) => {
+                    if (error) {
+                        reject(error)
+                    }
+                    resolve(rows);
+                });
+            });
+        }
     },
 /*               DELETE                  */
     disablePolicyInsurerInsured: (idPolicy, disablePolicyInsurerInsured) => {

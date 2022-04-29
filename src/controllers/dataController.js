@@ -51,7 +51,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: 'sistema/add-insurer',
                 name: req.session.name
             });
             throw new Error('Error, valor duplicado de la aseguradora');
@@ -102,7 +102,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: 'sistema/add-own-agent',
                 name: req.session.name
             });
             throw new Error('Error, valor duplicado del agente propio');
@@ -149,7 +149,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: 'sistema/add-executive',
                 name: req.session.name
             });
             throw new Error('Error, valor duplicado del ejecutivo');
@@ -225,7 +225,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-insurer/${idInsurer}`,
                 insurer: resultInsurer[0],
                 name: req.session.name
             });
@@ -280,7 +280,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-own-agent/${idOwnAgent}`,
                 ownAgent: resultOwnAgent[0],
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 name: req.session.name
@@ -339,7 +339,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-executive/${idExecutive}`,
                 executive: resultExecutive[0],
                 porcentajeEjecutivo,
                 name: req.session.name

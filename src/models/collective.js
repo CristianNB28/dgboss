@@ -30,7 +30,7 @@ module.exports = {
     },
     getCollective: (idCollective) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_colectivo, numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo 
+            db.query(`SELECT *
                     FROM Colectivo 
                     WHERE id_colectivo=?`, 
             [idCollective], 
@@ -142,9 +142,9 @@ module.exports = {
 /*                  POST                 */
     postCollectiveHealthForm: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Colectivo (numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, cobertura_suma_asegurada_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, maternidad_colectivo, plazo_espera_colectivo, detalle_cliente_colectivo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [collective.numero_colectivo, collective.nombre_tomador_colectivo, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente],                          
+            db.query(`INSERT INTO Colectivo (numero_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, cobertura_suma_asegurada_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, maternidad_colectivo, plazo_espera_colectivo, detalle_cliente_colectivo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente],                          
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -153,11 +153,11 @@ module.exports = {
             });
         });
     },
-    postCollectiveForm: (montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+    postCollectiveForm: (tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Colectivo (numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [collective.numero_colectivo, collective.nombre_tomador_colectivo, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo],                          
+            db.query(`INSERT INTO Colectivo (numero_colectivo, tomador_asegurado_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo],                          
             (error, rows) => {
                 if (error) {
                     reject(error)
@@ -167,12 +167,26 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateCollective: (fechaDesdeColectivo, fechaHastaColectivo, montoPrimaAnual, collective) => {
+    updateCollectiveHealth: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE Colectivo 
-                    SET numero_colectivo=?, nombre_tomador_colectivo=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_anual_colectivo=?, estatus_colectivo=? 
+                    SET numero_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_anual_colectivo=?, estatus_colectivo=?, cobertura_suma_asegurada_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?, maternidad_colectivo=?, plazo_espera_colectivo=?, detalle_cliente_colectivo=? 
                     WHERE id_colectivo=?`, 
-            [collective.numero_colectivo, collective.nombre_tomador_colectivo, collective.tipo_colectivo, fechaDesdeColectivo, fechaHastaColectivo, collective.tipo_moneda_colectivo, montoPrimaAnual, collective.estatus_colectivo, collective.id_colectivo], 
+            [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente, collective.id_colectivo], 
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(rows);
+            });
+        });
+    },
+    updateCollective: (tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+        return new Promise((resolve, reject) => {
+            db.query(`UPDATE Colectivo 
+                    SET numero_colectivo=?, tomador_asegurado_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_anual_colectivo=?, estatus_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?
+                    WHERE id_colectivo=?`, 
+            [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.id_colectivo], 
             (error, rows) => {
                 if (error) {
                     reject(error)

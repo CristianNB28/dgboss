@@ -1883,69 +1883,927 @@ module.exports = {
         }
     },
 /*                  PUT                  */
-    putPolicy: async (req, res, next) => {
+    putHealthPolicy: async (req, res, next) => {
         let valoresAceptados = /^[0-9]+$/;
         let idPolicy = req.params.id;
         if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
             let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
             let resultsLegalInsureds = await insuredModel.getLegalInsureds();
             let resultsPolicies = await policyModel.getPoliciesNumbers();
             let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
             let resultPolicy = await policyModel.getPolicy(idPolicy);
-            let resultsTaker = await policyModel.getPolicyHolder();
-            let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
-            let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let fechaDetalleCliente = resultPolicy[0].detalle_cliente_poliza;
             let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let cobertura = resultPolicy[0].tipo_cobertura_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (fechaDetalleCliente === null) {
+                fechaDetalleCliente = '';
+            } else {
+                fechaDetalleCliente = fechaDetalleCliente.toISOString().substring(0, 10);
+            }
             if (primaAnual.toString().includes('.') === true) {
                 primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
             } else {
                 primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
-            let insurers = await insurerModel.getInsurers();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-            let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
-            res.render('editPolicy', {
+            if (cobertura.toString().includes('.') === true) {
+                cobertura = cobertura.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                cobertura = String(cobertura).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                cobertura = `Bs ${cobertura}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                cobertura = `$ ${cobertura}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                cobertura = `€ ${cobertura}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyHealth', {
                 policy: resultPolicy[0],
-                takerNames: resultsTaker,
-                fechaDesdePoliza: fechaDesdePoliza,
-                fechaHastaPoliza: fechaHastaPoliza,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                fechaDetalleCliente,
+                primaAnual,
+                cobertura,
+                sumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
                 legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         } else {
             next();
         }
     },
-    updatePolicy: async (req, res) => {
+    putVehiclePolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyVehicle', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putPatrimonialPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyPatrimonial', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putBailPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyBail', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putAnotherBranchPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyAnotherBranch', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putFuneralPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyFuneral', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putLifePolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyLife', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putAPPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyAP', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    putTravelPolicy: async (req, res, next) => {
+        let valoresAceptados = /^[0-9]+$/;
+        let idPolicy = req.params.id;
+        if (idPolicy.match(valoresAceptados)) {
+            let resultInsuredNatural = [];
+            let resultInsuredLegal = [];
+            let executives = [];
+            let resultOwnAgent = [];
+            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+            let resultsPolicies = await policyModel.getPoliciesNumbers();
+            let resultsReceipts = await receiptModel.getReceipts();
+            let insurers = await insurerModel.getInsurers();
+            let resultsExecutives = await executiveModel.getExecutives();
+            let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            let resultPolicy = await policyModel.getPolicy(idPolicy);
+            const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+            let primaAnual = resultPolicy[0].prima_anual_poliza;
+            let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+            let deducible = resultPolicy[0].deducible_poliza;
+            if (primaAnual.toString().includes('.') === true) {
+                primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (sumaAsegurada.toString().includes('.') === true) {
+                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (deducible.toString().includes('.') === true) {
+                deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+                primaAnual = `Bs ${primaAnual}`;
+                sumaAsegurada = `Bs ${sumaAsegurada}`;
+                deducible = `Bs ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+                primaAnual = `$ ${primaAnual}`;
+                sumaAsegurada = `$ ${sumaAsegurada}`;
+                deducible = `$ ${deducible}`;
+            } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+                primaAnual = `€ ${primaAnual}`;
+                sumaAsegurada = `€ ${sumaAsegurada}`;
+                deducible = `€ ${deducible}`;
+            }
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            if (resultPolicyOA.length > 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+            }
+            const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+            }
+            if (resultPII[0].asegurado_per_jur_id === null) {
+                resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+            } else {
+                resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+            }
+            res.render('editPolicyTravel', {
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } else {
+            next();
+        }
+    },
+    updateHealthPolicy: async (req, res) => {
         let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsPolicies = await policyModel.getPoliciesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicy(idPolicy);
-        let resultsTaker = await policyModel.getPolicyHolder();
-        let fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
-        let fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let fechaDetalleCliente = resultPolicy[0].detalle_cliente_poliza;
         let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let cobertura = resultPolicy[0].tipo_cobertura_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (fechaDetalleCliente === null) {
+            fechaDetalleCliente = '';
+        } else {
+            fechaDetalleCliente = fechaDetalleCliente.toISOString().substring(0, 10);
+        }
         if (primaAnual.toString().includes('.') === true) {
             primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
         } else {
             primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
         }
-        let insurers = await insurerModel.getInsurers();
-        let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        if (cobertura.toString().includes('.') === true) {
+            cobertura = cobertura.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            cobertura = String(cobertura).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            cobertura = `Bs ${cobertura}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            cobertura = `$ ${cobertura}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            cobertura = `€ ${cobertura}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
         try {
-            let fechaDesdePoliza = new Date(req.body.fecha_desde_poliza);
-            let fechaHastaPoliza = new Date(req.body.fecha_hasta_poliza);
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
             let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let cobertura = req.body.tipo_cobertura_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
             montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            cobertura = cobertura.replace(/[Bs$€]/g, '').replace(' ', '');
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
@@ -1957,50 +2815,2034 @@ module.exports = {
                 montoPrimaAnual = montoPrimaAnual.replace(".", ",");
                 montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
             }
-            await policyModel.updatePolicy(fechaDesdePoliza, fechaHastaPoliza, montoPrimaAnual, req.body);
-            await policyInsurerInsuredModel.updatePolicyInsurerInsured(req.body.nombre_aseguradora, req.body.id_poliza);
-            res.render('editPolicy', {
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            if (cobertura === '') {
+                cobertura = 0;
+            } else {
+                if ((cobertura.indexOf(',') !== -1) && (cobertura.indexOf('.') !== -1)) {
+                    cobertura = cobertura.replace(",", ".");
+                    cobertura = cobertura.replace(".", ",");
+                    cobertura = parseFloat(cobertura.replace(/,/g,''));
+                } else if (cobertura.indexOf(',') !== -1) {
+                    cobertura = cobertura.replace(",", ".");
+                    cobertura = parseFloat(cobertura);
+                } else if (cobertura.indexOf('.') !== -1) {
+                    cobertura = cobertura.replace(".", ",");
+                    cobertura = parseFloat(cobertura.replace(/,/g,''));
+                }
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let fechaDetalleCliente = new Date(req.body.detalle_cliente_poliza);
+            let tipoIndividualPoliza = 'SALUD';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateHealthPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyHealth', {
                 alert: true,
                 alertTitle: 'Exitoso',
                 alertMessage: 'Se actualizaron los datos exitosamente',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: `sistema/edit-policy-health/${idPolicy}`,
                 policy: resultPolicy[0],
-                takerNames: resultsTaker,
-                fechaDesdePoliza: fechaDesdePoliza,
-                fechaHastaPoliza: fechaHastaPoliza,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                fechaDetalleCliente,
+                primaAnual,
+                cobertura,
+                sumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
                 legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         } catch (error) {
             console.log(error);
-            res.render('editPolicy', {
+            res.render('editPolicyHealth', {
                 alert: true,
                 alertTitle: 'Error',
                 alertMessage: error.message,
                 alertIcon: 'error',
                 showConfirmButton: true,
                 timer: 1500,
-                ruta: `sistema/edit-policy/${idPolicy}`,
+                ruta: `sistema/edit-policy-health/${idPolicy}`,
                 policy: resultPolicy[0],
-                takerNames: resultsTaker,
-                fechaDesdePoliza: fechaDesdePoliza,
-                fechaHastaPoliza: fechaHastaPoliza,
-                primaAnual: primaAnual,
-                insurers: insurers,
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                fechaDetalleCliente,
+                primaAnual,
+                cobertura,
+                sumaAsegurada,
+                deducible,
+                insurers,
                 insurer: resultInsurer[0],
                 naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
                 legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
                 policies: resultsPolicies,
                 receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateVehiclePolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'AUTOMÓVIL';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateVehiclePolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyVehicle', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-vehicle/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyVehicle', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-vehicle/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updatePatrimomialPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'PATRIMONIAL';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updatePatrimonialPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyPatrimonial', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-patrimonial/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyPatrimonial', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-patrimonial/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateBailPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'FIANZA';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateBailPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyBail', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-bail/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyBail', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-bail/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateAnotherBranchPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'OTROS RAMOS';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateAnotherBranchPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyAnotherBranch', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-another-branch/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyAnotherBranch', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-another-branch/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateFuneralPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'FUNERARIO';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateFuneralPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyFuneral', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-funeral/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyFuneral', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-funeral/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateLifePolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            if (nombreCompletoAgente === undefined) {
+                nombreCompletoAgente = '';
+            }
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'VIDA';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateLifePolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyLife', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-life/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyLife', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-life/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateAPPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'AP';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateAPPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyAP', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-ap/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyAP', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-ap/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        }
+    },
+    updateTravelPolicy: async (req, res) => {
+        let idPolicy = req.body.id_poliza;
+        let resultInsuredNatural = [];
+        let resultInsuredLegal = [];
+        let executives = [];
+        let resultOwnAgent = [];
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let insurers = await insurerModel.getInsurers();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicy(idPolicy);
+        const fechaDesdePoliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+        const fechaHastaPoliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
+        let primaAnual = resultPolicy[0].prima_anual_poliza;
+        let sumaAsegurada = resultPolicy[0].suma_asegurada_poliza;
+        let deducible = resultPolicy[0].deducible_poliza;
+        if (primaAnual.toString().includes('.') === true) {
+            primaAnual = primaAnual.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaAnual = String(primaAnual).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (sumaAsegurada.toString().includes('.') === true) {
+            sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (deducible.toString().includes('.') === true) {
+            deducible = deducible.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            deducible = String(deducible).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
+        if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            primaAnual = `Bs ${primaAnual}`;
+            sumaAsegurada = `Bs ${sumaAsegurada}`;
+            deducible = `Bs ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
+            primaAnual = `$ ${primaAnual}`;
+            sumaAsegurada = `$ ${sumaAsegurada}`;
+            deducible = `$ ${deducible}`;
+        } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
+            primaAnual = `€ ${primaAnual}`;
+            sumaAsegurada = `€ ${sumaAsegurada}`;
+            deducible = `€ ${deducible}`;
+        }
+        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultPolicyOA = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOA.length > 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOA[0].agente_propio_id);
+        }
+        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+        const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+        for (const resultPIIE of resultsPIIE) {
+            const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+            executives.push(`${resultExecutive[0].nombre_ejecutivo} ${resultExecutive[0].apellido_ejecutivo}`);
+        }
+        if (resultPII[0].asegurado_per_jur_id === null) {
+            resultInsuredNatural = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+        } else {
+            resultInsuredLegal = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+        }
+        try {
+            const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
+            let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
+            let montoPrimaAnual = req.body.prima_anual_poliza;
+            let deducible = req.body.deducible_poliza;
+            let sumaAsegurada = req.body.suma_asegurada_poliza;
+            let arrayEjecutivo = [];
+            let nombreCompletoAgente = req.body.nombre_agentes_propios;
+            montoPrimaAnual = montoPrimaAnual.replace(/[Bs$€]/g, '').replace(' ', '');
+            deducible = deducible.replace(/[Bs$€]/g, '').replace(' ', '');
+            sumaAsegurada = sumaAsegurada.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            } else if (montoPrimaAnual.indexOf(',') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(",", ".");
+                montoPrimaAnual = parseFloat(montoPrimaAnual);
+            } else if (montoPrimaAnual.indexOf('.') !== -1) {
+                montoPrimaAnual = montoPrimaAnual.replace(".", ",");
+                montoPrimaAnual = parseFloat(montoPrimaAnual.replace(/,/g,''));
+            }
+            if ((deducible.indexOf(',') !== -1) && (deducible.indexOf('.') !== -1)) {
+                deducible = deducible.replace(",", ".");
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            } else if (deducible.indexOf(',') !== -1) {
+                deducible = deducible.replace(",", ".");
+                deducible = parseFloat(deducible);
+            } else if (deducible.indexOf('.') !== -1) {
+                deducible = deducible.replace(".", ",");
+                deducible = parseFloat(deducible.replace(/,/g,''));
+            }
+            if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            } else if (sumaAsegurada.indexOf(',') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(",", ".");
+                sumaAsegurada = parseFloat(sumaAsegurada);
+            } else if (sumaAsegurada.indexOf('.') !== -1) {
+                sumaAsegurada = sumaAsegurada.replace(".", ",");
+                sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
+            }
+            let fechaPolizaDesde = new Date(req.body.fecha_desde_poliza);
+            let fechaPolizaHasta = new Date(req.body.fecha_hasta_poliza);
+            let tipoIndividualPoliza = 'VIAJE';
+            let cedulaAseguradoNatural = '';
+            let rifAseguradoJuridico = '';
+            let estatusPoliza = '';
+            let diasExpiracion = 0;
+            let fechaActual = new Date();
+            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
+            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
+            diasExpiracion = diferenciaDias.toFixed(0);
+            if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
+                rifAseguradoJuridico = req.body.id_rif_asegurado;
+            } else {
+                cedulaAseguradoNatural = req.body.id_rif_asegurado;
+            }
+            if (diasExpiracion > 0) {
+                estatusPoliza = 'VIGENTE';
+            } else {
+                estatusPoliza = 'ANULADO';
+            }
+            arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
+            await policyModel.updateTravelPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
+            if (nombreCompletoAgente !== '') {
+                let nombresAgentePropio;
+                let apellidosAgentePropio;
+                if (nombreCompletoAgente.split(" ").length === 2) {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 1).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresAgentePropio = nombreCompletoAgente.split(' ', 2).join(' ');
+                    apellidosAgentePropio = nombreCompletoAgente.split(' ').slice(2,4).join(' ');
+                }
+                let idAgentePropio = await ownAgentModel.getOwnAgentId(nombresAgentePropio, apellidosAgentePropio);
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length === 0) {
+                    await policyOwnAgentModel.postPolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } else {
+                    await policyOwnAgentModel.updatePolicyOwnAgent(req.body.id_poliza, idAgentePropio);
+                } 
+            } else {
+                let resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(req.body.id_poliza);
+                if (resultPOA.length !== 0) {
+                    const disablePAP = 1;
+                    await policyOwnAgentModel.disablePolicyOwnAgent(req.body.id_poliza, disablePAP);
+                }
+            }
+            await policyInsurerInsuredModel.updatePolicyInsurerInsured(cedulaAseguradoNatural, rifAseguradoJuridico, req.body.nombre_aseguradora, req.body.id_poliza);
+            const resultPAA = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.body.id_poliza);
+            const resultPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPAA[0].id_paa);
+            for (let index = 0; index < arrayEjecutivo.length; index++) {
+                const nombreCompletoEjecutivo = arrayEjecutivo[index];
+                let nombresEjecutivo;
+                let apellidosEjecutivo;
+                if (nombreCompletoEjecutivo.split(" ").length === 2) {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 1).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(1,2).join(' ');
+                } else {
+                    nombresEjecutivo = nombreCompletoEjecutivo.split(' ', 2).join(' ');
+                    apellidosEjecutivo = nombreCompletoEjecutivo.split(' ').slice(2,4).join(' ');
+                }
+                let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                await polInsuInsuredExecModel.updatePolInsuInsuredExecutive(resultPIIE[index].id_paae, idEjecutivo[0].id_ejecutivo);
+            }
+            res.render('editPolicyTravel', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-policy-travel/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
+                name: req.session.name
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editPolicyTravel', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-policy-travel/${idPolicy}`,
+                policy: resultPolicy[0],
+                fechaDesdePoliza,
+                fechaHastaPoliza,
+                primaAnual,
+                sumaAsegurada,
+                deducible,
+                insurers,
+                insurer: resultInsurer[0],
+                naturalInsureds: resultsNaturalInsureds,
+                naturalInsured: resultInsuredNatural[0],
+                legalInsureds: resultsLegalInsureds,
+                legalInsured: resultInsuredLegal[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                executivesNames: executives,
+                ownAgents: resultsOwnAgents,
+                ownAgent: resultOwnAgent[0],
                 name: req.session.name
             });
         }

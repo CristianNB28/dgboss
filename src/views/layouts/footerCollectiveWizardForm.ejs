@@ -577,15 +577,15 @@
         if(localStorage.formDataPolicyHealth !== undefined){
             formDataPolicyHealth = JSON.parse(localStorage.formDataPolicyHealth);
             for (var i = 0; i < formDataPolicyHealth.length; i++) {
-                $(`[name=${formDataPolicyHealth[i].name}]`).val(formDataPolicyHealth[i].value);
+                $(`#policy-form-health-collective [name=${formDataPolicyHealth[i].name}]`).val(formDataPolicyHealth[i].value);
                 if ((formDataPolicyHealth[i].name === 'maternidad_colectivo') && (formDataPolicyHealth[i].value === 'SÍ')) {
-                    document.getElementById("searchinput").style.display = "block";
+                    $('#policy-form-health-collective #searchinput').css('display', 'block');
                 }
                 if ((formDataPolicyHealth[i].name === 'plazo_espera_colectivo') && (formDataPolicyHealth[i].value === 'SÍ')) {
-                    document.getElementById("searchinput2").style.display = "block";
+                    $('#policy-form-health-collective #searchinput2').css('display', 'block');
                 }
                 if ((formDataPolicyHealth[i].name === 'tipo_canal_colectivo') && (formDataPolicyHealth[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-health-collective #searchList').css('display', 'block');
                 }
             }
         }
@@ -618,7 +618,7 @@
         if(localStorage.formDataReceiptHealth !== undefined){
             formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
             for (var i = 0; i < formDataReceiptHealth.length; i++) {
-                $(`[name=${formDataReceiptHealth[i].name}]`).val(formDataReceiptHealth[i].value);
+                $(`#receipt-form-health-collective [name=${formDataReceiptHealth[i].name}]`).val(formDataReceiptHealth[i].value);
                 if ((formDataReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptHealth[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptHealth[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -642,7 +642,7 @@
         if(localStorage.formCommissionHealth !== undefined){
             formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
             for (var i = 0; i < formCommissionHealth.length; i++) {
-                $(`[name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
+                $(`#commission-form-health-collective [name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
             }
         }
     }
@@ -675,12 +675,12 @@
         if(localStorage.formDataPolicyVehicle !== undefined){
             formDataPolicyVehicle = JSON.parse(localStorage.formDataPolicyVehicle);
             for (var i = 0; i < formDataPolicyVehicle.length; i++) {
-                $(`[name=${formDataPolicyVehicle[i].name}]`).val(formDataPolicyVehicle[i].value);
+                $(`#policy-form-vehicle-collective [name=${formDataPolicyVehicle[i].name}]`).val(formDataPolicyVehicle[i].value);
                 if ((formDataPolicyVehicle[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyVehicle[i].value === true)) {
-                    document.getElementById("tomador_asegurado_colectivo").checked = formDataPolicyVehicle[i].value;
+                    $('#policy-form-vehicle-collective #tomador_asegurado_colectivo').prop('checked', formDataPolicyVehicle[i].value);
                 }
                 if ((formDataPolicyVehicle[i].name === 'tipo_canal_colectivo') && (formDataPolicyVehicle[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-vehicle-collective #searchList').css('display', 'block');
                 }
             }
         }
@@ -713,7 +713,7 @@
         if(localStorage.formDataReceiptVehicle !== undefined){
             formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
             for (var i = 0; i < formDataReceiptVehicle.length; i++) {
-                $(`[name=${formDataReceiptVehicle[i].name}]`).val(formDataReceiptVehicle[i].value);
+                $(`#receipt-form-vehicle-collective [name=${formDataReceiptVehicle[i].name}]`).val(formDataReceiptVehicle[i].value);
                 if ((formDataReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptVehicle[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptVehicle[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -737,7 +737,7 @@
         if(localStorage.formCommissionVehicle !== undefined){
             formCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
             for (var i = 0; i < formCommissionVehicle.length; i++) {
-                $(`[name=${formCommissionVehicle[i].name}]`).val(formCommissionVehicle[i].value);
+                $(`#commission-form-vehicle-collective [name=${formCommissionVehicle[i].name}]`).val(formCommissionVehicle[i].value);
             }
         }
     }
@@ -770,12 +770,12 @@
         if(localStorage.formDataPolicyRiskDiverse !== undefined){
             formDataPolicyRiskDiverse = JSON.parse(localStorage.formDataPolicyRiskDiverse);
             for (var i = 0; i < formDataPolicyRiskDiverse.length; i++) {
-                $(`[name=${formDataPolicyRiskDiverse[i].name}]`).val(formDataPolicyRiskDiverse[i].value);
+                $(`#policy-form-risk-diverse [name=${formDataPolicyRiskDiverse[i].name}]`).val(formDataPolicyRiskDiverse[i].value);
                 if ((formDataPolicyRiskDiverse[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyRiskDiverse[i].value === true)) {
-                    document.getElementById("tomador_asegurado_colectivo").checked = formDataPolicyRiskDiverse[i].value;
+                    $('#policy-form-risk-diverse #tomador_asegurado_colectivo').prop('checked', formDataPolicyRiskDiverse[i].value);
                 }
                 if ((formDataPolicyRiskDiverse[i].name === 'tipo_canal_colectivo') && (formDataPolicyRiskDiverse[i].value === 'AGENTE PROPIO')) {
-                    document.getElementById("searchList").style.display = "block";
+                    $('#policy-form-risk-diverse #searchList').css('display', 'block');
                 }
             }
         }
@@ -808,7 +808,7 @@
         if(localStorage.formDataReceiptRiskDiverse !== undefined){
             formDataReceiptRiskDiverse = JSON.parse(localStorage.formDataReceiptRiskDiverse);
             for (var i = 0; i < formDataReceiptRiskDiverse.length; i++) {
-                $(`[name=${formDataReceiptRiskDiverse[i].name}]`).val(formDataReceiptRiskDiverse[i].value);
+                $(`#receipt-form-risk-diverse [name=${formDataReceiptRiskDiverse[i].name}]`).val(formDataReceiptRiskDiverse[i].value);
                 if ((formDataReceiptRiskDiverse[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptRiskDiverse[i].value === true)) {
                     document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptRiskDiverse[i].value;
                     document.getElementById("active-select-1").style.display = "inline";
@@ -832,7 +832,7 @@
         if(localStorage.formCommissionRiskDiverse !== undefined){
             formCommissionRiskDiverse = JSON.parse(localStorage.formCommissionRiskDiverse);
             for (var i = 0; i < formCommissionRiskDiverse.length; i++) {
-                $(`[name=${formCommissionRiskDiverse[i].name}]`).val(formCommissionRiskDiverse[i].value);
+                $(`#commission-form-risk-diverse [name=${formCommissionRiskDiverse[i].name}]`).val(formCommissionRiskDiverse[i].value);
             }
         }
     }
@@ -844,6 +844,10 @@
             let fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
+
+        if (document.getElementById('tipo_canal_colectivo').value=== 'AGENTE PROPIO') {
+            document.getElementById("searchList").style.display = "block";
+        }
 
         $('#fecha_desde_colectivo').change(function () {
             var extraer = $('#fecha_desde_colectivo').val();
@@ -911,7 +915,7 @@
                 cleaveNumeral.setRawValue('');
             }
         });
-
+        
         // Poliza Colectivo Salud
         getPolicyHealth();
         getReceiptHealth();
@@ -926,6 +930,13 @@
         getPolicyRiskDiverse();
         getReceiptRiskDiverse();
         getCommissionRiskDiverse();
+
+        if (document.getElementById('maternidad_colectivo').value === 'SÍ') {
+            document.getElementById("searchinput").style.display = "block";
+        }
+        if (document.getElementById('plazo_espera_colectivo').value === 'SÍ') {
+            document.getElementById("searchinput2").style.display = "block";
+        }
     });
 </script>
 

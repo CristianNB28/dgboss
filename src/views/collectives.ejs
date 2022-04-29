@@ -158,9 +158,19 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-collective/${row.id_colectivo}">
+                    if (row.tipo_colectivo === 'SALUD') { 
+                        return `<form class="form-inline" method="get" action="/sistema/edit-collective-health/${row.id_colectivo}">
                                     <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
                                 </form>`;
+                    } else if (row.tipo_colectivo === 'AUTOMÓVIL') { 
+                        return `<form class="form-inline" method="get" action="/sistema/edit-collective-vehicle/${row.id_colectivo}">
+                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                </form>`;
+                    } else if (row.tipo_colectivo === 'RIESGOS DIVERSOS') { 
+                        return `<form class="form-inline" method="get" action="/sistema/edit-collective-risk-diverse/${row.id_colectivo}">
+                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                </form>`;
+                    }
                 }
             },
             {

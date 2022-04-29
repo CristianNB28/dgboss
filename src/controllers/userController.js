@@ -47,7 +47,7 @@ module.exports = {
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
-                ruta: 'sistema',
+                ruta: 'sistema/user-management',
                 roles: resultsRol,
                 name: req.session.name
             });
@@ -79,7 +79,7 @@ module.exports = {
             alertIcon: 'success',
             showConfirmButton: false,
             timer: 1500,
-            ruta: 'sistema',
+            ruta: 'sistema/add-rol',
             name: req.session.name
         });
     },
@@ -120,6 +120,7 @@ module.exports = {
         let productor = req.body.productor ? 1 : 0;
         let cedulaUsuario = '';
         let rifUsuario = '';
+        const idUser = req.body.id_usuario;
         if ((typeof(req.body.rif_usuario) !== 'undefined')) {
             if ((!req.body.rif_usuario.startsWith('J')) && (!req.body.rif_usuario.startsWith('G')) && (!req.body.rif_usuario.startsWith('V'))) {
                 cedulaUsuario = req.body.rif_usuario;
@@ -135,20 +136,21 @@ module.exports = {
         }
         if (req.body.password_usuario !== req.body.password_confirm) {
             let newPassword = await bcrypt.hash(req.body.password_usuario, 8);
-            await rolUserModel.updateRolUser(req.body.id_usuario, req.body.rol);
+            await rolUserModel.updateRolUser(idUser, req.body.rol);
             await userModel.updateUser(cedulaUsuario, rifUsuario, admin, productor, newPassword, req.body);
-            res.redirect('/sistema');
+            res.redirect(`/sistema/edit-user/${idUser}`);
         } else {
-            await rolUserModel.updateRolUser(req.body.id_usuario, req.body.rol);
+            await rolUserModel.updateRolUser(idUser, req.body.rol);
             await userModel.updateUser(cedulaUsuario, rifUsuario, admin, productor, req.body.password_usuario, req.body);
-            res.redirect('/sistema');
+            res.redirect(`/sistema/edit-user/${idUser}`);
         }
     },
     updateRol: async (req, res) => {
+        const idRol = req.body.id_rol
         if ((req.body.nombre_rol) || (req.body.descripcion_rol)) {
             await rolModel.updateRol(req.body);
         }
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-rol/${idRol}`);
     },
 /*               DELETE                  */
     disableUser: async (req, res) => {

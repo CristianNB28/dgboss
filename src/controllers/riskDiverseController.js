@@ -155,7 +155,7 @@ module.exports = {
             sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
         }
         await riskDiverseModel.updateRiskDiverse(sumaAsegurada, req.body);
-        res.redirect('/sistema');
+        res.redirect(`/sistema/edit-risk-diverse/${req.body.id_riesgo_diverso}`);
     },
 /*               DELETE                  */
     disableRiskDiverse: async (req, res) => {
