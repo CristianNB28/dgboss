@@ -6,6 +6,7 @@ const receiptModel = require('../models/receipt');
 const insuredModel = require('../models/insured');
 const commissionModel = require('../models/commission');
 const collectiveModel = require('../models/collective');
+const { cookie } = require('express/lib/response');
 
 module.exports = {
 /*                  GET                  */
@@ -987,7 +988,8 @@ module.exports = {
             ownAgents: ownAgents,
             ownAgentsComission: totalCommissions,
             datesOwnAgents: datesOwnAgents,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     get404:  (req, res) => {

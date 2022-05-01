@@ -51,27 +51,52 @@ module.exports = {
             }
             let vehicle = await vehicleModel.postVehicleForm(blindaje, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
             await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
-            res.redirect('/sistema/add-vehicle-policy');
-            throw new Error('Error');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-vehicle-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-vehicle-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('vehiclePolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-vehicle-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postVehicleCollectiveForm: async (req, res) => {
@@ -150,29 +175,55 @@ module.exports = {
                     temparrayVehicle.push([collectiveInsurerInsured[0].id_caa, vehicleId]);
                 }
                 await colInsInsurerVehiModel.postColInsuInsuredVehi(temparrayVehicle);
-                res.redirect('/sistema/add-vehicle-collective');
+                if (req.cookies.rol === 'ADMINISTRATIVO') {
+                    res.redirect('/sistema/add-vehicle-collective');
+                } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                    res.redirect('/sistema/add-subscription-vehicle-collective');
+                }
             } else {
                 throw new SyntaxError("Ingrese archivo de extensión .csv");
             }
         } catch (error) {
             console.log(error);
-            res.render('vehicleCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                collectives: resultsCollective,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-vehicle-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
 /*                  PUT                  */
@@ -198,7 +249,8 @@ module.exports = {
                 sumaAsegurada: sumaAsegurada,
                 capacidadCarga: capacidadCarga,
                 naturalInsureds: resultsNaturalInsureds,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();

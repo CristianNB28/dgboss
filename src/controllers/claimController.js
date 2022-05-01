@@ -34,7 +34,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getLetterGuaranteeForm: async (req, res) => {
@@ -57,7 +58,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getEmergencyForm: async (req, res) => {
@@ -80,7 +82,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getAMPForm: async (req, res) => {
@@ -103,7 +106,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getRefunds: async (req, res) => {
@@ -137,7 +141,8 @@ module.exports = {
         }
         res.render('refunds',{
             data: resultsRefunds,
-            name: req.session.name 
+            name: req.session.name,
+            cookieRol: req.cookies.rol 
         });
     },
     getLettersGuarantee: async (req, res) => {
@@ -171,7 +176,8 @@ module.exports = {
         }
         res.render('lettersGuarentee',{
             data: resultsLettersGuarentee,
-            name: req.session.name 
+            name: req.session.name,
+            cookieRol: req.cookies.rol 
         });
     },
     getEmergencies: async (req, res) => {
@@ -205,7 +211,8 @@ module.exports = {
         }
         res.render('emergencies',{
             data: resultsEmergencies,
-            name: req.session.name 
+            name: req.session.name,
+            cookieRol: req.cookies.rol 
         });
     },
     getAMP: async (req, res) => {
@@ -239,7 +246,8 @@ module.exports = {
         }
         res.render('amp',{
             data: resultsAMP,
-            name: req.session.name 
+            name: req.session.name,
+            cookieRol: req.cookies.rol 
         });
     },
 /*                 POST                  */
@@ -313,7 +321,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     postLetterGuaranteeForm: async (req, res) => {
@@ -386,7 +395,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     postEmergencyForm: async (req, res) => {
@@ -459,7 +469,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     postAMPForm: async (req, res) => {
@@ -532,7 +543,8 @@ module.exports = {
             resultsCIIB: resultsCIIB,
             collectives: resultsCollectives,
             beneficiaries: resultsBeneficiaries,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
 /*                  PUT                  */
@@ -603,7 +615,8 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -676,7 +689,8 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -749,7 +763,8 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -822,7 +837,8 @@ module.exports = {
                 resultsCIIB: resultsCIIB,
                 collectives: resultsCollectives,
                 beneficiaries: resultsBeneficiaries,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();

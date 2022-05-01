@@ -129,7 +129,8 @@ module.exports = {
             }
             res.render('premiumsCollected',{
                 data: resultPremiumCollection,
-                name: req.session.name 
+                name: req.session.name,
+                cookieRol: req.cookies.rol 
             });
         } catch (error) {
             console.log(error);
@@ -276,7 +277,8 @@ module.exports = {
             }
             res.render('commissionsCollected', {
                 data: resultCommissionCollection,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -331,7 +333,8 @@ module.exports = {
         }
         res.render('policyClaims', {
             resultPolicyClaims: resultPolicyClaims,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getGlobalLossRatio: async (req, res) => {
@@ -349,7 +352,8 @@ module.exports = {
         totalPremium = totalPremiumPolicy + totalPremiumCollective; 
         res.render('globalLossRatio', {
             totalPremium: totalPremium,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getPendingPayments: async (req, res) => {
@@ -499,7 +503,8 @@ module.exports = {
             }
             res.render('pendingPayments',{
                 data: resultPendingPayment,
-                name: req.session.name 
+                name: req.session.name,
+                cookieRol: req.cookies.rol 
             });
         } catch (error) {
             console.log(error);

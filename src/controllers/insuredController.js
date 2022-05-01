@@ -7,28 +7,32 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('naturalInsuredForm', {
             ownAgents: resultsOwnAgents,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getLegalInsuredForm: async (req, res) => {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('legalInsuredForm', {
             ownAgents: resultsOwnAgents,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getNaturalInsureds: async (req, res) => {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         res.render('naturalInsureds', {
             data: resultsNaturalInsureds,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getLegalInsureds: async (req, res) => {
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         res.render('legalInsureds', {
             data: resultsLegalInsureds,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
 /*                 POST                  */
@@ -65,7 +69,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/add-natural-insured',
                     ownAgents: resultsOwnAgents,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else {
                 res.render('naturalInsuredForm', {
@@ -77,7 +82,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/add-natural-insured',
                     ownAgents: resultsOwnAgents,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             }
             throw new Error('Error, valor duplicado de asegurado persona natural');
@@ -92,7 +98,8 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema/add-natural-insured',
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -125,7 +132,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/add-legal-insured',
                     ownAgents: resultsOwnAgents,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else {
                 res.render('legalInsuredForm', {
@@ -137,7 +145,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/add-legal-insured',
                     ownAgents: resultsOwnAgents,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             }
             throw new Error('Error, valor duplicado de asegurado persona jurídico');
@@ -152,7 +161,8 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema/add-legal-insured',
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -170,7 +180,8 @@ module.exports = {
                 fechaNacNaturalInsured: fechaNacNaturalInsured,
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -187,7 +198,8 @@ module.exports = {
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -232,7 +244,8 @@ module.exports = {
                 fechaNacNaturalInsured: fechaNacNaturalInsured,
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado de asegurado persona natural');
         } catch (error) {
@@ -249,7 +262,8 @@ module.exports = {
                 fechaNacNaturalInsured: fechaNacNaturalInsured,
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -286,7 +300,8 @@ module.exports = {
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado de asegurado persona jurídico');
         } catch (error) {
@@ -302,7 +317,8 @@ module.exports = {
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },

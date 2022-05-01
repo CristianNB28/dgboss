@@ -34,7 +34,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
@@ -68,7 +69,8 @@ module.exports = {
                     ownAgents: resultsOwnAgents,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_nat_id === null) {
                 let resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
@@ -107,7 +109,8 @@ module.exports = {
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
@@ -146,9 +149,55 @@ module.exports = {
                     primaColectivo: primaColectivo,
                     porcentajeAgentePropio: porcentajeAgentePropio,
                     comisionRecibo: comisionRecibo,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             }
+        }
+    },
+    getSubscriptionHealthCollectiveForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultCollective.length === 0) {
+            res.render('subscriptionHealthCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let resultReceipt = await receiptModel.getReceiptLast();
+            let primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionHealthCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collective: resultCollective[0],
+                receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaColectivo: primaColectivo,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     getVehicleCollectiveForm: async (req, res) => {
@@ -169,7 +218,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
@@ -204,7 +254,8 @@ module.exports = {
                     ownAgents: resultsOwnAgents,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
@@ -250,7 +301,53 @@ module.exports = {
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubscriptionVehicleCollectiveForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultCollective.length === 0) {
+            res.render('subscriptionVehicleCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let resultReceipt = await receiptModel.getReceiptLast();
+            let primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionVehicleCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collective: resultCollective[0],
+                receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaColectivo: primaColectivo,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -272,7 +369,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
@@ -307,7 +405,8 @@ module.exports = {
                     ownAgents: resultsOwnAgents,
                     primaColectivo: primaColectivo,
                     comisionRecibo: comisionRecibo,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if (collectiveInsurerInsured[0].asegurado_per_jur_id === null) {
                 let resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
@@ -353,7 +452,53 @@ module.exports = {
                 primaColectivo: primaColectivo,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubscriptionRiskDiverseCollectiveForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultCollective = await collectiveModel.getCollectiveLast();
+        let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultCollective.length === 0) {
+            res.render('subscriptionRiskDiverseCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let resultReceipt = await receiptModel.getReceiptLast();
+            let primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionRiskDiverseCollectiveForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collective: resultCollective[0],
+                receipt: resultReceipt[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaColectivo: primaColectivo,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -388,7 +533,8 @@ module.exports = {
         }
         res.render('collectives', {
             data: resultsCollectives,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getCollectivesDetail: async (req, res, next) => {
@@ -414,7 +560,8 @@ module.exports = {
                 }
                 res.render('beneficiaries', {
                     data: resultsBeneficiaries,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if ((resultsCIIB.length === 0) && (resultsCIIRD.length === 0)) {
                 let resultsVehicles = [];
@@ -424,7 +571,8 @@ module.exports = {
                 }
                 res.render('vehicles', {
                     data: resultsVehicles,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             } else if ((resultsCIIB.length === 0) && (resultsCIIV.length === 0)) {
                 let resultsVariousRisk = [];
@@ -440,7 +588,8 @@ module.exports = {
                 }
                 res.render('variousRisk', {
                     data: resultsVariousRisk,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             }
         } else {
@@ -546,26 +695,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-health-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-health-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-health-collective');
+            }
         } catch (error) {
             console.log(error);
-            res.render('healthCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-health-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                collectives: resultsCollective,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('healthCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-health-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionHealthCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-health-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postVehicleCollectiveForm: async (req, res) => {
@@ -657,26 +832,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-vehicle-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-vehicle-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-vehicle-collective');
+            }
         } catch (error) {
             console.log(error);
-            res.render('vehicleCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                collectives: resultsCollective,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-vehicle-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postRiskDiverseCollectiveForm: async (req, res) => {
@@ -768,26 +969,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await colInsuInsuredExecModel.postColInsuInsuredExecutive(caa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-risk-diverse-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-risk-diverse-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-risk-diverse-collective');
+            }
         } catch (error) {
             console.log(error);
-            res.render('riskDiverseCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-risk-diverse-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                collectives: resultsCollective,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('riskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-risk-diverse-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionRiskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-risk-diverse-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
 /*                  PUT                  */
@@ -873,7 +1100,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -953,7 +1181,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -1033,7 +1262,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -1233,7 +1463,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -1262,7 +1493,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -1440,7 +1672,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -1469,7 +1702,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -1647,7 +1881,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -1676,7 +1911,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },

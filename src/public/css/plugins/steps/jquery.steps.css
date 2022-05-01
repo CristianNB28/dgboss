@@ -76,6 +76,16 @@
     width: 20%;
 }
 
+.wizard-health-subcription > .steps > ul > li
+{
+    width: 33.33%;
+}
+
+.wizard-patrimonial-subcription > .steps > ul > li
+{
+    width: 50%;
+}
+
 .wizard > .steps > ul > li,
 .wizard > .actions > ul > li
 {

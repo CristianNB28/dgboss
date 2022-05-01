@@ -9,26 +9,30 @@ module.exports = {
         let resultsRoles = await rolModel.getRoles();
         res.render('userForm', {
             roles: resultsRoles,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getRolForm: (req, res) => {
         res.render('rolForm', {
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getUsers: async (req, res) => {
         let resultsUsers = await userModel.getUsers();
         res.render('users', {
             data: resultsUsers,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getRoles: async (req, res) => {
         let results = await rolModel.getRoles();
         res.render('checkRoles',{
             data: results,
-            name: req.session.name 
+            name: req.session.name,
+            cookieRol: req.cookies.rol 
         });
     },
 /*                  POST                  */
@@ -49,7 +53,8 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema/user-management',
                 roles: resultsRol,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             try {
@@ -65,7 +70,8 @@ module.exports = {
                     timer: 1500,
                     ruta: 'sistema/user-management',
                     roles: resultsRol,
-                    name: req.session.name
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
                 });
             }
         }
@@ -80,7 +86,8 @@ module.exports = {
             showConfirmButton: false,
             timer: 1500,
             ruta: 'sistema/add-rol',
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
 /*                  PUT                  */
@@ -96,7 +103,8 @@ module.exports = {
                 user: resultUser[0],
                 rol: resultRol[0],
                 roles: resultsRoles,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -109,7 +117,8 @@ module.exports = {
             let resultRol = await rolModel.getRol(idRol);
             res.render('editRol', {
                 rol: resultRol[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();

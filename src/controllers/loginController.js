@@ -1,4 +1,6 @@
 const userModel = require('../models/user');
+const rolModel = require('../models/rol');
+const rolUserModel = require('../models/rol_user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -60,6 +62,13 @@ module.exports = {
                     });
                 }
             } else {
+                const resultRolUser = await rolUserModel.getRolUser(results[0].id_usuario);
+                const resultRol = await rolModel.getRol(resultRolUser[0].rol_id);
+                if (resultRol[0].nombre_rol === 'ADMINISTRATIVO') {
+                    res.cookie('rol', resultRol[0].nombre_rol, { httpOnly: true, maxAge: maxAge * 1000 });
+                } else if (resultRol[0].nombre_rol === 'SUSCRIPCIÓN') {
+                    res.cookie('rol', resultRol[0].nombre_rol, { httpOnly: true, maxAge: maxAge * 1000 });
+                }
                 const token = createToken(results[0].id_usuario);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
                 req.session.name = results[0].nombre_usuario;

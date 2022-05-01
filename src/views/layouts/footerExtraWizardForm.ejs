@@ -223,6 +223,141 @@
         step: $.validator.format("Por favor, escribe un múltiplo de {0}")
     });
     function esRepetidoNumPoliza(value, element, param) {
+        let numberPolicy = document.getElementById("numero_poliza").value;
+        const even = (policy) => policy.numero_poliza === numberPolicy;
+        if (policies.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value;
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
+    $(document).ready(function(){
+        $("#wizard").steps();
+        $("#form-health-policy-subcription").steps({
+            headerTag: "h1",
+            bodyTag: "fieldset",
+            titleTemplate:"<span class='text'></span> #title#",
+            saveState: true,
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Pagination",
+                finish: "Cerrar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: (event, currentIndex, newIndex) => {
+                if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                if (newIndex === 3)
+                {
+                    return false;
+                }
+                if (newIndex === 1) {
+                    $("#policy-form-health-subcription").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-health-subcription").valid();
+                } else if (newIndex === 2) {
+                    return true;
+                }
+            },
+            onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
+                if (currentIndex === 1) {
+                    storeValuesSubscriptionPolicyHealth();
+                    $('#policy-form-health-subcription').submit();
+                } 
+            },
+            onFinishing:(event, currentIndex) => {
+                $('#receipt-form-health').validate().settings.ignore = ":disabled,:hidden";
+                return $('#receipt-form-health').valid();
+            },
+            onFinished: (a) => {
+                localStorage.clear();
+                $('#form-health-policy-subcription .steps a:eq(0)').click();
+                $('#form-health-policy-subcription').hide();
+                $('#receipt-form-health').submit();
+            }
+        });
+        $().ready(function () {
+            $("#policy-form-health-subcription").validate({
+                rules: {
+                    numero_poliza: {
+                        esrepetidonumpoliza: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#receipt-form-health").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#extra-form").on('keyup','.input-numeral-cedula',function(){
+            new Cleave('.input-numeral-cedula', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.'
+            });    
+        });
+        $("#receipt-form-health").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+    });
+</script>
+
+<script>
+    var policies = <%- JSON.stringify(policies) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
+    $.extend($.validator.messages, {
+        required: "Este campo es obligatorio",
+        remote: "Por favor, rellena este campo",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida",
+        date: "Por favor, escribe una fecha válida",
+        dateISO: "Por favor, escribe una fecha (ISO) válida",
+        number: "Por favor, escribe un número entero válido",
+        digits: "Por favor, escribe sólo dígitos",
+        creditcard: "Por favor, escribe un número de tarjeta válido",
+        equalTo: "Por favor, escribe el mismo valor de nuevo",
+        accept: "Por favor, escribe un valor con una extensión aceptada",
+        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
+        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
+        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
+        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
+        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
+        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
+        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
+    });
+    function esRepetidoNumPoliza(value, element, param) {
         let numberPolicy = document.getElementById("numero_poliza").value
         const even = (policy) => policy.numero_poliza === numberPolicy;
         if (policies.some(even) === true) {
@@ -362,6 +497,13 @@
                 }, false); 
             }    
         });
+        $("#extra-form-vehicle").on('keyup','.input-numeral-cedula',function(){
+            new Cleave('.input-numeral-cedula', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.'
+            });    
+        });
         $("#receipt-form-vehicle").on('keyup','.porcentaje_tasa',function(){
             $('.porcentaje_tasa').toArray().forEach(function(field) {
                 new Cleave(field, {
@@ -383,6 +525,173 @@
                     tailPrefix: true
                 });
             });
+        });
+    });
+</script>
+
+<script>
+    var policies = <%- JSON.stringify(policies) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
+    $.extend($.validator.messages, {
+        required: "Este campo es obligatorio",
+        remote: "Por favor, rellena este campo",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida",
+        date: "Por favor, escribe una fecha válida",
+        dateISO: "Por favor, escribe una fecha (ISO) válida",
+        number: "Por favor, escribe un número entero válido",
+        digits: "Por favor, escribe sólo dígitos",
+        creditcard: "Por favor, escribe un número de tarjeta válido",
+        equalTo: "Por favor, escribe el mismo valor de nuevo",
+        accept: "Por favor, escribe un valor con una extensión aceptada",
+        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
+        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
+        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
+        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
+        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
+        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
+        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
+    });
+    function esRepetidoNumPoliza(value, element, param) {
+        let numberPolicy = document.getElementById("numero_poliza").value
+        const even = (policy) => policy.numero_poliza === numberPolicy;
+        if (policies.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
+    $(document).ready(function(){
+        $("#wizard").steps();
+        $("#form-vehicle-policy-subcription").steps({
+            headerTag: "h1",
+            bodyTag: "fieldset",
+            titleTemplate:"<span class='text'></span> #title#",
+            saveState: true,
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Pagination",
+                finish: "Cerrar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: (event, currentIndex, newIndex) => {
+                if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                if (newIndex === 3)
+                {
+                    return false;
+                }
+                if (newIndex === 1) {
+                    $("#policy-form-vehicle-subcription").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-vehicle-subcription").valid();
+                } else if (newIndex === 2) {
+                    $('#extra-form-vehicle-subcription').validate().settings.ignore = ":disabled,:hidden";
+                    return $('#extra-form-vehicle-subcription').valid();
+                }
+            },
+            onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } else if (currentIndex === 2 && priorIndex === 3) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
+                if (currentIndex === 1) {
+                    storeValuesSubscriptionPolicyVehicle();
+                    $('#policy-form-vehicle-subcription').submit();
+                } else if (currentIndex === 2) {
+                    storeValuesSubscriptionExtraVehicle();
+                    $('#extra-form-vehicle-subcription').submit();
+                }
+            },
+            onFinishing:(event, currentIndex) => {
+                $('#receipt-form-vehicle').validate().settings.ignore = ":disabled,:hidden";
+                return $('#receipt-form-vehicle').valid();
+            },
+            onFinished: (a) => {
+                localStorage.clear();
+                $('#form-vehicle-policy-subcription .steps a:eq(0)').click();
+                $('#form-vehicle-policy-subcription').hide();
+                $('#receipt-form-vehicle').submit();
+            }
+        });
+        $().ready(function () {
+            $("#policy-form-vehicle-subcription").validate({
+                rules: {
+                    numero_poliza: {
+                        esrepetidonumpoliza: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#receipt-form-vehicle").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#policy-form-vehicle-subcription").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+        $("#extra-form-vehicle-subcription").on('keyup','.number_format',function(){
+            var separador = $(this);
+            for (var i = 0 ; i < separador.length; i++) {
+                separador[i].addEventListener('input', (e) => {
+                    var entrada = e.target.value.split(','),
+                    parteEntera = entrada[0].replace(/\./g, ''),
+                    parteDecimal = entrada[1],
+                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
+                }, false); 
+            }    
+        });
+        $("#extra-form-vehicle-subcription").on('keyup','.input-numeral-cedula',function(){
+            new Cleave('.input-numeral-cedula', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.'
+            });    
+        });
+        $("#receipt-form-vehicle").on('keyup','.porcentaje_tasa',function(){
+            $('.porcentaje_tasa').toArray().forEach(function(field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '%',
+                    tailPrefix: true
+                });
+            });    
         });
     });
 </script>
@@ -595,6 +904,141 @@
     $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
     $(document).ready(function(){
         $("#wizard").steps();
+        $("#form-funeral-subcription").steps({
+            headerTag: "h1",
+            bodyTag: "fieldset",
+            titleTemplate:"<span class='text'></span> #title#",
+            saveState: true,
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Pagination",
+                finish: "Cerrar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: (event, currentIndex, newIndex) => {
+                if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                if (newIndex === 3)
+                {
+                    return false;
+                }
+                if (newIndex === 1) {
+                    $("#policy-form-funeral-subcription").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-funeral-subcription").valid();
+                } else if (newIndex === 2) {
+                    return true;
+                }
+            },
+            onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                }
+                if (currentIndex === 1) {
+                    storeValuesSubscriptionPolicyFuneral();
+                    $('#policy-form-funeral-subcription').submit();
+                }
+            },
+            onFinishing:(event, currentIndex) => {
+                $('#receipt-form-funeral').validate().settings.ignore = ":disabled,:hidden";
+                return $('#receipt-form-funeral').valid();
+            },
+            onFinished: (a) => {
+                localStorage.clear();
+                $('#form-funeral-subcription .steps a:eq(0)').click();
+                $('#form-funeral-subcription').hide();
+                $('#receipt-form-funeral').submit();
+            }
+        });
+        $().ready(function () {
+            $("#policy-form-funeral-subcription").validate({
+                rules: {
+                    numero_poliza: {
+                        esrepetidonumpoliza: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#receipt-form-funeral").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#extra-form").on('keyup','.input-numeral-cedula',function(){
+            new Cleave('.input-numeral-cedula', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.'
+            });    
+        });
+        $("#receipt-form-funeral").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+    });
+</script>
+
+<script>
+    var policies = <%- JSON.stringify(policies) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
+    $.extend($.validator.messages, {
+        required: "Este campo es obligatorio",
+        remote: "Por favor, rellena este campo",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida",
+        date: "Por favor, escribe una fecha válida",
+        dateISO: "Por favor, escribe una fecha (ISO) válida",
+        number: "Por favor, escribe un número entero válido",
+        digits: "Por favor, escribe sólo dígitos",
+        creditcard: "Por favor, escribe un número de tarjeta válido",
+        equalTo: "Por favor, escribe el mismo valor de nuevo",
+        accept: "Por favor, escribe un valor con una extensión aceptada",
+        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
+        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
+        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
+        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
+        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
+        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
+        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
+    });
+    function esRepetidoNumPoliza(value, element, param) {
+        let numberPolicy = document.getElementById("numero_poliza").value
+        const even = (policy) => policy.numero_poliza === numberPolicy;
+        if (policies.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
+    $(document).ready(function(){
+        $("#wizard").steps();
         $("#form-life").steps({
             headerTag: "h1",
             bodyTag: "fieldset",
@@ -713,6 +1157,141 @@
     });
 </script>
 
+<script>
+    var policies = <%- JSON.stringify(policies) %>;
+    var receipts = <%- JSON.stringify(receipts) %>;
+    $.extend($.validator.messages, {
+        required: "Este campo es obligatorio",
+        remote: "Por favor, rellena este campo",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida",
+        date: "Por favor, escribe una fecha válida",
+        dateISO: "Por favor, escribe una fecha (ISO) válida",
+        number: "Por favor, escribe un número entero válido",
+        digits: "Por favor, escribe sólo dígitos",
+        creditcard: "Por favor, escribe un número de tarjeta válido",
+        equalTo: "Por favor, escribe el mismo valor de nuevo",
+        accept: "Por favor, escribe un valor con una extensión aceptada",
+        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
+        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
+        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
+        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
+        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
+        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
+        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
+    });
+    function esRepetidoNumPoliza(value, element, param) {
+        let numberPolicy = document.getElementById("numero_poliza").value
+        const even = (policy) => policy.numero_poliza === numberPolicy;
+        if (policies.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
+    $(document).ready(function(){
+        $("#wizard").steps();
+        $("#form-life-subcription").steps({
+            headerTag: "h1",
+            bodyTag: "fieldset",
+            titleTemplate:"<span class='text'></span> #title#",
+            saveState: true,
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Pagination",
+                finish: "Cerrar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: (event, currentIndex, newIndex) => {
+                if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                if (newIndex === 3)
+                {
+                    return false;
+                }
+                if (newIndex === 1) {
+                    $("#policy-form-life-subcription").validate().settings.ignore = ":disabled,:hidden";
+                    return $("#policy-form-life-subcription").valid();
+                } else if (newIndex === 2) {
+                    return true;
+                }
+            },
+            onStepChanged: (event, currentIndex, priorIndex) => {
+                if (currentIndex === 1 && priorIndex === 2) {
+                    $("a[href$='previous']").on('click', function (event) {
+                        event.preventdefault();
+                    });
+                    return;
+                } 
+                if (currentIndex === 1) {
+                    storeValuesSubscriptionPolicyLife();
+                    $('#policy-form-life-subcription').submit();
+                }
+            },
+            onFinishing:(event, currentIndex) => {
+                $('#receipt-form-life').validate().settings.ignore = ":disabled,:hidden";
+                return $('#receipt-form-life').valid();
+            },
+            onFinished: (a) => {
+                localStorage.clear();
+                $('#form-life-subcription .steps a:eq(0)').click();
+                $('#form-life-subcription').hide();
+                $('#receipt-form-life').submit();
+            }
+        });
+        $().ready(function () {
+            $("#policy-form-life-subcription").validate({
+                rules: {
+                    numero_poliza: {
+                        esrepetidonumpoliza: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#receipt-form-life").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $("#extra-form").on('keyup','.input-numeral-cedula',function(){
+            new Cleave('.input-numeral-cedula', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.'
+            });    
+        });
+        $("#receipt-form-life").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+    });
+</script>
+
 <% if(typeof alert != 'undefined') { %>
     <script>
         Swal.fire({
@@ -823,6 +1402,51 @@
             formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
             for (var i = 0; i < formCommissionHealth.length; i++) {
                 $(`#commission-form-health [name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Salud Suscripcion -->
+<script>
+    function storeValuesSubscriptionPolicyHealth() {
+        let formDataSuscriptionPolicyHealth = [];
+        localStorage.removeItem('formDataSuscriptionPolicyHealth');
+        $('#policy-form-health-subcription input[type=text]').each(function(){
+            formDataSuscriptionPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-subcription input[type=email]').each(function(){
+            formDataSuscriptionPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-subcription input[type=date]').each(function(){
+            formDataSuscriptionPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-subcription select').each(function(){
+            formDataSuscriptionPolicyHealth.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-health-subcription #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSuscriptionPolicyHealth.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSuscriptionPolicyHealth", JSON.stringify(formDataSuscriptionPolicyHealth));
+    }
+    function getSubscriptionPolicyHealth() {
+        if(localStorage.formDataSuscriptionPolicyHealth !== undefined){
+            formDataSuscriptionPolicyHealth = JSON.parse(localStorage.formDataSuscriptionPolicyHealth);
+            for (var i = 0; i < formDataSuscriptionPolicyHealth.length; i++) {
+                $(`#policy-form-health-subcription [name=${formDataSuscriptionPolicyHealth[i].name}]`).val(formDataSuscriptionPolicyHealth[i].value);
+                if ((formDataSuscriptionPolicyHealth[i].name === 'tomador_asegurado_poliza') && (formDataSuscriptionPolicyHealth[i].value === true)) {
+                    $('#policy-form-health-subcription #tomador_asegurado_poliza').prop('checked', formDataSuscriptionPolicyHealth[i].value);
+                }
+                if ((formDataSuscriptionPolicyHealth[i].name === 'maternidad_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'SÍ')) {
+                    $('#policy-form-health-subcription #searchinput').css('display', 'block');
+                }
+                if ((formDataSuscriptionPolicyHealth[i].name === 'plazo_espera_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'SÍ')) {
+                    $('#policy-form-health-subcription #searchinput2').css('display', 'block');
+                }
+                if ((formDataSuscriptionPolicyHealth[i].name === 'tipo_canal_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'AGENTE PROPIO')) {
+                    $('#policy-form-health-subcription #searchList').css('display', 'block');
+                }
             }
         }
     }
@@ -957,6 +1581,79 @@
     }
 </script>
 
+<!-- Poliza de Vehiculo Suscripcion -->
+<script>
+    function storeValuesSubscriptionPolicyVehicle() {
+        let formDataSuscriptionPolicyVehicle = [];
+        localStorage.removeItem('formDataSuscriptionPolicyVehicle');
+        $('#policy-form-vehicle-subcription input[type=text]').each(function(){
+            formDataSuscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-subcription input[type=email]').each(function(){
+            formDataSuscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-subcription input[type=date]').each(function(){
+            formDataSuscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-subcription select').each(function(){
+            formDataSuscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-vehicle-subcription #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSuscriptionPolicyVehicle.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSuscriptionPolicyVehicle", JSON.stringify(formDataSuscriptionPolicyVehicle));
+    }
+    function getSubscriptionPolicyVehicle() {
+        if(localStorage.formDataSuscriptionPolicyVehicle !== undefined){
+            formDataSuscriptionPolicyVehicle = JSON.parse(localStorage.formDataSuscriptionPolicyVehicle);
+            for (var i = 0; i < formDataSuscriptionPolicyVehicle.length; i++) {
+                $(`#policy-form-vehicle-subcription [name=${formDataSuscriptionPolicyVehicle[i].name}]`).val(formDataSuscriptionPolicyVehicle[i].value);
+                if ((formDataSuscriptionPolicyVehicle[i].name === 'tomador_asegurado_poliza') && (formDataSuscriptionPolicyVehicle[i].value === true)) {
+                    $('#policy-form-vehicle-subcription #tomador_asegurado_poliza').prop('checked', formDataSuscriptionPolicyVehicle[i].value);
+                }
+                if ((formDataSuscriptionPolicyVehicle[i].name === 'tipo_canal_poliza') && (formDataSuscriptionPolicyVehicle[i].value === 'AGENTE PROPIO')) {
+                    $('#policy-form-vehicle-subcription #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionExtraVehicle() {
+        let formDataSuscriptionExtraVehicle = [];
+        localStorage.removeItem('formDataSuscriptionExtraVehicle');
+        $('#extra-form-vehicle-subcription input[type=text]').each(function(){
+            formDataSuscriptionExtraVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#extra-form-vehicle-subcription input[type=number]').each(function(){
+            formDataSuscriptionExtraVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#extra-form-vehicle-subcription select').each(function(){
+            formDataSuscriptionExtraVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#extra-form-vehicle-subcription #blindaje_boolean_vehiculo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSuscriptionExtraVehicle.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSuscriptionExtraVehicle", JSON.stringify(formDataSuscriptionExtraVehicle));
+    }
+    function getSubscriptionExtraVehicle() {
+        if(localStorage.formDataSuscriptionExtraVehicle !== undefined){
+            formDataSuscriptionExtraVehicle = JSON.parse(localStorage.formDataSuscriptionExtraVehicle);
+            for (var i = 0; i < formDataSuscriptionExtraVehicle.length; i++) {
+                $(`#extra-form-vehicle-subcription [name=${formDataSuscriptionExtraVehicle[i].name}]`).val(formDataSuscriptionExtraVehicle[i].value);
+                if ((formDataSuscriptionExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataSuscriptionExtraVehicle[i].value === true)) {
+                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataSuscriptionExtraVehicle[i].value;
+                    document.getElementById("active-select-3").style.display = "inline";
+                    document.getElementById("active-select-4").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
 <!-- Poliza de Funeral -->
 <script>
     function storeValuesPolicyFuneral() {
@@ -1047,6 +1744,45 @@
             formCommissionFuneral = JSON.parse(localStorage.formCommissionFuneral);
             for (var i = 0; i < formCommissionFuneral.length; i++) {
                 $(`#commission-form-funeral [name=${formCommissionFuneral[i].name}]`).val(formCommissionFuneral[i].value);
+            }
+        }
+    }
+</script>
+
+<!-- Poliza de Funeral Suscripcion -->
+<script>
+    function storeValuesSubscriptionPolicyFuneral() {
+        let formDataSubcriptionPolicyFuneral = [];
+        localStorage.removeItem('formDataSubcriptionPolicyFuneral');
+        $('#policy-form-funeral-subcription input[type=text]').each(function(){
+            formDataSubcriptionPolicyFuneral.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-funeral-subcription input[type=email]').each(function(){
+            formDataSubcriptionPolicyFuneral.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-funeral-subcription input[type=date]').each(function(){
+            formDataSubcriptionPolicyFuneral.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-funeral-subcription select').each(function(){
+            formDataSubcriptionPolicyFuneral.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-funeral-subcription #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSubcriptionPolicyFuneral.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSubcriptionPolicyFuneral", JSON.stringify(formDataSubcriptionPolicyFuneral));
+    }
+    function getSubscriptionPolicyFuneral() {
+        if(localStorage.formDataSubcriptionPolicyFuneral !== undefined){
+            formDataSubcriptionPolicyFuneral = JSON.parse(localStorage.formDataSubcriptionPolicyFuneral);
+            for (var i = 0; i < formDataSubcriptionPolicyFuneral.length; i++) {
+                $(`#policy-form-funeral-subcription [name=${formDataSubcriptionPolicyFuneral[i].name}]`).val(formDataSubcriptionPolicyFuneral[i].value);
+                if ((formDataSubcriptionPolicyFuneral[i].name === 'tomador_asegurado_poliza') && (formDataSubcriptionPolicyFuneral[i].value === true)) {
+                    $('#policy-form-funeral-subcription #tomador_asegurado_poliza').prop('checked', formDataSubcriptionPolicyFuneral[i].value);
+                }
+                if ((formDataSubcriptionPolicyFuneral[i].name === 'tipo_canal_poliza') && (formDataSubcriptionPolicyFuneral[i].value === 'AGENTE PROPIO')) {
+                    $('#policy-form-funeral-subcription #searchList').css('display', 'block');
+                }
             }
         }
     }
@@ -1147,6 +1883,45 @@
     }
 </script>
 
+<!-- Poliza de Vida Suscripcion -->
+<script>
+    function storeValuesSubscriptionPolicyLife() {
+        let formDataSubscriptionPolicyLife = [];
+        localStorage.removeItem('formDataSubscriptionPolicyLife');
+        $('#policy-form-life-subcription input[type=text]').each(function(){
+            formDataSubscriptionPolicyLife.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-life-subcription input[type=email]').each(function(){
+            formDataSubscriptionPolicyLife.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-life-subcription input[type=date]').each(function(){
+            formDataSubscriptionPolicyLife.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-life-subcription select').each(function(){
+            formDataSubscriptionPolicyLife.push({ name: this.name, value: this.value});
+        });
+        $('#policy-form-life-subcription #tomador_asegurado_poliza').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSubscriptionPolicyLife.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSubscriptionPolicyLife", JSON.stringify(formDataSubscriptionPolicyLife));
+    }
+    function getSubscriptionPolicyLife() {
+        if(localStorage.formDataSubscriptionPolicyLife !== undefined){
+            formDataSubscriptionPolicyLife = JSON.parse(localStorage.formDataSubscriptionPolicyLife);
+            for (var i = 0; i < formDataSubscriptionPolicyLife.length; i++) {
+                $(`#policy-form-life-subcription [name=${formDataSubscriptionPolicyLife[i].name}]`).val(formDataSubscriptionPolicyLife[i].value);
+                if ((formDataSubscriptionPolicyLife[i].name === 'tomador_asegurado_poliza') && (formDataSubscriptionPolicyLife[i].value === true)) {
+                    $('#policy-form-life-subcription #tomador_asegurado_poliza').prop('checked', formDataSubscriptionPolicyLife[i].value);
+                }
+                if ((formDataSubscriptionPolicyLife[i].name === 'tipo_canal_poliza') && (formDataSubscriptionPolicyLife[i].value === 'AGENTE PROPIO')) {
+                    $('#policy-form-life-subcription #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function () {
         if (document.getElementById('tipo_canal_poliza').value=== 'AGENTE PROPIO') {
@@ -1241,21 +2016,34 @@
         getReceiptHealth();
         getCommissionHealth();
 
+        // Poliza Salud Suscripcion
+        getSubscriptionPolicyHealth()
+
         // Poliza Vehiculo
         getPolicyVehicle();
         getExtraVehicle();
         getReceiptVehicle();
         getCommissionVehicle();
 
+        // Poliza Vehiculo Suscripcion
+        getSubscriptionPolicyVehicle();
+        getSubscriptionExtraVehicle();
+
         // Poliza Funeral
         getPolicyFuneral();
         getReceiptFuneral();
         getCommissionFuneral();
 
+        // Poliza Funeral Suscripcion
+        getSubscriptionPolicyFuneral();
+
         // Poliza Vida
         getPolicyLife();
         getReceiptLife();
         getCommissionLife();
+
+        // Poliza Vida Suscripcion
+        getSubscriptionPolicyLife();
 
         $('.porcentaje_tasa').keyup(function () {
             new Cleave('.porcentaje_tasa', {
@@ -1267,10 +2055,10 @@
             });
         });
 
-        if (document.getElementById('maternidad_poliza').value === 'SÍ') {
+        if ($('#maternidad_poliza').val() === 'SÍ') {
             document.getElementById("searchinput").style.display = "block";
         }
-        if (document.getElementById('plazo_espera_poliza').value === 'SÍ') {
+        if ($('#plazo_espera_poliza').val() === 'SÍ') {
             document.getElementById("searchinput2").style.display = "block";
         }
     });

@@ -23,7 +23,8 @@ module.exports = {
             policies: resultsPolicies,
             collectives: resultsCollectives,
             ownAgents: resultsOwnAgents,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getReceipts: async (req, res) => {
@@ -75,7 +76,8 @@ module.exports = {
         }
         res.render('receipts', {
             data: resultsReceipts,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
 /*                 POST                  */
@@ -135,26 +137,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-vehicle-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-vehicle-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('vehiclePolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postHealthReceiptForm: async (req, res) => {
@@ -213,26 +241,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-health-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-health-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('healthPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-health-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('healthPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-health-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionHealthPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postPatrimonialReceiptForm: async (req, res) => {
@@ -291,26 +345,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-patrimonial-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-patrimonial-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('patrimonialPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-patrimonial-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('patrimonialPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-patrimonial-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionPatrimonialPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postBailReceiptForm: async (req, res) => {
@@ -369,26 +449,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-bail-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-bail-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('bailPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-bail-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('bailPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-bail-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionBailPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postAnotherBranchReceiptForm: async (req, res) => {
@@ -447,26 +553,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-another-branch-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-another-branch-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('anotherBranchPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-another-branch-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('anotherBranchPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-another-branch-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionAnotherBranchPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postFuneralReceiptForm: async (req, res) => {
@@ -525,26 +657,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-funeral-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-funeral-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('funeralPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-funeral-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('funeralPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-funeral-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionFuneralPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postLifeReceiptForm: async (req, res) => {
@@ -603,26 +761,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-life-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-life-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('lifePolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-life-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('lifePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-life-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionLifePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postAPReceiptForm: async (req, res) => {
@@ -681,26 +865,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-ap-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-ap-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('apPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-ap-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('apPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-ap-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionApPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postTravelReceiptForm: async (req, res) => {
@@ -759,26 +969,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-travel-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-travel-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('travelPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-travel-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                policies: resultsPolicies,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('travelPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-travel-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    policies: resultsPolicies,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionTravelPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postHealthReceiptCollectiveForm: async (req, res) => {
@@ -788,6 +1024,7 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsCollective = await collectiveModel.getCollectives();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -840,25 +1077,52 @@ module.exports = {
                     await receiptInsuredModel.postReceiptLegalInsured(resultCII.asegurado_per_jur_id, receipt.insertId);
                 }
             }
-            res.redirect('/sistema/add-health-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-health-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('healthCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-health-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('healthCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-health-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionHealthCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postVehicleReceiptCollectiveForm: async (req, res) => {
@@ -868,6 +1132,7 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsCollective = await collectiveModel.getCollectives();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -916,25 +1181,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-vehicle-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-vehicle-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('vehicleCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehicleCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postRiskDiverseReceiptCollectiveForm: async (req, res) => {
@@ -944,6 +1236,7 @@ module.exports = {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsReceipts = await receiptModel.getReceipts();
+        let resultsCollective = await collectiveModel.getCollectives();
         try {
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
             let montoPrimaRecibo = req.body.monto_prima_recibo;
@@ -992,25 +1285,52 @@ module.exports = {
             } else {
                 await receiptInsuredModel.postReceiptLegalInsured(resultCII[0].asegurado_per_jur_id, receipt.insertId);
             }
-            res.redirect('/sistema/add-risk-diverse-collective');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-risk-diverse-collective');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema');
+            }
         } catch (error) {
             console.log(error);
-            res.render('riskDiverseCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-risk-diverse-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                ownAgents: resultsOwnAgents,
-                executives: resultsExecutives,
-                receipts: resultsReceipts,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('riskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-risk-diverse-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionRiskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    ownAgents: resultsOwnAgents,
+                    executives: resultsExecutives,
+                    receipts: resultsReceipts,
+                    collectives: resultsCollective,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postReceiptForm: async (req, res) => {
@@ -1129,6 +1449,7 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema/add-receipt',
                 name: req.session.name,
+                cookieRol: req.cookies.rol,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policies: resultsPolicies,
@@ -1146,6 +1467,7 @@ module.exports = {
                 timer: 1500,
                 ruta: 'sistema/add-receipt',
                 name: req.session.name,
+                cookieRol: req.cookies.rol,
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
                 policies: resultsPolicies,
@@ -1283,7 +1605,8 @@ module.exports = {
                 legalInsured: resultLegalInsured[0],
                 ownAgent: resultOwnAgent[0],
                 receipt: resultReceipt[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -1492,6 +1815,7 @@ module.exports = {
                 timer: 1500,
                 ruta: `sistema/edit-receipt/${idReceipt}`,
                 name: req.session.name,
+                cookieRol: req.cookies.rol,
                 resultsNaturalInsured: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsureds,
                 policies: resultsPolicies,
@@ -1524,6 +1848,7 @@ module.exports = {
                 timer: 1500,
                 ruta: `sistema/edit-receipt/${idReceipt}`,
                 name: req.session.name,
+                cookieRol: req.cookies.rol,
                 resultsNaturalInsured: resultsNaturalInsured,
                 legalInsureds: resultsLegalInsureds,
                 policies: resultsPolicies,

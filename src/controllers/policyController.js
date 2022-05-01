@@ -31,7 +31,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -82,7 +83,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionVehiclePolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionVehiclePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionVehiclePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -104,7 +157,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -162,7 +216,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionHealthPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionHealthPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionHealthPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -184,7 +290,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -235,7 +342,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionPatrimonialPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionPatrimonialPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionPatrimonialPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -257,7 +416,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -308,7 +468,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionBailPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionBailPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionBailPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -330,7 +542,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -381,7 +594,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionAnotherBranchPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionAnotherBranchPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionAnotherBranchPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -403,7 +668,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -461,7 +727,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionFuneralPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionFuneralPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionFuneralPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -483,7 +801,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -541,7 +860,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionLifePolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionLifePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionLifePolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -563,7 +934,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -614,7 +986,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionAPPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionApPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionApPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -636,7 +1060,8 @@ module.exports = {
                 receipts: resultsReceipts,
                 executives: resultsExecutives,
                 ownAgents: resultsOwnAgents,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
@@ -687,7 +1112,59 @@ module.exports = {
                 primaPoliza: primaPoliza,
                 porcentajeAgentePropio: porcentajeAgentePropio,
                 comisionRecibo: comisionRecibo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    getSubcriptionTravelPolicyForm: async (req, res) => {
+        let resultsInsurers = await insurerModel.getInsurers();
+        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultPolicy = await policyModel.getPolicyLast();
+        let resultsPolicies = await policyModel.getPoliciesNumbers();
+        let resultsReceipts = await receiptModel.getReceipts();
+        let resultsExecutives = await executiveModel.getExecutives();
+        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        if (resultPolicy.length === 0) {
+            res.render('subscriptionTravelPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } else {
+            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+            let resultsBeneficiaries = [];
+            let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+            for (const beneficiary of polInsInsuredBef) {
+                let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+                resultsBeneficiaries.push(resultBeneficiary[0]);
+            }
+            let primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
+            res.render('subscriptionTravelPolicyForm', {
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                primaPoliza: primaPoliza,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -722,7 +1199,8 @@ module.exports = {
         }
         res.render('policies', {
             data: resultsPolicies,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getPoliciesDetail: async (req, res, next) => {
@@ -741,7 +1219,8 @@ module.exports = {
             }
             res.render('policiesBeneficiaries', {
                 data: resultsBeneficiaries,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -850,26 +1329,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-vehicle-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-vehicle-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-vehicle-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('vehiclePolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-vehicle-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('vehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-vehicle-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionVehiclePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-vehicle-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postHealthPolicyForm: async (req, res) => {
@@ -992,26 +1497,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-health-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-health-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-health-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('healthPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-health-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('healthPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-health-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionHealthPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-health-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postPatrimonialPolicyForm: async (req, res) => {
@@ -1116,26 +1647,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-patrimonial-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-patrimonial-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-patrimonial-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('patrimonialPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-patrimonial-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('patrimonialPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-patrimonial-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionPatrimonialPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-patrimonial-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postBailPolicyForm: async (req, res) => {
@@ -1240,26 +1797,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-bail-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-bail-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-bail-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('bailPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-bail-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('bailPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-bail-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionBailPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-bail-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postAnotherBranchPolicyForm: async (req, res) => {
@@ -1364,26 +1947,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-another-branch-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-another-branch-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-another-branch-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('anotherBranchPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-another-branch-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('anotherBranchPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-another-branch-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionAnotherBranchPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-another-branch-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postFuneralPolicyForm: async (req, res) => {
@@ -1488,26 +2097,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-funeral-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-funeral-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-funeral-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('funeralPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-funeral-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('funeralPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-funeral-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionFuneralPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-funeral-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postLifePolicyForm: async (req, res) => {
@@ -1612,26 +2247,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-life-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-life-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-life-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('lifePolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-life-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('lifePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-life-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionLifePolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-life-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postAPPolicyForm: async (req, res) => {
@@ -1736,26 +2397,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-ap-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-ap-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-ap-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('apPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-ap-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('apPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-ap-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionApPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-ap-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
     postTravelPolicyForm: async (req, res) => {
@@ -1860,26 +2547,52 @@ module.exports = {
                 let idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
                 await polInsuInsuredExecModel.postPolInsuInsuredExecutive(paa.insertId, idEjecutivo[0].id_ejecutivo);
             }
-            res.redirect('/sistema/add-travel-policy');
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.redirect('/sistema/add-travel-policy');
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.redirect('/sistema/add-subscription-travel-policy');
+            }
         } catch (error) {
             console.log(error);
-            res.render('travelPolicyForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-travel-policy',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                policies: resultsPolicies,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('travelPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-travel-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionTravelPolicyForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-travel-policy',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    policies: resultsPolicies,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
 /*                  PUT                  */
@@ -1984,7 +2697,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2074,7 +2788,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2164,7 +2879,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2254,7 +2970,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2344,7 +3061,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2434,7 +3152,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2524,7 +3243,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2614,7 +3334,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2704,7 +3425,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -2945,7 +3667,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -2977,7 +3700,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -3181,7 +3905,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -3211,7 +3936,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -3415,7 +4141,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -3445,7 +4172,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -3649,7 +4377,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -3679,7 +4408,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -3883,7 +4613,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -3913,7 +4644,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -4117,7 +4849,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -4147,7 +4880,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -4351,7 +5085,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -4381,7 +5116,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -4582,7 +5318,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -4612,7 +5349,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -4813,7 +5551,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
@@ -4843,7 +5582,8 @@ module.exports = {
                 executivesNames: executives,
                 ownAgents: resultsOwnAgents,
                 ownAgent: resultOwnAgent[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },

@@ -92,29 +92,55 @@ module.exports = {
                     temparrayRiskDiverse.push([collectiveInsurerInsured[0].id_caa, riskDiverseId]);
                 }
                 await colInsInsurerRiskDiverModel.postColInsuInsuredRiesDiver(temparrayRiskDiverse);
-                res.redirect('/sistema/add-risk-diverse-collective');
+                if (req.cookies.rol === 'ADMINISTRATIVO') {
+                    res.redirect('/sistema/add-risk-diverse-collective');
+                } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                    res.redirect('/sistema/add-subscription-risk-diverse-collective');
+                }
             } else {
                 throw new SyntaxError("Ingrese archivo de extensión .csv");
             }
         } catch (error) {
             console.log(error);
-            res.render('riskDiverseCollectiveForm', {
-                alert: true,
-                alertTitle: 'Error',
-                alertMessage: error.message,
-                alertIcon: 'error',
-                showConfirmButton: true,
-                timer: 1500,
-                ruta: 'sistema/add-risk-diverse-collective',
-                insurers: resultsInsurers,
-                naturalInsureds: resultsNaturalInsureds,
-                legalInsureds: resultsLegalInsureds,
-                collectives: resultsCollective,
-                receipts: resultsReceipts,
-                executives: resultsExecutives,
-                ownAgents: resultsOwnAgents,
-                name: req.session.name
-            });
+            if (req.cookies.rol === 'ADMINISTRATIVO') {
+                res.render('riskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-risk-diverse-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
+                res.render('subscriptionRiskDiverseCollectiveForm', {
+                    alert: true,
+                    alertTitle: 'Error',
+                    alertMessage: error.message,
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: 1500,
+                    ruta: 'sistema/add-subscription-risk-diverse-collective',
+                    insurers: resultsInsurers,
+                    naturalInsureds: resultsNaturalInsureds,
+                    legalInsureds: resultsLegalInsureds,
+                    collectives: resultsCollective,
+                    receipts: resultsReceipts,
+                    executives: resultsExecutives,
+                    ownAgents: resultsOwnAgents,
+                    name: req.session.name,
+                    cookieRol: req.cookies.rol
+                });
+            }
         }
     },
 /*                  PUT                  */
@@ -135,7 +161,8 @@ module.exports = {
                 riskDiverse: resultRiskDiverse[0],
                 idCollective: resultCII[0],
                 sumaAsegurada: sumaAsegurada,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();

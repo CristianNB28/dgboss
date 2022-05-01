@@ -178,6 +178,33 @@
             $("#departamento_cargo_ejecutivo optgroup").css('display', 'none');
             $("#" + valor).css('display', 'block');
         })
+        
+        var cleaveNumeral = new Cleave('.input-numeral', {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            stripLeadingZeroes: false
+        });
+
+        $('#select_box').change(function(){
+            if ((this.value === 'V') || (this.value === 'E')) {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    stripLeadingZeroes: false
+                });
+                cleaveNumeral.setRawValue('');
+            } else {
+                var cleaveNumeral = new Cleave('.input-numeral', {
+                    numeral: true,
+                    numeralDecimalMark: '!',
+                    delimiter: '',
+                    stripLeadingZeroes: false,
+                });
+                cleaveNumeral.setRawValue('');
+            }
+        });
     })
 </script>
 

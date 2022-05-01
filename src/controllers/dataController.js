@@ -6,38 +6,44 @@ module.exports = {
 /*                  GET                  */
     getInsurerForm: (req, res) => {
         res.render('insurerForm', {
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getOwnAgentForm: (req, res) => {
         res.render('ownAgentForm', {
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getExecutiveForm: (req, res) => {
         res.render('executiveForm', {
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getInsurers: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         res.render('insurers', {
             data: resultsInsurers,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getOwnAgents: async (req, res) => {
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('ownAgents', {
             data: resultsOwnAgents,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
     getExecutives: async (req, res) => {
         let resultsExecutives = await executiveModel.getExecutives();
         res.render('executives', {
             data: resultsExecutives,
-            name: req.session.name
+            name: req.session.name,
+            cookieRol: req.cookies.rol
         });
     },
 /*                  POST                  */
@@ -52,7 +58,8 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: 'sistema/add-insurer',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado de la aseguradora');
         } catch (error) {
@@ -65,7 +72,8 @@ module.exports = {
                 showConfirmButton: true,
                 timer: 1500,
                 ruta: 'sistema/add-insurer',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -103,7 +111,8 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: 'sistema/add-own-agent',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado del agente propio');
         } catch (error) {
@@ -116,7 +125,8 @@ module.exports = {
                 showConfirmButton: true,
                 timer: 1500,
                 ruta: 'sistema/add-own-agent',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -150,7 +160,8 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: 'sistema/add-executive',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado del ejecutivo');
         } catch (error) {
@@ -163,7 +174,8 @@ module.exports = {
                 showConfirmButton: true,
                 timer: 1500,
                 ruta: 'sistema/add-executive',
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -175,7 +187,8 @@ module.exports = {
             let resultInsurer = await insurerModel.getInsurer(idInsurer);
             res.render('editInsurer', {
                 insurer: resultInsurer[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -191,7 +204,8 @@ module.exports = {
             res.render('editOwnAgent', {
                 ownAgent: resultOwnAgent[0],
                 porcentajeAgentePropio: porcentajeAgentePropio,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -207,7 +221,8 @@ module.exports = {
             res.render('editExecutive', {
                 executive: resultExecutive[0],
                 porcentajeEjecutivo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         } else {
             next();
@@ -227,7 +242,8 @@ module.exports = {
                 timer: 1500,
                 ruta: `sistema/edit-insurer/${idInsurer}`,
                 insurer: resultInsurer[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado de la aseguradora');
         } catch (error) {
@@ -241,7 +257,8 @@ module.exports = {
                 timer: 1500,
                 ruta: `sistema/edit-insurer/${idInsurer}`,
                 insurer: resultInsurer[0],
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -283,7 +300,8 @@ module.exports = {
                 ruta: `sistema/edit-own-agent/${idOwnAgent}`,
                 ownAgent: resultOwnAgent[0],
                 porcentajeAgentePropio: porcentajeAgentePropio,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado del agente propio');
         } catch (error) {
@@ -298,7 +316,8 @@ module.exports = {
                 ruta: `sistema/edit-own-agent/${idOwnAgent}`,
                 ownAgent: resultOwnAgent[0],
                 porcentajeAgentePropio: porcentajeAgentePropio,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
@@ -342,7 +361,8 @@ module.exports = {
                 ruta: `sistema/edit-executive/${idExecutive}`,
                 executive: resultExecutive[0],
                 porcentajeEjecutivo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
             throw new Error('Error, valor duplicado del ejecutivo');
         } catch (error) {
@@ -357,7 +377,8 @@ module.exports = {
                 ruta: `sistema/edit-executive/${idExecutive}`,
                 executive: resultExecutive[0],
                 porcentajeEjecutivo,
-                name: req.session.name
+                name: req.session.name,
+                cookieRol: req.cookies.rol
             });
         }
     },
