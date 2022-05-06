@@ -43,7 +43,7 @@ module.exports = {
     },
     getPolicyLast: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_poliza, prima_anual_poliza, tipo_moneda_poliza 
+            db.query(`SELECT id_poliza, numero_poliza, prima_anual_poliza, tipo_moneda_poliza 
                     FROM Poliza 
                     WHERE deshabilitar_poliza=0
                     ORDER BY id_poliza DESC

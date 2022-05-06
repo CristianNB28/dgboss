@@ -30,46 +30,34 @@
                                     <% if (collective === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="numero_poliza_colectivo" id="numero_poliza_colectivo" onchange="premiumCalculationDate()" required>
-                                                    <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
-                                                    <% policies.forEach((policy) => { %>
-                                                        <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
-                                                    <% }); %>
-                                                    <% collectives.forEach((collective) => { %>
-                                                        <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
-                                                    <% }); %>
-                                                </select>
+                                                <input 
+                                                    type="text"
+                                                    name="numero_poliza_colectivo"
+                                                    id="numero_poliza_colectivo"
+                                                    value="<%= policy.numero_poliza %>" 
+                                                    class="form-control"
+                                                    onkeyup="premiumCalculationDate()"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    required
+                                                >
                                             </div>
                                         </div>
                                     <% } else if (policy === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" name="numero_poliza_colectivo" id="numero_poliza_colectivo" onchange="premiumCalculationDate()" required>
-                                                    <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
-                                                    <% policies.forEach((policy) => { %>
-                                                        <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
-                                                    <% }); %>
-                                                    <% collectives.forEach((collective) => { %>
-                                                        <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
-                                                    <% }); %>
-                                                </select>
+                                                <input 
+                                                    type="text"
+                                                    name="numero_poliza_colectivo"
+                                                    id="numero_poliza_colectivo"
+                                                    value="<%= collective.numero_colectivo %>" 
+                                                    class="form-control"
+                                                    onkeyup="premiumCalculationDate()"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    required
+                                                >
                                             </div>
                                         </div>
                                     <% } %>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número Recibo</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="numero_recibo"
-                                                id="numero_recibo"
-                                                value="<%= receipt.numero_recibo %>" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
                                     <div class="hr-line-dashed"></div>
                                     <% if (naturalInsured === undefined) { %>
                                         <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
@@ -95,6 +83,19 @@
                                                     value="<%= legalInsured.rif_asegurado_per_jur %>" 
                                                     class="form-control input-numeral"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase().replace(/\s+/g, '');this.setSelectionRange(p, p);"
+                                                    required
+                                                >
+                                            </div>
+                                        </div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_razon_asegurado"
+                                                    id="nombre_razon_asegurado"
+                                                    value="<%= legalInsured.razon_social_per_jur %>"
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
@@ -128,6 +129,20 @@
                                                     >
                                                 </div>
                                             </div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= namesNaturalInsured %>"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
                                         <% } else { %>
                                             <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula/Rif</label>
                                                 <div class="col-sm-9 field">
@@ -156,40 +171,48 @@
                                                     >
                                                 </div>
                                             </div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                                <div class="col-sm-9">
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_razon_asegurado"
+                                                        id="nombre_razon_asegurado"
+                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                        required
+                                                    >
+                                                </div>
+                                            </div>
                                         <% } %>
                                     <% } %>
                                     <div class="hr-line-dashed"></div>
-                                    <% if (ownAgent === undefined) { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="nombre_agente_propio"
-                                                    id="nombre_agente_propio"
-                                                    placeholder="Nombre del Agente Propio *"
-                                                    onkeyup="pasarAgente();"
-                                                    class="form-control"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    required
-                                                >
-                                            </div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número Recibo</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="numero_recibo"
+                                                id="numero_recibo"
+                                                value="<%= receipt.numero_recibo %>" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
                                         </div>
-                                    <% } else { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
-                                            <div class="col-sm-9">
-                                                <input 
-                                                    type="text"
-                                                    name="nombre_agente_propio"
-                                                    id="nombre_agente_propio"
-                                                    value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
-                                                    onkeyup="pasarAgente();"
-                                                    class="form-control"
-                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                    required
-                                                >
-                                            </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_recibo" required>
+                                                <option value="<%= receipt.tipo_recibo %>"><%= receipt.tipo_recibo %></option>
+                                                <option value="EMISIÓN">EMISIÓN</option>
+                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
+                                                <option value="MODIFICACIÓN">MODIFICACIÓN</option>
+                                                <option value="FACTURACIÓN">FACTURACIÓN</option>
+                                            </select>
                                         </div>
-                                    <% } %>
+                                    </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row" id="radioContainer">
                                         <label class="col-sm-3 col-form-label">Fraccionamiento</label>
@@ -221,6 +244,50 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="numero_pago_recibo"
+                                                id="numero_pago_recibo"
+                                                value="<%= receipt.numero_pago_recibo %>" 
+                                                class="form-control number_format"
+                                                onkeyup="premiumCalculationDate();"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="monto_prima_recibo"
+                                                id="monto_prima_recibo"
+                                                value="<%= primaRecibo %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text" 
+                                                name="monto_comision_recibo"
+                                                id="monto_comision_recibo"
+                                                value="<%= comisionRecibo %>" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Desde</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -228,6 +295,18 @@
                                                 name="fecha_desde_recibo"
                                                 id="fecha_desde_recibo"
                                                 value="<%= fechaDesdeRecibo %>" 
+                                                class="form-control"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="date"
+                                                name="fecha_hasta_recibo"
+                                                id="fecha_hasta_recibo"
+                                                value="<%= fechaHastaRecibo %>"
                                                 class="form-control"
                                             >
                                         </div>
@@ -242,23 +321,6 @@
                                                 value="<%= fechaPagoRecibo %>" 
                                                 class="form-control"
                                             >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="ibox">
-                                <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo de recibo</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_recibo" required>
-                                                <option value="<%= receipt.tipo_recibo %>"><%= receipt.tipo_recibo %></option>
-                                                <option value="EMISIÓN">EMISIÓN</option>
-                                                <option value="RENOVACIÓN">RENOVACIÓN</option>
-                                                <option value="MODIFICACIÓN">MODIFICACIÓN</option>
-                                                <option value="FACTURACIÓN">FACTURACIÓN</option>
-                                            </select>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -279,115 +341,35 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <% if (naturalInsured === undefined) { %>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
+                                    <% if (ownAgent === undefined) { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                             <div class="col-sm-9">
                                                 <input 
                                                     type="text"
-                                                    name="nombre_razon_asegurado"
-                                                    id="nombre_razon_asegurado"
-                                                    value="<%= legalInsured.razon_social_per_jur %>"
+                                                    name="nombre_agente_propio"
+                                                    id="nombre_agente_propio"
+                                                    placeholder="Nombre del Agente Propio *"
                                                     class="form-control"
                                                     oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                     required
                                                 >
                                             </div>
                                         </div>
-                                    <% } else if (legalInsured === undefined) { %>
-                                        <% if (resultsNaturalInsured.length > 0) { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_razon_asegurado"
-                                                        id="nombre_razon_asegurado"
-                                                        value="<%= namesNaturalInsured %>"
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
+                                    <% } else { %>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="text"
+                                                    name="nombre_agente_propio"
+                                                    id="nombre_agente_propio"
+                                                    value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    required
+                                                >
                                             </div>
-                                        <% } else { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Asegurado</label>
-                                                <div class="col-sm-9">
-                                                    <input 
-                                                        type="text"
-                                                        name="nombre_razon_asegurado"
-                                                        id="nombre_razon_asegurado"
-                                                        value="<%= naturalInsured.nombre_asegurado_per_nat %> <%= naturalInsured.apellido_asegurado_per_nat %>"
-                                                        class="form-control"
-                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        <% } %>
+                                        </div>
                                     <% } %>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Porcentaje</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text" 
-                                                name="porcentaje_agente_propio"
-                                                id="porcentaje_agente_propio"
-                                                value="<%= ownAgentPercentage %>"
-                                                class="form-control porcentaje_tasa"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text" 
-                                                name="monto_prima_recibo"
-                                                id="monto_prima_recibo"
-                                                value="<%= primaRecibo %>" 
-                                                class="form-control"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="numero_pago_recibo"
-                                                id="numero_pago_recibo"
-                                                value="<%= receipt.numero_pago_recibo %>" 
-                                                class="form-control number_format"
-                                                onkeyup="premiumCalculationDate();"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Vigencia Hasta</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="date"
-                                                name="fecha_hasta_recibo"
-                                                id="fecha_hasta_recibo"
-                                                value="<%= fechaHastaRecibo %>"
-                                                class="form-control"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Comisión Asociada</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text" 
-                                                name="monto_comision_recibo"
-                                                id="monto_comision_recibo"
-                                                value="<%= comisionRecibo %>" 
-                                                class="form-control porcentaje_tasa"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

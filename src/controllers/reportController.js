@@ -47,7 +47,6 @@ module.exports = {
                 if (idsOwnAgents.length === 0) {
                     premiumCollection = {
                         ownAgent: '',
-                        company: '',
                         bouquetType: resultPolicy[0].tipo_individual_poliza,
                         insurer: resultInsurer[0].nombre_aseguradora,
                         dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -65,7 +64,6 @@ module.exports = {
                     });
                     premiumCollection = {
                         ownAgent: ownAgents,
-                        company: '',
                         bouquetType: resultPolicy[0].tipo_individual_poliza,
                         insurer: resultInsurer[0].nombre_aseguradora,
                         dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -99,7 +97,6 @@ module.exports = {
                 if (idsOwnAgents.length === 0) {
                     premiumCollection = {
                         ownAgent: '',
-                        company: '',
                         bouquetType: resultCollective[0].tipo_colectivo,
                         insurer: resultInsurer[0].nombre_aseguradora,
                         dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -117,7 +114,6 @@ module.exports = {
                     });
                     premiumCollection = {
                         ownAgent: ownAgents,
-                        company: '',
                         bouquetType: resultCollective[0].tipo_colectivo,
                         insurer: resultInsurer[0].nombre_aseguradora,
                         dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
@@ -179,7 +175,6 @@ module.exports = {
                 if (idsOwnAgents.length === 0) {
                     commissionCollection = {
                         ownAgent: '',
-                        company: '',
                         executive: executives,
                         bouquetType: resultPolicy[0].tipo_individual_poliza,
                         insurer: resultInsurer[0].nombre_aseguradora,
@@ -198,7 +193,6 @@ module.exports = {
                     });
                     commissionCollection = {
                         ownAgent: ownAgents,
-                        company: '',
                         executive: executives,
                         bouquetType: resultPolicy[0].tipo_individual_poliza,
                         insurer: resultInsurer[0].nombre_aseguradora,
@@ -245,7 +239,6 @@ module.exports = {
                 if (idsOwnAgents.length === 0) {
                     commissionCollection = {
                         ownAgent: '',
-                        company: '',
                         executive: executives,
                         bouquetType: resultCollective[0].tipo_colectivo,
                         insurer: resultInsurer[0].nombre_aseguradora,
@@ -264,7 +257,6 @@ module.exports = {
                     });
                     commissionCollection = {
                         ownAgent: ownAgents,
-                        company: '',
                         executive: executives,
                         bouquetType: resultCollective[0].tipo_colectivo,
                         insurer: resultInsurer[0].nombre_aseguradora,

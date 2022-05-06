@@ -44,7 +44,7 @@ module.exports = {
     },
     getCollectiveLast: () => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT id_colectivo, prima_anual_colectivo, tipo_moneda_colectivo 
+            db.query(`SELECT id_colectivo, numero_colectivo, prima_anual_colectivo, tipo_moneda_colectivo 
                     FROM Colectivo 
                     WHERE deshabilitar_colectivo=0
                     ORDER BY id_colectivo DESC

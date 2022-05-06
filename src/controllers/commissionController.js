@@ -23,7 +23,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -149,7 +149,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -275,7 +275,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -401,7 +401,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -527,7 +527,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -653,7 +653,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -779,7 +779,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -905,7 +905,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -1031,7 +1031,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
@@ -1157,7 +1157,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1284,7 +1284,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
@@ -1411,7 +1411,7 @@ module.exports = {
         porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
         porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[%]/g, '').replace(' ', '');
+        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
         let idCollective = await collectiveModel.getCollectiveLast();
         if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
             porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");

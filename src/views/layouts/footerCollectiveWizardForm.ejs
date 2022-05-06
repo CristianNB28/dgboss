@@ -35,6 +35,10 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    var collectiveNumber = <%- JSON.stringify(collective) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -101,58 +105,31 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-health-collective").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-health-collective").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
-                    $('#receipt-form-health-collective').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form-health-collective').valid();
+                    return true;
                 } else if (newIndex === 4) {
-                    $('#commission-form-health-collective').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form-health-collective').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 3 && priorIndex === 4) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesPolicyHealth();
-                    $('#policy-form-health-collective').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
-                } else if (currentIndex === 3) {
-                    storeValuesReceiptHealth();
-                    $('#receipt-form-health-collective').submit();
-                } else if (currentIndex === 4) {
-                    storeValuesCommissionHealth();
-                    $('#commission-form-health-collective').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#verification-form').validate().settings.ignore = ":disabled";
-                return $('#verification-form').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-health-collective .steps a:eq(0)').click();
                 $('#form-health-collective').hide();
-                $('#verification-form').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-health-collective'
+                });
             }
         });
         $().ready(function () {
@@ -165,6 +142,9 @@
             });
         });
         $().ready(function () {
+            $("#extra-form-health-collective").validate();
+        });
+        $().ready(function () {
             $("#receipt-form-health-collective").validate({
                 rules: {
                     numero_recibo: {
@@ -172,6 +152,12 @@
                     }
                 }
             });
+        });
+        $().ready(function () {
+            $('#commission-form-health-collective').validate();
+        });
+        $().ready(function () {
+            $('#verification-form-health-collective').validate();
         });
         $("#receipt-form-health-collective").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
@@ -199,6 +185,10 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    var collectiveNumber = <%- JSON.stringify(collective) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -265,41 +255,27 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-health-collective-subcription").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-health-collective-subcription").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesSubscriptionPolicyHealth();
-                    $('#policy-form-health-collective-subcription').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#receipt-form-health-collective').validate().settings.ignore = ":disabled,:hidden";
-                return $('#receipt-form-health-collective').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-health-collective-subcription .steps a:eq(0)').click();
                 $('#form-health-collective-subcription').hide();
-                $('#receipt-form-health-collective').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-subscription-health-collective'
+                });
             }
         });
         $().ready(function () {
@@ -312,7 +288,10 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form-health-collective").validate({
+            $("#extra-form-health-collective-subcription").validate();
+        });
+        $().ready(function () {
+            $("#receipt-form-health-collective-subcription").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -320,7 +299,7 @@
                 }
             });
         });
-        $("#receipt-form-health-collective").on('keyup','.porcentaje_tasa',function(){
+        $("#receipt-form-health-collective-subcription").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -335,6 +314,10 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    var collectiveNumber = <%- JSON.stringify(collective) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -401,58 +384,31 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-vehicle-collective").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-vehicle-collective").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
-                    $('#receipt-form-vehicle-collective').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form-vehicle-collective').valid();
+                    return true;
                 } else if (newIndex === 4) {
-                    $('#commission-form-vehicle-collective').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form-vehicle-collective').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 3 && priorIndex === 4) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesPolicyVehicle();
-                    $('#policy-form-vehicle-collective').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
-                } else if (currentIndex === 3) {
-                    storeValuesReceiptVehicle();
-                    $('#receipt-form-vehicle-collective').submit();
-                } else if (currentIndex === 4) {
-                    storeValuesCommissionVehicle();
-                    $('#commission-form-vehicle-collective').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#verification-form').validate().settings.ignore = ":disabled";
-                return $('#verification-form').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-vehicle-collective .steps a:eq(0)').click();
                 $('#form-vehicle-collective').hide();
-                $('#verification-form').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-vehicle-collective'
+                });
             }
         });
         $().ready(function () {
@@ -465,6 +421,9 @@
             });
         });
         $().ready(function () {
+            $("#extra-form-vehicle-collective").validate();
+        });
+        $().ready(function () {
             $("#receipt-form-vehicle-collective").validate({
                 rules: {
                     numero_recibo: {
@@ -472,6 +431,12 @@
                     }
                 }
             });
+        });
+        $().ready(function () {
+            $('#commission-form-vehicle-collective').validate();
+        });
+        $().ready(function () {
+            $('#verification-form-vehicle-collective').validate();
         });
         $("#policy-form-vehicle-collective").on('keyup','.input-numeral2',function(){
             new Cleave('.input-numeral2', {
@@ -507,6 +472,9 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -573,41 +541,27 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-vehicle-collective-subcription").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-vehicle-collective-subcription").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesSubscriptionPolicyVehicle();
-                    $('#policy-form-vehicle-collective-subcription').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#receipt-form-vehicle-collective').validate().settings.ignore = ":disabled,:hidden";
-                return $('#receipt-form-vehicle-collective').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-vehicle-collective-subcription .steps a:eq(0)').click();
                 $('#form-vehicle-collective-subcription').hide();
-                $('#receipt-form-vehicle-collective').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-subscription-vehicle-collective'
+                });
             }
         });
         $().ready(function () {
@@ -620,7 +574,10 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form-vehicle-collective").validate({
+            $("#extra-form-vehicle-collective-subcription").validate();
+        });
+        $().ready(function () {
+            $("#receipt-form-vehicle-collective-subcription").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -636,7 +593,7 @@
                 stripLeadingZeroes: false
             });   
         });
-        $("#receipt-form-vehicle-collective").on('keyup','.porcentaje_tasa',function(){
+        $("#receipt-form-vehicle-collective-subcription").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -651,6 +608,10 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    var collectiveNumber = <%- JSON.stringify(collective) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -717,58 +678,31 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-risk-diverse").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-risk-diverse").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
+                    return true;
                 } else if (newIndex === 3) {
-                    $('#receipt-form-risk-diverse').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#receipt-form-risk-diverse').valid();
+                    return true;
                 } else if (newIndex === 4) {
-                    $('#commission-form-risk-diverse').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#commission-form-risk-diverse').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 3 && priorIndex === 4) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesPolicyRiskDiverse();
-                    $('#policy-form-risk-diverse').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
-                } else if (currentIndex === 3) {
-                    storeValuesReceiptRiskDiverse();
-                    $('#receipt-form-risk-diverse').submit();
-                } else if (currentIndex === 4) {
-                    storeValuesCommissionRiskDiverse();
-                    $('#commission-form-risk-diverse').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#verification-form').validate().settings.ignore = ":disabled";
-                return $('#verification-form').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-risk-diverse .steps a:eq(0)').click();
                 $('#form-risk-diverse').hide();
-                $('#verification-form').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-risk-diverse-collective'
+                });
             }
         });
         $().ready(function () {
@@ -781,6 +715,9 @@
             });
         });
         $().ready(function () {
+            $("#extra-form-risk-diverse").validate();
+        });
+        $().ready(function () {
             $("#receipt-form-risk-diverse").validate({
                 rules: {
                     numero_recibo: {
@@ -788,6 +725,12 @@
                     }
                 }
             });
+        });
+        $().ready(function () {
+            $('#commission-form-risk-diverse').validate();
+        });
+        $().ready(function () {
+            $('#verification-form-risk-diverse').validate();
         });
         $("#policy-form-risk-diverse").on('keyup','.input-numeral2',function(){
             new Cleave('.input-numeral2', {
@@ -823,6 +766,9 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
+    if (collectiveNumber === undefined) {
+        collectiveNumber.numero_colectivo = '';
+    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -889,41 +835,27 @@
                     return false;
                 }
                 if (newIndex === 1) {
-                    $("#policy-form-risk-diverse-subcription").validate().settings.ignore = ":disabled,:hidden";
-                    return $("#policy-form-risk-diverse-subcription").valid();
+                    return true;
                 } else if (newIndex === 2) {
-                    $('#extra-form').validate().settings.ignore = ":disabled,:hidden";
-                    return $('#extra-form').valid();
-                }
-            },
-            onStepChanged: (event, currentIndex, priorIndex) => {
-                if (currentIndex === 1 && priorIndex === 2) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                } else if (currentIndex === 2 && priorIndex === 3) {
-                    $("a[href$='previous']").on('click', function (event) {
-                        event.preventdefault();
-                    });
-                    return;
-                }
-                if (currentIndex === 1) {
-                    storeValuesSubscriptionPolicyRiskDiverse();
-                    $('#policy-form-risk-diverse-subcription').submit();
-                } else if (currentIndex === 2) {
-                    $('#extra-form').submit();
+                    return true;
                 }
             },
             onFinishing:(event, currentIndex) => {
-                $('#receipt-form-risk-diverse').validate().settings.ignore = ":disabled,:hidden";
-                return $('#receipt-form-risk-diverse').valid();
+                return true;
             },
             onFinished: (a) => {
                 localStorage.clear();
                 $('#form-risk-diverse-subcription .steps a:eq(0)').click();
                 $('#form-risk-diverse-subcription').hide();
-                $('#receipt-form-risk-diverse').submit();
+                Swal.fire({
+                    title: 'Exitoso',
+                    icon: 'success',
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(()=>{
+                    window.location='/sistema/add-subscription-risk-diverse-collective'
+                });
             }
         });
         $().ready(function () {
@@ -936,7 +868,10 @@
             });
         });
         $().ready(function () {
-            $("#receipt-form-risk-diverse").validate({
+            $("#extra-form-risk-diverse-subcription").validate();
+        });
+        $().ready(function () {
+            $("#receipt-form-risk-diverse-subcription").validate({
                 rules: {
                     numero_recibo: {
                         esrepetidonumrecibo: true
@@ -952,7 +887,7 @@
                 stripLeadingZeroes: false
             });   
         });
-        $("#receipt-form-risk-diverse").on('keyup','.porcentaje_tasa',function(){
+        $("#receipt-form-risk-diverse-subcription").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -1017,6 +952,25 @@
 </script>
 
 <script>
+    function storeValuesExtraHealth() {
+        let formDataExtraHealth = [];
+        localStorage.removeItem('formDataExtraHealth');
+        $('#extra-form-health-collective select').each(function(){
+            formDataExtraHealth.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataExtraHealth", JSON.stringify(formDataExtraHealth));
+    }
+    function getExtraHealth() {
+        if(localStorage.formDataExtraHealth !== undefined){
+            formDataExtraHealth = JSON.parse(localStorage.formDataExtraHealth);
+            for (var i = 0; i < formDataExtraHealth.length; i++) {
+                $(`#extra-form-health-collective [name=${formDataExtraHealth[i].name}]`).val(formDataExtraHealth[i].value);
+            }
+        }
+    }
+</script>
+
+<script>
     function storeValuesReceiptHealth() {
         let formDataReceiptHealth = [];
         localStorage.removeItem('formDataReceiptHealth');
@@ -1072,6 +1026,28 @@
     }
 </script>
 
+<script>
+    function storeValuesVerificationHealth() {
+        let formDataVerificationHealth = [];
+        localStorage.removeItem('formDataVerificationHealth');
+        $('#verification-form-health-collective input[type=text]').each(function(){
+            formDataVerificationHealth.push({ name: this.name, value: this.value});
+        });
+        $('#verification-form-health-collective select').each(function(){
+            formDataVerificationHealth.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataVerificationHealth", JSON.stringify(formDataVerificationHealth));
+    }
+    function getVerificationHealth() {
+        if(localStorage.formDataVerificationHealth !== undefined){
+            formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
+            for (var i = 0; i < formDataVerificationHealth.length; i++) {
+                $(`#verification-form-health-collective [name=${formDataVerificationHealth[i].name}]`).val(formDataVerificationHealth[i].value);
+            }
+        }
+    }
+</script>
+
 <!-- Poliza de Colectivo Salud Suscripcion -->
 <script>
     function storeValuesSubscriptionPolicyHealth() {
@@ -1104,6 +1080,62 @@
                 }
                 if ((formDataSubscriptionPolicyHealth[i].name === 'tipo_canal_colectivo') && (formDataSubscriptionPolicyHealth[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-health-collective-subcription #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionExtraHealth() {
+        let formDataSubscriptionExtraHealth = [];
+        localStorage.removeItem('formDataSubscriptionExtraHealth');
+        $('#extra-form-health-collective-subcription select').each(function(){
+            formDataSubscriptionExtraHealth.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataSubscriptionExtraHealth", JSON.stringify(formDataSubscriptionExtraHealth));
+    }
+    function getSubscriptionExtraHealth() {
+        if(localStorage.formDataSubscriptionExtraHealth !== undefined){
+            formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
+            for (var i = 0; i < formDataSubscriptionExtraHealth.length; i++) {
+                $(`#extra-form-health-collective-subcription [name=${formDataSubscriptionExtraHealth[i].name}]`).val(formDataSubscriptionExtraHealth[i].value);
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionReceiptHealth() {
+        let formDataSubscriptionReceiptHealth = [];
+        localStorage.removeItem('formDataSubscriptionReceiptHealth');
+        $('#receipt-form-health-collective-subcription input[type=text]').each(function(){
+            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective-subcription input[type=number]').each(function(){
+            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective-subcription input[type=date]').each(function(){
+            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective-subcription select').each(function(){
+            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-health-collective-subcription #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSubscriptionReceiptHealth.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSubscriptionReceiptHealth", JSON.stringify(formDataSubscriptionReceiptHealth));
+    }
+    function getSubscriptionReceiptHealth() {
+        if(localStorage.formDataSubscriptionReceiptHealth !== undefined){
+            formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
+            for (var i = 0; i < formDataSubscriptionReceiptHealth.length; i++) {
+                $(`#receipt-form-health-collective-subcription [name=${formDataSubscriptionReceiptHealth[i].name}]`).val(formDataSubscriptionReceiptHealth[i].value);
+                if ((formDataSubscriptionReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptHealth[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptHealth[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
                 }
             }
         }
@@ -1143,6 +1175,30 @@
                 }
                 if ((formDataPolicyVehicle[i].name === 'tipo_canal_colectivo') && (formDataPolicyVehicle[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-vehicle-collective #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesExtraVehicle() {
+        let formDataExtraVehicle = [];
+        localStorage.removeItem('formDataExtraVehicle');
+        $('#extra-form-vehicle-collective select').each(function(){
+            formDataExtraVehicle.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataExtraVehicle", JSON.stringify(formDataExtraVehicle));
+    }
+    function getExtraVehicle() {
+        if(localStorage.formDataExtraVehicle !== undefined){
+            formDataExtraVehicle = JSON.parse(localStorage.formDataExtraVehicle);
+            for (var i = 0; i < formDataExtraVehicle.length; i++) {
+                $(`#extra-form-vehicle-collective [name=${formDataExtraVehicle[i].name}]`).val(formDataExtraVehicle[i].value);
+                if ((formDataExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataExtraVehicle[i].value === true)) {
+                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataExtraVehicle[i].value;
+                    document.getElementById("active-select-3").style.display = "inline";
+                    document.getElementById("active-select-4").style.display = "inline";
                 }
             }
         }
@@ -1205,6 +1261,28 @@
     }
 </script>
 
+<script>
+    function storeValuesVerificationVehicle() {
+        let formDataVerificationVehicle = [];
+        localStorage.removeItem('formDataVerificationVehicle');
+        $('#verification-form-vehicle-collective input[type=text]').each(function(){
+            formDataVerificationVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#verification-form-vehicle-collective select').each(function(){
+            formDataVerificationVehicle.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataVerificationVehicle", JSON.stringify(formDataVerificationVehicle));
+    }
+    function getVerificationVehicle() {
+        if(localStorage.formDataVerificationVehicle !== undefined){
+            formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
+            for (var i = 0; i < formDataVerificationVehicle.length; i++) {
+                $(`#verification-form-vehicle-collective [name=${formDataVerificationVehicle[i].name}]`).val(formDataVerificationVehicle[i].value);
+            }
+        }
+    }
+</script>
+
 <!-- Poliza de Colectivo Vehiculo Suscripcion -->
 <script>
     function storeValuesSubscriptionPolicyVehicle() {
@@ -1244,6 +1322,67 @@
     }
 </script>
 
+<script>
+    function storeValuesSubscriptionExtraVehicle() {
+        let formDataSubscriptionExtraVehicle = [];
+        localStorage.removeItem('formDataSubscriptionExtraVehicle');
+        $('#extra-form-vehicle-collective-subcription select').each(function(){
+            formDataSubscriptionExtraVehicle.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataSubscriptionExtraVehicle", JSON.stringify(formDataSubscriptionExtraVehicle));
+    }
+    function getSubscriptionExtraVehicle() {
+        if(localStorage.formDataSubscriptionExtraVehicle !== undefined){
+            formDataSubscriptionExtraVehicle = JSON.parse(localStorage.formDataSubscriptionExtraVehicle);
+            for (var i = 0; i < formDataSubscriptionExtraVehicle.length; i++) {
+                $(`#extra-form-vehicle-collective-subcription [name=${formDataSubscriptionExtraVehicle[i].name}]`).val(formDataSubscriptionExtraVehicle[i].value);
+                if ((formDataSubscriptionExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataSubscriptionExtraVehicle[i].value === true)) {
+                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataSubscriptionExtraVehicle[i].value;
+                    document.getElementById("active-select-3").style.display = "inline";
+                    document.getElementById("active-select-4").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionReceiptVehicle() {
+        let formDataSubscriptionReceiptVehicle = [];
+        localStorage.removeItem('formDataSubscriptionReceiptVehicle');
+        $('#receipt-form-vehicle-collective-subcription input[type=text]').each(function(){
+            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective-subcription input[type=number]').each(function(){
+            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective-subcription input[type=date]').each(function(){
+            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective-subcription select').each(function(){
+            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-vehicle-collective-subcription #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSubscriptionReceiptVehicle", JSON.stringify(formDataSubscriptionReceiptVehicle));
+    }
+    function getSubscriptionReceiptVehicle() {
+        if(localStorage.formDataSubscriptionReceiptVehicle !== undefined){
+            formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
+            for (var i = 0; i < formDataSubscriptionReceiptVehicle.length; i++) {
+                $(`#receipt-form-vehicle-collective-subcription [name=${formDataSubscriptionReceiptVehicle[i].name}]`).val(formDataSubscriptionReceiptVehicle[i].value);
+                if ((formDataSubscriptionReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptVehicle[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptVehicle[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
 <!-- Poliza de Colectivo Riesgos Diversos -->
 <script>
     function storeValuesPolicyRiskDiverse() {
@@ -1277,6 +1416,30 @@
                 }
                 if ((formDataPolicyRiskDiverse[i].name === 'tipo_canal_colectivo') && (formDataPolicyRiskDiverse[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-risk-diverse #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesExtraRiskDiverse() {
+        let formDataExtraRiskDiverse = [];
+        localStorage.removeItem('formDataExtraRiskDiverse');
+        $('#extra-form-risk-diverse select').each(function(){
+            formDataExtraRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataExtraRiskDiverse", JSON.stringify(formDataExtraRiskDiverse));
+    }
+    function getExtraRiskDiverse() {
+        if(localStorage.formDataExtraRiskDiverse !== undefined){
+            formDataExtraRiskDiverse = JSON.parse(localStorage.formDataExtraRiskDiverse);
+            for (var i = 0; i < formDataExtraRiskDiverse.length; i++) {
+                $(`#extra-form-risk-diverse [name=${formDataExtraRiskDiverse[i].name}]`).val(formDataExtraRiskDiverse[i].value);
+                if ((formDataExtraRiskDiverse[i].name === 'blindaje_boolean_vehiculo') && (formDataExtraRiskDiverse[i].value === true)) {
+                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataExtraRiskDiverse[i].value;
+                    document.getElementById("active-select-3").style.display = "inline";
+                    document.getElementById("active-select-4").style.display = "inline";
                 }
             }
         }
@@ -1339,6 +1502,29 @@
     }
 </script>
 
+<script>
+    function storeValuesVerificationRiskDiverse() {
+        let formDataVerificationRiskDiverse = [];
+        localStorage.removeItem('formDataVerificationRiskDiverse');
+        $('#verification-form-risk-diverse input[type=text]').each(function(){
+            formDataVerificationRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#verification-form-risk-diverse select').each(function(){
+            formDataVerificationRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataVerificationRiskDiverse", JSON.stringify(formDataVerificationRiskDiverse));
+    }
+    function getVerificationRiskDiverse() {
+        console.log(localStorage.formDataVerificationRiskDiverse)
+        if(localStorage.formDataVerificationRiskDiverse !== undefined){
+            formDataVerificationRiskDiverse = JSON.parse(localStorage.formDataVerificationRiskDiverse);
+            for (var i = 0; i < formDataVerificationRiskDiverse.length; i++) {
+                $(`#verification-form-risk-diverse [name=${formDataVerificationRiskDiverse[i].name}]`).val(formDataVerificationRiskDiverse[i].value);
+            }
+        }
+    }
+</script>
+
 <!-- Poliza de Colectivo Riesgos Diversos Suscripcion -->
 <script>
     function storeValuesSubscriptionPolicyRiskDiverse() {
@@ -1372,6 +1558,67 @@
                 }
                 if ((formDataSubscriptionPolicyRiskDiverse[i].name === 'tipo_canal_colectivo') && (formDataSubscriptionPolicyRiskDiverse[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-risk-diverse-subcription #searchList').css('display', 'block');
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionExtraRiskDiverse() {
+        let formDataSubscriptionExtraRiskDiverse = [];
+        localStorage.removeItem('formDataSubscriptionExtraRiskDiverse');
+        $('#extra-form-risk-diverse-subcription select').each(function(){
+            formDataSubscriptionExtraRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        localStorage.setItem("formDataSubscriptionExtraRiskDiverse", JSON.stringify(formDataSubscriptionExtraRiskDiverse));
+    }
+    function getSubscriptionExtraRiskDiverse() {
+        if(localStorage.formDataSubscriptionExtraRiskDiverse !== undefined){
+            formDataSubscriptionExtraRiskDiverse = JSON.parse(localStorage.formDataSubscriptionExtraRiskDiverse);
+            for (var i = 0; i < formDataSubscriptionExtraRiskDiverse.length; i++) {
+                $(`#extra-form-risk-diverse-subcription [name=${formDataSubscriptionExtraRiskDiverse[i].name}]`).val(formDataSubscriptionExtraRiskDiverse[i].value);
+                if ((formDataSubscriptionExtraRiskDiverse[i].name === 'blindaje_boolean_vehiculo') && (formDataSubscriptionExtraRiskDiverse[i].value === true)) {
+                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataSubscriptionExtraRiskDiverse[i].value;
+                    document.getElementById("active-select-3").style.display = "inline";
+                    document.getElementById("active-select-4").style.display = "inline";
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function storeValuesSubscriptionReceiptRiskDiverse() {
+        let formDataSubscriptionReceiptRiskDiverse = [];
+        localStorage.removeItem('formDataSubscriptionReceiptRiskDiverse');
+        $('#receipt-form-risk-diverse-subcription input[type=text]').each(function(){
+            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse-subcription input[type=number]').each(function(){
+            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse-subcription input[type=date]').each(function(){
+            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse-subcription select').each(function(){
+            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+        });
+        $('#receipt-form-risk-diverse-subcription #fraccionamiento_boolean_recibo').each(function(){
+            let markedCheck = $(this).prop('checked');
+            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: markedCheck});
+        });
+        localStorage.setItem("formDataSubscriptionReceiptRiskDiverse", JSON.stringify(formDataSubscriptionReceiptRiskDiverse));
+    }
+    function getSubscriptionReceiptRiskDiverse() {
+        if(localStorage.formDataSubscriptionReceiptRiskDiverse !== undefined){
+            formDataSubscriptionReceiptRiskDiverse = JSON.parse(localStorage.formDataSubscriptionReceiptRiskDiverse);
+            for (var i = 0; i < formDataSubscriptionReceiptRiskDiverse.length; i++) {
+                $(`#receipt-form-risk-diverse-subcription [name=${formDataSubscriptionReceiptRiskDiverse[i].name}]`).val(formDataSubscriptionReceiptRiskDiverse[i].value);
+                if ((formDataSubscriptionReceiptRiskDiverse[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptRiskDiverse[i].value === true)) {
+                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptRiskDiverse[i].value;
+                    document.getElementById("active-select-1").style.display = "inline";
+                    document.getElementById("active-select-2").style.display = "inline";
                 }
             }
         }
@@ -1457,28 +1704,118 @@
         });
         
         // Poliza Colectivo Salud
+        $("#btn_health_policy_collective").on('click', function (event) {
+            storeValuesPolicyHealth();
+        });
+        $("#btn_health_extra_collective").on('click', function (event) {
+            storeValuesExtraHealth();
+        });
+        $("#btn_health_receipt_collective").on('click', function (event) {
+            storeValuesReceiptHealth();
+        });
+        $("#btn_health_commission_collective").on('click', function (event) {
+            storeValuesCommissionHealth();
+        });
+        $("#btn_health_verification_collective").on('click', function (event) {
+            storeValuesVerificationHealth();
+        });
+
         getPolicyHealth();
+        getExtraHealth();
         getReceiptHealth();
         getCommissionHealth();
+        getVerificationHealth();
 
         // Poliza Colectivo Salud Suscripcion
+        $("#btn_health_policy_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyHealth();
+        });
+        $("#btn_health_extra_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraHealth();
+        });
+        $("#btn_health_receipt_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptHealth();
+        });
+
         getSubscriptionPolicyHealth();
+        getSubscriptionExtraHealth();
+        getSubscriptionReceiptHealth();
 
         // Poliza Colectivo Vehiculo
+        $("#btn_vehicle_policy_collective").on('click', function (event) {
+            storeValuesPolicyVehicle();
+        });
+        $("#btn_vehicle_extra_collective").on('click', function (event) {
+            storeValuesExtraVehicle();
+        });
+        $("#btn_vehicle_receipt_collective").on('click', function (event) {
+            storeValuesReceiptVehicle();
+        });
+        $("#btn_vehicle_commission_collective").on('click', function (event) {
+            storeValuesCommissionVehicle();
+        });
+        $("#btn_vehicle_verification_collective").on('click', function (event) {
+            storeValuesVerificationVehicle();
+        });
+
         getPolicyVehicle();
+        getExtraVehicle();
         getReceiptVehicle();
         getCommissionVehicle();
+        getVerificationVehicle();
 
         // Poliza Colectivo Vehiculo Suscripcion
+        $("#btn_vehicle_policy_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyVehicle();
+        });
+        $("#btn_vehicle_extra_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraVehicle();
+        });
+        $("#btn_vehicle_receipt_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptVehicle();
+        });
+
         getSubscriptionPolicyVehicle();
+        getSubscriptionExtraVehicle();
+        getSubscriptionReceiptVehicle();
 
         // Poliza Colectivo Riesgos Diversos
+        $("#btn_risk_diverse_policy").on('click', function (event) {
+            storeValuesPolicyRiskDiverse();
+        });
+        $("#btn_risk_diverse_extra").on('click', function (event) {
+            storeValuesExtraRiskDiverse();
+        });
+        $("#btn_risk_diverse_receipt").on('click', function (event) {
+            storeValuesReceiptRiskDiverse();
+        });
+        $("#btn_risk_diverse_commission").on('click', function (event) {
+            storeValuesCommissionRiskDiverse();
+        });
+        $("#btn_risk_diverse_verification").on('click', function (event) {
+            storeValuesVerificationRiskDiverse();
+        });
+
         getPolicyRiskDiverse();
+        getExtraRiskDiverse();
         getReceiptRiskDiverse();
         getCommissionRiskDiverse();
+        getVerificationRiskDiverse();
 
         // Poliza Colectivo Riesgos Diversos Suscripcion
+        $("#btn_risk_diverse_policy_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyRiskDiverse();
+        });
+        $("#btn_risk_diverse_extra_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraRiskDiverse();
+        });
+        $("#btn_risk_diverse_receipt_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptRiskDiverse();
+        });
+
         getSubscriptionPolicyRiskDiverse();
+        getSubscriptionExtraRiskDiverse();
+        getSubscriptionReceiptRiskDiverse();
 
         if ($('#maternidad_colectivo').val() === 'SÍ') {
             document.getElementById("searchinput").style.display = "block";

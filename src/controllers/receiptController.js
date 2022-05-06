@@ -55,22 +55,27 @@ module.exports = {
             } else {
                 resultReceipt.monto_comision_recibo = String(resultReceipt.monto_comision_recibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
             }
-            resultReceipt.monto_comision_recibo = `${resultReceipt.monto_comision_recibo}%`;
             if (resultCollective.length === 0) {
                 if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     resultReceipt.monto_prima_recibo = `Bs ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `Bs ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
                     resultReceipt.monto_prima_recibo = `$ ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `$ ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
                     resultReceipt.monto_prima_recibo = `€ ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `€ ${resultReceipt.monto_comision_recibo}`;
                 }
             } else {
                 if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     resultReceipt.monto_prima_recibo = `Bs ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `Bs ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     resultReceipt.monto_prima_recibo = `$ ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `$ ${resultReceipt.monto_comision_recibo}`;
                 } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
                     resultReceipt.monto_prima_recibo = `€ ${resultReceipt.monto_prima_recibo}`;
+                    resultReceipt.monto_comision_recibo = `€ ${resultReceipt.monto_comision_recibo}`;
                 }
             }
         }
@@ -97,7 +102,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -140,7 +145,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-vehicle-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-vehicle-policy');
             }
         } catch (error) {
             console.log(error);
@@ -171,7 +176,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-vehicle-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -201,7 +206,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -244,7 +249,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-health-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-health-policy');
             }
         } catch (error) {
             console.log(error);
@@ -275,7 +280,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-health-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -305,7 +310,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -348,7 +353,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-patrimonial-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-patrimonial-policy');
             }
         } catch (error) {
             console.log(error);
@@ -379,7 +384,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-patrimonial-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -409,7 +414,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -452,7 +457,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-bail-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-bail-policy');
             }
         } catch (error) {
             console.log(error);
@@ -483,7 +488,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-bail-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -513,7 +518,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -556,7 +561,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-another-branch-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-another-branch-policy');
             }
         } catch (error) {
             console.log(error);
@@ -587,7 +592,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-another-branch-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -617,7 +622,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -660,7 +665,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-funeral-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-funeral-policy');
             }
         } catch (error) {
             console.log(error);
@@ -691,7 +696,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-funeral-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -721,7 +726,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -764,7 +769,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-life-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-life-policy');
             }
         } catch (error) {
             console.log(error);
@@ -795,7 +800,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-life-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -825,7 +830,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -868,7 +873,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-ap-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-ap-policy');
             }
         } catch (error) {
             console.log(error);
@@ -899,7 +904,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-ap-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -929,7 +934,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -972,7 +977,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-travel-policy');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-travel-policy');
             }
         } catch (error) {
             console.log(error);
@@ -1003,7 +1008,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-travel-policy',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -1033,7 +1038,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -1080,7 +1085,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-health-collective');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-health-collective');
             }
         } catch (error) {
             console.log(error);
@@ -1111,7 +1116,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-health-collective',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -1141,7 +1146,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -1184,7 +1189,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-vehicle-collective');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-vehicle-collective');
             }
         } catch (error) {
             console.log(error);
@@ -1215,7 +1220,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-vehicle-collective',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -1245,7 +1250,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -1288,7 +1293,7 @@ module.exports = {
             if (req.cookies.rol === 'ADMINISTRATIVO') {
                 res.redirect('/sistema/add-risk-diverse-collective');
             } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema');
+                res.redirect('/sistema/add-subscription-risk-diverse-collective');
             }
         } catch (error) {
             console.log(error);
@@ -1319,7 +1324,7 @@ module.exports = {
                     alertIcon: 'error',
                     showConfirmButton: true,
                     timer: 1500,
-                    ruta: 'sistema',
+                    ruta: 'sistema/add-subscription-risk-diverse-collective',
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
@@ -1350,7 +1355,7 @@ module.exports = {
             let fechaHastaRecibo = null;
             let fechaPagoRecibo = null;
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[%]/g, '').replace(' ', '');
+            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
             if (req.body.fecha_pago_recibo !== '') {
                 fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
             }
@@ -1579,11 +1584,6 @@ module.exports = {
                     resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
                 }
             }
-            let ownAgentPercentage = 0;
-            if (resultOwnAgent.length !== 0) {
-                ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
-                ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
             res.render('editReceipt', {
                 naturalInsureds: resultsNaturalInsureds,
                 legalInsureds: resultsLegalInsureds,
@@ -1595,7 +1595,6 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
-                ownAgentPercentage: ownAgentPercentage,
                 policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
@@ -1691,11 +1690,6 @@ module.exports = {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
             }
         }
-        let ownAgentPercentage = 0;
-        if (resultOwnAgent.length !== 0) {
-            ownAgentPercentage = resultOwnAgent[0].porcentaje_agente_propio;
-            ownAgentPercentage = ownAgentPercentage.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
@@ -1710,7 +1704,7 @@ module.exports = {
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
             montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionRecibo = montoComisionRecibo.replace(/[%]/g, '').replace(' ', '');
+            montoComisionRecibo = montoComisionRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
             if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
                 montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
                 montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
@@ -1826,7 +1820,6 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
-                ownAgentPercentage: ownAgentPercentage,
                 policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],
@@ -1859,7 +1852,6 @@ module.exports = {
                 fechaPagoRecibo: fechaPagoRecibo,
                 primaRecibo: primaRecibo,
                 comisionRecibo: comisionRecibo,
-                ownAgentPercentage: ownAgentPercentage,
                 policy: resultPolicy[0],
                 collective: resultCollective[0],
                 naturalInsured: resultNaturalInsured[0],

@@ -1235,6 +1235,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1349,6 +1350,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1368,6 +1370,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1385,6 +1388,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1517,6 +1521,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1536,6 +1541,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1553,6 +1559,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1667,6 +1674,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1686,6 +1694,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1703,6 +1712,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1817,6 +1827,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1836,6 +1847,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1853,6 +1865,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1967,6 +1980,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -1986,6 +2000,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2003,6 +2018,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2117,6 +2133,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2136,6 +2153,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2153,6 +2171,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2267,6 +2286,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2286,6 +2306,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2303,6 +2324,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2417,6 +2439,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2436,6 +2459,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2453,6 +2477,7 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2567,6 +2592,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
@@ -2586,6 +2612,7 @@ module.exports = {
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
                     policies: resultsPolicies,
+                    policy: resultPolicy[0],
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
