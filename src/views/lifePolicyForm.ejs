@@ -586,7 +586,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <% if (typeof(policy) !== 'undefined') { %>
+                                        <% if (policy.length !== 0) { %>
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">Prima</label>
                                                     <div class="col-sm-9">
@@ -892,7 +892,7 @@
                             <form id="verification-form-life" action="/sistema/add-life-verification-factor" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <% if (typeof(policy) !== 'undefined') { %>
+                                        <% if (policy.length !== 0) { %>
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-3 col-form-label">% Prima</label>
                                                     <div class="col-sm-9">

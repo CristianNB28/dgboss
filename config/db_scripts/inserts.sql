@@ -1,15 +1,8 @@
-/* Tabla Usuario */
-INSERT INTO `Usuario` (`cedula_usuario`, `rif_usuario`, `tipo_cedula_usuario`, `tipo_rif_usuario`, `nombre_usuario`, `username`, `password_usuario`, `correo_usuario`, `telefono_usuario`, `direccion_usuario`, `cargo_usuario`, `productor_boolean`, `administrador_boolean`, `tipo_linea_negocio`) 
-    VALUES ('23421423', NULL, 'V', NULL, 'Jose Torres', 'jtorrestest', '$2a$08$UZQKsUcKvKCLw3q7XibY8e2029a0GbS.uQMjGAmWqOChexlj73obe', 'jt@test.com', NULL, NULL, NULL, 0, 1, 'Persona');
-/* Tabla Rol */
-INSERT INTO `Rol` (`nombre_rol`, `descripcion_rol`)
-    VALUES ('Analista', 'Analista');
-INSERT INTO `Rol` (`nombre_rol`, `descripcion_rol`)
-    VALUES ('Cliente', 'Cliente App');
-INSERT INTO `Rol` (`nombre_rol`, `descripcion_rol`)
-    VALUES ('Ejecutivo', 'Ejecutivo de Cuentas');
-INSERT INTO `Rol` (`nombre_rol`, `descripcion_rol`)
-    VALUES ('Administrativo', 'Administrativo');
-/* Tabla Usuario_Rol */
-INSERT INTO `Usuario_Rol` (`usuario_id`, `rol_id`)
-    VALUES (1, 4);
+INSERT INTO `agente_propio` VALUES (1,'22.588.181','V','JUAN','GONZALEZ','0412-2015050','jgonzalez@gmail.com','CARACAS',19.0000,NULL,0);
+INSERT INTO `asegurado_persona_juridica` VALUES (1,'001245684','J','ATINA CORRETAJE DE SEGUROS','0212-8166132','','0412-2200000','','','','','info@atinaseguros.com','','URB, TORRE LA CASTELLANA, PB AV. PRINCIPAL DE LA CASTELLANA,\r\nCARACAS 1060, DISTRITO CAPITAL, VENEZUELA',NULL,0,1);
+INSERT INTO `asegurado_persona_natural` VALUES (1,'81.515.151','E','MARTHA','RIOS','1980-08-15','','mrios@gmail.com','0412-2100000','FERNANDO TORREALBA','0424-0000000','CARACAS',NULL,0,1),(2,'22.501.200','V','ANA ','DELGADO','1976-09-25',NULL,'anamag3082@gmail.com','4125858597',NULL,NULL,'CARACAS, VENEZUELA',NULL,0,NULL),(3,'12.421.920','V','ANA ','DELGADO','1976-09-25',NULL,'anamag3082@gmail.com','4125858597',NULL,NULL,'CARACAS, VENEZUELA',NULL,0,NULL),(4,'5.712.644','V','ANA ','DELGADO','1976-09-25',NULL,'anamag3082@gmail.com','4125858597',NULL,NULL,'CARACAS, VENEZUELA',NULL,0,NULL);
+INSERT INTO `aseguradora` VALUES (1,'000340218','J','C.A. DE SEGUROS AVILA','ALTAMIRA SUR AV. JOSÉ FELIX SOSA EDIF. TORRE BRITÁNICA PB','',NULL,0),(2,'000340366','J','SEGUROS VENEZUELA C.A.','AV. FRANCISCO DE MIRANDA. EDIF. SEGUROS VENEZUELA. PISOS 8 Y 9. URB. CAMPO ALEGRE. CARACAS, EDO. MIRANDA','',NULL,0);
+INSERT INTO `ejecutivo` VALUES (1,'15.505.051','V','RODRIGO','HERNANDEZ','0414-0000000','rhernandez@gmail.com','CARACAS','EJECUTIVO','SUSCRIPCIÓN',25.0000,NULL,0),(2,'22.515.184','V','RAUL','HERRERA','0424-0000000','rherrera@gmail.com','CARACAS','EJECUTIVO','SINIESTROS',18.0000,NULL,0),(3,'13.161.511','V','KELLYS','GUTIERREZ','0412-5151511','kgutierrez@gmail.com','CARACAS','EJECUTIVO','COBRANZAS',17.0000,NULL,0),(4,'19.155.151','V','OLIVER','FERNANDEZ','0414-0000000','ofernandez@gmail.com','CARACAS','COORDINADOR','SUSCRIPCIÓN INDIVIDUAL',22.8500,NULL,0),(5,'11.515.180','V','PAULA','TORRES','0424-0000000','ptorres@gmail.com','CARACAS','COORDINADOR','SUSCRIPCIÓN COLECTIVO',19.8400,NULL,0);
+INSERT INTO `rol` VALUES (1,'ANALISTA','ANALISTA',NULL,0),(2,'CLIENTE','CLIENTE APP',NULL,0),(3,'EJECUTIVO','EJECUTIVO DE CUENTAS',NULL,0),(4,'ADMINISTRATIVO','ADMINISTRATIVO',NULL,0),(5,'SUSCRIPCIÓN','DEPARTAMENTO DE SUSCRIPCIÓN',NULL,0);
+INSERT INTO `usuario` VALUES (1,'23421423',NULL,'V',NULL,'Jose Torres','jtorrestest','$2a$08$UZQKsUcKvKCLw3q7XibY8e2029a0GbS.uQMjGAmWqOChexlj73obe','jt@test.com',NULL,NULL,NULL,0,1,'Persona',NULL,0),(2,'22.151.818',NULL,NULL,NULL,'KELLYS GARCIAS','KGARCIA','$2a$08$L33eogY/jE13/0.o.W9US.ne0vqi6GkabutEPsycup1jq7RNg/Jqu','kg@test.com','','','',0,0,'AUTOMÓVIL',NULL,0);
+INSERT INTO `usuario_rol` VALUES (1,0,1,4),(2,0,2,5);

@@ -36,9 +36,6 @@
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var collectiveNumber = <%- JSON.stringify(collective) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -124,7 +121,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -186,9 +183,6 @@
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var collectiveNumber = <%- JSON.stringify(collective) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -270,7 +264,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -315,9 +309,6 @@
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var collectiveNumber = <%- JSON.stringify(collective) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -403,7 +394,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -472,9 +463,6 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -556,7 +544,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -609,9 +597,6 @@
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var collectiveNumber = <%- JSON.stringify(collective) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -697,7 +682,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -766,9 +751,6 @@
 <script>
     var collectives = <%- JSON.stringify(collectives) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
-    if (collectiveNumber === undefined) {
-        collectiveNumber.numero_colectivo = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -850,7 +832,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber.numero_colectivo} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${collectiveNumber[0].numero_colectivo} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -2045,7 +2027,7 @@
     }   
 </script>
 
-<% if (typeof(collective) !== 'undefined') { %>
+<% if (collective.length !== 0) { %>
     <script>
         var collective = <%- JSON.stringify(collective) %>;
         function premiumCalculationDate() {
@@ -2080,9 +2062,9 @@
                 if ((numberMonthly === '') || (numberMonthly === '0')) {
                     numberMonthly = 1;
                 }
-                var premiumMonthly = collective.prima_anual_colectivo / numberMonthly;
+                var premiumMonthly = collective[0].prima_anual_colectivo / numberMonthly;
                 premiumMonthly = String(premiumMonthly);
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2090,7 +2072,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumMonthly);
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2098,7 +2080,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumMonthly);
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2132,10 +2114,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumBimonthly = collective.prima_anual_colectivo / 6;
+                var premiumBimonthly = collective[0].prima_anual_colectivo / 6;
                 premiumBimonthly = String(premiumBimonthly);
                 document.getElementById("numero_pago_recibo").value = 6;
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2143,7 +2125,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumBimonthly);
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2151,7 +2133,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumBimonthly);
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2185,10 +2167,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumQuarterly = collective.prima_anual_colectivo / 4;
+                var premiumQuarterly = collective[0].prima_anual_colectivo / 4;
                 premiumQuarterly = String(premiumQuarterly);
                 document.getElementById("numero_pago_recibo").value = 4;
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2196,7 +2178,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumQuarterly);
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2204,7 +2186,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumQuarterly);
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2238,10 +2220,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumBiannual = collective.prima_anual_colectivo / 2;
+                var premiumBiannual = collective[0].prima_anual_colectivo / 2;
                 premiumBiannual = String(premiumBiannual);
                 document.getElementById("numero_pago_recibo").value = 2;
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2249,7 +2231,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumBiannual);
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2257,7 +2239,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumBiannual);
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2291,10 +2273,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var annualPremium = collective.prima_anual_colectivo / 1;
+                var annualPremium = collective[0].prima_anual_colectivo / 1;
                 annualPremium = String(annualPremium);
                 document.getElementById("numero_pago_recibo").value = 1;
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2302,7 +2284,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(annualPremium);
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2310,7 +2292,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(annualPremium);
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2321,30 +2303,30 @@
                 }
             }
             if (checkboxDivision === false) {
-                if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: 'Bs ',
                     });
-                    cleave.setRawValue(String(collective.prima_anual_colectivo));
-                } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                    cleave.setRawValue(String(collective[0].prima_anual_colectivo));
+                } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: '$ ',
                     });
-                    cleave.setRawValue(String(collective.prima_anual_colectivo));
-                } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                    cleave.setRawValue(String(collective[0].prima_anual_colectivo));
+                } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: '€ ',
                     });
-                    cleave.setRawValue(String(collective.prima_anual_colectivo));
+                    cleave.setRawValue(String(collective[0].prima_anual_colectivo));
                 }
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
@@ -2358,7 +2340,7 @@
     <script>
         var collective = <%- JSON.stringify(collective) %>;
         window.onload = function() {
-            if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+            if (collective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -2367,7 +2349,7 @@
                         prefix: 'Bs ',
                     });
                 });
-            } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+            } else if (collective[0].tipo_moneda_colectivo === 'DÓLAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -2376,7 +2358,7 @@
                         prefix: '$ ',
                     });
                 });
-            } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+            } else if (collective[0].tipo_moneda_colectivo === 'EUROS') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,

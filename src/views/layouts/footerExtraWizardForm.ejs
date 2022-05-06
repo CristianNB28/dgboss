@@ -40,9 +40,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -128,7 +125,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -188,9 +185,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -272,7 +266,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -324,9 +318,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -412,7 +403,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -493,9 +484,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -577,7 +565,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -652,9 +640,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -740,7 +725,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -809,9 +794,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -893,7 +875,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -945,9 +927,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -1033,7 +1012,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -1102,9 +1081,6 @@
     var policies = <%- JSON.stringify(policies) %>;
     var receipts = <%- JSON.stringify(receipts) %>;
     var policyNumber = <%- JSON.stringify(policy) %>;
-    if (policyNumber === undefined) {
-        policyNumber.numero_poliza = '';
-    }
     $.extend($.validator.messages, {
         required: "Este campo es obligatorio",
         remote: "Por favor, rellena este campo",
@@ -1186,7 +1162,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -2721,7 +2697,7 @@
     }   
 </script>
 
-<% if (typeof(policy) !== 'undefined') { %>
+<% if (policy.length !== 0) { %>
     <script>
         var policy = <%- JSON.stringify(policy) %>;
         function premiumCalculationDate() {
@@ -2756,9 +2732,9 @@
                 if ((numberMonthly === '') || (numberMonthly === '0')) {
                     numberMonthly = 1;
                 }
-                var premiumMonthly = policy.prima_anual_poliza / numberMonthly;
+                var premiumMonthly = policy[0].prima_anual_poliza / numberMonthly;
                 premiumMonthly = String(premiumMonthly);
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2766,7 +2742,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumMonthly);
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2774,7 +2750,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumMonthly);
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2808,10 +2784,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumBimonthly = policy.prima_anual_poliza / 6;
+                var premiumBimonthly = policy[0].prima_anual_poliza / 6;
                 premiumBimonthly = String(premiumBimonthly);
                 document.getElementById("numero_pago_recibo").value = 6;
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2819,7 +2795,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumBimonthly);
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2827,7 +2803,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumBimonthly);
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2861,10 +2837,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumQuarterly = policy.prima_anual_poliza / 4;
+                var premiumQuarterly = policy[0].prima_anual_poliza / 4;
                 premiumQuarterly = String(premiumQuarterly);
                 document.getElementById("numero_pago_recibo").value = 4;
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2872,7 +2848,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumQuarterly);
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2880,7 +2856,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumQuarterly);
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2914,10 +2890,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var premiumBiannual = policy.prima_anual_poliza / 2;
+                var premiumBiannual = policy[0].prima_anual_poliza / 2;
                 premiumBiannual = String(premiumBiannual);
                 document.getElementById("numero_pago_recibo").value = 2;
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2925,7 +2901,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(premiumBiannual);
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2933,7 +2909,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(premiumBiannual);
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2967,10 +2943,10 @@
                         $('#fecha_hasta_recibo').val(fecha);
                     });
                 });
-                var annualPremium = policy.prima_anual_poliza / 1;
+                var annualPremium = policy[0].prima_anual_poliza / 1;
                 annualPremium = String(annualPremium);
                 document.getElementById("numero_pago_recibo").value = 1;
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2978,7 +2954,7 @@
                         prefix: 'Bs ',
                     });
                     cleave.setRawValue(annualPremium);
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2986,7 +2962,7 @@
                         prefix: '$ ',
                     });
                     cleave.setRawValue(annualPremium);
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
@@ -2997,30 +2973,30 @@
                 }
             }
             if (checkboxDivision === false) {
-                if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: 'Bs ',
                     });
-                    cleave.setRawValue(String(policy.prima_anual_poliza));
-                } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
+                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: '$ ',
                     });
-                    cleave.setRawValue(String(policy.prima_anual_poliza));
-                } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
+                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                     let cleave = new Cleave("#monto_prima_recibo", {
                         numeral: true,
                         numeralDecimalMark: ',',
                         delimiter: '.',
                         prefix: '€ ',
                     });
-                    cleave.setRawValue(String(policy.prima_anual_poliza));
+                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
                 }
                 document.getElementById("numero_pago_recibo").value = 0;
                 document.getElementById("tipo_fraccionamiento_recibo").value = '';
@@ -3034,7 +3010,7 @@
     <script>
         var policy = <%- JSON.stringify(policy) %>;
         window.onload = function() {
-            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+            if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -3043,7 +3019,7 @@
                         prefix: 'Bs ',
                     });
                 });
-            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+            } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -3052,7 +3028,7 @@
                         prefix: '$ ',
                     });
                 });
-            } else if (policy.tipo_moneda_poliza === 'EUROS') {
+            } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
