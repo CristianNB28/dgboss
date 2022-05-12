@@ -708,11 +708,14 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let primaColectivo = resultCollective[0].prima_anual_colectivo;
-        if (primaColectivo.toString().includes('.') === true) {
-            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaColectivo = 0;
+        if (resultCollective.length !== 0) {
+            primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
@@ -855,11 +858,14 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let primaColectivo = resultCollective[0].prima_anual_colectivo;
-        if (primaColectivo.toString().includes('.') === true) {
-            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaColectivo = 0;
+        if (resultCollective.length !== 0) {
+            primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -993,11 +999,14 @@ module.exports = {
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let primaColectivo = resultCollective[0].prima_anual_colectivo;
-        if (primaColectivo.toString().includes('.') === true) {
-            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaColectivo = 0;
+        if (resultCollective.length !== 0) {
+            primaColectivo = resultCollective[0].prima_anual_colectivo;
+            if (primaColectivo.toString().includes('.') === true) {
+                primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;

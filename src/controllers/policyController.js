@@ -1542,11 +1542,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -1693,11 +1696,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -1862,11 +1868,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2013,11 +2022,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2164,11 +2176,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2315,11 +2330,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2466,11 +2484,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2617,11 +2638,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
@@ -2768,11 +2792,14 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        let primaPoliza = 0;
+        if (resultPolicy.length !== 0) {
+            primaPoliza = resultPolicy[0].prima_anual_poliza;
+            if (primaPoliza.toString().includes('.') === true) {
+                primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            } else {
+                primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            }
         }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
