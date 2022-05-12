@@ -33,7 +33,7 @@
                                                 type="text"
                                                 name="numero_poliza"
                                                 id="numero_poliza"
-                                                value="<%= policy.numero_poliza %>" 
+                                                value="<%= policy[0].numero_poliza %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -46,7 +46,7 @@
                                             <div class="numeral-selector selector">
                                                 <div class="select-box-wrapper">
                                                     <select name="tipo_id_rif_tomador" id="select_box">
-                                                        <option value="<%= policy.tipo_id_rif_tomador %>"><%= policy.tipo_id_rif_tomador %></option>
+                                                        <option value="<%= policy[0].tipo_id_rif_tomador %>"><%= policy[0].tipo_id_rif_tomador %></option>
                                                         <option value="V">V</option>
                                                         <option value="E">E</option>
                                                         <option value="J">J</option>
@@ -60,7 +60,7 @@
                                                 type="text"
                                                 name="id_rif_tomador"
                                                 id="id_rif_tomador"
-                                                value="<%= policy.id_rif_tomador %>"
+                                                value="<%= policy[0].id_rif_tomador %>"
                                                 onkeyup="pasarNombreTomador();"
                                                 class="form-control input-numeral"
                                                 required
@@ -74,7 +74,7 @@
                                                 type="text"
                                                 name="nombre_tomador_poliza"
                                                 id="nombre_tomador_poliza"
-                                                value="<%= policy.nombre_tomador_poliza %>" 
+                                                value="<%= policy[0].nombre_tomador_poliza %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -88,7 +88,7 @@
                                                 type="email"
                                                 name="correo_tomador"
                                                 id="correo_tomador"
-                                                value="<%= policy.correo_tomador %>" 
+                                                value="<%= policy[0].correo_tomador %>" 
                                                 class="form-control"
                                                 required
                                             >
@@ -103,7 +103,7 @@
                                                             name="tomador_asegurado_poliza" 
                                                             id="tomador_asegurado_poliza" 
                                                             onclick="pasarNombreTomador();"
-                                                            <%= policy.tomador_asegurado_poliza === 1 ? 'checked': '' %>
+                                                            <%= policy[0].tomador_asegurado_poliza === 1 ? 'checked': '' %>
                                                         > 
                                                         ¿Asegurado mismo tomador?</label></div>
                                         </div>
@@ -290,7 +290,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Ramo</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_ramo_poliza">
-                                                <option value="<%= policy.tipo_ramo_poliza %>"><%= policy.tipo_ramo_poliza %></option>
+                                                <option value="<%= policy[0].tipo_ramo_poliza %>"><%= policy[0].tipo_ramo_poliza %></option>
                                                 <option value="TRI">TRI</option>
                                                 <option value="RCG">RCG</option>
                                                 <option value="FIDELIDAD DE EMPLEADOS">FIDELIDAD DE EMPLEADOS</option>
@@ -308,7 +308,7 @@
                                                 type="text"
                                                 name="grupo_poliza"
                                                 id="grupo_poliza"
-                                                value="<%= policy.grupo_poliza %>" 
+                                                value="<%= policy[0].grupo_poliza %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
@@ -318,7 +318,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_moneda_poliza" id="tipo_moneda_poliza" onchange="currencySignChange()" required>
-                                                <option value="<%= policy.tipo_moneda_poliza %>"><%= policy.tipo_moneda_poliza %></option>
+                                                <option value="<%= policy[0].tipo_moneda_poliza %>"><%= policy[0].tipo_moneda_poliza %></option>
                                                 <option value="BOLÍVAR">BOLÍVAR</option>
                                                 <option value="DÓLAR">DÓLAR</option>
                                                 <option value="EUROS">EUROS</option>
@@ -342,7 +342,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_canal_poliza" id="tipo_canal_poliza" onchange="showList()" required>
-                                                <option value="<%= policy.tipo_canal_poliza %>"><%= policy.tipo_canal_poliza %></option>
+                                                <option value="<%= policy[0].tipo_canal_poliza %>"><%= policy[0].tipo_canal_poliza %></option>
                                                 <option value="REDES SOCIALES">REDES SOCIALES</option>
                                                 <option value="PÁGINA WEB">PÁGINA WEB</option>
                                                 <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
@@ -438,7 +438,7 @@
                                 type="hidden"
                                 name="id_poliza"
                                 id="id_poliza"
-                                value="<%= policy.id_poliza %>"
+                                value="<%= policy[0].id_poliza %>"
                                 class="form-control"
                             >
                         </div>

@@ -33,7 +33,7 @@
                                                 type="text"
                                                 name="numero_colectivo"
                                                 id="numero_colectivo"
-                                                value="<%= collective.numero_colectivo %>" 
+                                                value="<%= collective[0].numero_colectivo %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -46,7 +46,7 @@
                                             <div class="numeral-selector selector">
                                                 <div class="select-box-wrapper">
                                                     <select name="tipo_id_rif_tomador" id="select_box">
-                                                        <option value="<%= collective.tipo_id_rif_tomador %>"><%= collective.tipo_id_rif_tomador %></option>
+                                                        <option value="<%= collective[0].tipo_id_rif_tomador %>"><%= collective[0].tipo_id_rif_tomador %></option>
                                                         <option value="V">V</option>
                                                         <option value="E">E</option>
                                                         <option value="J">J</option>
@@ -61,7 +61,7 @@
                                                 name="id_rif_tomador"
                                                 id="id_rif_tomador"
                                                 onkeyup="pasarNombreTomador2();"
-                                                value="<%= collective.id_rif_tomador %>"
+                                                value="<%= collective[0].id_rif_tomador %>"
                                                 class="form-control input-numeral"
                                                 required
                                             >
@@ -74,7 +74,7 @@
                                                 type="text"
                                                 name="nombre_tomador_colectivo"
                                                 id="nombre_tomador_colectivo"
-                                                value="<%= collective.nombre_tomador_colectivo %>"
+                                                value="<%= collective[0].nombre_tomador_colectivo %>"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -88,7 +88,7 @@
                                                 type="email"
                                                 name="correo_tomador"
                                                 id="correo_tomador"
-                                                value="<%= collective.correo_tomador %>"
+                                                value="<%= collective[0].correo_tomador %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -103,7 +103,7 @@
                                                             name="tomador_asegurado_colectivo" 
                                                             id="tomador_asegurado_colectivo" 
                                                             onclick="pasarNombreTomador();"
-                                                            <%= collective.tomador_asegurado_colectivo === 1 ? 'checked': '' %>
+                                                            <%= collective[0].tomador_asegurado_colectivo === 1 ? 'checked': '' %>
                                                         > 
                                                         ¿Asegurado mismo tomador?</label></div>
                                         </div>
@@ -280,7 +280,7 @@
                                                 type="text"
                                                 name="grupo_colectivo"
                                                 id="grupo_colectivo"
-                                                value="<%= collective.grupo_colectivo %>" 
+                                                value="<%= collective[0].grupo_colectivo %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
@@ -290,7 +290,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_moneda_colectivo" id="tipo_moneda_colectivo" onchange="currencySignChange()" required>
-                                                <option value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
+                                                <option value="<%= collective[0].tipo_moneda_colectivo %>"><%= collective[0].tipo_moneda_colectivo %></option>
                                                 <option value="BOLÍVAR">BOLÍVAR</option>
                                                 <option value="DÓLAR">DÓLAR</option>
                                                 <option value="EUROS">EUROS</option>
@@ -314,7 +314,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
-                                                <option value="<%= collective.tipo_canal_colectivo %>"><%= collective.tipo_canal_colectivo %></option>
+                                                <option value="<%= collective[0].tipo_canal_colectivo %>"><%= collective[0].tipo_canal_colectivo %></option>
                                                 <option value="REDES SOCIALES">REDES SOCIALES</option>
                                                 <option value="PÁGINA WEB">PÁGINA WEB</option>
                                                 <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
@@ -410,7 +410,7 @@
                                 type="hidden" 
                                 name="id_colectivo"
                                 id="id_colectivo"
-                                value="<%= collective.id_colectivo %>"
+                                value="<%= collective[0].id_colectivo %>"
                                 class="form-control"
                             >
                         </div>
