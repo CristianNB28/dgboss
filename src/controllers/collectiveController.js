@@ -202,6 +202,38 @@ module.exports = {
             });
         }
     },
+    getHealthCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('healthCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubscriptionHealthCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('subscriptionHealthCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getVehicleCollectiveForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -354,6 +386,38 @@ module.exports = {
                 cookieRol: req.cookies.rol
             });
         }
+    },
+    getVehicleCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('vehicleCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubscriptionVehicleCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('subscriptionVehicleCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
     },
     getRiskDiverseCollectiveForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
@@ -508,6 +572,38 @@ module.exports = {
             });
         }
     },
+    getRiskDiverseCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('riskDiverseCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubscriptionRiskDiverseCollectiveList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        res.render('subscriptionRiskDiverseCollectiveList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            collective: resultCollective,
+            collectives: resultsCollective,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getCollectives: async (req, res) => {
         let resultsCollectives =  await collectiveModel.getCollectives();
         let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
@@ -607,10 +703,17 @@ module.exports = {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let primaColectivo = resultCollective[0].prima_anual_colectivo;
+        if (primaColectivo.toString().includes('.') === true) {
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             let montoPrimaAnual = req.body.prima_anual_colectivo;
             let deducible = req.body.deducible_colectivo;
@@ -624,17 +727,7 @@ module.exports = {
             let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
             let fechaDetalleCliente = new Date(req.body.detalle_cliente_colectivo);
             let tipoColectivo = 'SALUD';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
-            }
+            const estatusPoliza = 'ACTIVA';
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
                 montoPrimaAnual = montoPrimaAnual.replace(",", ".");
@@ -720,10 +813,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -739,10 +834,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -754,9 +851,16 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let primaColectivo = resultCollective[0].prima_anual_colectivo;
+        if (primaColectivo.toString().includes('.') === true) {
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
@@ -771,21 +875,11 @@ module.exports = {
             let tipoColectivo = 'AUTOMÓVIL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
@@ -857,10 +951,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -876,10 +972,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -891,9 +989,16 @@ module.exports = {
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         let resultsLegalInsureds = await insuredModel.getLegalInsureds();
         let resultsCollective = await collectiveModel.getCollectivesNumbers();
+        let resultCollective = await collectiveModel.getCollectiveLast();
         let resultsReceipts = await receiptModel.getReceipts();
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let primaColectivo = resultCollective[0].prima_anual_colectivo;
+        if (primaColectivo.toString().includes('.') === true) {
+            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_colectivo ? 1 : 0;
@@ -908,21 +1013,11 @@ module.exports = {
             let tipoColectivo = 'RIESGOS DIVERSOS';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
@@ -994,10 +1089,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1013,10 +1110,12 @@ module.exports = {
                     insurers: resultsInsurers,
                     naturalInsureds: resultsNaturalInsureds,
                     legalInsureds: resultsLegalInsureds,
+                    collective: resultCollective,
                     collectives: resultsCollective,
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaColectivo,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1350,17 +1449,7 @@ module.exports = {
             let fechaPolizaHasta = new Date(req.body.fecha_hasta_colectivo);
             let fechaDetalleCliente = new Date(req.body.detalle_cliente_colectivo);
             let tipoColectivo = 'SALUD';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
-            }
+            const estatusPoliza = 'ACTIVA';
             if (nombreCompletoAgente === undefined) {
                 nombreCompletoAgente = '';
             }
@@ -1572,21 +1661,11 @@ module.exports = {
             let tipoColectivo = 'AUTOMÓVIL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {
@@ -1781,21 +1860,11 @@ module.exports = {
             let tipoColectivo = 'RIESGOS DIVERSOS';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             if ((montoPrimaAnual.indexOf(',') !== -1) && (montoPrimaAnual.indexOf('.') !== -1)) {

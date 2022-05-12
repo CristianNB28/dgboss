@@ -1,0 +1,72 @@
+<!-- Se incluye el layout del header -->
+<%- include('layouts/header') %>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Pólizas</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/sistema">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>Pólizas</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>Lista de Datos de Colectivo Riesgos Diversos</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Colectivo</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-group list-group-flush" id="list-risk-diverse-subcription-collective1"></ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul class="list-group list-group-flush" id="list-risk-diverse-subcription-collective2"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-title">
+                    <h5>Vehículo</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ul class="list-group list-group-flush" id="list-risk-diverse-subcription-extra"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-title">
+                    <h5>Recibo</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-group list-group-flush" id="list-risk-diverse-subcription-receipt1"></ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul class="list-group list-group-flush" id="list-risk-diverse-subcription-receipt2"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-sm-offset-2">
+                    <div class="card-body d-flex">
+                        <button class="btn btn-primary btn-sm ml-auto" id="btn_risk_diverse_subcription_list" onclick="location.href='/sistema'">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Se incluye el layout del footer -->
+<%- include('layouts/footerCollectiveWizardForm') %>

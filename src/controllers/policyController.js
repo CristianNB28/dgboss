@@ -141,6 +141,38 @@ module.exports = {
             });
         }
     },
+    getVehiclePolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('vehiclePolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionVehiclePolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionVehiclePolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getHealthPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -276,6 +308,38 @@ module.exports = {
             });
         }
     },
+    getHealthPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('healthPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionHealthPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionHealthPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getPatrimonialPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -403,6 +467,38 @@ module.exports = {
                 cookieRol: req.cookies.rol
             });
         }
+    },
+    getPatrimonialPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('patrimonialPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionPatrimonialPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionPatrimonialPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
     },
     getBailPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
@@ -532,6 +628,38 @@ module.exports = {
             });
         }
     },
+    getBailPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('bailPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionBailPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionBailPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getAnotherBranchPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -659,6 +787,38 @@ module.exports = {
                 cookieRol: req.cookies.rol
             });
         }
+    },
+    getAnotherBranchPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('anotherBranchPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionAnotherBranchPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionAnotherBranchPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
     },
     getFuneralPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
@@ -795,6 +955,38 @@ module.exports = {
             });
         }
     },
+    getFuneralPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('funeralPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionFuneralPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionFuneralPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getLifePolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -930,6 +1122,38 @@ module.exports = {
             });
         }
     },
+    getLifePolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('lifePolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionLifePolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionLifePolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getAPPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
         let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
@@ -1057,6 +1281,38 @@ module.exports = {
                 cookieRol: req.cookies.rol
             });
         }
+    },
+    getAPPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('apPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionAPPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionApPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
     },
     getTravelPolicyForm: async (req, res) => {
         let resultsInsurers = await insurerModel.getInsurers();
@@ -1186,6 +1442,38 @@ module.exports = {
             });
         }
     },
+    getTravelPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('travelPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
+    getSubcriptionTravelPolicyList: async (req, res) => {
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultPolicy = await policyModel.getPolicyLast();
+        res.render('subscriptionTravelPolicyList', {
+            naturalInsureds: resultsNaturalInsureds,
+            legalInsureds: resultsLegalInsureds,
+            policy: resultPolicy,
+            policies: resultsPolicies,
+            receipts: resultsReceipts,
+            name: req.session.name,
+            cookieRol: req.cookies.rol
+        });
+    },
     getPolicies: async (req, res) => {
         let resultsPolicies =  await policyModel.getPolicies();
         let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
@@ -1254,6 +1542,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1303,21 +1597,11 @@ module.exports = {
             let tipoIndividualPoliza = 'AUTOMÓVIL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postVehiclePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -1372,6 +1656,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1392,6 +1677,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1407,6 +1693,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1474,21 +1766,11 @@ module.exports = {
             let tipoIndividualPoliza = 'SALUD';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postHealthPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -1543,6 +1825,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1563,6 +1846,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1578,6 +1862,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1627,21 +1917,11 @@ module.exports = {
             let tipoIndividualPoliza = 'PATRIMONIAL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postPatrimonialPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -1696,6 +1976,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1716,6 +1997,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1731,6 +2013,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1780,21 +2068,11 @@ module.exports = {
             let tipoIndividualPoliza = 'FIANZA';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postBailPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -1849,6 +2127,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1869,6 +2148,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -1884,6 +2164,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -1933,21 +2219,11 @@ module.exports = {
             let tipoIndividualPoliza = 'OTROS RAMOS';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postAnotherBranchPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -2002,6 +2278,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2022,6 +2299,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2037,6 +2315,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2086,21 +2370,11 @@ module.exports = {
             let tipoIndividualPoliza = 'FUNERARIO';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postFuneralPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -2155,6 +2429,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2175,6 +2450,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2190,6 +2466,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2239,21 +2521,11 @@ module.exports = {
             let tipoIndividualPoliza = 'VIDA';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postLifePolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -2308,6 +2580,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2328,6 +2601,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2343,6 +2617,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2392,21 +2672,11 @@ module.exports = {
             let tipoIndividualPoliza = 'AP';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postAPPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -2461,6 +2731,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2481,6 +2752,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2496,6 +2768,12 @@ module.exports = {
         let resultsExecutives = await executiveModel.getExecutives();
         let resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultPolicy = await policyModel.getPolicyLast();
+        let primaPoliza = resultPolicy[0].prima_anual_poliza;
+        if (primaPoliza.toString().includes('.') === true) {
+            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        } else {
+            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        }
         try {
             const tipoIdRifAsegurado = req.body.tipo_id_rif_asegurado;
             let tomadorAsegurado = req.body.tomador_asegurado_poliza ? 1 : 0;
@@ -2545,21 +2823,11 @@ module.exports = {
             let tipoIndividualPoliza = 'VIAJE';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             let policy = await policyModel.postTravelPolicyForm(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -2614,6 +2882,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -2634,6 +2903,7 @@ module.exports = {
                     receipts: resultsReceipts,
                     executives: resultsExecutives,
                     ownAgents: resultsOwnAgents,
+                    primaPoliza: primaPoliza,
                     name: req.session.name,
                     cookieRol: req.cookies.rol
                 });
@@ -3625,21 +3895,11 @@ module.exports = {
             let tipoIndividualPoliza = 'SALUD';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateHealthPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -3865,21 +4125,11 @@ module.exports = {
             let tipoIndividualPoliza = 'AUTOMÓVIL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateVehiclePolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -4101,21 +4351,11 @@ module.exports = {
             let tipoIndividualPoliza = 'PATRIMONIAL';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updatePatrimonialPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -4337,21 +4577,11 @@ module.exports = {
             let tipoIndividualPoliza = 'FIANZA';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateBailPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -4573,21 +4803,11 @@ module.exports = {
             let tipoIndividualPoliza = 'OTROS RAMOS';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateAnotherBranchPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -4809,21 +5029,11 @@ module.exports = {
             let tipoIndividualPoliza = 'FUNERARIO';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateFuneralPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -5045,21 +5255,11 @@ module.exports = {
             let tipoIndividualPoliza = 'VIDA';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateLifePolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -5278,21 +5478,11 @@ module.exports = {
             let tipoIndividualPoliza = 'AP';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateAPPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);
@@ -5511,21 +5701,11 @@ module.exports = {
             let tipoIndividualPoliza = 'VIAJE';
             let cedulaAseguradoNatural = '';
             let rifAseguradoJuridico = '';
-            let estatusPoliza = '';
-            let diasExpiracion = 0;
-            let fechaActual = new Date();
-            let diferenciaTiempo = fechaPolizaHasta.getTime() - fechaActual.getTime();
-            let diferenciaDias = diferenciaTiempo / (1000 * 3600 * 24);
-            diasExpiracion = diferenciaDias.toFixed(0);
+            const estatusPoliza = 'ACTIVA';
             if ((tipoIdRifAsegurado === 'J') || (tipoIdRifAsegurado === 'G') || (tipoIdRifAsegurado === 'I') || (tipoIdRifAsegurado === 'F')) {
                 rifAseguradoJuridico = req.body.id_rif_asegurado;
             } else {
                 cedulaAseguradoNatural = req.body.id_rif_asegurado;
-            }
-            if (diasExpiracion > 0) {
-                estatusPoliza = 'VIGENTE';
-            } else {
-                estatusPoliza = 'ANULADO';
             }
             arrayEjecutivo = [req.body.nombre_ejecutivo_coordinador, req.body.nombre_ejecutivo_suscripcion, req.body.nombre_ejecutivo_siniestros, req.body.nombre_ejecutivo_cobranzas];
             await policyModel.updateTravelPolicy(tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, req.body);

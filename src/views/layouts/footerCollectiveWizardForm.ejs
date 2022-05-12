@@ -4,8 +4,6 @@
     </div>
 </div>
 
-
-
 <!-- Mainly scripts -->
 <script src="/js/jquery-3.1.1.min.js"></script>
 <script src="/js/jquery-2.1.1.js"></script>
@@ -115,7 +113,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-health-collective .steps a:eq(0)').click();
                 $('#form-health-collective').hide();
                 Swal.fire({
@@ -125,7 +122,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-health-collective'
+                    window.location='/sistema/list-health-collective'
                 });
             }
         });
@@ -258,7 +255,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-health-collective-subcription .steps a:eq(0)').click();
                 $('#form-health-collective-subcription').hide();
                 Swal.fire({
@@ -268,7 +264,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-subscription-health-collective'
+                    window.location='/sistema/list-subscription-health-collective'
                 });
             }
         });
@@ -388,7 +384,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-vehicle-collective .steps a:eq(0)').click();
                 $('#form-vehicle-collective').hide();
                 Swal.fire({
@@ -398,7 +393,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-vehicle-collective'
+                    window.location='/sistema/list-vehicle-collective'
                 });
             }
         });
@@ -538,7 +533,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-vehicle-collective-subcription .steps a:eq(0)').click();
                 $('#form-vehicle-collective-subcription').hide();
                 Swal.fire({
@@ -548,7 +542,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-subscription-vehicle-collective'
+                    window.location='/sistema/list-subscription-vehicle-collective'
                 });
             }
         });
@@ -676,7 +670,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-risk-diverse .steps a:eq(0)').click();
                 $('#form-risk-diverse').hide();
                 Swal.fire({
@@ -686,7 +679,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-risk-diverse-collective'
+                    window.location='/sistema/list-risk-diverse-collective'
                 });
             }
         });
@@ -826,7 +819,6 @@
                 return true;
             },
             onFinished: (a) => {
-                localStorage.clear();
                 $('#form-risk-diverse-subcription .steps a:eq(0)').click();
                 $('#form-risk-diverse-subcription').hide();
                 Swal.fire({
@@ -836,7 +828,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
-                    window.location='/sistema/add-subscription-risk-diverse-collective'
+                    window.location='/sistema/list-subscription-risk-diverse-collective'
                 });
             }
         });
@@ -901,22 +893,26 @@
         let formDataPolicyHealth = [];
         localStorage.removeItem('formDataPolicyHealth');
         $('#policy-form-health-collective input[type=text]').each(function(){
-            formDataPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective input[type=email]').each(function(){
-            formDataPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective input[type=date]').each(function(){
-            formDataPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective select').each(function(){
-            formDataPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataPolicyHealth", JSON.stringify(formDataPolicyHealth));
     }
     function getPolicyHealth() {
         if(localStorage.formDataPolicyHealth !== undefined){
-            formDataPolicyHealth = JSON.parse(localStorage.formDataPolicyHealth);
+            const formDataPolicyHealth = JSON.parse(localStorage.formDataPolicyHealth);
             for (var i = 0; i < formDataPolicyHealth.length; i++) {
                 $(`#policy-form-health-collective [name=${formDataPolicyHealth[i].name}]`).val(formDataPolicyHealth[i].value);
                 if ((formDataPolicyHealth[i].name === 'maternidad_colectivo') && (formDataPolicyHealth[i].value === 'SÍ')) {
@@ -931,6 +927,20 @@
             }
         }
     }
+    function getPolicyHealthList() {
+        if(localStorage.formDataPolicyHealth !== undefined){
+            const formDataPolicyHealth = JSON.parse(localStorage.formDataPolicyHealth);
+            const lengthPolicyHealth = Math.trunc(formDataPolicyHealth.length / 2);
+            const listHealthElement1 = $("#list-health-collective1");
+            const listHealthElement2 = $("#list-health-collective2");
+            for (let i = 0; i < lengthPolicyHealth; i++) {
+                listHealthElement1.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+            }
+            for (let i = lengthPolicyHealth; i < formDataPolicyHealth.length; i++) {
+                listHealthElement2.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -938,15 +948,25 @@
         let formDataExtraHealth = [];
         localStorage.removeItem('formDataExtraHealth');
         $('#extra-form-health-collective select').each(function(){
-            formDataExtraHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataExtraHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataExtraHealth", JSON.stringify(formDataExtraHealth));
     }
     function getExtraHealth() {
         if(localStorage.formDataExtraHealth !== undefined){
-            formDataExtraHealth = JSON.parse(localStorage.formDataExtraHealth);
+            const formDataExtraHealth = JSON.parse(localStorage.formDataExtraHealth);
             for (var i = 0; i < formDataExtraHealth.length; i++) {
                 $(`#extra-form-health-collective [name=${formDataExtraHealth[i].name}]`).val(formDataExtraHealth[i].value);
+            }
+        }
+    }
+    function getExtraHealthList() {
+        if(localStorage.formDataExtraHealth !== undefined){
+            const formDataExtraHealth = JSON.parse(localStorage.formDataExtraHealth);
+            const listExtraHealthElement = $("#list-health-extra");
+            for (let i = 0; i < formDataExtraHealth.length; i++) {
+                listExtraHealthElement.append(`<li class="list-group-item">${formDataExtraHealth[i].label}: ${formDataExtraHealth[i].value}</li>`);
             }
         }
     }
@@ -957,33 +977,52 @@
         let formDataReceiptHealth = [];
         localStorage.removeItem('formDataReceiptHealth');
         $('#receipt-form-health-collective input[type=text]').each(function(){
-            formDataReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective input[type=number]').each(function(){
-            formDataReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective input[type=date]').each(function(){
-            formDataReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective select').each(function(){
-            formDataReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataReceiptHealth.push({ name: this.name, value: markedCheck});
+            formDataReceiptHealth.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptHealth", JSON.stringify(formDataReceiptHealth));
     }
     function getReceiptHealth() {
         if(localStorage.formDataReceiptHealth !== undefined){
-            formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
+            const formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
             for (var i = 0; i < formDataReceiptHealth.length; i++) {
                 $(`#receipt-form-health-collective [name=${formDataReceiptHealth[i].name}]`).val(formDataReceiptHealth[i].value);
                 if ((formDataReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptHealth[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptHealth[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-health-collective #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptHealth[i].value);
+                    $('#receipt-form-health-collective #active-select-1').css('display', 'inline');
+                    $('#receipt-form-health-collective #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getReceiptHealthList() {
+        if(localStorage.formDataReceiptHealth !== undefined){
+            const formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
+            const lengthReceiptHealth = Math.trunc(formDataReceiptHealth.length / 2);
+            const listReceiptHealthElement1 = $("#list-health-receipt1");
+            const listReceiptHealthElement2 = $("#list-health-receipt2");
+            for (let i = 0; i < lengthReceiptHealth; i++) {
+                listReceiptHealthElement1.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
+            }
+            for (let i = lengthReceiptHealth; i < formDataReceiptHealth.length; i++) {
+                listReceiptHealthElement2.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
             }
         }
     }
@@ -994,15 +1033,30 @@
         let formCommissionHealth = [];
         localStorage.removeItem('formCommissionHealth');
         $('#commission-form-health-collective input[type=text]').each(function(){
-            formCommissionHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formCommissionHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formCommissionHealth", JSON.stringify(formCommissionHealth));
     }
     function getCommissionHealth() {
         if(localStorage.formCommissionHealth !== undefined){
-            formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
+            const formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
             for (var i = 0; i < formCommissionHealth.length; i++) {
                 $(`#commission-form-health-collective [name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
+            }
+        }
+    }
+    function getCommissionHealthList() {
+        if(localStorage.formCommissionHealth !== undefined){
+            const formDataCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
+            const lengthCommissionHealth = Math.trunc(formDataCommissionHealth.length / 2);
+            const listCommissionHealthElement1 = $("#list-health-commission1");
+            const listCommissionHealthElement2 = $("#list-health-commission2");
+            for (let i = 0; i < lengthCommissionHealth; i++) {
+                listCommissionHealthElement1.append(`<li class="list-group-item">${formDataCommissionHealth[i].label}: ${formDataCommissionHealth[i].value}</li>`);
+            }
+            for (let i = lengthCommissionHealth; i < formDataCommissionHealth.length; i++) {
+                listCommissionHealthElement2.append(`<li class="list-group-item">${formDataCommissionHealth[i].label}: ${formDataCommissionHealth[i].value}</li>`);
             }
         }
     }
@@ -1013,18 +1067,34 @@
         let formDataVerificationHealth = [];
         localStorage.removeItem('formDataVerificationHealth');
         $('#verification-form-health-collective input[type=text]').each(function(){
-            formDataVerificationHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#verification-form-health-collective select').each(function(){
-            formDataVerificationHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataVerificationHealth", JSON.stringify(formDataVerificationHealth));
     }
     function getVerificationHealth() {
         if(localStorage.formDataVerificationHealth !== undefined){
-            formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
+            const formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
             for (var i = 0; i < formDataVerificationHealth.length; i++) {
                 $(`#verification-form-health-collective [name=${formDataVerificationHealth[i].name}]`).val(formDataVerificationHealth[i].value);
+            }
+        }
+    }
+    function getVerificationHealthList() {
+        if(localStorage.formDataVerificationHealth !== undefined){
+            const formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
+            const lengthVerificationHealth = Math.trunc(formDataVerificationHealth.length / 2);
+            const listVerificationHealthElement1 = $("#list-health-verification1");
+            const listVerificationHealthElement2 = $("#list-health-verification2");
+            for (let i = 0; i < lengthVerificationHealth; i++) {
+                listVerificationHealthElement1.append(`<li class="list-group-item">${formDataVerificationHealth[i].label}: ${formDataVerificationHealth[i].value}</li>`);
+            }
+            for (let i = lengthVerificationHealth; i < formDataVerificationHealth.length; i++) {
+                listVerificationHealthElement2.append(`<li class="list-group-item">${formDataVerificationHealth[i].label}: ${formDataVerificationHealth[i].value}</li>`);
             }
         }
     }
@@ -1036,22 +1106,26 @@
         let formDataSubscriptionPolicyHealth = [];
         localStorage.removeItem('formDataSubscriptionPolicyHealth');
         $('#policy-form-health-collective-subcription input[type=text]').each(function(){
-            formDataSubscriptionPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective-subcription input[type=email]').each(function(){
-            formDataSubscriptionPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective-subcription input[type=date]').each(function(){
-            formDataSubscriptionPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health-collective-subcription select').each(function(){
-            formDataSubscriptionPolicyHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionPolicyHealth", JSON.stringify(formDataSubscriptionPolicyHealth));
     }
     function getSubscriptionPolicyHealth() {
         if(localStorage.formDataSubscriptionPolicyHealth !== undefined){
-            formDataSubscriptionPolicyHealth = JSON.parse(localStorage.formDataSubscriptionPolicyHealth);
+            const formDataSubscriptionPolicyHealth = JSON.parse(localStorage.formDataSubscriptionPolicyHealth);
             for (var i = 0; i < formDataSubscriptionPolicyHealth.length; i++) {
                 $(`#policy-form-health-collective-subcription [name=${formDataSubscriptionPolicyHealth[i].name}]`).val(formDataSubscriptionPolicyHealth[i].value);
                 if ((formDataSubscriptionPolicyHealth[i].name === 'maternidad_colectivo') && (formDataSubscriptionPolicyHealth[i].value === 'SÍ')) {
@@ -1066,6 +1140,20 @@
             }
         }
     }
+    function getSubscriptionPolicyHealthList() {
+        if(localStorage.formDataSubscriptionPolicyHealth !== undefined){
+            const formDataSubscriptionPolicyHealth = JSON.parse(localStorage.formDataSubscriptionPolicyHealth);
+            const lengthSubscriptionPolicyHealth = Math.trunc(formDataSubscriptionPolicyHealth.length / 2);
+            const listSubscriptionHealthElement1 = $("#list-health-subcription-collective1");
+            const listSubscriptionHealthElement2 = $("#list-health-subcription-collective2");
+            for (let i = 0; i < lengthSubscriptionPolicyHealth; i++) {
+                listSubscriptionHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyHealth[i].label}: ${formDataSubscriptionPolicyHealth[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionPolicyHealth; i < formDataSubscriptionPolicyHealth.length; i++) {
+                listSubscriptionHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyHealth[i].label}: ${formDataSubscriptionPolicyHealth[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -1073,15 +1161,25 @@
         let formDataSubscriptionExtraHealth = [];
         localStorage.removeItem('formDataSubscriptionExtraHealth');
         $('#extra-form-health-collective-subcription select').each(function(){
-            formDataSubscriptionExtraHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataSubscriptionExtraHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraHealth", JSON.stringify(formDataSubscriptionExtraHealth));
     }
     function getSubscriptionExtraHealth() {
         if(localStorage.formDataSubscriptionExtraHealth !== undefined){
-            formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
+            const formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
             for (var i = 0; i < formDataSubscriptionExtraHealth.length; i++) {
                 $(`#extra-form-health-collective-subcription [name=${formDataSubscriptionExtraHealth[i].name}]`).val(formDataSubscriptionExtraHealth[i].value);
+            }
+        }
+    }
+    function getSubscriptionExtraHealthList() {
+        if(localStorage.formDataSubscriptionExtraHealth !== undefined){
+            const formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
+            const listSubscriptionExtraHealthElement = $("#list-health-subcription-extra");
+            for (let i = 0; i < formDataSubscriptionExtraHealth.length; i++) {
+                listSubscriptionExtraHealthElement.append(`<li class="list-group-item">${formDataSubscriptionExtraHealth[i].label}: ${formDataSubscriptionExtraHealth[i].value}</li>`);
             }
         }
     }
@@ -1092,33 +1190,52 @@
         let formDataSubscriptionReceiptHealth = [];
         localStorage.removeItem('formDataSubscriptionReceiptHealth');
         $('#receipt-form-health-collective-subcription input[type=text]').each(function(){
-            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective-subcription input[type=number]').each(function(){
-            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective-subcription input[type=date]').each(function(){
-            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective-subcription select').each(function(){
-            formDataSubscriptionReceiptHealth.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health-collective-subcription #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptHealth.push({ name: this.name, value: markedCheck});
+            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataSubscriptionReceiptHealth", JSON.stringify(formDataSubscriptionReceiptHealth));
     }
     function getSubscriptionReceiptHealth() {
         if(localStorage.formDataSubscriptionReceiptHealth !== undefined){
-            formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
+            const formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
             for (var i = 0; i < formDataSubscriptionReceiptHealth.length; i++) {
                 $(`#receipt-form-health-collective-subcription [name=${formDataSubscriptionReceiptHealth[i].name}]`).val(formDataSubscriptionReceiptHealth[i].value);
                 if ((formDataSubscriptionReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptHealth[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptHealth[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-health-collective-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptHealth[i].value);
+                    $('#receipt-form-health-collective-subcription #active-select-1').css('display', 'inline');
+                    $('#receipt-form-health-collective-subcription #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getSubscriptionReceiptHealthList() {
+        if(localStorage.formDataSubscriptionReceiptHealth !== undefined){
+            const formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
+            const lengthSubscriptionReceiptHealth = Math.trunc(formDataSubscriptionReceiptHealth.length / 2);
+            const listSubscriptionReceiptHealthElement1 = $("#list-health-subcription-receipt1");
+            const listSubscriptionReceiptHealthElement2 = $("#list-health-subcription-receipt2");
+            for (let i = 0; i < lengthSubscriptionReceiptHealth; i++) {
+                listSubscriptionReceiptHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptHealth[i].label}: ${formDataSubscriptionReceiptHealth[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionReceiptHealth; i < formDataSubscriptionReceiptHealth.length; i++) {
+                listSubscriptionReceiptHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptHealth[i].label}: ${formDataSubscriptionReceiptHealth[i].value}</li>`);
             }
         }
     }
@@ -1130,26 +1247,31 @@
         let formDataPolicyVehicle = [];
         localStorage.removeItem('formDataPolicyVehicle');
         $('#policy-form-vehicle-collective input[type=text]').each(function(){
-            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective input[type=email]').each(function(){
-            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective input[type=date]').each(function(){
-            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective select').each(function(){
-            formDataPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective #tomador_asegurado_colectivo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataPolicyVehicle.push({ name: this.name, value: markedCheck});
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataPolicyVehicle", JSON.stringify(formDataPolicyVehicle));
     }
     function getPolicyVehicle() {
         if(localStorage.formDataPolicyVehicle !== undefined){
-            formDataPolicyVehicle = JSON.parse(localStorage.formDataPolicyVehicle);
+            const formDataPolicyVehicle = JSON.parse(localStorage.formDataPolicyVehicle);
             for (var i = 0; i < formDataPolicyVehicle.length; i++) {
                 $(`#policy-form-vehicle-collective [name=${formDataPolicyVehicle[i].name}]`).val(formDataPolicyVehicle[i].value);
                 if ((formDataPolicyVehicle[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyVehicle[i].value === true)) {
@@ -1161,6 +1283,20 @@
             }
         }
     }
+    function getPolicyVehicleList() {
+        if(localStorage.formDataPolicyVehicle !== undefined){
+            const formDataPolicyVehicle = JSON.parse(localStorage.formDataPolicyVehicle);
+            const lengthPolicyVehicle = Math.trunc(formDataPolicyVehicle.length / 2);
+            const listVehicleElement1 = $("#list-vehicle-collective1");
+            const listVehicleElement2 = $("#list-vehicle-collective2");
+            for (let i = 0; i < lengthPolicyVehicle; i++) {
+                listVehicleElement1.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+            }
+            for (let i = lengthPolicyVehicle; i < formDataPolicyVehicle.length; i++) {
+                listVehicleElement2.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -1168,20 +1304,25 @@
         let formDataExtraVehicle = [];
         localStorage.removeItem('formDataExtraVehicle');
         $('#extra-form-vehicle-collective select').each(function(){
-            formDataExtraVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataExtraVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataExtraVehicle", JSON.stringify(formDataExtraVehicle));
     }
     function getExtraVehicle() {
         if(localStorage.formDataExtraVehicle !== undefined){
-            formDataExtraVehicle = JSON.parse(localStorage.formDataExtraVehicle);
+            const formDataExtraVehicle = JSON.parse(localStorage.formDataExtraVehicle);
             for (var i = 0; i < formDataExtraVehicle.length; i++) {
                 $(`#extra-form-vehicle-collective [name=${formDataExtraVehicle[i].name}]`).val(formDataExtraVehicle[i].value);
-                if ((formDataExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataExtraVehicle[i].value === true)) {
-                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataExtraVehicle[i].value;
-                    document.getElementById("active-select-3").style.display = "inline";
-                    document.getElementById("active-select-4").style.display = "inline";
-                }
+            }
+        }
+    }
+    function getExtraVehicleList() {
+        if(localStorage.formDataExtraVehicle !== undefined){
+            const formDataExtraVehicle = JSON.parse(localStorage.formDataExtraVehicle);
+            const listExtraVehicleElement = $("#list-vehicle-extra");
+            for (let i = 0; i < formDataExtraVehicle.length; i++) {
+                listExtraVehicleElement.append(`<li class="list-group-item">${formDataExtraVehicle[i].label}: ${formDataExtraVehicle[i].value}</li>`);
             }
         }
     }
@@ -1192,33 +1333,52 @@
         let formDataReceiptVehicle = [];
         localStorage.removeItem('formDataReceiptVehicle');
         $('#receipt-form-vehicle-collective input[type=text]').each(function(){
-            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective input[type=number]').each(function(){
-            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective input[type=date]').each(function(){
-            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective select').each(function(){
-            formDataReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataReceiptVehicle.push({ name: this.name, value: markedCheck});
+            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptVehicle", JSON.stringify(formDataReceiptVehicle));
     }
     function getReceiptVehicle() {
         if(localStorage.formDataReceiptVehicle !== undefined){
-            formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
+            const formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
             for (var i = 0; i < formDataReceiptVehicle.length; i++) {
                 $(`#receipt-form-vehicle-collective [name=${formDataReceiptVehicle[i].name}]`).val(formDataReceiptVehicle[i].value);
                 if ((formDataReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptVehicle[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptVehicle[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-vehicle-collective #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptVehicle[i].value);
+                    $('#receipt-form-vehicle-collective #active-select-1').css('display', 'inline');
+                    $('#receipt-form-vehicle-collective #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getReceiptVehicleList() {
+        if(localStorage.formDataReceiptVehicle !== undefined){
+            const formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
+            const lengthReceiptVehicle = Math.trunc(formDataReceiptVehicle.length / 2);
+            const listReceiptVehicleElement1 = $("#list-vehicle-receipt1");
+            const listReceiptVehicleElement2 = $("#list-vehicle-receipt2");
+            for (let i = 0; i < lengthReceiptVehicle; i++) {
+                listReceiptVehicleElement1.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
+            }
+            for (let i = lengthReceiptVehicle; i < formDataReceiptVehicle.length; i++) {
+                listReceiptVehicleElement2.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
             }
         }
     }
@@ -1229,15 +1389,30 @@
         let formCommissionVehicle = [];
         localStorage.removeItem('formCommissionVehicle');
         $('#commission-form-vehicle-collective input[type=text]').each(function(){
-            formCommissionVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formCommissionVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formCommissionVehicle", JSON.stringify(formCommissionVehicle));
     }
     function getCommissionVehicle() {
         if(localStorage.formCommissionVehicle !== undefined){
-            formCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
+            const formCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
             for (var i = 0; i < formCommissionVehicle.length; i++) {
                 $(`#commission-form-vehicle-collective [name=${formCommissionVehicle[i].name}]`).val(formCommissionVehicle[i].value);
+            }
+        }
+    }
+    function getCommissionVehicleList() {
+        if(localStorage.formCommissionVehicle !== undefined){
+            const formDataCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
+            const lengthCommissionVehicle = Math.trunc(formDataCommissionVehicle.length / 2);
+            const listCommissionVehicleElement1 = $("#list-vehicle-commission1");
+            const listCommissionVehicleElement2 = $("#list-vehicle-commission2");
+            for (let i = 0; i < lengthCommissionVehicle; i++) {
+                listCommissionVehicleElement1.append(`<li class="list-group-item">${formDataCommissionVehicle[i].label}: ${formDataCommissionVehicle[i].value}</li>`);
+            }
+            for (let i = lengthCommissionVehicle; i < formDataCommissionVehicle.length; i++) {
+                listCommissionVehicleElement2.append(`<li class="list-group-item">${formDataCommissionVehicle[i].label}: ${formDataCommissionVehicle[i].value}</li>`);
             }
         }
     }
@@ -1248,18 +1423,34 @@
         let formDataVerificationVehicle = [];
         localStorage.removeItem('formDataVerificationVehicle');
         $('#verification-form-vehicle-collective input[type=text]').each(function(){
-            formDataVerificationVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#verification-form-vehicle-collective select').each(function(){
-            formDataVerificationVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataVerificationVehicle", JSON.stringify(formDataVerificationVehicle));
     }
     function getVerificationVehicle() {
         if(localStorage.formDataVerificationVehicle !== undefined){
-            formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
+            const formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
             for (var i = 0; i < formDataVerificationVehicle.length; i++) {
                 $(`#verification-form-vehicle-collective [name=${formDataVerificationVehicle[i].name}]`).val(formDataVerificationVehicle[i].value);
+            }
+        }
+    }
+    function getVerificationVehicleList() {
+        if(localStorage.formDataVerificationVehicle !== undefined){
+            const formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
+            const lengthVerificationVehicle = Math.trunc(formDataVerificationVehicle.length / 2);
+            const listVerificationVehicleElement1 = $("#list-vehicle-verification1");
+            const listVerificationVehicleElement2 = $("#list-vehicle-verification2");
+            for (let i = 0; i < lengthVerificationVehicle; i++) {
+                listVerificationVehicleElement1.append(`<li class="list-group-item">${formDataVerificationVehicle[i].label}: ${formDataVerificationVehicle[i].value}</li>`);
+            }
+            for (let i = lengthVerificationVehicle; i < formDataVerificationVehicle.length; i++) {
+                listVerificationVehicleElement2.append(`<li class="list-group-item">${formDataVerificationVehicle[i].label}: ${formDataVerificationVehicle[i].value}</li>`);
             }
         }
     }
@@ -1271,26 +1462,31 @@
         let formDataSubscriptionPolicyVehicle = [];
         localStorage.removeItem('formDataSubscriptionPolicyVehicle');
         $('#policy-form-vehicle-collective-subcription input[type=text]').each(function(){
-            formDataSubscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective-subcription input[type=email]').each(function(){
-            formDataSubscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective-subcription input[type=date]').each(function(){
-            formDataSubscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective-subcription select').each(function(){
-            formDataSubscriptionPolicyVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle-collective-subcription #tomador_asegurado_colectivo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataSubscriptionPolicyVehicle.push({ name: this.name, value: markedCheck});
+            formDataSubscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataSubscriptionPolicyVehicle", JSON.stringify(formDataSubscriptionPolicyVehicle));
     }
     function getSubscriptionPolicyVehicle() {
         if(localStorage.formDataSubscriptionPolicyVehicle !== undefined){
-            formDataSubscriptionPolicyVehicle = JSON.parse(localStorage.formDataSubscriptionPolicyVehicle);
+            const formDataSubscriptionPolicyVehicle = JSON.parse(localStorage.formDataSubscriptionPolicyVehicle);
             for (var i = 0; i < formDataSubscriptionPolicyVehicle.length; i++) {
                 $(`#policy-form-vehicle-collective-subcription [name=${formDataSubscriptionPolicyVehicle[i].name}]`).val(formDataSubscriptionPolicyVehicle[i].value);
                 if ((formDataSubscriptionPolicyVehicle[i].name === 'tomador_asegurado_colectivo') && (formDataSubscriptionPolicyVehicle[i].value === true)) {
@@ -1302,6 +1498,20 @@
             }
         }
     }
+    function getSubscriptionPolicyVehicleList() {
+        if(localStorage.formDataSubscriptionPolicyVehicle !== undefined){
+            const formDataSubscriptionPolicyVehicle = JSON.parse(localStorage.formDataSubscriptionPolicyVehicle);
+            const lengthSubscriptionPolicyVehicle = Math.trunc(formDataSubscriptionPolicyVehicle.length / 2);
+            const listSubscriptionVehicleElement1 = $("#list-vehicle-subcription-collective1");
+            const listSubscriptionVehicleElement2 = $("#list-vehicle-subcription-collective2");
+            for (let i = 0; i < lengthSubscriptionPolicyVehicle; i++) {
+                listSubscriptionVehicleElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyVehicle[i].label}: ${formDataSubscriptionPolicyVehicle[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionPolicyVehicle; i < formDataSubscriptionPolicyVehicle.length; i++) {
+                listSubscriptionVehicleElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyVehicle[i].label}: ${formDataSubscriptionPolicyVehicle[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -1309,20 +1519,25 @@
         let formDataSubscriptionExtraVehicle = [];
         localStorage.removeItem('formDataSubscriptionExtraVehicle');
         $('#extra-form-vehicle-collective-subcription select').each(function(){
-            formDataSubscriptionExtraVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataSubscriptionExtraVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraVehicle", JSON.stringify(formDataSubscriptionExtraVehicle));
     }
     function getSubscriptionExtraVehicle() {
         if(localStorage.formDataSubscriptionExtraVehicle !== undefined){
-            formDataSubscriptionExtraVehicle = JSON.parse(localStorage.formDataSubscriptionExtraVehicle);
+            const formDataSubscriptionExtraVehicle = JSON.parse(localStorage.formDataSubscriptionExtraVehicle);
             for (var i = 0; i < formDataSubscriptionExtraVehicle.length; i++) {
                 $(`#extra-form-vehicle-collective-subcription [name=${formDataSubscriptionExtraVehicle[i].name}]`).val(formDataSubscriptionExtraVehicle[i].value);
-                if ((formDataSubscriptionExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataSubscriptionExtraVehicle[i].value === true)) {
-                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataSubscriptionExtraVehicle[i].value;
-                    document.getElementById("active-select-3").style.display = "inline";
-                    document.getElementById("active-select-4").style.display = "inline";
-                }
+            }
+        }
+    }
+    function getSubscriptionExtraVehicleList() {
+        if(localStorage.formDataSubscriptionExtraVehicle !== undefined){
+            const formDataSubscriptionExtraVehicle = JSON.parse(localStorage.formDataSubscriptionExtraVehicle);
+            const listSubscriptionExtraVehicleElement = $("#list-vehicle-subcription-extra");
+            for (let i = 0; i < formDataSubscriptionExtraVehicle.length; i++) {
+                listSubscriptionExtraVehicleElement.append(`<li class="list-group-item">${formDataSubscriptionExtraVehicle[i].label}: ${formDataSubscriptionExtraVehicle[i].value}</li>`);
             }
         }
     }
@@ -1333,33 +1548,52 @@
         let formDataSubscriptionReceiptVehicle = [];
         localStorage.removeItem('formDataSubscriptionReceiptVehicle');
         $('#receipt-form-vehicle-collective-subcription input[type=text]').each(function(){
-            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective-subcription input[type=number]').each(function(){
-            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective-subcription input[type=date]').each(function(){
-            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective-subcription select').each(function(){
-            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle-collective-subcription #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptVehicle.push({ name: this.name, value: markedCheck});
+            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataSubscriptionReceiptVehicle", JSON.stringify(formDataSubscriptionReceiptVehicle));
     }
     function getSubscriptionReceiptVehicle() {
         if(localStorage.formDataSubscriptionReceiptVehicle !== undefined){
-            formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
+            const formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
             for (var i = 0; i < formDataSubscriptionReceiptVehicle.length; i++) {
                 $(`#receipt-form-vehicle-collective-subcription [name=${formDataSubscriptionReceiptVehicle[i].name}]`).val(formDataSubscriptionReceiptVehicle[i].value);
                 if ((formDataSubscriptionReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptVehicle[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptVehicle[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-vehicle-collective-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptVehicle[i].value);
+                    $('#receipt-form-vehicle-collective-subcription #active-select-1').css('display', 'inline');
+                    $('#receipt-form-vehicle-collective-subcription #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getSubscriptionReceiptVehicleList() {
+        if(localStorage.formDataSubscriptionReceiptVehicle !== undefined){
+            const formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
+            const lengthSubscriptionReceiptVehicle = Math.trunc(formDataSubscriptionReceiptVehicle.length / 2);
+            const listSubscriptionReceiptVehicleElement1 = $("#list-vehicle-subcription-receipt1");
+            const listSubscriptionReceiptVehicleElement2 = $("#list-vehicle-subcription-receipt2");
+            for (let i = 0; i < lengthSubscriptionReceiptVehicle; i++) {
+                listSubscriptionReceiptVehicleElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptVehicle[i].label}: ${formDataSubscriptionReceiptVehicle[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionReceiptVehicle; i < formDataSubscriptionReceiptVehicle.length; i++) {
+                listSubscriptionReceiptVehicleElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptVehicle[i].label}: ${formDataSubscriptionReceiptVehicle[i].value}</li>`);
             }
         }
     }
@@ -1371,26 +1605,31 @@
         let formDataPolicyRiskDiverse = [];
         localStorage.removeItem('formDataPolicyRiskDiverse');
         $('#policy-form-risk-diverse input[type=text]').each(function(){
-            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse input[type=email]').each(function(){
-            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse input[type=date]').each(function(){
-            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse select').each(function(){
-            formDataPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse #tomador_asegurado_colectivo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataPolicyRiskDiverse.push({ name: this.name, value: markedCheck});
+            formDataPolicyRiskDiverse.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataPolicyRiskDiverse", JSON.stringify(formDataPolicyRiskDiverse));
     }
     function getPolicyRiskDiverse() {
         if(localStorage.formDataPolicyRiskDiverse !== undefined){
-            formDataPolicyRiskDiverse = JSON.parse(localStorage.formDataPolicyRiskDiverse);
+            const formDataPolicyRiskDiverse = JSON.parse(localStorage.formDataPolicyRiskDiverse);
             for (var i = 0; i < formDataPolicyRiskDiverse.length; i++) {
                 $(`#policy-form-risk-diverse [name=${formDataPolicyRiskDiverse[i].name}]`).val(formDataPolicyRiskDiverse[i].value);
                 if ((formDataPolicyRiskDiverse[i].name === 'tomador_asegurado_colectivo') && (formDataPolicyRiskDiverse[i].value === true)) {
@@ -1402,6 +1641,20 @@
             }
         }
     }
+    function getPolicyRiskDiverseList() {
+        if(localStorage.formDataPolicyRiskDiverse !== undefined){
+            const formDataPolicyRiskDiverse = JSON.parse(localStorage.formDataPolicyRiskDiverse);
+            const lengthPolicyRiskDiverse = Math.trunc(formDataPolicyRiskDiverse.length / 2);
+            const listRiskDiverseElement1 = $("#list-risk-diverse-collective1");
+            const listRiskDiverseElement2 = $("#list-risk-diverse-collective2");
+            for (let i = 0; i < lengthPolicyRiskDiverse; i++) {
+                listRiskDiverseElement1.append(`<li class="list-group-item">${formDataPolicyRiskDiverse[i].label}: ${formDataPolicyRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthPolicyRiskDiverse; i < formDataPolicyRiskDiverse.length; i++) {
+                listRiskDiverseElement2.append(`<li class="list-group-item">${formDataPolicyRiskDiverse[i].label}: ${formDataPolicyRiskDiverse[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -1409,20 +1662,25 @@
         let formDataExtraRiskDiverse = [];
         localStorage.removeItem('formDataExtraRiskDiverse');
         $('#extra-form-risk-diverse select').each(function(){
-            formDataExtraRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataExtraRiskDiverse.push({ label: labelName, name: this.name, value: this.value});
         });
         localStorage.setItem("formDataExtraRiskDiverse", JSON.stringify(formDataExtraRiskDiverse));
     }
     function getExtraRiskDiverse() {
         if(localStorage.formDataExtraRiskDiverse !== undefined){
-            formDataExtraRiskDiverse = JSON.parse(localStorage.formDataExtraRiskDiverse);
+            const formDataExtraRiskDiverse = JSON.parse(localStorage.formDataExtraRiskDiverse);
             for (var i = 0; i < formDataExtraRiskDiverse.length; i++) {
                 $(`#extra-form-risk-diverse [name=${formDataExtraRiskDiverse[i].name}]`).val(formDataExtraRiskDiverse[i].value);
-                if ((formDataExtraRiskDiverse[i].name === 'blindaje_boolean_vehiculo') && (formDataExtraRiskDiverse[i].value === true)) {
-                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataExtraRiskDiverse[i].value;
-                    document.getElementById("active-select-3").style.display = "inline";
-                    document.getElementById("active-select-4").style.display = "inline";
-                }
+            }
+        }
+    }
+    function getExtraRiskDiverseList() {
+        if(localStorage.formDataExtraRiskDiverse !== undefined){
+            const formDataExtraRiskDiverse = JSON.parse(localStorage.formDataExtraRiskDiverse);
+            const listExtraRiskDiverseElement = $("#list-risk-diverse-extra");
+            for (let i = 0; i < formDataExtraRiskDiverse.length; i++) {
+                listExtraRiskDiverseElement.append(`<li class="list-group-item">${formDataExtraRiskDiverse[i].label}: ${formDataExtraRiskDiverse[i].value}</li>`);
             }
         }
     }
@@ -1433,33 +1691,52 @@
         let formDataReceiptRiskDiverse = [];
         localStorage.removeItem('formDataReceiptRiskDiverse');
         $('#receipt-form-risk-diverse input[type=text]').each(function(){
-            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse input[type=number]').each(function(){
-            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse input[type=date]').each(function(){
-            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse select').each(function(){
-            formDataReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataReceiptRiskDiverse.push({ name: this.name, value: markedCheck});
+            formDataReceiptRiskDiverse.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptRiskDiverse", JSON.stringify(formDataReceiptRiskDiverse));
     }
     function getReceiptRiskDiverse() {
         if(localStorage.formDataReceiptRiskDiverse !== undefined){
-            formDataReceiptRiskDiverse = JSON.parse(localStorage.formDataReceiptRiskDiverse);
+            const formDataReceiptRiskDiverse = JSON.parse(localStorage.formDataReceiptRiskDiverse);
             for (var i = 0; i < formDataReceiptRiskDiverse.length; i++) {
                 $(`#receipt-form-risk-diverse [name=${formDataReceiptRiskDiverse[i].name}]`).val(formDataReceiptRiskDiverse[i].value);
                 if ((formDataReceiptRiskDiverse[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptRiskDiverse[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataReceiptRiskDiverse[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-risk-diverse #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptRiskDiverse[i].value);
+                    $('#receipt-form-risk-diverse #active-select-1').css('display', 'inline');
+                    $('#receipt-form-risk-diverse #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getReceiptRiskDiverseList() {
+        if(localStorage.formDataReceiptRiskDiverse !== undefined){
+            const formDataReceiptRiskDiverse = JSON.parse(localStorage.formDataReceiptRiskDiverse);
+            const lengthReceiptRiskDiverse = Math.trunc(formDataReceiptRiskDiverse.length / 2);
+            const listReceiptRiskDiverseElement1 = $("#list-risk-diverse-receipt1");
+            const listReceiptRiskDiverseElement2 = $("#list-risk-diverse-receipt2");
+            for (let i = 0; i < lengthReceiptRiskDiverse; i++) {
+                listReceiptRiskDiverseElement1.append(`<li class="list-group-item">${formDataReceiptRiskDiverse[i].label}: ${formDataReceiptRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthReceiptRiskDiverse; i < formDataReceiptRiskDiverse.length; i++) {
+                listReceiptRiskDiverseElement2.append(`<li class="list-group-item">${formDataReceiptRiskDiverse[i].label}: ${formDataReceiptRiskDiverse[i].value}</li>`);
             }
         }
     }
@@ -1470,15 +1747,30 @@
         let formCommissionRiskDiverse = [];
         localStorage.removeItem('formCommissionRiskDiverse');
         $('#commission-form-risk-diverse input[type=text]').each(function(){
-            formCommissionRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formCommissionRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formCommissionRiskDiverse", JSON.stringify(formCommissionRiskDiverse));
     }
     function getCommissionRiskDiverse() {
         if(localStorage.formCommissionRiskDiverse !== undefined){
-            formCommissionRiskDiverse = JSON.parse(localStorage.formCommissionRiskDiverse);
+            const formCommissionRiskDiverse = JSON.parse(localStorage.formCommissionRiskDiverse);
             for (var i = 0; i < formCommissionRiskDiverse.length; i++) {
                 $(`#commission-form-risk-diverse [name=${formCommissionRiskDiverse[i].name}]`).val(formCommissionRiskDiverse[i].value);
+            }
+        }
+    }
+    function getCommissionRiskDiverseList() {
+        if(localStorage.formCommissionRiskDiverse !== undefined){
+            const formDataCommissionRiskDiverse = JSON.parse(localStorage.formCommissionRiskDiverse);
+            const lengthCommissionRiskDiverse = Math.trunc(formDataCommissionRiskDiverse.length / 2);
+            const listCommissionRiskDiverseElement1 = $("#list-risk-diverse-commission1");
+            const listCommissionRiskDiverseElement2 = $("#list-risk-diverse-commission2");
+            for (let i = 0; i < lengthCommissionRiskDiverse; i++) {
+                listCommissionRiskDiverseElement1.append(`<li class="list-group-item">${formDataCommissionRiskDiverse[i].label}: ${formDataCommissionRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthCommissionRiskDiverse; i < formDataCommissionRiskDiverse.length; i++) {
+                listCommissionRiskDiverseElement2.append(`<li class="list-group-item">${formDataCommissionRiskDiverse[i].label}: ${formDataCommissionRiskDiverse[i].value}</li>`);
             }
         }
     }
@@ -1489,19 +1781,34 @@
         let formDataVerificationRiskDiverse = [];
         localStorage.removeItem('formDataVerificationRiskDiverse');
         $('#verification-form-risk-diverse input[type=text]').each(function(){
-            formDataVerificationRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#verification-form-risk-diverse select').each(function(){
-            formDataVerificationRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataVerificationRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataVerificationRiskDiverse", JSON.stringify(formDataVerificationRiskDiverse));
     }
     function getVerificationRiskDiverse() {
-        console.log(localStorage.formDataVerificationRiskDiverse)
         if(localStorage.formDataVerificationRiskDiverse !== undefined){
-            formDataVerificationRiskDiverse = JSON.parse(localStorage.formDataVerificationRiskDiverse);
+            const formDataVerificationRiskDiverse = JSON.parse(localStorage.formDataVerificationRiskDiverse);
             for (var i = 0; i < formDataVerificationRiskDiverse.length; i++) {
                 $(`#verification-form-risk-diverse [name=${formDataVerificationRiskDiverse[i].name}]`).val(formDataVerificationRiskDiverse[i].value);
+            }
+        }
+    }
+    function getVerificationRiskDiverseList() {
+        if(localStorage.formDataVerificationRiskDiverse !== undefined){
+            const formDataVerificationRiskDiverse = JSON.parse(localStorage.formDataVerificationRiskDiverse);
+            const lengthVerificationRiskDiverse = Math.trunc(formDataVerificationRiskDiverse.length / 2);
+            const listVerificationRiskDiverseElement1 = $("#list-risk-diverse-verification1");
+            const listVerificationRiskDiverseElement2 = $("#list-risk-diverse-verification2");
+            for (let i = 0; i < lengthVerificationRiskDiverse; i++) {
+                listVerificationRiskDiverseElement1.append(`<li class="list-group-item">${formDataVerificationRiskDiverse[i].label}: ${formDataVerificationRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthVerificationRiskDiverse; i < formDataVerificationRiskDiverse.length; i++) {
+                listVerificationRiskDiverseElement2.append(`<li class="list-group-item">${formDataVerificationRiskDiverse[i].label}: ${formDataVerificationRiskDiverse[i].value}</li>`);
             }
         }
     }
@@ -1513,26 +1820,31 @@
         let formDataSubscriptionPolicyRiskDiverse = [];
         localStorage.removeItem('formDataSubscriptionPolicyRiskDiverse');
         $('#policy-form-risk-diverse-subcription input[type=text]').each(function(){
-            formDataSubscriptionPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse-subcription input[type=email]').each(function(){
-            formDataSubscriptionPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse-subcription input[type=date]').each(function(){
-            formDataSubscriptionPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse-subcription select').each(function(){
-            formDataSubscriptionPolicyRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionPolicyRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-risk-diverse-subcription #tomador_asegurado_colectivo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataSubscriptionPolicyRiskDiverse.push({ name: this.name, value: markedCheck});
+            formDataSubscriptionPolicyRiskDiverse.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataSubscriptionPolicyRiskDiverse", JSON.stringify(formDataSubscriptionPolicyRiskDiverse));
     }
     function getSubscriptionPolicyRiskDiverse() {
         if(localStorage.formDataSubscriptionPolicyRiskDiverse !== undefined){
-            formDataSubscriptionPolicyRiskDiverse = JSON.parse(localStorage.formDataSubscriptionPolicyRiskDiverse);
+            const formDataSubscriptionPolicyRiskDiverse = JSON.parse(localStorage.formDataSubscriptionPolicyRiskDiverse);
             for (var i = 0; i < formDataSubscriptionPolicyRiskDiverse.length; i++) {
                 $(`#policy-form-risk-diverse-subcription [name=${formDataSubscriptionPolicyRiskDiverse[i].name}]`).val(formDataSubscriptionPolicyRiskDiverse[i].value);
                 if ((formDataSubscriptionPolicyRiskDiverse[i].name === 'tomador_asegurado_colectivo') && (formDataSubscriptionPolicyRiskDiverse[i].value === true)) {
@@ -1544,6 +1856,20 @@
             }
         }
     }
+    function getSubscriptionPolicyRiskDiverseList() {
+        if(localStorage.formDataSubscriptionPolicyRiskDiverse !== undefined){
+            const formDataSubscriptionPolicyRiskDiverse = JSON.parse(localStorage.formDataSubscriptionPolicyRiskDiverse);
+            const lengthSubscriptionPolicyRiskDiverse = Math.trunc(formDataSubscriptionPolicyRiskDiverse.length / 2);
+            const listSubscriptionRiskDiverseElement1 = $("#list-risk-diverse-subcription-collective1");
+            const listSubscriptionRiskDiverseElement2 = $("#list-risk-diverse-subcription-collective2");
+            for (let i = 0; i < lengthSubscriptionPolicyRiskDiverse; i++) {
+                listSubscriptionRiskDiverseElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyRiskDiverse[i].label}: ${formDataSubscriptionPolicyRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionPolicyRiskDiverse; i < formDataSubscriptionPolicyRiskDiverse.length; i++) {
+                listSubscriptionRiskDiverseElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyRiskDiverse[i].label}: ${formDataSubscriptionPolicyRiskDiverse[i].value}</li>`);
+            }
+        }
+    }
 </script>
 
 <script>
@@ -1551,20 +1877,25 @@
         let formDataSubscriptionExtraRiskDiverse = [];
         localStorage.removeItem('formDataSubscriptionExtraRiskDiverse');
         $('#extra-form-risk-diverse-subcription select').each(function(){
-            formDataSubscriptionExtraRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-10').siblings('.col-form-label').text();
+            formDataSubscriptionExtraRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraRiskDiverse", JSON.stringify(formDataSubscriptionExtraRiskDiverse));
     }
     function getSubscriptionExtraRiskDiverse() {
         if(localStorage.formDataSubscriptionExtraRiskDiverse !== undefined){
-            formDataSubscriptionExtraRiskDiverse = JSON.parse(localStorage.formDataSubscriptionExtraRiskDiverse);
+            const formDataSubscriptionExtraRiskDiverse = JSON.parse(localStorage.formDataSubscriptionExtraRiskDiverse);
             for (var i = 0; i < formDataSubscriptionExtraRiskDiverse.length; i++) {
                 $(`#extra-form-risk-diverse-subcription [name=${formDataSubscriptionExtraRiskDiverse[i].name}]`).val(formDataSubscriptionExtraRiskDiverse[i].value);
-                if ((formDataSubscriptionExtraRiskDiverse[i].name === 'blindaje_boolean_vehiculo') && (formDataSubscriptionExtraRiskDiverse[i].value === true)) {
-                    document.getElementById("blindaje_boolean_vehiculo").checked = formDataSubscriptionExtraRiskDiverse[i].value;
-                    document.getElementById("active-select-3").style.display = "inline";
-                    document.getElementById("active-select-4").style.display = "inline";
-                }
+            }
+        }
+    }
+    function getSubscriptionExtraRiskDiverseList() {
+        if(localStorage.formDataSubscriptionExtraRiskDiverse !== undefined){
+            const formDataSubscriptionExtraRiskDiverse = JSON.parse(localStorage.formDataSubscriptionExtraRiskDiverse);
+            const listSubscriptionExtraRiskDiverseElement = $("#list-risk-diverse-subcription-extra");
+            for (let i = 0; i < formDataSubscriptionExtraRiskDiverse.length; i++) {
+                listSubscriptionExtraRiskDiverseElement.append(`<li class="list-group-item">${formDataSubscriptionExtraRiskDiverse[i].label}: ${formDataSubscriptionExtraRiskDiverse[i].value}</li>`);
             }
         }
     }
@@ -1575,46 +1906,227 @@
         let formDataSubscriptionReceiptRiskDiverse = [];
         localStorage.removeItem('formDataSubscriptionReceiptRiskDiverse');
         $('#receipt-form-risk-diverse-subcription input[type=text]').each(function(){
-            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse-subcription input[type=number]').each(function(){
-            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse-subcription input[type=date]').each(function(){
-            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse-subcription select').each(function(){
-            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: this.value});
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataSubscriptionReceiptRiskDiverse.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-risk-diverse-subcription #fraccionamiento_boolean_recibo').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptRiskDiverse.push({ name: this.name, value: markedCheck});
+            formDataSubscriptionReceiptRiskDiverse.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataSubscriptionReceiptRiskDiverse", JSON.stringify(formDataSubscriptionReceiptRiskDiverse));
     }
     function getSubscriptionReceiptRiskDiverse() {
         if(localStorage.formDataSubscriptionReceiptRiskDiverse !== undefined){
-            formDataSubscriptionReceiptRiskDiverse = JSON.parse(localStorage.formDataSubscriptionReceiptRiskDiverse);
+            const formDataSubscriptionReceiptRiskDiverse = JSON.parse(localStorage.formDataSubscriptionReceiptRiskDiverse);
             for (var i = 0; i < formDataSubscriptionReceiptRiskDiverse.length; i++) {
                 $(`#receipt-form-risk-diverse-subcription [name=${formDataSubscriptionReceiptRiskDiverse[i].name}]`).val(formDataSubscriptionReceiptRiskDiverse[i].value);
                 if ((formDataSubscriptionReceiptRiskDiverse[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptRiskDiverse[i].value === true)) {
-                    document.getElementById("fraccionamiento_boolean_recibo").checked = formDataSubscriptionReceiptRiskDiverse[i].value;
-                    document.getElementById("active-select-1").style.display = "inline";
-                    document.getElementById("active-select-2").style.display = "inline";
+                    $('#receipt-form-risk-diverse-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptRiskDiverse[i].value);
+                    $('#receipt-form-risk-diverse-subcription #active-select-1').css('display', 'inline');
+                    $('#receipt-form-risk-diverse-subcription #active-select-2').css('display', 'inline');
                 }
+            }
+        }
+    }
+    function getSubscriptionReceiptRiskDiverseList() {
+        if(localStorage.formDataSubscriptionReceiptRiskDiverse !== undefined){
+            const formDataSubscriptionReceiptRiskDiverse = JSON.parse(localStorage.formDataSubscriptionReceiptRiskDiverse);
+            const lengthSubscriptionReceiptRiskDiverse = Math.trunc(formDataSubscriptionReceiptRiskDiverse.length / 2);
+            const listSubscriptionReceiptRiskDiverseElement1 = $("#list-risk-diverse-subcription-receipt1");
+            const listSubscriptionReceiptRiskDiverseElement2 = $("#list-risk-diverse-subcription-receipt2");
+            for (let i = 0; i < lengthSubscriptionReceiptRiskDiverse; i++) {
+                listSubscriptionReceiptRiskDiverseElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptRiskDiverse[i].label}: ${formDataSubscriptionReceiptRiskDiverse[i].value}</li>`);
+            }
+            for (let i = lengthSubscriptionReceiptRiskDiverse; i < formDataSubscriptionReceiptRiskDiverse.length; i++) {
+                listSubscriptionReceiptRiskDiverseElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptRiskDiverse[i].label}: ${formDataSubscriptionReceiptRiskDiverse[i].value}</li>`);
             }
         }
     }
 </script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function () {        
+        // Poliza Colectivo Salud
+        $("#btn_health_policy_collective").on('click', function (event) {
+            storeValuesPolicyHealth();
+        });
+        $("#btn_health_extra_collective").on('click', function (event) {
+            storeValuesExtraHealth();
+        });
+        $("#btn_health_receipt_collective").on('click', function (event) {
+            storeValuesReceiptHealth();
+        });
+        $("#btn_health_commission_collective").on('click', function (event) {
+            storeValuesCommissionHealth();
+        });
+        $("#btn_health_verification_collective").on('click', function (event) {
+            storeValuesVerificationHealth();
+        });
+
+        $("#btn_health_collective_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getPolicyHealth();
+        getPolicyHealthList();
+        getExtraHealth();
+        getExtraHealthList();
+        getReceiptHealth();
+        getReceiptHealthList();
+        getCommissionHealth();
+        getCommissionHealthList();
+        getVerificationHealth();
+        getVerificationHealthList();
+
+        // Poliza Colectivo Salud Suscripcion
+        $("#btn_health_policy_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyHealth();
+        });
+        $("#btn_health_extra_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraHealth();
+        });
+        $("#btn_health_receipt_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptHealth();
+        });
+
+        $("#btn_health_subcription_collective_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getSubscriptionPolicyHealth();
+        getSubscriptionPolicyHealthList();
+        getSubscriptionExtraHealth();
+        getSubscriptionExtraHealthList();
+        getSubscriptionReceiptHealth();
+        getSubscriptionReceiptHealthList();
+
+        // Poliza Colectivo Vehiculo
+        $("#btn_vehicle_policy_collective").on('click', function (event) {
+            storeValuesPolicyVehicle();
+        });
+        $("#btn_vehicle_extra_collective").on('click', function (event) {
+            storeValuesExtraVehicle();
+        });
+        $("#btn_vehicle_receipt_collective").on('click', function (event) {
+            storeValuesReceiptVehicle();
+        });
+        $("#btn_vehicle_commission_collective").on('click', function (event) {
+            storeValuesCommissionVehicle();
+        });
+        $("#btn_vehicle_verification_collective").on('click', function (event) {
+            storeValuesVerificationVehicle();
+        });
+
+        $("#btn_vehicle_collective_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getPolicyVehicle();
+        getPolicyVehicleList();
+        getExtraVehicle();
+        getExtraVehicleList();
+        getReceiptVehicle();
+        getReceiptVehicleList();
+        getCommissionVehicle();
+        getCommissionVehicleList();
+        getVerificationVehicle();
+        getVerificationVehicleList()
+
+        // Poliza Colectivo Vehiculo Suscripcion
+        $("#btn_vehicle_policy_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyVehicle();
+        });
+        $("#btn_vehicle_extra_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraVehicle();
+        });
+        $("#btn_vehicle_receipt_collective_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptVehicle();
+        });
+
+        $("#btn_vehicle_subcription_collective_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getSubscriptionPolicyVehicle();
+        getSubscriptionPolicyVehicleList();
+        getSubscriptionExtraVehicle();
+        getSubscriptionExtraVehicleList();
+        getSubscriptionReceiptVehicle();
+        getSubscriptionReceiptVehicleList();
+
+        // Poliza Colectivo Riesgos Diversos
+        $("#btn_risk_diverse_policy").on('click', function (event) {
+            storeValuesPolicyRiskDiverse();
+        });
+        $("#btn_risk_diverse_extra").on('click', function (event) {
+            storeValuesExtraRiskDiverse();
+        });
+        $("#btn_risk_diverse_receipt").on('click', function (event) {
+            storeValuesReceiptRiskDiverse();
+        });
+        $("#btn_risk_diverse_commission").on('click', function (event) {
+            storeValuesCommissionRiskDiverse();
+        });
+        $("#btn_risk_diverse_verification").on('click', function (event) {
+            storeValuesVerificationRiskDiverse();
+        });
+
+        $("#btn_risk_diverse_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getPolicyRiskDiverse();
+        getPolicyRiskDiverseList();
+        getExtraRiskDiverse();
+        getExtraRiskDiverseList();
+        getReceiptRiskDiverse();
+        getReceiptRiskDiverseList();
+        getCommissionRiskDiverse();
+        getCommissionRiskDiverseList();
+        getVerificationRiskDiverse();
+        getVerificationRiskDiverseList();
+
+        // Poliza Colectivo Riesgos Diversos Suscripcion
+        $("#btn_risk_diverse_policy_subcription").on('click', function (event) {
+            storeValuesSubscriptionPolicyRiskDiverse();
+        });
+        $("#btn_risk_diverse_extra_subcription").on('click', function (event) {
+            storeValuesSubscriptionExtraRiskDiverse();
+        });
+        $("#btn_risk_diverse_receipt_subcription").on('click', function (event) {
+            storeValuesSubscriptionReceiptRiskDiverse();
+        });
+
+        $("#btn_risk_diverse_subcription_list").on('click', function (event) {
+            localStorage.clear();
+        });
+
+        getSubscriptionPolicyRiskDiverse();
+        getSubscriptionPolicyRiskDiverseList();
+        getSubscriptionExtraRiskDiverse();
+        getSubscriptionExtraRiskDiverseList();
+        getSubscriptionReceiptRiskDiverse();
+        getSubscriptionReceiptRiskDiverseList();
+
         $('.custom-file-input').on('change', function() {
             let fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
 
-        if (document.getElementById('tipo_canal_colectivo').value=== 'AGENTE PROPIO') {
+        if ($('#tipo_canal_colectivo').val() === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
         }
 
@@ -1629,7 +2141,7 @@
             $('#fecha_hasta_colectivo').val(fecha);
         });
 
-        if ((document.getElementById("select_box").value === 'V') || (document.getElementById("select_box").value === 'E')) {
+        if (($('#select_box').val() === 'V') || ($('#select_box').val() === 'E')) {
             var cleaveNumeral = new Cleave('.input-numeral', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -1684,120 +2196,6 @@
                 cleaveNumeral.setRawValue('');
             }
         });
-        
-        // Poliza Colectivo Salud
-        $("#btn_health_policy_collective").on('click', function (event) {
-            storeValuesPolicyHealth();
-        });
-        $("#btn_health_extra_collective").on('click', function (event) {
-            storeValuesExtraHealth();
-        });
-        $("#btn_health_receipt_collective").on('click', function (event) {
-            storeValuesReceiptHealth();
-        });
-        $("#btn_health_commission_collective").on('click', function (event) {
-            storeValuesCommissionHealth();
-        });
-        $("#btn_health_verification_collective").on('click', function (event) {
-            storeValuesVerificationHealth();
-        });
-
-        getPolicyHealth();
-        getExtraHealth();
-        getReceiptHealth();
-        getCommissionHealth();
-        getVerificationHealth();
-
-        // Poliza Colectivo Salud Suscripcion
-        $("#btn_health_policy_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyHealth();
-        });
-        $("#btn_health_extra_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraHealth();
-        });
-        $("#btn_health_receipt_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptHealth();
-        });
-
-        getSubscriptionPolicyHealth();
-        getSubscriptionExtraHealth();
-        getSubscriptionReceiptHealth();
-
-        // Poliza Colectivo Vehiculo
-        $("#btn_vehicle_policy_collective").on('click', function (event) {
-            storeValuesPolicyVehicle();
-        });
-        $("#btn_vehicle_extra_collective").on('click', function (event) {
-            storeValuesExtraVehicle();
-        });
-        $("#btn_vehicle_receipt_collective").on('click', function (event) {
-            storeValuesReceiptVehicle();
-        });
-        $("#btn_vehicle_commission_collective").on('click', function (event) {
-            storeValuesCommissionVehicle();
-        });
-        $("#btn_vehicle_verification_collective").on('click', function (event) {
-            storeValuesVerificationVehicle();
-        });
-
-        getPolicyVehicle();
-        getExtraVehicle();
-        getReceiptVehicle();
-        getCommissionVehicle();
-        getVerificationVehicle();
-
-        // Poliza Colectivo Vehiculo Suscripcion
-        $("#btn_vehicle_policy_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyVehicle();
-        });
-        $("#btn_vehicle_extra_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraVehicle();
-        });
-        $("#btn_vehicle_receipt_collective_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptVehicle();
-        });
-
-        getSubscriptionPolicyVehicle();
-        getSubscriptionExtraVehicle();
-        getSubscriptionReceiptVehicle();
-
-        // Poliza Colectivo Riesgos Diversos
-        $("#btn_risk_diverse_policy").on('click', function (event) {
-            storeValuesPolicyRiskDiverse();
-        });
-        $("#btn_risk_diverse_extra").on('click', function (event) {
-            storeValuesExtraRiskDiverse();
-        });
-        $("#btn_risk_diverse_receipt").on('click', function (event) {
-            storeValuesReceiptRiskDiverse();
-        });
-        $("#btn_risk_diverse_commission").on('click', function (event) {
-            storeValuesCommissionRiskDiverse();
-        });
-        $("#btn_risk_diverse_verification").on('click', function (event) {
-            storeValuesVerificationRiskDiverse();
-        });
-
-        getPolicyRiskDiverse();
-        getExtraRiskDiverse();
-        getReceiptRiskDiverse();
-        getCommissionRiskDiverse();
-        getVerificationRiskDiverse();
-
-        // Poliza Colectivo Riesgos Diversos Suscripcion
-        $("#btn_risk_diverse_policy_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyRiskDiverse();
-        });
-        $("#btn_risk_diverse_extra_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraRiskDiverse();
-        });
-        $("#btn_risk_diverse_receipt_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptRiskDiverse();
-        });
-
-        getSubscriptionPolicyRiskDiverse();
-        getSubscriptionExtraRiskDiverse();
-        getSubscriptionReceiptRiskDiverse();
 
         if ($('#maternidad_colectivo').val() === 'SÍ') {
             document.getElementById("searchinput").style.display = "block";
