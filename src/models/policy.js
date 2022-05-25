@@ -222,6 +222,658 @@ module.exports = {
             });
         });
     },
+    getVehicleAccidentSum: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_vehiculo
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = 'DÓLAR') AND (tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION
+                    SELECT SUM(prima_anual_colectivo) as siniestralidad_vehiculo
+                    FROM Colectivo
+                    WHERE ((DATE(fecha_desde_colectivo) BETWEEN ? AND ?) AND (tipo_moneda_colectivo = 'DÓLAR') AND (tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getVehicleAccidentRateSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_vehiculo_suma
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = ?) AND (tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION
+                    SELECT SUM(prima_anual_colectivo) as siniestralidad_vehiculo_suma
+                    FROM Colectivo
+                    WHERE ((DATE(fecha_desde_colectivo) BETWEEN ? AND ?) AND (tipo_moneda_colectivo = ?) AND (tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getHealthAccidentSum: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_salud
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = 'DÓLAR') AND (tipo_individual_poliza = 'SALUD'))
+                    UNION
+                    SELECT SUM(prima_anual_colectivo) as siniestralidad_salud
+                    FROM Colectivo
+                    WHERE ((DATE(fecha_desde_colectivo) BETWEEN ? AND ?) AND (tipo_moneda_colectivo = 'DÓLAR') AND (tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getHealthAccidentRateSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_salud_suma
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = ?) AND (tipo_individual_poliza = 'SALUD'))
+                    UNION
+                    SELECT SUM(prima_anual_colectivo) as siniestralidad_salud_suma
+                    FROM Colectivo
+                    WHERE ((DATE(fecha_desde_colectivo) BETWEEN ? AND ?) AND (tipo_moneda_colectivo = ?) AND (tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPatrimonialAccidentSum: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_patrimonial
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = 'DÓLAR') AND (tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPatrimonialAccidentRateSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_patrimonial_suma
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = ?) AND (tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getBailAccidentSum: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_fianza
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = 'DÓLAR') AND (tipo_individual_poliza = 'FIANZA'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getBailAccidentRateSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(prima_anual_poliza) as siniestralidad_fianza_suma
+                    FROM Poliza
+                    WHERE ((DATE(fecha_desde_poliza) BETWEEN ? AND ?) AND (tipo_moneda_poliza = ?) AND (tipo_individual_poliza = 'FIANZA'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getChargedCounterPremium: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza - c.monto_comision_comision) as prima_cobrada
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo - c.monto_comision_comision) as prima_cobrada
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getChargedCounterPremiumDate: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza - c.monto_comision_comision) as prima_cobrada_date
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo - c.monto_comision_comision) as prima_cobrada
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumReturnedCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza - c.monto_comision_comision) as prima_devuelta
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo - c.monto_comision_comision) as prima_devuelta
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumReturnedCounterDate: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza - c.monto_comision_comision) as prima_devuelta_date
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo - c.monto_comision_comision) as prima_devuelta
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetCounterDate: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_date
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetVehicleCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_vehiculo
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta_vehiculo
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetVehicleSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_vehiculo_suma
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta_vehiculo_suma
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetHealthCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_salud
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta_salud
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetHealthSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_salud_suma
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION
+                    SELECT SUM(pc.prima_anual_colectivo) as prima_cobrada_neta_salud_suma
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetPatrimonialCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_patrimonial
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetPatrimonialSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_patrimonial_suma
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetBailCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_fianza
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'FIANZA'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getPremiumCollectedNetBailSum: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT SUM(p.prima_anual_poliza) as prima_cobrada_neta_fianza_suma
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'FIANZA'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedVehiclePolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_auto
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_no_renovada_auto
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedVehiclePolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_auto_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_no_renovada_auto_contador
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedHealthPolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_salud
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_no_renovada_salud
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedHealthPolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_salud_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_no_renovada_salud_contador
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedPatrimonialPolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_patrimonial
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getNonRenewedPatrimonialPolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_no_renovada_patrimonial_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PENDIENTE') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedVehiclePolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_auto
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_renovada_auto
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedVehiclePolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_auto_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'AUTOMÓVIL'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_renovada_auto_contador
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'AUTOMÓVIL'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedHealthPolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_salud
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_renovada_salud
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedHealthPolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_salud_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'SALUD'))
+                    UNION ALL
+                    SELECT COUNT(pc.id_colectivo) as poliza_renovada_salud_contador
+                    FROM Colectivo pc
+                    INNER JOIN Comision c ON pc.id_colectivo = c.colectivo_id
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(pc.fecha_desde_colectivo) BETWEEN ? AND ?) AND (pc.tipo_moneda_colectivo = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (pc.tipo_colectivo = 'SALUD'))`,
+            [startDate, endDate, coinType, startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedPatrimonialPolicyCounter: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_patrimonial
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = 'DÓLAR') AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
+    getRenewedPatrimonialPolicyCount: (startDate, endDate, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT COUNT(p.id_poliza) as poliza_renovada_patrimonial_contador
+                    FROM Poliza p
+                    INNER JOIN Comision c ON p.id_poliza = c.poliza_id 
+                    INNER JOIN Factor_Verificacion fv ON c.id_comision = fv.comision_id
+                    WHERE ((DATE(p.fecha_desde_poliza) BETWEEN ? AND ?) AND (p.tipo_moneda_poliza = ?) AND (fv.estatus_comision_factor_verificacion = 'PAGADO') AND (p.tipo_individual_poliza = 'PATRIMONIAL'))`,
+            [startDate, endDate, coinType], 
+            (error, rows) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(rows);
+            });
+        });
+    },
 /*                  POST                 */
     postVehiclePolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {

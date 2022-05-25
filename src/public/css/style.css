@@ -9739,3 +9739,13 @@ select {
 .input-numeral, .input-numeral2, .input-numeral-rif, .input-numeral-cedula {
   text-indent: 33px;
 }
+
+.col-sm-1half {
+  width: 13.5%;
+  padding-left: 1%;
+}
+
+.col-sm-10half {
+  width: 86.5%;
+  padding-right: 1%;
+}

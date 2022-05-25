@@ -1281,6 +1281,7 @@
 <script>
     function storeValuesExtraHealth() {
         let formDataExtraHealth = [];
+        let recoveredData = localStorage.getItem("formDataExtraHealthCompleted");
         localStorage.removeItem('formDataExtraHealth');
         $('#extra-form-health input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
@@ -1295,6 +1296,24 @@
             formDataExtraHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataExtraHealth", JSON.stringify(formDataExtraHealth));
+        if(recoveredData == null){
+            localStorage.setItem("formDataExtraHealthCompleted", JSON.stringify(formDataExtraHealth));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-health input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-health input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-health select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataExtraHealthCompleted', JSON.stringify(data))
+        }
     }
     function getExtraHealth() {
         if(localStorage.formDataExtraHealth !== undefined){
@@ -1305,16 +1324,16 @@
         }
     }
     function getExtraHealthList() {
-        if(localStorage.formDataExtraHealth !== undefined){
-            const formDataExtraHealth = JSON.parse(localStorage.formDataExtraHealth);
-            const lengthExtraHealth = Math.trunc(formDataExtraHealth.length / 2);
+        if(localStorage.formDataExtraHealthCompleted !== undefined){
+            const formDataExtraHealthCompleted = JSON.parse(localStorage.formDataExtraHealthCompleted);
+            const lengthExtraHealth = Math.trunc(formDataExtraHealthCompleted.length / 2);
             const listExtraHealthElement1 = $("#list-health-extra1");
             const listExtraHealthElement2 = $("#list-health-extra2");
             for (let i = 0; i < lengthExtraHealth; i++) {
-                listExtraHealthElement1.append(`<li class="list-group-item">${formDataExtraHealth[i].label}: ${formDataExtraHealth[i].value}</li>`);
+                listExtraHealthElement1.append(`<li class="list-group-item">${formDataExtraHealthCompleted[i].label}: ${formDataExtraHealthCompleted[i].value}</li>`);
             }
-            for (let i = lengthExtraHealth; i < formDataExtraHealth.length; i++) {
-                listExtraHealthElement2.append(`<li class="list-group-item">${formDataExtraHealth[i].label}: ${formDataExtraHealth[i].value}</li>`);
+            for (let i = lengthExtraHealth; i < formDataExtraHealthCompleted.length; i++) {
+                listExtraHealthElement2.append(`<li class="list-group-item">${formDataExtraHealthCompleted[i].label}: ${formDataExtraHealthCompleted[i].value}</li>`);
             }
         }
     }
@@ -1515,6 +1534,7 @@
 <script>
     function storeValuesSubscriptionExtraHealth() {
         let formDataSubscriptionExtraHealth = [];
+        let recoveredData = localStorage.getItem("formDataSubscriptionExtraHealthCompleted");
         localStorage.removeItem('formDataSubscriptionExtraHealth');
         $('#extra-form-health-subcription input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
@@ -1529,6 +1549,24 @@
             formDataSubscriptionExtraHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraHealth", JSON.stringify(formDataSubscriptionExtraHealth));
+        if(recoveredData == null){
+            localStorage.setItem("formDataSubscriptionExtraHealthCompleted", JSON.stringify(formDataSubscriptionExtraHealth));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-health-subcription input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-health-subcription input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-health-subcription select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataSubscriptionExtraHealthCompleted', JSON.stringify(data))
+        }
     }
     function getSubscriptionExtraHealth() {
         if(localStorage.formDataSubscriptionExtraHealth !== undefined){
@@ -1539,16 +1577,16 @@
         }
     }
     function getSubscriptionExtraHealthList() {
-        if(localStorage.formDataSubscriptionExtraHealth !== undefined){
-            const formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
-            const lengthSubscriptionExtraHealth = Math.trunc(formDataSubscriptionExtraHealth.length / 2);
+        if(localStorage.formDataSubscriptionExtraHealthCompleted !== undefined){
+            const formDataSubscriptionExtraHealthCompleted = JSON.parse(localStorage.formDataSubscriptionExtraHealthCompleted);
+            const lengthSubscriptionExtraHealth = Math.trunc(formDataSubscriptionExtraHealthCompleted.length / 2);
             const listSubscriptionExtraHealthElement1 = $("#list-health-subcription-extra1");
             const listSubscriptionExtraHealthElement2 = $("#list-health-subcription-extra2");
             for (let i = 0; i < lengthSubscriptionExtraHealth; i++) {
-                listSubscriptionExtraHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraHealth[i].label}: ${formDataSubscriptionExtraHealth[i].value}</li>`);
+                listSubscriptionExtraHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraHealthCompleted[i].label}: ${formDataSubscriptionExtraHealthCompleted[i].value}</li>`);
             }
-            for (let i = lengthSubscriptionExtraHealth; i < formDataSubscriptionExtraHealth.length; i++) {
-                listSubscriptionExtraHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraHealth[i].label}: ${formDataSubscriptionExtraHealth[i].value}</li>`);
+            for (let i = lengthSubscriptionExtraHealth; i < formDataSubscriptionExtraHealthCompleted.length; i++) {
+                listSubscriptionExtraHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraHealthCompleted[i].label}: ${formDataSubscriptionExtraHealthCompleted[i].value}</li>`);
             }
         }
     }
@@ -2075,6 +2113,7 @@
 <script>
     function storeValuesExtraFuneral() {
         let formDataExtraFuneral = [];
+        let recoveredData = localStorage.getItem("formDataExtraFuneralCompleted");
         localStorage.removeItem('formDataExtraFuneral');
         $('#extra-form-funeral input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
@@ -2089,6 +2128,24 @@
             formDataExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataExtraFuneral", JSON.stringify(formDataExtraFuneral));
+        if(recoveredData == null){
+            localStorage.setItem("formDataExtraFuneralCompleted", JSON.stringify(formDataExtraFuneral));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-funeral input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-funeral input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-funeral select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataExtraFuneralCompleted', JSON.stringify(data))
+        }
     }
     function getExtraFuneral() {
         if(localStorage.formDataExtraFuneral !== undefined){
@@ -2099,16 +2156,16 @@
         }
     }
     function getExtraFuneralList() {
-        if(localStorage.formDataExtraFuneral !== undefined){
-            const formDataExtraFuneral = JSON.parse(localStorage.formDataExtraFuneral);
-            const lengthExtraFuneral = Math.trunc(formDataExtraFuneral.length / 2);
+        if(localStorage.formDataExtraFuneralCompleted !== undefined){
+            const formDataExtraFuneralCompleted = JSON.parse(localStorage.formDataExtraFuneralCompleted);
+            const lengthExtraFuneral = Math.trunc(formDataExtraFuneralCompleted.length / 2);
             const listExtraFuneralElement1 = $("#list-funeral-extra1");
             const listExtraFuneralElement2 = $("#list-funeral-extra2");
             for (let i = 0; i < lengthExtraFuneral; i++) {
-                listExtraFuneralElement1.append(`<li class="list-group-item">${formDataExtraFuneral[i].label}: ${formDataExtraFuneral[i].value}</li>`);
+                listExtraFuneralElement1.append(`<li class="list-group-item">${formDataExtraFuneralCompleted[i].label}: ${formDataExtraFuneralCompleted[i].value}</li>`);
             }
-            for (let i = lengthExtraFuneral; i < formDataExtraFuneral.length; i++) {
-                listExtraFuneralElement2.append(`<li class="list-group-item">${formDataExtraFuneral[i].label}: ${formDataExtraFuneral[i].value}</li>`);
+            for (let i = lengthExtraFuneral; i < formDataExtraFuneralCompleted.length; i++) {
+                listExtraFuneralElement2.append(`<li class="list-group-item">${formDataExtraFuneralCompleted[i].label}: ${formDataExtraFuneralCompleted[i].value}</li>`);
             }
         }
     }
@@ -2304,6 +2361,7 @@
     function storeValuesSubscriptionExtraFuneral() {
         let formDataSubscriptionExtraFuneral = [];
         localStorage.removeItem('formDataSubscriptionExtraFuneral');
+        let recoveredData = localStorage.getItem("formDataSubscriptionExtraFuneralCompleted");
         $('#extra-form-funeral-subcription input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataSubscriptionExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
@@ -2317,6 +2375,24 @@
             formDataSubscriptionExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraFuneral", JSON.stringify(formDataSubscriptionExtraFuneral));
+        if(recoveredData == null){
+            localStorage.setItem("formDataSubscriptionExtraFuneralCompleted", JSON.stringify(formDataSubscriptionExtraFuneral));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-funeral-subcription input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+                });
+            $('#extra-form-funeral-subcription input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-funeral-subcription select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataSubscriptionExtraFuneralCompleted', JSON.stringify(data))
+        }
     }
     function getSubscriptionExtraFuneral() {
         if(localStorage.formDataSubscriptionExtraFuneral !== undefined){
@@ -2327,16 +2403,16 @@
         }
     }
     function getSubscriptionExtraFuneralList() {
-        if(localStorage.formDataSubscriptionExtraFuneral !== undefined){
-            const formDataSubscriptionExtraFuneral = JSON.parse(localStorage.formDataSubscriptionExtraFuneral);
-            const lengthSubscriptionExtraFuneral = Math.trunc(formDataSubscriptionExtraFuneral.length / 2);
+        if(localStorage.formDataSubscriptionExtraFuneralCompleted !== undefined){
+            const formDataSubscriptionExtraFuneralCompleted = JSON.parse(localStorage.formDataSubscriptionExtraFuneralCompleted);
+            const lengthSubscriptionExtraFuneral = Math.trunc(formDataSubscriptionExtraFuneralCompleted.length / 2);
             const listSubscriptionExtraFuneralElement1 = $("#list-funeral-subcription-extra1");
             const listSubscriptionExtraFuneralElement2 = $("#list-funeral-subcription-extra2");
             for (let i = 0; i < lengthSubscriptionExtraFuneral; i++) {
-                listSubscriptionExtraFuneralElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneral[i].label}: ${formDataSubscriptionExtraFuneral[i].value}</li>`);
+                listSubscriptionExtraFuneralElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneralCompleted[i].label}: ${formDataSubscriptionExtraFuneralCompleted[i].value}</li>`);
             }
-            for (let i = lengthSubscriptionExtraFuneral; i < formDataSubscriptionExtraFuneral.length; i++) {
-                listSubscriptionExtraFuneralElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneral[i].label}: ${formDataSubscriptionExtraFuneral[i].value}</li>`);
+            for (let i = lengthSubscriptionExtraFuneral; i < formDataSubscriptionExtraFuneralCompleted.length; i++) {
+                listSubscriptionExtraFuneralElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneralCompleted[i].label}: ${formDataSubscriptionExtraFuneralCompleted[i].value}</li>`);
             }
         }
     }
@@ -2459,6 +2535,7 @@
 <script>
     function storeValuesExtraLife() {
         let formDataExtraLife = [];
+        let recoveredData = localStorage.getItem("formDataExtraLifeCompleted");
         localStorage.removeItem('formDataExtraLife');
         $('#extra-form-life input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
@@ -2473,6 +2550,24 @@
             formDataExtraLife.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataExtraLife", JSON.stringify(formDataExtraLife));
+        if(recoveredData == null){
+            localStorage.setItem("formDataExtraLifeCompleted", JSON.stringify(formDataExtraLife));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-life input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-life input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-life select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataExtraLifeCompleted', JSON.stringify(data))
+        }
     }
     function getExtraLife() {
         if(localStorage.formDataExtraLife !== undefined){
@@ -2483,16 +2578,16 @@
         }
     }
     function getExtraLifeList() {
-        if(localStorage.formDataExtraLife !== undefined){
-            const formDataExtraLife = JSON.parse(localStorage.formDataExtraLife);
-            const lengthExtraLife = Math.trunc(formDataExtraLife.length / 2);
+        if(localStorage.formDataExtraLifeCompleted !== undefined){
+            const formDataExtraLifeCompleted = JSON.parse(localStorage.formDataExtraLifeCompleted);
+            const lengthExtraLife = Math.trunc(formDataExtraLifeCompleted.length / 2);
             const listExtraLifeElement1 = $("#list-life-extra1");
             const listExtraLifeElement2 = $("#list-life-extra2");
             for (let i = 0; i < lengthExtraLife; i++) {
-                listExtraLifeElement1.append(`<li class="list-group-item">${formDataExtraLife[i].label}: ${formDataExtraLife[i].value}</li>`);
+                listExtraLifeElement1.append(`<li class="list-group-item">${formDataExtraLifeCompleted[i].label}: ${formDataExtraLifeCompleted[i].value}</li>`);
             }
-            for (let i = lengthExtraLife; i < formDataExtraLife.length; i++) {
-                listExtraLifeElement2.append(`<li class="list-group-item">${formDataExtraLife[i].label}: ${formDataExtraLife[i].value}</li>`);
+            for (let i = lengthExtraLife; i < formDataExtraLifeCompleted.length; i++) {
+                listExtraLifeElement2.append(`<li class="list-group-item">${formDataExtraLifeCompleted[i].label}: ${formDataExtraLifeCompleted[i].value}</li>`);
             }
         }
     }
@@ -2688,6 +2783,7 @@
     function storeValuesSubscriptionExtraLife() {
         let formDataSubscriptionExtraLife = [];
         localStorage.removeItem('formDataSubscriptionExtraLife');
+        let recoveredData = localStorage.getItem("formDataSubscriptionExtraLifeCompleted");
         $('#extra-form-life-subcription input[type=text]').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataSubscriptionExtraLife.push({ label: labelName, name: this.name, value: this.value });
@@ -2701,6 +2797,24 @@
             formDataSubscriptionExtraLife.push({ label: labelName, name: this.name, value: this.value });
         });
         localStorage.setItem("formDataSubscriptionExtraLife", JSON.stringify(formDataSubscriptionExtraLife));
+        if(recoveredData == null){
+            localStorage.setItem("formDataSubscriptionExtraLifeCompleted", JSON.stringify(formDataSubscriptionExtraLife));
+        } else {
+            let data = JSON.parse(recoveredData)
+            $('#extra-form-life-subcription input[type=text]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-life-subcription input[type=date]').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            $('#extra-form-life-subcription select').each(function(){
+                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+                data.push({ label: labelName, name: this.name, value: this.value });
+            });
+            localStorage.setItem('formDataSubscriptionExtraLifeCompleted', JSON.stringify(data))
+        }
     }
     function getSubscriptionExtraLife() {
         if(localStorage.formDataSubscriptionExtraLife !== undefined){
@@ -2711,16 +2825,16 @@
         }
     }
     function getSubscriptionExtraLifeList() {
-        if(localStorage.formDataSubscriptionExtraLife !== undefined){
-            const formDataSubscriptionExtraLife = JSON.parse(localStorage.formDataSubscriptionExtraLife);
-            const lengthSubscriptionExtraLife = Math.trunc(formDataSubscriptionExtraLife.length / 2);
+        if(localStorage.formDataSubscriptionExtraLifeCompleted !== undefined){
+            const formDataSubscriptionExtraLifeCompleted = JSON.parse(localStorage.formDataSubscriptionExtraLifeCompleted);
+            const lengthSubscriptionExtraLife = Math.trunc(formDataSubscriptionExtraLifeCompleted.length / 2);
             const listSubscriptionExtraLifeElement1 = $("#list-life-subcription-extra1");
             const listSubscriptionExtraLifeElement2 = $("#list-life-subcription-extra2");
             for (let i = 0; i < lengthSubscriptionExtraLife; i++) {
-                listSubscriptionExtraLifeElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraLife[i].label}: ${formDataSubscriptionExtraLife[i].value}</li>`);
+                listSubscriptionExtraLifeElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraLifeCompleted[i].label}: ${formDataSubscriptionExtraLifeCompleted[i].value}</li>`);
             }
-            for (let i = lengthSubscriptionExtraLife; i < formDataSubscriptionExtraLife.length; i++) {
-                listSubscriptionExtraLifeElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraLife[i].label}: ${formDataSubscriptionExtraLife[i].value}</li>`);
+            for (let i = lengthSubscriptionExtraLife; i < formDataSubscriptionExtraLifeCompleted.length; i++) {
+                listSubscriptionExtraLifeElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraLifeCompleted[i].label}: ${formDataSubscriptionExtraLifeCompleted[i].value}</li>`);
             }
         }
     }

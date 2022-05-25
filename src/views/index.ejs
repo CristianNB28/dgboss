@@ -113,6 +113,188 @@
 </div>
 
 <div class="row">
+    <div class="col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4>Siniestralidad DL</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="col-sm-12">
+                    <form method="POST" action="/sistema/graph-accident-rate">
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_inicio"
+                                        id="fecha_inicio"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_final"
+                                        id="fecha_final"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </form>
+                    <div id="chartSiniestralidad">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4>Prima cobradas DL</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="col-sm-12">
+                    <form method="POST" action="/sistema/graph-premium-collected">
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_inicio"
+                                        id="fecha_inicio"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_final"
+                                        id="fecha_final"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </form>
+                    <div id="chartPrimaCobrada">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4>Composición de cartera DL</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="col-sm-12">
+                    <form method="POST" action="/sistema/graph-portfolio-composition">
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_inicio"
+                                        id="fecha_inicio"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_final"
+                                        id="fecha_final"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </form>
+                    <div id="chartComposicionCartera">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="ibox">
+            <div class="ibox-title">
+                <h4>Persistencia DL</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="col-sm-12">
+                    <form method="POST" action="/sistema/graph-persistence">
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_inicio"
+                                        id="fecha_inicio"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                <div class="col-sm-9">
+                                    <input 
+                                        type="date"
+                                        name="fecha_final"
+                                        id="fecha_final"
+                                        class="form-control"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Consultar</button>
+                        </div>
+                    </form>
+                    <div id="chartPersistencia">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-lg-12">
         <div class="ibox">
             <div class="ibox-title">
@@ -199,195 +381,506 @@
     </div>
 </div>
     
-    <!-- Mainly scripts -->
-    <script src="/js/jquery-3.1.1.min.js"></script>
-    <script src="/js/jquery-2.1.1.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<!-- Mainly scripts -->
+<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-    <!-- Flot -->
-    <script src="/js/plugins/flot/jquery.flot.js"></script>
-    <script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="/js/plugins/flot/jquery.flot.pie.js"></script>
+<!-- Flot -->
+<script src="/js/plugins/flot/jquery.flot.js"></script>
+<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
 
-    <!-- Peity -->
-    <script src="/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="/js/demo/peity-demo.js"></script>
+<!-- Peity -->
+<script src="/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/js/demo/peity-demo.js"></script>
 
-    <!-- Custom and plugin javascript -->
-    <script src="/js/inspinia.js"></script>
-    <script src="/js/plugins/pace/pace.min.js"></script>
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
 
-    <!-- jQuery UI -->
-    <script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- jQuery UI -->
+<script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
-    <!-- GITTER -->
-    <script src="/js/plugins/gritter/jquery.gritter.min.js"></script>
+<!-- GITTER -->
+<script src="/js/plugins/gritter/jquery.gritter.min.js"></script>
 
-    <!-- Sparkline -->
-    <script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+<!-- Sparkline -->
+<script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
-    <!-- Sparkline demo data  -->
-    <script src="/js/demo/sparkline-demo.js"></script>
+<!-- Sparkline demo data  -->
+<script src="/js/demo/sparkline-demo.js"></script>
 
-    <!-- ChartJS-->
-    <script src="/js/plugins/chartJs/Chart.min.js"></script>
+<!-- ChartJS-->
+<script src="/js/plugins/chartJs/Chart.min.js"></script>
 
-    <!-- Toastr -->
-    <script src="/js/plugins/toastr/toastr.min.js"></script>
+<!-- Toastr -->
+<script src="/js/plugins/toastr/toastr.min.js"></script>
 
-    <!-- DataTables -->
-    <script src="/js/plugins/dataTables/datatables.min.js"></script>
-    <script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>`
+<!-- DataTables -->
+<script src="/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>`
 
-    <!-- Chartist -->
-    <script src="/js/plugins/chartist/chartist.min.js"></script>
+<!-- Chartist -->
+<script src="/js/plugins/chartist/chartist.min.js"></script>
 
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    var insurer = <%- JSON.stringify(insurers) %>;
+    var insurerPremium = <%- JSON.stringify(InsurersPremium) %>;
+    var dates = <%- JSON.stringify(dates) %>;
+    var backgroundColor = ['rgba(17, 59, 191, 1.0)', 'rgba(26,179,148, 0.8)', 'rgba(207, 0, 15, 1)'];
+    if (insurerPremium.length > backgroundColor.length) {
+        for (let i = 0; i < insurerPremium.length; i++) {
+            if ((i % 3) === 0) {
+                backgroundColor.push('rgba(17, 59, 191, 1.0)');
+            } else if ((i % 4) === 0) {
+                backgroundColor.push('rgba(26,179,148, 0.8)');
+            } else if ((i % 5) === 0) {
+                backgroundColor.push('rgba(207, 0, 15, 1)');
+            }
+        }
+    }
+
+    var barData = {
+        labels: dates,
+        datasets: [
+            {
+                backgroundColor: backgroundColor,
+                pointBorderColor: "#fff",
+                data: insurerPremium
+            },
+        ]
+    };
+    var barOptions = {
+        responsive: true,
+        legend: {
+            display: false
+        }
+    };
+    var ctx = document.getElementById("barChart").getContext("2d");
+    var chartBar = new Chart(ctx, {type: 'bar', data: barData, options:barOptions});
+
+    legend = document.getElementById('legend');
+    const legendLength = chartBar.data.labels;
+    const legendBg = chartBar.data.datasets[0].backgroundColor;
+    const legendLabels = insurer;
+    const legendData = chartBar.data.datasets[0].data;
+    for (let i = 0; i < legendLength.length; i++) {
+        const lp = document.createElement('P');
+        const lcircle = document.createElement('SPAN');
+        lcircle.classList.add('lcircle');
+        lcircle.style.backgroundColor = legendBg[i];
+        const ltext = document.createElement('SPAN');
+        var ltextNode = document.createTextNode(legendLabels[i] + ' - ' + legendData[i]);
+        ltext.classList.add('ltext');
+        legend.appendChild(lp);
+        lp.appendChild(lcircle);
+        lp.appendChild(ltext);
+        ltext.appendChild(ltextNode);
+    }
+
+    function filterData() {
+        const dates2 = [...dates];
+        const startDate = document.getElementById('fecha_inicio');
+        const endDate = document.getElementById('fecha_final');
+        const indexStartDate = dates2.indexOf(startDate.value);
+        const indexEndDate = dates2.indexOf(endDate.value);
+        const filterDate = dates2.slice(indexStartDate, indexEndDate+1);
+        chartBar.data.labels = filterDate;
+        const datapoints = [...insurerPremium];
+        const filterDatapoints = datapoints.slice(indexStartDate, indexEndDate+1);
+        chartBar.data.datasets[0].data = filterDatapoints;
+        chartBar.update();
+    }
+</script>
+
+<script>
+    var ownAgent = <%- JSON.stringify(ownAgents) %>;
+    var ownAgentComission = <%- JSON.stringify(ownAgentsComission) %>;
+    var datesOwnAgent = <%- JSON.stringify(datesOwnAgents) %>;
+    var backgroundColor = ['rgba(17, 59, 191, 1.0)', 'rgba(26,179,148, 0.8)', 'rgba(207, 0, 15, 1)'];
+    if (ownAgentComission.length > backgroundColor.length) {
+        for (let i = 0; i < ownAgentComission.length; i++) {
+            if ((i % 3) === 0) {
+                backgroundColor.push('rgba(17, 59, 191, 1.0)');
+            } else if ((i % 4) === 0) {
+                backgroundColor.push('rgba(26,179,148, 0.8)');
+            } else if ((i % 5) === 0) {
+                backgroundColor.push('rgba(207, 0, 15, 1)');
+            }
+        }
+    }
+
+    var barData = {
+        labels: datesOwnAgent,
+        datasets: [
+            {
+                backgroundColor: backgroundColor,
+                pointBorderColor: "#fff",
+                data: ownAgentComission
+            },
+        ]
+    };
+    var barOptions = {
+        responsive: true,
+        legend: {
+            display: false
+        }
+    };
+    var ctx = document.getElementById("horizontalBarChart").getContext("2d");
+    var chartHorizontalBar = new Chart(ctx, {type: 'horizontalBar', data: barData, options:barOptions});
+
+    legendOwnAgent = document.getElementById('legendOwnAgent');
+    const legendLengthOwnAgent = chartHorizontalBar.data.labels;
+    const legendBgOwnAgent = chartHorizontalBar.data.datasets[0].backgroundColor;
+    const legendLabelsOwnAgent = ownAgent;
+    const legendDataOwnAgent = chartHorizontalBar.data.datasets[0].data;
+    for (let i = 0; i < legendLengthOwnAgent.length; i++) {
+        const lpOwnAgent = document.createElement('P');
+        const lcircleOnwAgent = document.createElement('SPAN');
+        lcircleOnwAgent.classList.add('lcircleOnwAgent');
+        lcircleOnwAgent.style.backgroundColor = legendBgOwnAgent[i];
+        const ltextOwnAgent = document.createElement('SPAN');
+        var ltextOwnAgentNode = document.createTextNode(legendLabelsOwnAgent[i] + ' - ' + legendDataOwnAgent[i]);
+        ltextOwnAgent.classList.add('ltextOnwAgent');
+        legendOwnAgent.appendChild(lpOwnAgent);
+        lpOwnAgent.appendChild(lcircleOnwAgent);
+        lpOwnAgent.appendChild(ltextOwnAgent);
+        ltextOwnAgent.appendChild(ltextOwnAgentNode);
+    }  
+    
+    function filterDataOwnAgent() {
+        const dates = [...datesOwnAgent];
+        const startDate = document.getElementById('fecha_inicio_agente');
+        const endDate = document.getElementById('fecha_final_agente');
+        const indexStartDate = dates.indexOf(startDate.value);
+        const indexEndDate = dates.indexOf(endDate.value);
+        const filterDate = dates.slice(indexStartDate, indexEndDate+1);
+        chartHorizontalBar.data.labels = filterDate;
+        const datapoints = [...ownAgentComission];
+        const filterDatapoints = datapoints.slice(indexStartDate, indexEndDate+1);
+        chartHorizontalBar.data.datasets[0].data = filterDatapoints;
+        chartHorizontalBar.update();
+    }
+</script>
+
+<% if (typeof(arrayAccidentRate) !== 'undefined') { %>
     <script>
-        var insurer = <%- JSON.stringify(insurers) %>;
-        var insurerPremium = <%- JSON.stringify(InsurersPremium) %>;
-        var dates = <%- JSON.stringify(dates) %>;
-        var backgroundColor = ['rgba(17, 59, 191, 1.0)', 'rgba(26,179,148, 0.8)', 'rgba(207, 0, 15, 1)'];
-        if (insurerPremium.length > backgroundColor.length) {
-            for (let i = 0; i < insurerPremium.length; i++) {
-                if ((i % 3) === 0) {
-                    backgroundColor.push('rgba(17, 59, 191, 1.0)');
-                } else if ((i % 4) === 0) {
-                    backgroundColor.push('rgba(26,179,148, 0.8)');
-                } else if ((i % 5) === 0) {
-                    backgroundColor.push('rgba(207, 0, 15, 1)');
+        let accidentRate = <%- JSON.stringify(arrayAccidentRate) %>;
+        localStorage.setItem("formDataAccidentRate", JSON.stringify(accidentRate));
+        let options4 = {
+            series: [{
+                name: 'monto',
+                data: accidentRate
+            }],
+            chart: {
+                type: 'bar'
+            },
+            plotOptions: {
+                bar: {
+                barHeight: '50%',
+                distributed: true,
+                horizontal: true,
+                dataLabels: {
+                    position: 'bottom'
+                },
+                }
+            },
+            colors: ['#33b2df', '#546E7A', '#d4526e', '#13d8aa'],
+            dataLabels: {
+                enabled: true,
+                textAnchor: 'start',
+                style: {
+                    colors: ['#fff']
+                },
+                formatter: function (val, opt) {
+                    return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+                },
+                offsetX: 0,
+                dropShadow: {
+                    enabled: true
+                }
+            },
+            stroke: {
+                width: 1,
+                colors: ['#fff']
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial', 'Fianzas'],
+            },
+            yaxis: {
+                labels: {
+                    show: false
+                }
+            },
+        };
+
+        let chart4 = new ApexCharts(document.querySelector("#chartSiniestralidad"), options4);
+        chart4.render();
+    </script>
+<% } else { %>
+    <script>
+        const formDataAccidentRate = JSON.parse(localStorage.formDataAccidentRate);
+        let optionsAccidentRate = {
+            series: [{
+                name: 'monto',
+                data: formDataAccidentRate
+            }],
+            chart: {
+                type: 'bar'
+            },
+            plotOptions: {
+                bar: {
+                barHeight: '50%',
+                distributed: true,
+                horizontal: true,
+                dataLabels: {
+                    position: 'bottom'
+                },
+                }
+            },
+            colors: ['#33b2df', '#546E7A', '#d4526e', '#13d8aa'],
+            dataLabels: {
+                enabled: true,
+                textAnchor: 'start',
+                style: {
+                    colors: ['#fff']
+                },
+                formatter: function (val, opt) {
+                    return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+                },
+                offsetX: 0,
+                dropShadow: {
+                    enabled: true
+                }
+            },
+            stroke: {
+                width: 1,
+                colors: ['#fff']
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial', 'Fianzas'],
+            },
+            yaxis: {
+                labels: {
+                    show: false
+                }
+            },
+        };
+
+        let chartAccidentRate = new ApexCharts(document.querySelector("#chartSiniestralidad"), optionsAccidentRate);
+        chartAccidentRate.render();
+    </script>
+<% } %>
+
+<% if (typeof(arrayPremiumCharged) !== 'undefined') { %>
+    <script>
+        let premiumCharged = <%- JSON.stringify(arrayPremiumCharged) %>;
+        localStorage.setItem("formDataPremiumCharged", JSON.stringify(premiumCharged));
+        let options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: 'monto',
+                data: premiumCharged
+            }],
+            xaxis: {
+                categories: ['Prima Cobrada', 'Prima Devuelta', 'Prima Cobrada Neta']
+            },
+            plotOptions: {
+                bar: {
+                    distributed: true
                 }
             }
         }
 
-        var barData = {
-            labels: dates,
-            datasets: [
-                {
-                    backgroundColor: backgroundColor,
-                    pointBorderColor: "#fff",
-                    data: insurerPremium
-                },
-            ]
-        };
-        var barOptions = {
-            responsive: true,
-            legend: {
-                display: false
-            }
-        };
-        var ctx = document.getElementById("barChart").getContext("2d");
-        var chartBar = new Chart(ctx, {type: 'bar', data: barData, options:barOptions});
-
-        legend = document.getElementById('legend');
-        const legendLength = chartBar.data.labels;
-        const legendBg = chartBar.data.datasets[0].backgroundColor;
-        const legendLabels = insurer;
-        const legendData = chartBar.data.datasets[0].data;
-        for (let i = 0; i < legendLength.length; i++) {
-            const lp = document.createElement('P');
-            const lcircle = document.createElement('SPAN');
-            lcircle.classList.add('lcircle');
-            lcircle.style.backgroundColor = legendBg[i];
-            const ltext = document.createElement('SPAN');
-            var ltextNode = document.createTextNode(legendLabels[i] + ' - ' + legendData[i]);
-            ltext.classList.add('ltext');
-            legend.appendChild(lp);
-            lp.appendChild(lcircle);
-            lp.appendChild(ltext);
-            ltext.appendChild(ltextNode);
-        }
-
-        function filterData() {
-            const dates2 = [...dates];
-            const startDate = document.getElementById('fecha_inicio');
-            const endDate = document.getElementById('fecha_final');
-            const indexStartDate = dates2.indexOf(startDate.value);
-            const indexEndDate = dates2.indexOf(endDate.value);
-            const filterDate = dates2.slice(indexStartDate, indexEndDate+1);
-            chartBar.data.labels = filterDate;
-            const datapoints = [...insurerPremium];
-            const filterDatapoints = datapoints.slice(indexStartDate, indexEndDate+1);
-            chartBar.data.datasets[0].data = filterDatapoints;
-            chartBar.update();
-        }
+        let chart = new ApexCharts(document.querySelector("#chartPrimaCobrada"), options);
+        chart.render();
     </script>
-
+<% } else { %>
     <script>
-        var ownAgent = <%- JSON.stringify(ownAgents) %>;
-        var ownAgentComission = <%- JSON.stringify(ownAgentsComission) %>;
-        var datesOwnAgent = <%- JSON.stringify(datesOwnAgents) %>;
-        var backgroundColor = ['rgba(17, 59, 191, 1.0)', 'rgba(26,179,148, 0.8)', 'rgba(207, 0, 15, 1)'];
-        if (ownAgentComission.length > backgroundColor.length) {
-            for (let i = 0; i < ownAgentComission.length; i++) {
-                if ((i % 3) === 0) {
-                    backgroundColor.push('rgba(17, 59, 191, 1.0)');
-                } else if ((i % 4) === 0) {
-                    backgroundColor.push('rgba(26,179,148, 0.8)');
-                } else if ((i % 5) === 0) {
-                    backgroundColor.push('rgba(207, 0, 15, 1)');
+        const formDataPremiumCharged = JSON.parse(localStorage.formDataPremiumCharged);
+        let optionsPremium = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: 'monto',
+                data: formDataPremiumCharged
+            }],
+            xaxis: {
+                categories: ['Prima Cobrada', 'Prima Devuelta', 'Prima Cobrada Neta']
+            },
+            plotOptions: {
+                bar: {
+                    distributed: true
                 }
             }
         }
 
-        var barData = {
-            labels: datesOwnAgent,
-            datasets: [
-                {
-                    backgroundColor: backgroundColor,
-                    pointBorderColor: "#fff",
-                    data: ownAgentComission
-                },
-            ]
-        };
-        var barOptions = {
-            responsive: true,
-            legend: {
-                display: false
+        let chartPremium = new ApexCharts(document.querySelector("#chartPrimaCobrada"), optionsPremium);
+        chartPremium.render();
+    </script>
+<% } %>
+
+<% if (typeof(arrayPortfolioComposition) !== 'undefined') { %>
+    <script>
+        let portfolioComposition = <%- JSON.stringify(arrayPortfolioComposition) %>;
+        localStorage.setItem("formDataPortfolioComposition", JSON.stringify(portfolioComposition));
+        let options2 = {
+            series: [{
+                name: 'monto',
+                data: portfolioComposition
+            }],
+            chart: {
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                    distributed: true,
+                    barHeight: '50%'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial', 'Fianzas'],
             }
         };
-        var ctx = document.getElementById("horizontalBarChart").getContext("2d");
-        var chartHorizontalBar = new Chart(ctx, {type: 'horizontalBar', data: barData, options:barOptions});
 
-        legendOwnAgent = document.getElementById('legendOwnAgent');
-        const legendLengthOwnAgent = chartHorizontalBar.data.labels;
-        const legendBgOwnAgent = chartHorizontalBar.data.datasets[0].backgroundColor;
-        const legendLabelsOwnAgent = ownAgent;
-        const legendDataOwnAgent = chartHorizontalBar.data.datasets[0].data;
-        for (let i = 0; i < legendLengthOwnAgent.length; i++) {
-            const lpOwnAgent = document.createElement('P');
-            const lcircleOnwAgent = document.createElement('SPAN');
-            lcircleOnwAgent.classList.add('lcircleOnwAgent');
-            lcircleOnwAgent.style.backgroundColor = legendBgOwnAgent[i];
-            const ltextOwnAgent = document.createElement('SPAN');
-            var ltextOwnAgentNode = document.createTextNode(legendLabelsOwnAgent[i] + ' - ' + legendDataOwnAgent[i]);
-            ltextOwnAgent.classList.add('ltextOnwAgent');
-            legendOwnAgent.appendChild(lpOwnAgent);
-            lpOwnAgent.appendChild(lcircleOnwAgent);
-            lpOwnAgent.appendChild(ltextOwnAgent);
-            ltextOwnAgent.appendChild(ltextOwnAgentNode);
-        }  
-        
-        function filterDataOwnAgent() {
-            const dates = [...datesOwnAgent];
-            const startDate = document.getElementById('fecha_inicio_agente');
-            const endDate = document.getElementById('fecha_final_agente');
-            const indexStartDate = dates.indexOf(startDate.value);
-            const indexEndDate = dates.indexOf(endDate.value);
-            const filterDate = dates.slice(indexStartDate, indexEndDate+1);
-            chartHorizontalBar.data.labels = filterDate;
-            const datapoints = [...ownAgentComission];
-            const filterDatapoints = datapoints.slice(indexStartDate, indexEndDate+1);
-            chartHorizontalBar.data.datasets[0].data = filterDatapoints;
-            chartHorizontalBar.update();
-        }
+        let chart2 = new ApexCharts(document.querySelector("#chartComposicionCartera"), options2);
+        chart2.render();
     </script>
+<% } else { %>
+    <script>
+        const formDataPortfolioComposition = JSON.parse(localStorage.formDataPortfolioComposition);
+        let optionsPortfolio = {
+            series: [{
+                name: 'monto',
+                data: formDataPortfolioComposition
+            }],
+            chart: {
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                    distributed: true,
+                    barHeight: '50%'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial', 'Fianzas'],
+            }
+        };
+
+        let chartPortfolio = new ApexCharts(document.querySelector("#chartComposicionCartera"), optionsPortfolio);
+        chartPortfolio.render();
+    </script>
+<% } %>
+
+<% if (typeof(arrayPolizaRenovada) !== 'undefined') { %>
+    <script>
+        let policyNotRenewed = <%- JSON.stringify(arrayPolizaNoRenovada) %>;
+        localStorage.setItem("formDataPolicyNotRenewed", JSON.stringify(policyNotRenewed));
+        let policyRenewed = <%- JSON.stringify(arrayPolizaRenovada) %>;
+        localStorage.setItem("formDataPolicyRenewed", JSON.stringify(policyRenewed));
+        let options3 = {
+            series: [{
+                name: 'Póliza no Renovadas',
+                data: policyNotRenewed
+                }, {
+                name: 'Póliza Renovadas',
+                data: policyRenewed
+                }],
+            chart: {
+                type: 'bar'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial'],
+            },
+            fill: {
+                opacity: 1
+            },
+        };
+
+        let chart3 = new ApexCharts(document.querySelector("#chartPersistencia"), options3);
+        chart3.render();
+    </script>
+<% } else { %>
+    <script>
+        const formDataPolicyNotRenewed = JSON.parse(localStorage.formDataPolicyNotRenewed);
+        const formDataPolicyRenewed = JSON.parse(localStorage.formDataPolicyRenewed);
+        let optionsPolicy = {
+            series: [{
+                name: 'Póliza no Renovadas',
+                data: formDataPolicyNotRenewed
+                }, {
+                name: 'Póliza Renovadas',
+                data: formDataPolicyRenewed
+                }],
+            chart: {
+                type: 'bar'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: ['Automóvil', 'Salud', 'Patrimonial'],
+            },
+            fill: {
+                opacity: 1
+            },
+        };
+
+        let chartPolicy = new ApexCharts(document.querySelector("#chartPersistencia"), optionsPolicy);
+        chartPolicy.render();
+    </script>
+<% } %>
 
 </body>
 

@@ -16,12 +16,17 @@ const beneficiaryController = require('../controllers/beneficiaryController');
 const collectiveController = require('../controllers/collectiveController');
 const riskDiverseController = require('../controllers/riskDiverseController');
 const verificationFactorController = require('../controllers/verificationFactorController');
+const renewalController = require('../controllers/renewalController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/multerMiddleware');
 
 // Ruta index
 router.get('/', requireAuth, indexController.getIndex);
+router.post('/graph-accident-rate', requireAuth, indexController.postIndexGraphicAccidentRate);
+router.post('/graph-premium-collected', requireAuth, indexController.postIndexGraphicPremiumCollected);
+router.post('/graph-portfolio-composition', requireAuth, indexController.postIndexGraphicPortfolioComposition);
+router.post('/graph-persistence', requireAuth, indexController.postIndexGraphicPersistence);
 // Rutas login
 router.get('/login', loginController.getLogin);
 router.post('/auth', loginController.postLogin);
@@ -238,6 +243,14 @@ router.get('/commissions-collected', requireAuth, reportController.getCommission
 router.get('/policy-claims', requireAuth, reportController.getPolicyClaims);
 router.get('/global-loss-ratio', requireAuth, reportController.getGlobalLossRatio);
 router.get('/pending-payments', requireAuth, reportController.getPendingPayments);
+router.get('/premiums-collected-date', requireAuth, reportController.getPremiumsCollectedDate);
+router.post('/premiums-collected-date', requireAuth, reportController.postPremiumsCollectedDate);
+router.get('/accident-rate', requireAuth, reportController.getAccidentRate);
+router.post('/accident-rate', requireAuth, reportController.postAccidentRate);
+router.get('/portfolio-composition', requireAuth, reportController.getPortfolioComposition);
+router.post('/portfolio-composition', requireAuth, reportController.postPortfolioComposition);
+router.get('/persistence', requireAuth, reportController.getPersistence);
+router.post('/persistence', requireAuth, reportController.postPersistence);
 // Rutas de Beneficiarios
 router.post('/remove-beneficiary/:id', requireAuth, beneficiaryController.disableBeneficiary);
 router.get('/edit-beneficiary/:id', requireAuth, beneficiaryController.putBeneficiary);
@@ -263,6 +276,9 @@ router.get('/receipts', requireAuth, receiptController.getReceipts);
 router.post('/remove-receipt/:id', requireAuth, receiptController.disableReceipt);
 router.get('/edit-receipt/:id', requireAuth, receiptController.putReceipt);
 router.post('/update-receipt', requireAuth, receiptController.updateReceipt);
+// Rutas de Renovaciones
+router.get('/consult-renewal', requireAuth, renewalController.getRenewalConsultation);
+router.post('/consult-renewal', requireAuth, renewalController.postRenewalConsultation);
 // Pagina error 404
 router.get('*', indexController.get404);
 
