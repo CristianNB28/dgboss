@@ -6,7 +6,6 @@ const receiptModel = require('../models/receipt');
 const insuredModel = require('../models/insured');
 const commissionModel = require('../models/commission');
 const collectiveModel = require('../models/collective');
-const { cookie } = require('express/lib/response');
 
 module.exports = {
 /*                  GET                  */

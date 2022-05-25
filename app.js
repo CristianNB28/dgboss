@@ -5,7 +5,8 @@ const bcryptjs = require('bcryptjs');
 const session = require('express-session');
 const connection = require('./config/database');
 const router = require("./src/routes/index.routes");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const extendTimeoutMiddleware = require('./src/middlewares/extendTimeoutMiddleware');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -30,7 +31,8 @@ let appendLocalsToUseInViews = (req, res, next) => {
     next(null, req, res);
 };
 
-app.use(appendLocalsToUseInViews)
+app.use(appendLocalsToUseInViews);
+app.use(extendTimeoutMiddleware);
 
 app.use('/sistema', router);
 
