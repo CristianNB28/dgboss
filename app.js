@@ -6,7 +6,6 @@ const session = require('express-session');
 const connection = require('./config/database');
 const router = require("./src/routes/index.routes");
 const cookieParser = require('cookie-parser');
-const extendTimeout = require('./src/middlewares/extendTimeoutMiddleware');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -32,7 +31,6 @@ let appendLocalsToUseInViews = (req, res, next) => {
 };
 
 app.use(appendLocalsToUseInViews);
-app.use(extendTimeout);
 
 app.use('/sistema', router);
 
