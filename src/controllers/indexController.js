@@ -1,10 +1,5 @@
 const policyModel = require('../models/policy');
-const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
-const insurerModel = require('../models/insurer');
-const ownAgentModel = require('../models/own_agent');
 const receiptModel = require('../models/receipt');
-const insuredModel = require('../models/insured');
-const commissionModel = require('../models/commission');
 const collectiveModel = require('../models/collective');
 
 module.exports = {

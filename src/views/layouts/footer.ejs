@@ -171,6 +171,38 @@
     </script>
 <% } %>
 
+<% if (typeof(executives) !== 'undefined') { %>
+    <script>
+        let arrayExecutives = <%- JSON.stringify(executives) %>;
+        function pasarEjecutivoUsuario() {
+            let cedulaUsuario = document.getElementById("cedula_usuario").value;
+            let selectBox = document.getElementById("select_box").value;
+            for (let index = 0; index < arrayExecutives.length; index++) {
+                const elementExecutive = arrayExecutives[index];
+                if (cedulaUsuario.match(/^\d/)) {
+                    if ((selectBox === elementExecutive.tipo_cedula_ejecutivo) && (cedulaUsuario === elementExecutive.cedula_ejecutivo)) {
+                        document.getElementById("nombre_apellido_usuario").value = `${elementExecutive.nombre_ejecutivo} ${elementExecutive.apellido_ejecutivo}`;
+                        document.getElementById("cargo_usuario").value = `${elementExecutive.cargo_ejecutivo} ${elementExecutive.departamento_cargo_ejecutivo}`;
+                        document.getElementById("email_usuario").value = elementExecutive.correo_ejecutivo;
+                        document.getElementById("direccion_usuario").value = elementExecutive.direccion_ejecutivo;
+                        break;
+                    } else {
+                        document.getElementById("nombre_apellido_usuario").value = '';
+                        document.getElementById("cargo_usuario").value = '';
+                        document.getElementById("email_usuario").value = '';
+                        document.getElementById("direccion_usuario").value = '';
+                    }
+                } else if (cedulaUsuario.startsWith('')) {
+                    document.getElementById("nombre_apellido_usuario").value = '';
+                    document.getElementById("cargo_usuario").value = '';
+                    document.getElementById("email_usuario").value = '';
+                    document.getElementById("direccion_usuario").value = '';
+                }
+            }
+        }
+    </script>
+<% } %>
+
 <script>
     $(document).ready(function(){
         $("#cargo_ejecutivo").change(function(){
@@ -187,23 +219,13 @@
         });
 
         $('#select_box').change(function(){
-            if ((this.value === 'V') || (this.value === 'E')) {
-                var cleaveNumeral = new Cleave('.input-numeral', {
-                    numeral: true,
-                    numeralDecimalMark: ',',
-                    delimiter: '.',
-                    stripLeadingZeroes: false
-                });
-                cleaveNumeral.setRawValue('');
-            } else {
-                var cleaveNumeral = new Cleave('.input-numeral', {
-                    numeral: true,
-                    numeralDecimalMark: '!',
-                    delimiter: '',
-                    stripLeadingZeroes: false,
-                });
-                cleaveNumeral.setRawValue('');
-            }
+            var cleaveNumeral = new Cleave('.input-numeral', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                stripLeadingZeroes: false
+            });
+            cleaveNumeral.setRawValue('');
         });
     })
 </script>

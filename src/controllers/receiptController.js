@@ -6,7 +6,6 @@ const insuredModel = require('../models/insured');
 const ownAgentModel = require('../models/own_agent');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
-const receiptInsuredModel = require('../models/receipt_insured');
 const executiveModel = require('../models/executive');
 
 module.exports = {

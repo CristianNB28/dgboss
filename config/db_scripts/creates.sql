@@ -4,34 +4,6 @@ CREATE DATABASE sistema;
 USE sistema;
 
 /* Tables */
-CREATE TABLE Usuario(
-    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    cedula_usuario VARCHAR(255),
-    rif_usuario VARCHAR(255),
-    tipo_cedula_usuario CHAR(5),
-    tipo_rif_usuario CHAR(5),
-    nombre_usuario VARCHAR(255) NOT NULL,
-    username VARCHAR(255),
-    password_usuario VARCHAR(255) NOT NULL,
-    correo_usuario VARCHAR(255) NOT NULL,
-    telefono_usuario VARCHAR(255),
-    direccion_usuario VARCHAR(255),
-    cargo_usuario VARCHAR(255),
-    productor_boolean BOOLEAN,
-    administrador_boolean BOOLEAN,
-    tipo_linea_negocio VARCHAR(255) NOT NULL,
-    obser_deshabilitar_usuario VARCHAR(500),
-    deshabilitar_usuario BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE TABLE Rol(
-    id_rol INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_rol VARCHAR(255) NOT NULL,
-    descripcion_rol VARCHAR(255) NOT NULL,
-    obser_deshabilitar_rol VARCHAR(500),
-    deshabilitar_rol BOOLEAN NOT NULL DEFAULT FALSE
-);
-
 CREATE TABLE Vehiculo(
     id_vehiculo INT PRIMARY KEY AUTO_INCREMENT,
     numero_certificado_vehiculo VARCHAR(255),
@@ -73,7 +45,9 @@ CREATE TABLE Poliza(
     fecha_hasta_poliza DATE NOT NULL,
     tipo_moneda_poliza VARCHAR(255) NOT NULL,
     tasa_poliza VARCHAR(255),
-    prima_anual_poliza DECIMAL(20,4) NOT NULL,
+    prima_neta_poliza DECIMAL(20,4) NOT NULL,
+    igtf_poliza DECIMAL(20,4) NOT NULL,
+    prima_total_poliza DECIMAL(20,4) NOT NULL,
     estatus_poliza VARCHAR(255),
     tipo_cobertura_poliza DECIMAL(20,4),
     tipo_canal_poliza VARCHAR(255),
@@ -83,8 +57,11 @@ CREATE TABLE Poliza(
     maternidad_poliza VARCHAR(255),
     plazo_espera_poliza VARCHAR(255),
     detalle_cliente_poliza DATE,
-    obser_deshabilitar_poliza VARCHAR(500),
     tipo_producto_poliza VARCHAR(255),
+    fraccionamiento_boolean_poliza BOOLEAN NOT NULL,
+    tipo_fraccionamiento_poliza VARCHAR(255),
+    numero_pago_poliza INT,
+    obser_deshabilitar_poliza VARCHAR(500),
     deshabilitar_poliza BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -151,7 +128,7 @@ CREATE TABLE Beneficiario(
 CREATE TABLE Colectivo(
     id_colectivo INT PRIMARY KEY AUTO_INCREMENT,
     numero_colectivo VARCHAR(255) NOT NULL,
-    tomador_asegurado_colectivo BOOLEAN,
+    tomador_asegurado_colectivo BOOLEAN NOT NULL,
     tipo_id_rif_tomador CHAR(5) NOT NULL,
     id_rif_tomador VARCHAR(255) NOT NULL,
     nombre_tomador_colectivo VARCHAR(255) NOT NULL,
@@ -160,7 +137,9 @@ CREATE TABLE Colectivo(
     fecha_desde_colectivo DATE NOT NULL,
     fecha_hasta_colectivo DATE NOT NULL,
     tipo_moneda_colectivo VARCHAR(255) NOT NULL,
-    prima_anual_colectivo DECIMAL(20,4) NOT NULL,
+    prima_neta_colectivo DECIMAL(20,4) NOT NULL,
+    igtf_colectivo DECIMAL(20,4) NOT NULL,
+    prima_total_colectivo DECIMAL(20,4) NOT NULL,
     estatus_colectivo VARCHAR(255),
     cobertura_suma_asegurada_colectivo DECIMAL(20,4),
     tipo_canal_colectivo VARCHAR(255),
@@ -169,6 +148,9 @@ CREATE TABLE Colectivo(
     maternidad_colectivo VARCHAR(255),
     plazo_espera_colectivo VARCHAR(255),
     detalle_cliente_colectivo DATE,
+    fraccionamiento_boolean_colectivo BOOLEAN NOT NULL,
+    tipo_fraccionamiento_colectivo VARCHAR(255),
+    numero_pago_colectivo INT,
     obser_deshabilitar_colectivo VARCHAR(500),
     deshabilitar_colectivo BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -190,52 +172,66 @@ CREATE TABLE Riesgo_Diverso(
     deshabilitar_riesgo_diverso BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE Usuario(
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    cedula_usuario VARCHAR(255) NOT NULL,
+    tipo_cedula_usuario CHAR(5) NOT NULL,
+    nombre_apellido_usuario VARCHAR(255) NOT NULL,
+    cargo_usuario VARCHAR(255) NOT NULL,
+    correo_usuario VARCHAR(255) NOT NULL,
+    direccion_usuario VARCHAR(255),
+    username VARCHAR(255),
+    password_usuario VARCHAR(255) NOT NULL,
+    obser_deshabilitar_usuario VARCHAR(500),
+    deshabilitar_usuario BOOLEAN NOT NULL DEFAULT FALSE,
+    ejecutivo_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_usuario_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+);
+
 CREATE TABLE Recibo(
     id_recibo INT PRIMARY KEY AUTO_INCREMENT,
     numero_recibo VARCHAR(255) NOT NULL,
     tipo_recibo VARCHAR(255) NOT NULL,
-    fecha_desde_recibo DATE,
-    fecha_hasta_recibo DATE,
-    fraccionamiento_boolean_recibo BOOLEAN NOT NULL,
-    tipo_fraccionamiento_recibo VARCHAR(255),
-    metodo_pago_recibo VARCHAR(255) NOT NULL, 
-    monto_prima_recibo DECIMAL(20,4) NOT NULL,
+    fecha_desde_recibo DATE NOT NULL,
+    fecha_hasta_recibo DATE NOT NULL, 
+    prima_neta_recibo DECIMAL(20,4) NOT NULL,
+    igtf_recibo DECIMAL(20,4) NOT NULL,
+    prima_total_recibo DECIMAL(20,4) NOT NULL,
+    fecha_pago_recibo DATE NOT NULL,
+    metodo_pago_recibo VARCHAR(255) NOT NULL,
     monto_comision_recibo DECIMAL(20,4) NOT NULL,
-    numero_pago_recibo INT,
-    fecha_pago_recibo DATE,
     obser_deshabilitar_recibo VARCHAR(500),
     deshabilitar_recibo BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT,
     colectivo_id INT,
-    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
+    CONSTRAINT FOREIGN KEY fk_recibo_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_recibo_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
-CREATE TABLE Comision(
-    id_comision INT PRIMARY KEY AUTO_INCREMENT,
-    porcentaje_agente_comision DECIMAL(10,4) NOT NULL,
-    caso_especial_comision DECIMAL(10,4),
+CREATE TABLE Distribucion(
+    id_distribucion INT PRIMARY KEY AUTO_INCREMENT,
+    monto_comision_distribucion DECIMAL(20,4) NOT NULL,
+    porcentaje_bonificacion_distribucion DECIMAL(10,4) NOT NULL,
+    monto_bonificacion_distribucion DECIMAL(20,4) NOT NULL,
+    monto_comision_bonificacion DECIMAL(20,4) NOT NULL,
+    porcentaje_islr_distribucion DECIMAL(10,4) NOT NULL,
+    total_comision_distribuir DECIMAL(20,4) NOT NULL,
+    porcentaje_agente_distribucion DECIMAL(10,4) NOT NULL,
+    caso_especial_distribucion DECIMAL(10,4),
+    porcentaje_atina_distribucion DECIMAL(10,4) NOT NULL,
+    porcentaje_fundatina_distribucion DECIMAL(10,4) NOT NULL,
+    porcentaje_director_distribucion DECIMAL(10,4) NOT NULL,
+    porcentaje_socio_distribucion DECIMAL(10,4) NOT NULL,
+    porcentaje_gerente_distribucion DECIMAL(10,4) NOT NULL,
+    porcentaje_coordinador_suscripcion DECIMAL(10,4) NOT NULL,
+    porcentaje_coordinador_reclamo DECIMAL(10,4) NOT NULL,
+    porcentaje_coordinador_administracion DECIMAL(10,4) NOT NULL,
     porcentaje_ejecutivo_suscripcion DECIMAL(10,4) NOT NULL,
-    porcentaje_ejecutivo_siniestro DECIMAL(10,4) NOT NULL,
+    porcentaje_ejecutivo_reclamo DECIMAL(10,4) NOT NULL,
     porcentaje_ejecutivo_cobranza DECIMAL(10,4) NOT NULL,
-    porcentaje_fundatina_comision DECIMAL(10,4) NOT NULL,
-    porcentaje_director_comision DECIMAL(10,4) NOT NULL,
-    porcentaje_socio_comision DECIMAL(10,4) NOT NULL,
-    porcentaje_atina_comision DECIMAL(10,4) NOT NULL,
-    monto_comision_comision DECIMAL(20,4) NOT NULL,
-    deshabilitar_comision BOOLEAN NOT NULL DEFAULT FALSE,
-    poliza_id INT,
-    colectivo_id INT,
-    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
-);
-
-CREATE TABLE Factor_Verificacion(
-    id_factor_verificacion INT PRIMARY KEY AUTO_INCREMENT,
-    porcentaje_prima_factor_verificacion DECIMAL(10,4) NOT NULL,
-    estatus_comision_factor_verificacion VARCHAR(255) NOT NULL,
-    comision_id INT,
-    CONSTRAINT FOREIGN KEY fk_comision_id(comision_id) REFERENCES Comision(id_comision)
+    deshabilitar_distribucion BOOLEAN NOT NULL DEFAULT FALSE,
+    recibo_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_distribucion_recibo_id(recibo_id) REFERENCES Recibo(id_recibo)
 );
 
 CREATE TABLE Asegurado_Persona_Natural(
@@ -254,7 +250,7 @@ CREATE TABLE Asegurado_Persona_Natural(
     obser_deshabilitar_per_nat VARCHAR(500),
     deshabilitar_asegurado_per_nat BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT,
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
+    CONSTRAINT FOREIGN KEY fk_natural_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
 CREATE TABLE Asegurado_Persona_Juridica(
@@ -275,18 +271,7 @@ CREATE TABLE Asegurado_Persona_Juridica(
     obser_deshabilitar_per_jur VARCHAR(500),
     deshabilitar_asegurado_per_jur BOOLEAN NOT NULL DEFAULT FALSE,
     agente_propio_id INT,
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
-);
-
-CREATE TABLE Recibo_Asegurado(
-    id_recibo_asegurado INT PRIMARY KEY AUTO_INCREMENT,
-    desahabilitar_recibo_asegurado BOOLEAN NOT NULL DEFAULT FALSE,
-    recibo_id INT NOT NULL,
-    asegurado_per_nat_id INT,
-    asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_recibo_id(recibo_id) REFERENCES Recibo(id_recibo),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    CONSTRAINT FOREIGN KEY fk_juridica_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
 CREATE TABLE Asegurado_Beneficiario(
@@ -295,18 +280,9 @@ CREATE TABLE Asegurado_Beneficiario(
     asegurado_per_nat_id INT,
     asegurado_per_jur_id INT,
     beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
-);
-
-CREATE TABLE Usuario_Rol(
-    id_usuario_rol INT PRIMARY KEY AUTO_INCREMENT,
-    deshabilitar_usuario_rol BOOLEAN NOT NULL DEFAULT FALSE,
-    usuario_id INT NOT NULL,
-    rol_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_usuario_id(usuario_id) REFERENCES Usuario(id_usuario),
-    CONSTRAINT FOREIGN KEY fk_rol_id(rol_id) REFERENCES Rol(id_rol)
+    CONSTRAINT FOREIGN KEY fk_ab_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_ab_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_ab_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Poliza_Aseguradora_Asegurado(
@@ -316,10 +292,10 @@ CREATE TABLE Poliza_Aseguradora_Asegurado(
     aseguradora_id INT NOT NULL,
     asegurado_per_nat_id INT,
     asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    CONSTRAINT FOREIGN KEY fk_paa_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_paa_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
+    CONSTRAINT FOREIGN KEY fk_paa_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_paa_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Colectivo_Aseguradora_Asegurado(
@@ -329,10 +305,10 @@ CREATE TABLE Colectivo_Aseguradora_Asegurado(
     aseguradora_id INT NOT NULL,
     asegurado_per_nat_id INT,
     asegurado_per_jur_id INT,
-    CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo),
-    CONSTRAINT FOREIGN KEY fk_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
-    CONSTRAINT FOREIGN KEY fk_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
+    CONSTRAINT FOREIGN KEY fk_caa_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo),
+    CONSTRAINT FOREIGN KEY fk_caa_aseguradora_id(aseguradora_id) REFERENCES Aseguradora(id_aseguradora),
+    CONSTRAINT FOREIGN KEY fk_caa_asegurado_per_nat_id(asegurado_per_nat_id) REFERENCES Asegurado_Persona_Natural(id_asegurado_per_nat),
+    CONSTRAINT FOREIGN KEY fk_caa_asegurado_per_jur_id(asegurado_per_jur_id) REFERENCES Asegurado_Persona_Juridica(id_asegurado_per_jur)
 );
 
 CREATE TABLE Poliza_Agente_Propio(
@@ -340,8 +316,8 @@ CREATE TABLE Poliza_Agente_Propio(
     deshabilitar_pap BOOLEAN NOT NULL DEFAULT FALSE,
     poliza_id INT NOT NULL,
     agente_propio_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
+    CONSTRAINT FOREIGN KEY fk_pap_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_pap_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
 CREATE TABLE Colectivo_Agente_Propio(
@@ -349,8 +325,8 @@ CREATE TABLE Colectivo_Agente_Propio(
     deshabilitar_cap BOOLEAN NOT NULL DEFAULT FALSE,
     colectivo_id INT NOT NULL,
     agente_propio_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo),
-    CONSTRAINT FOREIGN KEY fk_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
+    CONSTRAINT FOREIGN KEY fk_cap_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo),
+    CONSTRAINT FOREIGN KEY fk_cap_agente_propio_id(agente_propio_id) REFERENCES Agente_Propio(id_agente_propio)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Benef(
@@ -358,8 +334,8 @@ CREATE TABLE Pol_Aseg_Asegurado_Benef(
     deshabilitar_paab BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
-    CONSTRAINT FOREIGN KEY fk_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario)
+    CONSTRAINT FOREIGN KEY fk_paab_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
+    CONSTRAINT FOREIGN KEY fk_paab_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario)
 );
 
 CREATE TABLE Col_Aseg_Asegurado_Benef(
@@ -367,8 +343,8 @@ CREATE TABLE Col_Aseg_Asegurado_Benef(
     deshabilitar_caab BOOLEAN NOT NULL DEFAULT FALSE,
     caa_id INT NOT NULL,
     beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
-    CONSTRAINT FOREIGN KEY fk_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario)
+    CONSTRAINT FOREIGN KEY fk_caab_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_caab_beneficiario_id(beneficiario_id) REFERENCES Beneficiario(id_beneficiario)
 );
 
 CREATE TABLE Reembolso(
@@ -385,7 +361,11 @@ CREATE TABLE Reembolso(
     numero_siniestro_reembolso VARCHAR(255) NOT NULL,
     deshabilitar_reembolso BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
+    poliza_id INT,
+    colectivo_id INT,
+    CONSTRAINT FOREIGN KEY fk_reembolso_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_reembolso_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_reembolso_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
 CREATE TABLE AMP(
@@ -403,7 +383,11 @@ CREATE TABLE AMP(
     numero_siniestro_amp VARCHAR(255) NOT NULL,
     deshabilitar_amp BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
+    poliza_id INT,
+    colectivo_id INT,
+    CONSTRAINT FOREIGN KEY fk_amp_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_amp_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_amp_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
 CREATE TABLE Emergencia(
@@ -421,7 +405,11 @@ CREATE TABLE Emergencia(
     numero_siniestro_emergencia VARCHAR(255) NOT NULL,
     deshabilitar_emergencia BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
+    poliza_id INT,
+    colectivo_id INT,
+    CONSTRAINT FOREIGN KEY fk_emergencia_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_emergencia_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_emergencia_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
 CREATE TABLE Carta_Aval(
@@ -439,7 +427,11 @@ CREATE TABLE Carta_Aval(
     numero_siniestro_carta_aval VARCHAR(255) NOT NULL,
     deshabilitar_carta_aval BOOLEAN NOT NULL DEFAULT FALSE,
     asegurado_beneficiario_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario)
+    poliza_id INT,
+    colectivo_id INT,
+    CONSTRAINT FOREIGN KEY fk_carta_asegurado_beneficiario_id(asegurado_beneficiario_id) REFERENCES Asegurado_Beneficiario(id_asegurado_beneficiario),
+    CONSTRAINT FOREIGN KEY fk_carta_poliza_id(poliza_id) REFERENCES Poliza(id_poliza),
+    CONSTRAINT FOREIGN KEY fk_carta_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Vehi(
@@ -447,8 +439,8 @@ CREATE TABLE Pol_Aseg_Asegurado_Vehi(
     deshabilitar_paav BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     vehiculo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
-    CONSTRAINT FOREIGN KEY fk_vehiculo_id(vehiculo_id) REFERENCES Vehiculo(id_vehiculo)
+    CONSTRAINT FOREIGN KEY fk_paav_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
+    CONSTRAINT FOREIGN KEY fk_paav_vehiculo_id(vehiculo_id) REFERENCES Vehiculo(id_vehiculo)
 );
 
 CREATE TABLE Col_Aseg_Asegurado_Vehi(
@@ -456,8 +448,8 @@ CREATE TABLE Col_Aseg_Asegurado_Vehi(
     deshabilitar_caav BOOLEAN NOT NULL DEFAULT FALSE,
     caa_id INT NOT NULL,
     vehiculo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
-    CONSTRAINT FOREIGN KEY fk_vehiculo_id(vehiculo_id) REFERENCES Vehiculo(id_vehiculo)
+    CONSTRAINT FOREIGN KEY fk_caav_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_caav_vehiculo_id(vehiculo_id) REFERENCES Vehiculo(id_vehiculo)
 );
 
 CREATE TABLE Col_Aseg_Asegurado_Ries_Diver(
@@ -465,8 +457,8 @@ CREATE TABLE Col_Aseg_Asegurado_Ries_Diver(
     deshabilitar_caard BOOLEAN NOT NULL DEFAULT FALSE,
     caa_id INT NOT NULL,
     riesgo_diverso_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
-    CONSTRAINT FOREIGN KEY fk_riesgo_diverso_id(riesgo_diverso_id) REFERENCES Riesgo_Diverso(id_riesgo_diverso)
+    CONSTRAINT FOREIGN KEY fk_caard_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_caard_riesgo_diverso_id(riesgo_diverso_id) REFERENCES Riesgo_Diverso(id_riesgo_diverso)
 );
 
 CREATE TABLE Pol_Aseg_Asegurado_Ejecu(
@@ -474,8 +466,8 @@ CREATE TABLE Pol_Aseg_Asegurado_Ejecu(
     deshabilitar_paae BOOLEAN NOT NULL DEFAULT FALSE,
     paa_id INT NOT NULL,
     ejecutivo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
-    CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+    CONSTRAINT FOREIGN KEY fk_paae_paa_id(paa_id) REFERENCES Poliza_Aseguradora_Asegurado(id_paa),
+    CONSTRAINT FOREIGN KEY fk_paae_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
 );
 
 CREATE TABLE Col_Aseg_Asegurado_Ejecu(
@@ -483,6 +475,6 @@ CREATE TABLE Col_Aseg_Asegurado_Ejecu(
     deshabilitar_caae BOOLEAN NOT NULL DEFAULT FALSE,
     caa_id INT NOT NULL,
     ejecutivo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
-    CONSTRAINT FOREIGN KEY fk_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
+    CONSTRAINT FOREIGN KEY fk_caae_caa_id(caa_id) REFERENCES Colectivo_Aseguradora_Asegurado(id_caa),
+    CONSTRAINT FOREIGN KEY fk_caae_ejecutivo_id(ejecutivo_id) REFERENCES Ejecutivo(id_ejecutivo)
 );

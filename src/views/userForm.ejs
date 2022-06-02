@@ -24,30 +24,86 @@
             <div class="ibox-content">
                 <form method="POST" action="/sistema/user-management">
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="ibox">
                                 <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula/Rif</label>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cédula</label>
                                         <div class="col-sm-10 field">
                                             <div class="numeral-selector selector">
                                                 <div class="select-box-wrapper">
-                                                    <select id="select_box">
+                                                    <select id="select_box" name="tipo_cedula_usuario">
                                                         <option value="V">V</option>
                                                         <option value="E">E</option>
-                                                        <option value="J">J</option>
-                                                        <option value="G">G</option>
-                                                        <option value="I">I</option>
-                                                        <option value="F">F</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <input 
                                                 type="text"
-                                                name="id_rif"
-                                                id="id_rif"
-                                                placeholder="Cédula/Rif *" 
+                                                name="cedula_usuario"
+                                                id="cedula_usuario"
+                                                onkeyup="pasarEjecutivoUsuario();"
+                                                placeholder="Cédula *" 
                                                 class="form-control input-numeral"
                                                 required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="nombre_apellido_usuario"
+                                                id="nombre_apellido_usuario"
+                                                placeholder="Nombre y Apellido *" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="cargo_usuario"
+                                                id="cargo_usuario"
+                                                placeholder="Cargo"
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="email"
+                                                name="email_usuario"
+                                                id="email_usuario"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+                                                placeholder="Email *" 
+                                                class="form-control"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
+                                        <div class="col-sm-10">
+                                            <input 
+                                                type="text"
+                                                name="direccion_usuario"
+                                                id="direccion_usuario"
+                                                placeholder="Dirección Fiscal"
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
                                             >
                                         </div>
                                     </div>
@@ -78,63 +134,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Email</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="email"
-                                                name="email_usuario"
-                                                id="email_usuario"
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
-                                                placeholder="Email *" 
-                                                class="form-control"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Dirección</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="direccion_usuario"
-                                                id="direccion_usuario"
-                                                placeholder="Dirección Fiscal"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="ibox">
-                                <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="nombre_usuario"
-                                                id="nombre_usuario"
-                                                placeholder="Nombre y Apellido *" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Rol</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" name="rol" required>
-                                                <option value="">Seleccione *</option>
-                                                <% roles.forEach((rol) => { %>
-                                                    <option value="<%= rol.nombre_rol %>"><%= rol.nombre_rol %></option> 
-                                                <% }); %> 
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-2 col-form-label">Confirmar</label>
                                         <div class="col-sm-10">
                                             <input 
@@ -147,72 +146,6 @@
                                             >
                                         </div>
                                     </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Teléfono</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="tel"
-                                                name="telefono_usuario"
-                                                id="telefono_usuario" 
-                                                placeholder="Teléfono" 
-                                                class="form-control"
-                                            >
-                                        </div>
-                                    </div>
-                                    </br>
-                                    </br>
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label"></label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="hidden" 
-                                                placeholder="" 
-                                                class="form-control"
-                                                disabled
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="ibox">
-                                <div class="form-control">
-                                    <div class="form-group row"><label class="col-sm-2 col-form-label">Cargo</label>
-                                        <div class="col-sm-10">
-                                            <input 
-                                                type="text"
-                                                name="cargo_usuario"
-                                                id="cargo_usuario"
-                                                placeholder="Cargo"
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);" 
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Productor</label>
-                                        <div class="col-sm-9">
-                                            <div><label> <input type="checkbox" name="productor"> ¿Usuario es Productor?</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Admin</label>
-                                        <div class="col-sm-9">
-                                            <div><label> <input type="checkbox" name="admin"> ¿Usuario es Administrador?</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label">Línea de Negocio</label>
-                                        <div class="col-sm-9">
-                                            <div><label> <input type="checkbox" name="negocio" value="AUTOMÓVIL"> AUTOMÓVIL</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="PATRIMONIAL"> PATRIMONIAL</label></div>
-                                            <div><label> <input type="checkbox" name="negocio" value="SALUD"> SALUD</label></div>
-                                        </div>
-                                    </div>
-                                    </br>
                                 </div>
                             </div>
                         </div>

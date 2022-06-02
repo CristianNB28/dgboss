@@ -1,6 +1,4 @@
 const userModel = require('../models/user');
-const rolModel = require('../models/rol');
-const rolUserModel = require('../models/rol_user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -28,7 +26,7 @@ module.exports = {
         });
     },
 /*                  POST                  */
-    postLogin: async (req, res, next) => {
+    postLogin: async (req, res) => {
         let results = await userModel.postLogin(req.body.email_username);
         if (results[0] === undefined) {
             try {
@@ -62,16 +60,10 @@ module.exports = {
                     });
                 }
             } else {
-                const resultRolUser = await rolUserModel.getRolUser(results[0].id_usuario);
-                const resultRol = await rolModel.getRol(resultRolUser[0].rol_id);
-                if (resultRol[0].nombre_rol === 'ADMINISTRATIVO') {
-                    res.cookie('rol', resultRol[0].nombre_rol, { httpOnly: true, maxAge: maxAge * 1000 });
-                } else if (resultRol[0].nombre_rol === 'SUSCRIPCIÓN') {
-                    res.cookie('rol', resultRol[0].nombre_rol, { httpOnly: true, maxAge: maxAge * 1000 });
-                }
+                res.cookie('cargo', results[0].cargo_usuario, { httpOnly: true, maxAge: maxAge * 1000 });
                 const token = createToken(results[0].id_usuario);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
-                req.session.name = results[0].nombre_usuario;
+                req.session.name = results[0].nombre_apellido_usuario;
                 res.render('login', {
                     alert: true,
                     alertTitle: 'Bienvenido',

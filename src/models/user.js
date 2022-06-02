@@ -4,23 +4,39 @@ module.exports = {
 /*                  GET                  */
     getUsers: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id_usuario, cedula_usuario, rif_usuario, correo_usuario, direccion_usuario, nombre_usuario, cargo_usuario, tipo_linea_negocio FROM Usuario WHERE deshabilitar_usuario=0', 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
                 }
-                resolve(rows);
+                connection.query('SELECT * FROM Usuario WHERE deshabilitar_usuario=0',
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
             });
         });
     },
     getUser: (idUser) => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT * FROM Usuario WHERE id_usuario = ?', [idUser],
-            (error, rows) => {
-                if (error) {
-                    reject(error)
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
                 }
-                resolve(rows);
+                connection.query('SELECT * FROM Usuario WHERE id_usuario=?', [idUser],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
             });
         });
     },
@@ -29,100 +45,134 @@ module.exports = {
         const validateEmail = email => /\S+@\S+/.test(email);
         if (validateEmail(email_username) === true) {
             return new Promise((resolve, reject) => {
-                db.query('SELECT id_usuario, correo_usuario, password_usuario, nombre_usuario FROM Usuario WHERE correo_usuario = ?', [email_username], (error, rows) => {
-                    if (error) {
-                        reject(error)
+                db.getConnection((err, connection) => {
+                    if(err) { 
+                        console.log(err); 
+                        return; 
                     }
-                    resolve(rows);
+                    connection.query(`SELECT id_usuario, nombre_apellido_usuario, cargo_usuario, password_usuario 
+                                    FROM Usuario 
+                                    WHERE correo_usuario=? AND deshabilitar_usuario=0`, 
+                    [email_username],
+                    (error, rows) => {
+                        connection.release();
+                        if (error) {
+                            reject(error);
+                            return;
+                        }
+                        resolve(rows);
+                    });
                 });
             });
         } else {
             return new Promise((resolve, reject) => {
-                db.query('SELECT id_usuario, username, password_usuario, nombre_usuario FROM Usuario WHERE username = ?', [email_username], (error, rows) => {
-                    if (error) {
-                        reject(error)
+                db.getConnection((err, connection) => {
+                    if(err) { 
+                        console.log(err); 
+                        return; 
                     }
-                    resolve(rows);
+                    connection.query(`SELECT id_usuario, nombre_apellido_usuario, cargo_usuario, password_usuario 
+                                    FROM Usuario 
+                                    WHERE username=? AND deshabilitar_usuario=0`, 
+                    [email_username],
+                    (error, rows) => {
+                        connection.release();
+                        if (error) {
+                            reject(error);
+                            return;
+                        }
+                        resolve(rows);
+                    });
                 });
             });
         }
     },
-    postUserForm: (admin, productor, password, user) => {
-        if ((user.id_rif.startsWith('J')) || (user.id_rif.startsWith('V')) || (user.id_rif.startsWith('G'))) {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Usuario (rif_usuario, nombre_usuario, username, password_usuario, correo_usuario, telefono_usuario, direccion_usuario, cargo_usuario, productor_boolean, administrador_boolean, tipo_linea_negocio)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [user.id_rif, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio], 
+    postUserForm: (password, idExecutive, user) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`INSERT INTO Usuario (cedula_usuario, tipo_cedula_usuario, nombre_apellido_usuario, cargo_usuario, correo_usuario, direccion_usuario, username, password_usuario, ejecutivo_id)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [user.cedula_usuario, user.tipo_cedula_usuario, user.nombre_apellido_usuario, user.cargo_usuario, user.email_usuario, user.direccion_usuario, user.username, password, idExecutive],
                 (error, rows) => {
+                    connection.release();
                     if (error) {
-                        reject(error)
+                        reject(error);
+                        return;
                     }
                     resolve(rows);
                 });
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`INSERT INTO Usuario (cedula_usuario, nombre_usuario, username, password_usuario, correo_usuario, telefono_usuario, direccion_usuario, cargo_usuario, productor_boolean, administrador_boolean, tipo_linea_negocio)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [user.id_rif, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
-            });
-        }
+        });
     },
 /*                  PUT                  */
-    updateUser: (cedulaUsuario, rifUsuario, admin, productor, password, user) => {
-        if (cedulaUsuario === '') {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Usuario 
-                            SET cedula_usuario=?, rif_usuario=?, nombre_usuario=?, username=?, password_usuario=?, correo_usuario=?, telefono_usuario=?, direccion_usuario=?, cargo_usuario=?, productor_boolean=?, administrador_boolean=?, tipo_linea_negocio=?    
-                            WHERE id_usuario=?`, [cedulaUsuario, rifUsuario, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio, user.id_usuario], 
+    updateUser: (password, idExecutive, user) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
+                }
+                connection.query(`UPDATE Usuario 
+                                SET cedula_usuario=?, tipo_cedula_usuario=?, nombre_apellido_usuario=?, cargo_usuario=?, correo_usuario=?, direccion_usuario=?, username=?, password_usuario=?, ejecutivo_id=?    
+                                WHERE id_usuario=?`, 
+                [user.cedula_usuario, user.tipo_cedula_usuario, user.nombre_apellido_usuario, user.cargo_usuario, user.email_usuario, user.direccion_usuario, user.username, password, idExecutive, user.id_usuario],
                 (error, rows) => {
+                    connection.release();
                     if (error) {
-                        reject(error)
+                        reject(error);
+                        return;
                     }
                     resolve(rows);
                 });
             });
-        } else {
-            return new Promise((resolve, reject) => {
-                db.query(`UPDATE Usuario 
-                            SET cedula_usuario=?, rif_usuario=?, nombre_usuario=?, username=?, password_usuario=?, correo_usuario=?, telefono_usuario=?, direccion_usuario=?, cargo_usuario=?, productor_boolean=?, administrador_boolean=?, tipo_linea_negocio=?    
-                            WHERE id_usuario=?`, [cedulaUsuario, rifUsuario, user.nombre_usuario, user.username, password, user.email_usuario, user.telefono_usuario, user.direccion_usuario, user.cargo_usuario, productor, admin, user.negocio, user.id_usuario], 
-                (error, rows) => {
-                    if (error) {
-                        reject(error)
-                    }
-                    resolve(rows);
-                });
-            });
-        }
+        });
     },
     updateDisableUser: (id, user) => {
         return new Promise((resolve, reject) => {
-            db.query(`UPDATE Usuario 
-                        SET obser_deshabilitar_usuario=?    
-                        WHERE id_usuario=?`, 
-            [user.obser_deshabilitar_usuario, id], 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
                 }
-                resolve(rows);
+                connection.query(`UPDATE Usuario 
+                                SET obser_deshabilitar_usuario=?    
+                                WHERE id_usuario=?`, 
+                [user.obser_deshabilitar_usuario, id], 
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
             });
         });
     },
 /*               DELETE                  */
     disableUser: (id, disableUser) => {
         return new Promise((resolve, reject) => {
-            db.query(`UPDATE Usuario SET deshabilitar_usuario=? WHERE id_usuario=?`, [disableUser, id], 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
                 }
-                resolve(rows);
+                connection.query(`UPDATE Usuario 
+                                SET deshabilitar_usuario=? 
+                                WHERE id_usuario=?`, 
+                [disableUser, id],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
             });
         });
     }

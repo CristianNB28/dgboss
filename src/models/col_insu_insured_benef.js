@@ -2,16 +2,17 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
-    getRefunds: () => {
+    getColInsuInsuredBenef: (caaId) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT *
-                                FROM Reembolso 
-                                WHERE deshabilitar_reembolso=0`,
+                connection.query(`SELECT * 
+                                FROM Col_Aseg_Asegurado_Benef 
+                                WHERE caa_id=? AND deshabilitar_caab=0`, 
+                [caaId],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -23,17 +24,38 @@ module.exports = {
             });
         });
     },
-    getRefund: (idRefund) => {
+    getColInsuInsuredBenefs: () => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT *
-                                FROM Reembolso 
-                                WHERE id_reembolso=?`, 
-                [idRefund],
+                connection.query(`SELECT * 
+                                FROM Col_Aseg_Asegurado_Benef 
+                                WHERE deshabilitar_caab=0`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getColInsuInsuredBenefId: (beneficiaryId) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT id_caab, caa_id 
+                                FROM Col_Aseg_Asegurado_Benef 
+                                WHERE beneficiario_id=? AND deshabilitar_caab=0`, 
+                [beneficiaryId],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -46,16 +68,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postRefundForm: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, refund) => {
+    postColInsuInsuredBenef: async (temparrayBeneficiary) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, observacion_reembolso, tipo_moneda_reembolso, estatus_reembolso, numero_siniestro_reembolso, asegurado_beneficiario_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId],
+                connection.query(`INSERT INTO Col_Aseg_Asegurado_Benef (caa_id, beneficiario_id) 
+                                VALUES ?`, 
+                [temparrayBeneficiary],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -68,62 +90,38 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateRefund: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, refund) => {
-        return new Promise((resolve, reject) => {
-            db.getConnection((err, connection) => {
-                if(err) { 
-                    console.log(err);
-                    return; 
-                }
-                connection.query(`UPDATE Reembolso 
-                                SET patologia_reembolso=?, fecha_ocurrencia_reembolso=?, fecha_notificacion_reembolso=?, monto_reclamo_reembolso=?, monto_pagado_reembolso=?, observacion_reembolso=?, tipo_moneda_reembolso=?, estatus_reembolso=?, numero_siniestro_reembolso=?, asegurado_beneficiario_id=? 
-                                WHERE id_reembolso=?`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, refund.id_reembolso],
-                (error, rows) => {
-                    connection.release();
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(rows);
-                });
-            });
-        });
-    },
-    updateDisableRefund: (id, refund) => {
-        return new Promise((resolve, reject) => {
-            db.getConnection((err, connection) => {
-                if(err) { 
-                    console.log(err);
-                    return; 
-                }
-                connection.query(`UPDATE Reembolso 
-                                SET obser_deshabilitar_reembolso=?    
-                                WHERE id_reembolso=?`, 
-                [refund.obser_deshabilitar_reembolso, id],
-                (error, rows) => {
-                    connection.release();
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(rows);
-                });
-            });
-        });
-    },
 /*               DELETE                  */
-    disableRefund: (id, disableRefund) => {
+    disableColInsuInsuredBenef: (id, disableCIIB) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err);
                     return; 
                 }
-                connection.query(`UPDATE Reembolso 
-                                SET deshabilitar_reembolso=? 
-                                WHERE id_reembolso=?`, 
-                [disableRefund, id],
+                connection.query(`UPDATE Col_Aseg_Asegurado_Benef SET deshabilitar_caab=? WHERE id_caab=?`, 
+                [disableCIIB, id],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    disableColInsuInsuredBenefId: (idBeneficiary, disableCIIB) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
+                }
+                connection.query(`UPDATE Col_Aseg_Asegurado_Benef 
+                                SET deshabilitar_caab=? 
+                                WHERE beneficiario_id=?`, 
+                [disableCIIB, idBeneficiary],
                 (error, rows) => {
                     connection.release();
                     if (error) {

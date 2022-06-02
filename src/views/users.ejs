@@ -31,13 +31,13 @@
                         >
                         <thead>
                         <tr>
-                            <th>Nombre</th>
+                            <th>Tipo Cédula</th>
                             <th>Cédula</th>
-                            <th>Rif</th>
-                            <th>Correo Electrónico</th>
-                            <th>Dirección Fiscal</th>
+                            <th>Nombre</th>
                             <th>Cargo</th>
-                            <th>Línea de Negocio</th>
+                            <th>Correo</th>
+                            <th>Dirección Fiscal</th>
+                            <th>Username</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -47,13 +47,13 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Nombre</th>
+                            <th>Tipo Cédula</th>
                             <th>Cédula</th>
-                            <th>Rif</th>
-                            <th>Correo Electrónico</th>
-                            <th>Dirección Fiscal</th>
+                            <th>Nombre</th>
                             <th>Cargo</th>
-                            <th>Línea de Negocio</th>
+                            <th>Correo</th>
+                            <th>Dirección Fiscal</th>
+                            <th>Username</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -132,13 +132,13 @@ $(document).ready(function(){
         processing: true,
         serverSide: false,
         columns: [
-            {"data": "nombre_usuario"},
+            {"data": "tipo_cedula_usuario"},
             {"data": "cedula_usuario"},
-            {"data": "rif_usuario"},
+            {"data": "nombre_apellido_usuario"},
+            {"data": "cargo_usuario"},
             {"data": "correo_usuario"},
             {"data": "direccion_usuario"},
-            {"data": "cargo_usuario"},
-            {"data": "tipo_linea_negocio"},
+            {"data": "username"},
             {
                 "data": "",
                 "render": (data, type, row) => {
