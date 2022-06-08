@@ -99,17 +99,13 @@
                 {
                     return true;
                 }
-                if (newIndex === 5)
+                if (newIndex === 3)
                 {
                     return false;
                 }
                 if (newIndex === 1) {
                     return true;
                 } else if (newIndex === 2) {
-                    return true;
-                } else if (newIndex === 3) {
-                    return true;
-                } else if (newIndex === 4) {
                     return true;
                 }
             },
@@ -122,7 +118,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -151,147 +147,7 @@
                 }
             });
         });
-        $().ready(function () {
-            $('#commission-form-health').validate();
-        });
-        $().ready(function () {
-            $('#verification-form-health').validate();
-        });
         $("#extra-form-health").on('keyup','.input-numeral-cedula',function(){
-            new Cleave('.input-numeral-cedula', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.'
-            });    
-        });
-        $("#commission-form-health").on('keyup','.porcentaje_tasa',function(){
-            $('.porcentaje_tasa').toArray().forEach(function(field) {
-                new Cleave(field, {
-                    numeral: true,
-                    numeralDecimalMark: ',',
-                    delimiter: '.',
-                    prefix: '%',
-                    tailPrefix: true
-                });
-            });
-        });
-    });
-</script>
-
-<script>
-    var policies = <%- JSON.stringify(policies) %>;
-    var receipts = <%- JSON.stringify(receipts) %>;
-    var policyNumber = <%- JSON.stringify(policy) %>;
-    $.extend($.validator.messages, {
-        required: "Este campo es obligatorio",
-        remote: "Por favor, rellena este campo",
-        email: "Por favor, escribe una dirección de correo válida",
-        url: "Por favor, escribe una URL válida",
-        date: "Por favor, escribe una fecha válida",
-        dateISO: "Por favor, escribe una fecha (ISO) válida",
-        number: "Por favor, escribe un número entero válido",
-        digits: "Por favor, escribe sólo dígitos",
-        creditcard: "Por favor, escribe un número de tarjeta válido",
-        equalTo: "Por favor, escribe el mismo valor de nuevo",
-        accept: "Por favor, escribe un valor con una extensión aceptada",
-        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
-        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
-        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
-        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
-        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
-        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
-        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
-    });
-    function esRepetidoNumPoliza(value, element, param) {
-        let numberPolicy = document.getElementById("numero_poliza").value;
-        const even = (policy) => policy.numero_poliza === numberPolicy;
-        if (policies.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    function esRepetidoNumRecibo(value, element, param) {
-        let numberReceipt = document.getElementById("numero_recibo").value;
-        const even = (receipt) => receipt.numero_recibo === numberReceipt;
-        if (receipts.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
-    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
-    $(document).ready(function(){
-        $("#wizard").steps();
-        $("#form-health-policy-subcription").steps({
-            headerTag: "h1",
-            bodyTag: "fieldset",
-            titleTemplate:"<span class='text'></span> #title#",
-            saveState: true,
-            labels: {
-                cancel: "Cancelar",
-                current: "current step:",
-                pagination: "Pagination",
-                finish: "Cerrar",
-                next: "Siguiente",
-                previous: "Anterior",
-                loading: "Cargando ..."
-            },
-            onStepChanging: (event, currentIndex, newIndex) => {
-                if (currentIndex > newIndex)
-                {
-                    return true;
-                }
-                if (newIndex === 3)
-                {
-                    return false;
-                }
-                if (newIndex === 1) {
-                    return true;
-                } else if (newIndex === 2) {
-                    return true;
-                }
-            },
-            onFinishing:(event, currentIndex) => {
-                return true;
-            },
-            onFinished: (a) => {
-                $('#form-health-policy-subcription .steps a:eq(0)').click();
-                $('#form-health-policy-subcription').hide();
-                Swal.fire({
-                    title: 'Exitoso',
-                    icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(()=>{
-                    window.location='/sistema/list-subscription-health-policy'
-                });
-            }
-        });
-        $().ready(function () {
-            $("#policy-form-health-subcription").validate({
-                rules: {
-                    numero_poliza: {
-                        esrepetidonumpoliza: true
-                    }
-                }
-            });
-        });
-        $().ready(function () {
-            $("#extra-form-health-subcription").validate();
-        });
-        $().ready(function () {
-            $("#receipt-form-health-subcription").validate({
-                rules: {
-                    numero_recibo: {
-                        esrepetidonumrecibo: true
-                    }
-                }
-            });
-        });
-        $("#extra-form-health-subcription").on('keyup','.input-numeral-cedula',function(){
             new Cleave('.input-numeral-cedula', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -375,17 +231,13 @@
                 {
                     return true;
                 }
-                if (newIndex === 5)
+                if (newIndex === 3)
                 {
                     return false;
                 }
                 if (newIndex === 1) {
                     return true;
                 } else if (newIndex === 2) {
-                    return true;
-                } else if (newIndex === 3) {
-                    return true;
-                } else if (newIndex === 4) {
                     return true;
                 }
             },
@@ -398,7 +250,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -426,12 +278,6 @@
                     }
                 }
             });
-        });
-        $().ready(function () {
-            $('#commission-form-vehicle').validate();
-        });
-        $().ready(function () {
-            $('#verification-form-vehicle').validate();
         });
         $("#policy-form-vehicle").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
@@ -461,162 +307,7 @@
                 delimiter: '.'
             });    
         });
-        $("#commission-form-vehicle").on('keyup','.porcentaje_tasa',function(){
-            $('.porcentaje_tasa').toArray().forEach(function(field) {
-                new Cleave(field, {
-                    numeral: true,
-                    numeralDecimalMark: ',',
-                    delimiter: '.',
-                    prefix: '%',
-                    tailPrefix: true
-                });
-            });
-        });
-    });
-</script>
-
-<script>
-    var policies = <%- JSON.stringify(policies) %>;
-    var receipts = <%- JSON.stringify(receipts) %>;
-    var policyNumber = <%- JSON.stringify(policy) %>;
-    $.extend($.validator.messages, {
-        required: "Este campo es obligatorio",
-        remote: "Por favor, rellena este campo",
-        email: "Por favor, escribe una dirección de correo válida",
-        url: "Por favor, escribe una URL válida",
-        date: "Por favor, escribe una fecha válida",
-        dateISO: "Por favor, escribe una fecha (ISO) válida",
-        number: "Por favor, escribe un número entero válido",
-        digits: "Por favor, escribe sólo dígitos",
-        creditcard: "Por favor, escribe un número de tarjeta válido",
-        equalTo: "Por favor, escribe el mismo valor de nuevo",
-        accept: "Por favor, escribe un valor con una extensión aceptada",
-        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
-        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
-        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
-        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
-        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
-        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
-        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
-    });
-    function esRepetidoNumPoliza(value, element, param) {
-        let numberPolicy = document.getElementById("numero_poliza").value
-        const even = (policy) => policy.numero_poliza === numberPolicy;
-        if (policies.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    function esRepetidoNumRecibo(value, element, param) {
-        let numberReceipt = document.getElementById("numero_recibo").value
-        const even = (receipt) => receipt.numero_recibo === numberReceipt;
-        if (receipts.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
-    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
-    $(document).ready(function(){
-        $("#wizard").steps();
-        $("#form-vehicle-policy-subcription").steps({
-            headerTag: "h1",
-            bodyTag: "fieldset",
-            titleTemplate:"<span class='text'></span> #title#",
-            saveState: true,
-            labels: {
-                cancel: "Cancelar",
-                current: "current step:",
-                pagination: "Pagination",
-                finish: "Cerrar",
-                next: "Siguiente",
-                previous: "Anterior",
-                loading: "Cargando ..."
-            },
-            onStepChanging: (event, currentIndex, newIndex) => {
-                if (currentIndex > newIndex)
-                {
-                    return true;
-                }
-                if (newIndex === 3)
-                {
-                    return false;
-                }
-                if (newIndex === 1) {
-                    return true;
-                } else if (newIndex === 2) {
-                    return true;
-                }
-            },
-            onFinishing:(event, currentIndex) => {
-                return true;
-            },
-            onFinished: (a) => {
-                $('#form-vehicle-policy-subcription .steps a:eq(0)').click();
-                $('#form-vehicle-policy-subcription').hide();
-                Swal.fire({
-                    title: 'Exitoso',
-                    icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(()=>{
-                    window.location='/sistema/list-subscription-vehicle-policy'
-                });
-            }
-        });
-        $().ready(function () {
-            $("#policy-form-vehicle-subcription").validate({
-                rules: {
-                    numero_poliza: {
-                        esrepetidonumpoliza: true
-                    }
-                }
-            });
-        });
-        $().ready(function () {
-            $('#extra-form-vehicle-subcription').validate();
-        })
-        $().ready(function () {
-            $("#receipt-form-vehicle-subcription").validate({
-                rules: {
-                    numero_recibo: {
-                        esrepetidonumrecibo: true
-                    }
-                }
-            });
-        });
-        $("#policy-form-vehicle-subcription").on('keyup','.porcentaje_tasa',function(){
-            new Cleave('.porcentaje_tasa', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.',
-                prefix: '%',
-                tailPrefix: true
-            });    
-        });
-        $("#extra-form-vehicle-subcription").on('keyup','.number_format',function(){
-            var separador = $(this);
-            for (var i = 0 ; i < separador.length; i++) {
-                separador[i].addEventListener('input', (e) => {
-                    var entrada = e.target.value.split(','),
-                    parteEntera = entrada[0].replace(/\./g, ''),
-                    parteDecimal = entrada[1],
-                    salida = parteEntera.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                    e.target.value = salida + (parteDecimal !== undefined ? ',' + parteDecimal.replace(/([0-9])([0-9]{2})$/,'') : '');
-                }, false); 
-            }    
-        });
-        $("#extra-form-vehicle-subcription").on('keyup','.input-numeral-cedula',function(){
-            new Cleave('.input-numeral-cedula', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.'
-            });    
-        });
-        $("#receipt-form-vehicle-subcription").on('keyup','.porcentaje_tasa',function(){
+        $("#receipt-form-vehicle").on('keyup','.porcentaje_tasa',function(){
             $('.porcentaje_tasa').toArray().forEach(function(field) {
                 new Cleave(field, {
                     numeral: true,
@@ -695,17 +386,13 @@
                 {
                     return true;
                 }
-                if (newIndex === 5)
+                if (newIndex === 3)
                 {
                     return false;
                 }
                 if (newIndex === 1) {
                     return true;
                 } else if (newIndex === 2) {
-                    return true;
-                } else if (newIndex === 3) {
-                    return true;
-                } else if (newIndex === 4) {
                     return true;
                 }
             },
@@ -718,7 +405,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -747,12 +434,6 @@
                 }
             });
         });
-        $().ready(function () {
-            $("#commission-form-funeral").validate();
-        });
-        $().ready(function () {
-            $("#verification-form-funeral").validate();
-        });
         $("#extra-form-funeral").on('keyup','.input-numeral-cedula',function(){
             new Cleave('.input-numeral-cedula', {
                 numeral: true,
@@ -761,149 +442,6 @@
             });    
         });
         $("#receipt-form-funeral").on('keyup','.porcentaje_tasa',function(){
-            new Cleave('.porcentaje_tasa', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.',
-                prefix: '%',
-                tailPrefix: true
-            });    
-        });
-        $("#commission-form-funeral").on('keyup','.porcentaje_tasa',function(){
-            $('.porcentaje_tasa').toArray().forEach(function(field) {
-                new Cleave(field, {
-                    numeral: true,
-                    numeralDecimalMark: ',',
-                    delimiter: '.',
-                    prefix: '%',
-                    tailPrefix: true
-                });
-            });
-        });
-    });
-</script>
-
-<script>
-    var policies = <%- JSON.stringify(policies) %>;
-    var receipts = <%- JSON.stringify(receipts) %>;
-    var policyNumber = <%- JSON.stringify(policy) %>;
-    $.extend($.validator.messages, {
-        required: "Este campo es obligatorio",
-        remote: "Por favor, rellena este campo",
-        email: "Por favor, escribe una dirección de correo válida",
-        url: "Por favor, escribe una URL válida",
-        date: "Por favor, escribe una fecha válida",
-        dateISO: "Por favor, escribe una fecha (ISO) válida",
-        number: "Por favor, escribe un número entero válido",
-        digits: "Por favor, escribe sólo dígitos",
-        creditcard: "Por favor, escribe un número de tarjeta válido",
-        equalTo: "Por favor, escribe el mismo valor de nuevo",
-        accept: "Por favor, escribe un valor con una extensión aceptada",
-        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
-        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
-        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
-        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
-        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
-        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
-        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
-    });
-    function esRepetidoNumPoliza(value, element, param) {
-        let numberPolicy = document.getElementById("numero_poliza").value
-        const even = (policy) => policy.numero_poliza === numberPolicy;
-        if (policies.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    function esRepetidoNumRecibo(value, element, param) {
-        let numberReceipt = document.getElementById("numero_recibo").value
-        const even = (receipt) => receipt.numero_recibo === numberReceipt;
-        if (receipts.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
-    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
-    $(document).ready(function(){
-        $("#wizard").steps();
-        $("#form-funeral-subcription").steps({
-            headerTag: "h1",
-            bodyTag: "fieldset",
-            titleTemplate:"<span class='text'></span> #title#",
-            saveState: true,
-            labels: {
-                cancel: "Cancelar",
-                current: "current step:",
-                pagination: "Pagination",
-                finish: "Cerrar",
-                next: "Siguiente",
-                previous: "Anterior",
-                loading: "Cargando ..."
-            },
-            onStepChanging: (event, currentIndex, newIndex) => {
-                if (currentIndex > newIndex)
-                {
-                    return true;
-                }
-                if (newIndex === 3)
-                {
-                    return false;
-                }
-                if (newIndex === 1) {
-                    return true;
-                } else if (newIndex === 2) {
-                    return true;
-                }
-            },
-            onFinishing:(event, currentIndex) => {
-                return true;
-            },
-            onFinished: (a) => {
-                $('#form-funeral-subcription .steps a:eq(0)').click();
-                $('#form-funeral-subcription').hide();
-                Swal.fire({
-                    title: 'Exitoso',
-                    icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(()=>{
-                    window.location='/sistema/list-subscription-funeral-policy'
-                });
-            }
-        });
-        $().ready(function () {
-            $("#policy-form-funeral-subcription").validate({
-                rules: {
-                    numero_poliza: {
-                        esrepetidonumpoliza: true
-                    }
-                }
-            });
-        });
-        $().ready(function () {
-            $("#extra-form-funeral-subcription").validate();
-        });
-        $().ready(function () {
-            $("#receipt-form-funeral-subcription").validate({
-                rules: {
-                    numero_recibo: {
-                        esrepetidonumrecibo: true
-                    }
-                }
-            });
-        });
-        $("#extra-form-funeral-subcription").on('keyup','.input-numeral-cedula',function(){
-            new Cleave('.input-numeral-cedula', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.'
-            });    
-        });
-        $("#receipt-form-funeral-subcription").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -980,17 +518,13 @@
                 {
                     return true;
                 }
-                if (newIndex === 5)
+                if (newIndex === 3)
                 {
                     return false;
                 }
                 if (newIndex === 1) {
                     return true;
                 } else if (newIndex === 2) {
-                    return true;
-                } else if (newIndex === 3) {
-                    return true;
-                } else if (newIndex === 4) {
                     return true;
                 }
             },
@@ -1003,7 +537,7 @@
                 Swal.fire({
                     title: 'Exitoso',
                     icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
+                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber.numero_poliza} </b>`,
                     showConfirmButton: false,
                     timer: 2000
                 }).then(()=>{
@@ -1032,12 +566,6 @@
                 }
             });
         });
-        $().ready(function () {
-            $('#commission-form-life').validate();
-        });
-        $().ready(function () {
-            $('#verification-form-life').validate();
-        });
         $("#extra-form-life").on('keyup','.input-numeral-cedula',function(){
             new Cleave('.input-numeral-cedula', {
                 numeral: true,
@@ -1046,149 +574,6 @@
             });    
         });
         $("#receipt-form-life").on('keyup','.porcentaje_tasa',function(){
-            new Cleave('.porcentaje_tasa', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.',
-                prefix: '%',
-                tailPrefix: true
-            });    
-        });
-        $("#commission-form-life").on('keyup','.porcentaje_tasa',function(){
-            $('.porcentaje_tasa').toArray().forEach(function(field) {
-                new Cleave(field, {
-                    numeral: true,
-                    numeralDecimalMark: ',',
-                    delimiter: '.',
-                    prefix: '%',
-                    tailPrefix: true
-                });
-            });
-        });
-    });
-</script>
-
-<script>
-    var policies = <%- JSON.stringify(policies) %>;
-    var receipts = <%- JSON.stringify(receipts) %>;
-    var policyNumber = <%- JSON.stringify(policy) %>;
-    $.extend($.validator.messages, {
-        required: "Este campo es obligatorio",
-        remote: "Por favor, rellena este campo",
-        email: "Por favor, escribe una dirección de correo válida",
-        url: "Por favor, escribe una URL válida",
-        date: "Por favor, escribe una fecha válida",
-        dateISO: "Por favor, escribe una fecha (ISO) válida",
-        number: "Por favor, escribe un número entero válido",
-        digits: "Por favor, escribe sólo dígitos",
-        creditcard: "Por favor, escribe un número de tarjeta válido",
-        equalTo: "Por favor, escribe el mismo valor de nuevo",
-        accept: "Por favor, escribe un valor con una extensión aceptada",
-        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
-        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
-        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
-        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
-        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
-        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
-        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
-    });
-    function esRepetidoNumPoliza(value, element, param) {
-        let numberPolicy = document.getElementById("numero_poliza").value
-        const even = (policy) => policy.numero_poliza === numberPolicy;
-        if (policies.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    function esRepetidoNumRecibo(value, element, param) {
-        let numberReceipt = document.getElementById("numero_recibo").value
-        const even = (receipt) => receipt.numero_recibo === numberReceipt;
-        if (receipts.some(even) === true) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    $.validator.addMethod("esrepetidonumpoliza", esRepetidoNumPoliza, "Se repite el número de póliza");
-    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
-    $(document).ready(function(){
-        $("#wizard").steps();
-        $("#form-life-subcription").steps({
-            headerTag: "h1",
-            bodyTag: "fieldset",
-            titleTemplate:"<span class='text'></span> #title#",
-            saveState: true,
-            labels: {
-                cancel: "Cancelar",
-                current: "current step:",
-                pagination: "Pagination",
-                finish: "Cerrar",
-                next: "Siguiente",
-                previous: "Anterior",
-                loading: "Cargando ..."
-            },
-            onStepChanging: (event, currentIndex, newIndex) => {
-                if (currentIndex > newIndex)
-                {
-                    return true;
-                }
-                if (newIndex === 3)
-                {
-                    return false;
-                }
-                if (newIndex === 1) {
-                    return true;
-                } else if (newIndex === 2) {
-                    return true;
-                }
-            },
-            onFinishing:(event, currentIndex) => {
-                return true;
-            },
-            onFinished: (a) => {
-                $('#form-life-subcription .steps a:eq(0)').click();
-                $('#form-life-subcription').hide();
-                Swal.fire({
-                    title: 'Exitoso',
-                    icon: 'success',
-                    html: `Se ha cargado con éxito la póliza <b> ${policyNumber[0].numero_poliza} </b>`,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(()=>{
-                    window.location='/sistema/list-subscription-life-policy'
-                });
-            }
-        });
-        $().ready(function () {
-            $("#policy-form-life-subcription").validate({
-                rules: {
-                    numero_poliza: {
-                        esrepetidonumpoliza: true
-                    }
-                }
-            });
-        });
-        $().ready(function () {
-            $('#extra-form-life-subcription').validate();
-        });
-        $().ready(function () {
-            $("#receipt-form-life-subcription").validate({
-                rules: {
-                    numero_recibo: {
-                        esrepetidonumrecibo: true
-                    }
-                }
-            });
-        });
-        $("#extra-form-life-subcription").on('keyup','.input-numeral-cedula',function(){
-            new Cleave('.input-numeral-cedula', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.'
-            });    
-        });
-        $("#receipt-form-life-subcription").on('keyup','.porcentaje_tasa',function(){
             new Cleave('.porcentaje_tasa', {
                 numeral: true,
                 numeralDecimalMark: ',',
@@ -1231,11 +616,20 @@
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
+        $('#policy-form-health input[type=number]').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
+        });
         $('#policy-form-health select').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-health #tomador_asegurado_poliza').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyHealth.push({ label: labelName, name: this.name, value: markedCheck });
+        });
+        $('#policy-form-health #fraccionamiento_boolean_poliza').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
             formDataPolicyHealth.push({ label: labelName, name: this.name, value: markedCheck });
@@ -1249,6 +643,10 @@
                 $(`#policy-form-health [name=${formDataPolicyHealth[i].name}]`).val(formDataPolicyHealth[i].value);
                 if ((formDataPolicyHealth[i].name === 'tomador_asegurado_poliza') && (formDataPolicyHealth[i].value === true)) {
                     $('#policy-form-health #tomador_asegurado_poliza').prop('checked', formDataPolicyHealth[i].value);
+                }
+                if ((formDataPolicyHealth[i].name === 'fraccionamiento_boolean_poliza') && (formDataPolicyHealth[i].value === true)) {
+                    $('#policy-form-health #fraccionamiento_boolean_poliza').prop('checked', formDataPolicyHealth[i].value);
+                    $('#policy-form-health #active-select-1').css('display', 'inline');
                 }
                 if ((formDataPolicyHealth[i].name === 'maternidad_poliza') && (formDataPolicyHealth[i].value === 'SÍ')) {
                     $('#policy-form-health #searchinput').css('display', 'block');
@@ -1344,25 +742,20 @@
         let formDataReceiptHealth = [];
         localStorage.removeItem('formDataReceiptHealth');
         $('#receipt-form-health input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-health select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-health #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataReceiptHealth.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptHealth", JSON.stringify(formDataReceiptHealth));
     }
@@ -1371,11 +764,6 @@
             const formDataReceiptHealth = JSON.parse(localStorage.formDataReceiptHealth);
             for (var i = 0; i < formDataReceiptHealth.length; i++) {
                 $(`#receipt-form-health [name=${formDataReceiptHealth[i].name}]`).val(formDataReceiptHealth[i].value);
-                if ((formDataReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptHealth[i].value === true)) {
-                    $('#receipt-form-health #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptHealth[i].value);
-                    $('#receipt-form-health #active-select-1').css('display', 'inline');
-                    $('#receipt-form-health #active-select-2').css('display', 'inline');
-                }
             }
         }
     }
@@ -1390,259 +778,6 @@
             }
             for (let i = lengthReceiptHealth; i < formDataReceiptHealth.length; i++) {
                 listReceiptHealthElement2.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesCommissionHealth() {
-        let formCommissionHealth = [];
-        localStorage.removeItem('formCommissionHealth');
-        $('#commission-form-health input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formCommissionHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formCommissionHealth", JSON.stringify(formCommissionHealth));
-    }
-    function getCommissionHealth() {
-        if(localStorage.formCommissionHealth !== undefined){
-            const formCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
-            for (var i = 0; i < formCommissionHealth.length; i++) {
-                $(`#commission-form-health [name=${formCommissionHealth[i].name}]`).val(formCommissionHealth[i].value);
-            }
-        }
-    }
-    function getCommissionHealthList() {
-        if(localStorage.formCommissionHealth !== undefined){
-            const formDataCommissionHealth = JSON.parse(localStorage.formCommissionHealth);
-            const lengthCommissionHealth = Math.trunc(formDataCommissionHealth.length / 2);
-            const listCommissionHealthElement1 = $("#list-health-commission1");
-            const listCommissionHealthElement2 = $("#list-health-commission2");
-            for (let i = 0; i < lengthCommissionHealth; i++) {
-                listCommissionHealthElement1.append(`<li class="list-group-item">${formDataCommissionHealth[i].label}: ${formDataCommissionHealth[i].value}</li>`);
-            }
-            for (let i = lengthCommissionHealth; i < formDataCommissionHealth.length; i++) {
-                listCommissionHealthElement2.append(`<li class="list-group-item">${formDataCommissionHealth[i].label}: ${formDataCommissionHealth[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesVerificationHealth() {
-        let formDataVerificationHealth = [];
-        localStorage.removeItem('formDataVerificationHealth');
-        $('#verification-form-health input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#verification-form-health select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataVerificationHealth", JSON.stringify(formDataVerificationHealth));
-    }
-    function getVerificationHealth() {
-        if(localStorage.formDataVerificationHealth !== undefined){
-            const formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
-            for (var i = 0; i < formDataVerificationHealth.length; i++) {
-                $(`#verification-form-health [name=${formDataVerificationHealth[i].name}]`).val(formDataVerificationHealth[i].value);
-            }
-        }
-    }
-    function getVerificationHealthList() {
-        if(localStorage.formDataVerificationHealth !== undefined){
-            const formDataVerificationHealth = JSON.parse(localStorage.formDataVerificationHealth);
-            const lengthVerificationHealth = Math.trunc(formDataVerificationHealth.length / 2);
-            const listVerificationHealthElement1 = $("#list-health-verification1");
-            const listVerificationHealthElement2 = $("#list-health-verification2");
-            for (let i = 0; i < lengthVerificationHealth; i++) {
-                listVerificationHealthElement1.append(`<li class="list-group-item">${formDataVerificationHealth[i].label}: ${formDataVerificationHealth[i].value}</li>`);
-            }
-            for (let i = lengthVerificationHealth; i < formDataVerificationHealth.length; i++) {
-                listVerificationHealthElement2.append(`<li class="list-group-item">${formDataVerificationHealth[i].label}: ${formDataVerificationHealth[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<!-- Poliza de Salud Suscripcion -->
-<script>
-    function storeValuesSubscriptionPolicyHealth() {
-        let formDataSuscriptionPolicyHealth = [];
-        localStorage.removeItem('formDataSuscriptionPolicyHealth');
-        $('#policy-form-health-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-health-subcription input[type=email]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-health-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-health-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-health-subcription #tomador_asegurado_poliza').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSuscriptionPolicyHealth.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSuscriptionPolicyHealth", JSON.stringify(formDataSuscriptionPolicyHealth));
-    }
-    function getSubscriptionPolicyHealth() {
-        if(localStorage.formDataSuscriptionPolicyHealth !== undefined){
-            const formDataSuscriptionPolicyHealth = JSON.parse(localStorage.formDataSuscriptionPolicyHealth);
-            for (var i = 0; i < formDataSuscriptionPolicyHealth.length; i++) {
-                $(`#policy-form-health-subcription [name=${formDataSuscriptionPolicyHealth[i].name}]`).val(formDataSuscriptionPolicyHealth[i].value);
-                if ((formDataSuscriptionPolicyHealth[i].name === 'tomador_asegurado_poliza') && (formDataSuscriptionPolicyHealth[i].value === true)) {
-                    $('#policy-form-health-subcription #tomador_asegurado_poliza').prop('checked', formDataSuscriptionPolicyHealth[i].value);
-                }
-                if ((formDataSuscriptionPolicyHealth[i].name === 'maternidad_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'SÍ')) {
-                    $('#policy-form-health-subcription #searchinput').css('display', 'block');
-                }
-                if ((formDataSuscriptionPolicyHealth[i].name === 'plazo_espera_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'SÍ')) {
-                    $('#policy-form-health-subcription #searchinput2').css('display', 'block');
-                }
-                if ((formDataSuscriptionPolicyHealth[i].name === 'tipo_canal_poliza') && (formDataSuscriptionPolicyHealth[i].value === 'AGENTE PROPIO')) {
-                    $('#policy-form-health-subcription #searchList').css('display', 'block');
-                }
-            }
-        }
-    }
-    function getSubscriptionPolicyHealthList() {
-        if(localStorage.formDataSuscriptionPolicyHealth!== undefined){
-            const formDataSubscriptionPolicyHealth = JSON.parse(localStorage.formDataSuscriptionPolicyHealth);
-            const lengthSubscriptionPolicyHealth = Math.trunc(formDataSubscriptionPolicyHealth.length / 2);
-            const listSubscriptionHealthElement1 = $("#list-health-subcription-policy1");
-            const listSubscriptionHealthElement2 = $("#list-health-subcription-policy2");
-            for (let i = 0; i < lengthSubscriptionPolicyHealth; i++) {
-                listSubscriptionHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyHealth[i].label}: ${formDataSubscriptionPolicyHealth[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionPolicyHealth; i < formDataSubscriptionPolicyHealth.length; i++) {
-                listSubscriptionHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyHealth[i].label}: ${formDataSubscriptionPolicyHealth[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionExtraHealth() {
-        let formDataSubscriptionExtraHealth = [];
-        let recoveredData = localStorage.getItem("formDataSubscriptionExtraHealthCompleted");
-        localStorage.removeItem('formDataSubscriptionExtraHealth');
-        $('#extra-form-health-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-health-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-health-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataSubscriptionExtraHealth", JSON.stringify(formDataSubscriptionExtraHealth));
-        if(recoveredData == null){
-            localStorage.setItem("formDataSubscriptionExtraHealthCompleted", JSON.stringify(formDataSubscriptionExtraHealth));
-        } else {
-            let data = JSON.parse(recoveredData)
-            $('#extra-form-health-subcription input[type=text]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            $('#extra-form-health-subcription input[type=date]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            $('#extra-form-health-subcription select').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            localStorage.setItem('formDataSubscriptionExtraHealthCompleted', JSON.stringify(data))
-        }
-    }
-    function getSubscriptionExtraHealth() {
-        if(localStorage.formDataSubscriptionExtraHealth !== undefined){
-            const formDataSubscriptionExtraHealth = JSON.parse(localStorage.formDataSubscriptionExtraHealth);
-            for (var i = 0; i < formDataSubscriptionExtraHealth.length; i++) {
-                $(`#extra-form-health-subcription [name=${formDataSubscriptionExtraHealth[i].name}]`).val(formDataSubscriptionExtraHealth[i].value);
-            }
-        }
-    }
-    function getSubscriptionExtraHealthList() {
-        if(localStorage.formDataSubscriptionExtraHealthCompleted !== undefined){
-            const formDataSubscriptionExtraHealthCompleted = JSON.parse(localStorage.formDataSubscriptionExtraHealthCompleted);
-            const lengthSubscriptionExtraHealth = Math.trunc(formDataSubscriptionExtraHealthCompleted.length / 2);
-            const listSubscriptionExtraHealthElement1 = $("#list-health-subcription-extra1");
-            const listSubscriptionExtraHealthElement2 = $("#list-health-subcription-extra2");
-            for (let i = 0; i < lengthSubscriptionExtraHealth; i++) {
-                listSubscriptionExtraHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraHealthCompleted[i].label}: ${formDataSubscriptionExtraHealthCompleted[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionExtraHealth; i < formDataSubscriptionExtraHealthCompleted.length; i++) {
-                listSubscriptionExtraHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraHealthCompleted[i].label}: ${formDataSubscriptionExtraHealthCompleted[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionReceiptHealth() {
-        let formDataSubscriptionReceiptHealth = [];
-        localStorage.removeItem('formDataSubscriptionReceiptHealth');
-        $('#receipt-form-health-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-health-subcription input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptHealth.push({label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-health-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-health-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-health-subcription #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptHealth.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubscriptionReceiptHealth", JSON.stringify(formDataSubscriptionReceiptHealth));
-    }
-    function getSubscriptionReceiptHealth() {
-        if(localStorage.formDataSubscriptionReceiptHealth !== undefined){
-            const formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
-            for (var i = 0; i < formDataSubscriptionReceiptHealth.length; i++) {
-                $(`#receipt-form-health-subcription [name=${formDataSubscriptionReceiptHealth[i].name}]`).val(formDataSubscriptionReceiptHealth[i].value);
-                if ((formDataSubscriptionReceiptHealth[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptHealth[i].value === true)) {
-                    $('#receipt-form-health-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptHealth[i].value);
-                    $('#receipt-form-health-subcription #active-select-1').css('display', 'inline');
-                    $('#receipt-form-health-subcription #active-select-2').css('display', 'inline');
-                }
-            }
-        }
-    }
-    function getSubscriptionReceiptHealthList() {
-        if(localStorage.formDataSubscriptionReceiptHealth !== undefined){
-            const formDataSubscriptionReceiptHealth = JSON.parse(localStorage.formDataSubscriptionReceiptHealth);
-            const lengthSubscriptionReceiptHealth = Math.trunc(formDataSubscriptionReceiptHealth.length / 2);
-            const listSubscriptionReceiptHealthElement1 = $("#list-health-subcription-receipt1");
-            const listSubscriptionReceiptHealthElement2 = $("#list-health-subcription-receipt2");
-            for (let i = 0; i < lengthSubscriptionReceiptHealth; i++) {
-                listSubscriptionReceiptHealthElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptHealth[i].label}: ${formDataSubscriptionReceiptHealth[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionReceiptHealth; i < formDataSubscriptionReceiptHealth.length; i++) {
-                listSubscriptionReceiptHealthElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptHealth[i].label}: ${formDataSubscriptionReceiptHealth[i].value}</li>`);
             }
         }
     }
@@ -1665,11 +800,20 @@
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
+        $('#policy-form-vehicle input[type=number]').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
+        });
         $('#policy-form-vehicle select').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-vehicle #tomador_asegurado_poliza').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyVehicle.push({ label: labelName, name: this.name, value: markedCheck });
+        });
+        $('#policy-form-vehicle #fraccionamiento_boolean_poliza').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
             formDataPolicyVehicle.push({ label: labelName, name: this.name, value: markedCheck });
@@ -1683,6 +827,10 @@
                 $(`#policy-form-vehicle [name=${formDataPolicyVehicle[i].name}]`).val(formDataPolicyVehicle[i].value);
                 if ((formDataPolicyVehicle[i].name === 'tomador_asegurado_poliza') && (formDataPolicyVehicle[i].value === true)) {
                     $('#policy-form-vehicle #tomador_asegurado_poliza').prop('checked', formDataPolicyVehicle[i].value);
+                }
+                if ((formDataPolicyVehicle[i].name === 'fraccionamiento_boolean_poliza') && (formDataPolicyVehicle[i].value === true)) {
+                    $('#policy-form-vehicle #fraccionamiento_boolean_poliza').prop('checked', formDataPolicyVehicle[i].value);
+                    $('#policy-form-vehicle #active-select-1').css('display', 'inline');
                 }
                 if ((formDataPolicyVehicle[i].name === 'tipo_canal_poliza') && (formDataPolicyVehicle[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-vehicle #searchList').css('display', 'block');
@@ -1763,25 +911,20 @@
         let formDataReceiptVehicle = [];
         localStorage.removeItem('formDataReceiptVehicle');
         $('#receipt-form-vehicle input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-vehicle select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-vehicle #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataReceiptVehicle.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptVehicle", JSON.stringify(formDataReceiptVehicle));
     }
@@ -1790,11 +933,6 @@
             const formDataReceiptVehicle = JSON.parse(localStorage.formDataReceiptVehicle);
             for (var i = 0; i < formDataReceiptVehicle.length; i++) {
                 $(`#receipt-form-vehicle [name=${formDataReceiptVehicle[i].name}]`).val(formDataReceiptVehicle[i].value);
-                if ((formDataReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptVehicle[i].value === true)) {
-                    $('#receipt-form-vehicle #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptVehicle[i].value);
-                    $('#receipt-form-vehicle #active-select-1').css('display', 'inline');
-                    $('#receipt-form-vehicle #active-select-2').css('display', 'inline');
-                }
             }
         }
     }
@@ -1809,244 +947,6 @@
             }
             for (let i = lengthReceiptVehicle; i < formDataReceiptVehicle.length; i++) {
                 listReceiptVehicleElement2.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesCommissionVehicle() {
-        let formCommissionVehicle = [];
-        localStorage.removeItem('formCommissionVehicle');
-        $('#commission-form-vehicle input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formCommissionVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formCommissionVehicle", JSON.stringify(formCommissionVehicle));
-    }
-    function getCommissionVehicle() {
-        if(localStorage.formCommissionVehicle !== undefined){
-            const formCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
-            for (var i = 0; i < formCommissionVehicle.length; i++) {
-                $(`#commission-form-vehicle [name=${formCommissionVehicle[i].name}]`).val(formCommissionVehicle[i].value);
-            }
-        }
-    }
-    function getCommissionVehicleList() {
-        if(localStorage.formCommissionVehicle !== undefined){
-            const formDataCommissionVehicle = JSON.parse(localStorage.formCommissionVehicle);
-            const lengthCommissionVehicle = Math.trunc(formDataCommissionVehicle.length / 2);
-            const listCommissionVehicleElement1 = $("#list-vehicle-commission1");
-            const listCommissionVehicleElement2 = $("#list-vehicle-commission2");
-            for (let i = 0; i < lengthCommissionVehicle; i++) {
-                listCommissionVehicleElement1.append(`<li class="list-group-item">${formDataCommissionVehicle[i].label}: ${formDataCommissionVehicle[i].value}</li>`);
-            }
-            for (let i = lengthCommissionVehicle; i < formDataCommissionVehicle.length; i++) {
-                listCommissionVehicleElement2.append(`<li class="list-group-item">${formDataCommissionVehicle[i].label}: ${formDataCommissionVehicle[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesVerificationVehicle() {
-        let formDataVerificationVehicle = [];
-        localStorage.removeItem('formDataVerificationVehicle');
-        $('#verification-form-vehicle input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#verification-form-vehicle select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataVerificationVehicle", JSON.stringify(formDataVerificationVehicle));
-    }
-    function getVerificationVehicle() {
-        if(localStorage.formDataVerificationVehicle !== undefined){
-            const formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
-            for (var i = 0; i < formDataVerificationVehicle.length; i++) {
-                $(`#verification-form-vehicle [name=${formDataVerificationVehicle[i].name}]`).val(formDataVerificationVehicle[i].value);
-            }
-        }
-    }
-    function getVerificationVehicleList() {
-        if(localStorage.formDataVerificationVehicle !== undefined){
-            const formDataVerificationVehicle = JSON.parse(localStorage.formDataVerificationVehicle);
-            const lengthVerificationVehicle = Math.trunc(formDataVerificationVehicle.length / 2);
-            const listVerificationVehicleElement1 = $("#list-vehicle-verification1");
-            const listVerificationVehicleElement2 = $("#list-vehicle-verification2");
-            for (let i = 0; i < lengthVerificationVehicle; i++) {
-                listVerificationVehicleElement1.append(`<li class="list-group-item">${formDataVerificationVehicle[i].label}: ${formDataVerificationVehicle[i].value}</li>`);
-            }
-            for (let i = lengthVerificationVehicle; i < formDataVerificationVehicle.length; i++) {
-                listVerificationVehicleElement2.append(`<li class="list-group-item">${formDataVerificationVehicle[i].label}: ${formDataVerificationVehicle[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<!-- Poliza de Vehiculo Suscripcion -->
-<script>
-    function storeValuesSubscriptionPolicyVehicle() {
-        let formDataSuscriptionPolicyVehicle = [];
-        localStorage.removeItem('formDataSuscriptionPolicyVehicle');
-        $('#policy-form-vehicle-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-vehicle-subcription input[type=email]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-vehicle-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-vehicle-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-vehicle-subcription #tomador_asegurado_poliza').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSuscriptionPolicyVehicle.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSuscriptionPolicyVehicle", JSON.stringify(formDataSuscriptionPolicyVehicle));
-    }
-    function getSubscriptionPolicyVehicle() {
-        if(localStorage.formDataSuscriptionPolicyVehicle !== undefined){
-            const formDataSuscriptionPolicyVehicle = JSON.parse(localStorage.formDataSuscriptionPolicyVehicle);
-            for (var i = 0; i < formDataSuscriptionPolicyVehicle.length; i++) {
-                $(`#policy-form-vehicle-subcription [name=${formDataSuscriptionPolicyVehicle[i].name}]`).val(formDataSuscriptionPolicyVehicle[i].value);
-                if ((formDataSuscriptionPolicyVehicle[i].name === 'tomador_asegurado_poliza') && (formDataSuscriptionPolicyVehicle[i].value === true)) {
-                    $('#policy-form-vehicle-subcription #tomador_asegurado_poliza').prop('checked', formDataSuscriptionPolicyVehicle[i].value);
-                }
-                if ((formDataSuscriptionPolicyVehicle[i].name === 'tipo_canal_poliza') && (formDataSuscriptionPolicyVehicle[i].value === 'AGENTE PROPIO')) {
-                    $('#policy-form-vehicle-subcription #searchList').css('display', 'block');
-                }
-            }
-        }
-    }
-    function getSubscriptionPolicyVehicleList() {
-        if(localStorage.formDataSuscriptionPolicyVehicle !== undefined){
-            const formDataSubscriptionPolicyVehicle = JSON.parse(localStorage.formDataSuscriptionPolicyVehicle);
-            const lengthSubscriptionPolicyVehicle = Math.trunc(formDataSubscriptionPolicyVehicle.length / 2);
-            const listSubscriptionVehicleElement1 = $("#list-vehicle-subcription-policy1");
-            const listSubscriptionVehicleElement2 = $("#list-vehicle-subcription-policy2");
-            for (let i = 0; i < lengthSubscriptionPolicyVehicle; i++) {
-                listSubscriptionVehicleElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyVehicle[i].label}: ${formDataSubscriptionPolicyVehicle[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionPolicyVehicle; i < formDataSubscriptionPolicyVehicle.length; i++) {
-                listSubscriptionVehicleElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyVehicle[i].label}: ${formDataSubscriptionPolicyVehicle[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionExtraVehicle() {
-        let formDataSuscriptionExtraVehicle = [];
-        localStorage.removeItem('formDataSuscriptionExtraVehicle');
-        $('#extra-form-vehicle-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionExtraVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-vehicle-subcription input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionExtraVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-vehicle-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSuscriptionExtraVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-vehicle-subcription #blindaje_boolean_vehiculo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSuscriptionExtraVehicle.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSuscriptionExtraVehicle", JSON.stringify(formDataSuscriptionExtraVehicle));
-    }
-    function getSubscriptionExtraVehicle() {
-        if(localStorage.formDataSuscriptionExtraVehicle !== undefined){
-            const formDataSuscriptionExtraVehicle = JSON.parse(localStorage.formDataSuscriptionExtraVehicle);
-            for (var i = 0; i < formDataSuscriptionExtraVehicle.length; i++) {
-                $(`#extra-form-vehicle-subcription [name=${formDataSuscriptionExtraVehicle[i].name}]`).val(formDataSuscriptionExtraVehicle[i].value);
-                if ((formDataSuscriptionExtraVehicle[i].name === 'blindaje_boolean_vehiculo') && (formDataSuscriptionExtraVehicle[i].value === true)) {
-                    $('#extra-form-vehicle-subcription #blindaje_boolean_vehiculo').prop('checked', formDataSuscriptionExtraVehicle[i].value);
-                    $('#extra-form-vehicle-subcription #active-select-3').css('display', 'inline');
-                    $('#extra-form-vehicle-subcription #active-select-4').css('display', 'inline');
-                }
-            }
-        }
-    }
-    function getSubscriptionExtraVehicleList() {
-        if(localStorage.formDataSuscriptionExtraVehicle !== undefined){
-            const formDataSubscriptionExtraVehicle = JSON.parse(localStorage.formDataSuscriptionExtraVehicle);
-            const lengthSubscriptionExtraVehicle = Math.trunc(formDataSubscriptionExtraVehicle.length / 2);
-            const listSubscriptionExtraVehicleElement1 = $("#list-vehicle-subcription-extra1");
-            const listSubscriptionExtraVehicleElement2 = $("#list-vehicle-subcription-extra2");
-            for (let i = 0; i < lengthSubscriptionExtraVehicle; i++) {
-                listSubscriptionExtraVehicleElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraVehicle[i].label}: ${formDataSubscriptionExtraVehicle[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionExtraVehicle; i < formDataSubscriptionExtraVehicle.length; i++) {
-                listSubscriptionExtraVehicleElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraVehicle[i].label}: ${formDataSubscriptionExtraVehicle[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionReceiptVehicle() {
-        let formDataSubscriptionReceiptVehicle = [];
-        localStorage.removeItem('formDataSubscriptionReceiptVehicle');
-        $('#receipt-form-vehicle-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-vehicle-subcription input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-vehicle-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-vehicle-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-vehicle-subcription #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptVehicle.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubscriptionReceiptVehicle", JSON.stringify(formDataSubscriptionReceiptVehicle));
-    }
-    function getSubscriptionReceiptVehicle() {
-        if(localStorage.formDataSubscriptionReceiptVehicle !== undefined){
-            const formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
-            for (var i = 0; i < formDataSubscriptionReceiptVehicle.length; i++) {
-                $(`#receipt-form-vehicle-subcription [name=${formDataSubscriptionReceiptVehicle[i].name}]`).val(formDataSubscriptionReceiptVehicle[i].value);
-                if ((formDataSubscriptionReceiptVehicle[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptVehicle[i].value === true)) {
-                    $('#receipt-form-vehicle-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptVehicle[i].value);
-                    $('#receipt-form-vehicle-subcription #active-select-1').css('display', 'inline');
-                    $('#receipt-form-vehicle-subcription #active-select-2').css('display', 'inline');
-                }
-            }
-        }
-    }
-    function getSubscriptionReceiptVehicleList() {
-        if(localStorage.formDataSubscriptionReceiptVehicle !== undefined){
-            const formDataSubscriptionReceiptVehicle = JSON.parse(localStorage.formDataSubscriptionReceiptVehicle);
-            const lengthSubscriptionReceiptVehicle = Math.trunc(formDataSubscriptionReceiptVehicle.length / 2);
-            const listSubscriptionReceiptVehicleElement1 = $("#list-vehicle-subcription-receipt1");
-            const listSubscriptionReceiptVehicleElement2 = $("#list-vehicle-subcription-receipt2");
-            for (let i = 0; i < lengthSubscriptionReceiptVehicle; i++) {
-                listSubscriptionReceiptVehicleElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptVehicle[i].label}: ${formDataSubscriptionReceiptVehicle[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionReceiptVehicle; i < formDataSubscriptionReceiptVehicle.length; i++) {
-                listSubscriptionReceiptVehicleElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptVehicle[i].label}: ${formDataSubscriptionReceiptVehicle[i].value}</li>`);
             }
         }
     }
@@ -2069,11 +969,20 @@
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
+        $('#policy-form-funeral input[type=number]').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
+        });
         $('#policy-form-funeral select').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-funeral #tomador_asegurado_poliza').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyFuneral.push({ label: labelName, name: this.name, value: markedCheck });
+        });
+        $('#policy-form-funeral #fraccionamiento_boolean_poliza').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
             formDataPolicyFuneral.push({ label: labelName, name: this.name, value: markedCheck });
@@ -2087,6 +996,10 @@
                 $(`#policy-form-funeral [name=${formDataPolicyFuneral[i].name}]`).val(formDataPolicyFuneral[i].value);
                 if ((formDataPolicyFuneral[i].name === 'tomador_asegurado_poliza') && (formDataPolicyFuneral[i].value === true)) {
                     $('#policy-form-funeral #tomador_asegurado_poliza').prop('checked', formDataPolicyFuneral[i].value);
+                }
+                if ((formDataPolicyFuneral[i].name === 'fraccionamiento_boolean_poliza') && (formDataPolicyFuneral[i].value === true)) {
+                    $('#policy-form-funeral #fraccionamiento_boolean_poliza').prop('checked', formDataPolicyFuneral[i].value);
+                    $('#policy-form-funeral #active-select-1').css('display', 'inline');
                 }
                 if ((formDataPolicyFuneral[i].name === 'tipo_canal_poliza') && (formDataPolicyFuneral[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-funeral #searchList').css('display', 'block');
@@ -2176,25 +1089,20 @@
         let formDataReceiptFuneral = [];
         localStorage.removeItem('formDataReceiptFuneral');
         $('#receipt-form-funeral input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-funeral input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-funeral input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-funeral select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-funeral #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataReceiptFuneral.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptFuneral", JSON.stringify(formDataReceiptFuneral));
     }
@@ -2203,11 +1111,6 @@
             const formDataReceiptFuneral = JSON.parse(localStorage.formDataReceiptFuneral);
             for (var i = 0; i < formDataReceiptFuneral.length; i++) {
                 $(`#receipt-form-funeral [name=${formDataReceiptFuneral[i].name}]`).val(formDataReceiptFuneral[i].value);
-                if ((formDataReceiptFuneral[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptFuneral[i].value === true)) {
-                    $('#receipt-form-funeral #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptFuneral[i].value);
-                    $('#receipt-form-funeral #active-select-1').css('display', 'inline');
-                    $('#receipt-form-funeral #active-select-2').css('display', 'inline');
-                }
             }
         }
     }
@@ -2222,253 +1125,6 @@
             }
             for (let i = lengthReceiptFuneral; i < formDataReceiptFuneral.length; i++) {
                 listReceiptFuneralElement2.append(`<li class="list-group-item">${formDataReceiptFuneral[i].label}: ${formDataReceiptFuneral[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesCommissionFuneral() {
-        let formCommissionFuneral = [];
-        localStorage.removeItem('formCommissionFuneral');
-        $('#commission-form-funeral input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formCommissionFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formCommissionFuneral", JSON.stringify(formCommissionFuneral));
-    }
-    function getCommissionFuneral() {
-        if(localStorage.formCommissionFuneral !== undefined){
-            const formCommissionFuneral = JSON.parse(localStorage.formCommissionFuneral);
-            for (var i = 0; i < formCommissionFuneral.length; i++) {
-                $(`#commission-form-funeral [name=${formCommissionFuneral[i].name}]`).val(formCommissionFuneral[i].value);
-            }
-        }
-    }
-    function getCommissionFuneralList() {
-        if(localStorage.formCommissionFuneral !== undefined){
-            const formDataCommissionFuneral = JSON.parse(localStorage.formCommissionFuneral);
-            const lengthCommissionFuneral = Math.trunc(formDataCommissionFuneral.length / 2);
-            const listCommissionFuneralElement1 = $("#list-funeral-commission1");
-            const listCommissionFuneralElement2 = $("#list-funeral-commission2");
-            for (let i = 0; i < lengthCommissionFuneral; i++) {
-                listCommissionFuneralElement1.append(`<li class="list-group-item">${formDataCommissionFuneral[i].label}: ${formDataCommissionFuneral[i].value}</li>`);
-            }
-            for (let i = lengthCommissionFuneral; i < formDataCommissionFuneral.length; i++) {
-                listCommissionFuneralElement2.append(`<li class="list-group-item">${formDataCommissionFuneral[i].label}: ${formDataCommissionFuneral[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesVerificationFuneral() {
-        let formDataVerificationFuneral = [];
-        localStorage.removeItem('formDataVerificationFuneral');
-        $('#verification-form-funeral input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#verification-form-funeral select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataVerificationFuneral", JSON.stringify(formDataVerificationFuneral));
-    }
-    function getVerificationFuneral() {
-        if(localStorage.formDataVerificationFuneral !== undefined){
-            const formDataVerificationFuneral = JSON.parse(localStorage.formDataVerificationFuneral);
-            for (var i = 0; i < formDataVerificationFuneral.length; i++) {
-                $(`#verification-form-funeral [name=${formDataVerificationFuneral[i].name}]`).val(formDataVerificationFuneral[i].value);
-            }
-        }
-    }
-    function getVerificationFuneralList() {
-        if(localStorage.formDataVerificationFuneral !== undefined){
-            const formDataVerificationFuneral = JSON.parse(localStorage.formDataVerificationFuneral);
-            const lengthVerificationFuneral = Math.trunc(formDataVerificationFuneral.length / 2);
-            const listVerificationFuneralElement1 = $("#list-funeral-verification1");
-            const listVerificationFuneralElement2 = $("#list-funeral-verification2");
-            for (let i = 0; i < lengthVerificationFuneral; i++) {
-                listVerificationFuneralElement1.append(`<li class="list-group-item">${formDataVerificationFuneral[i].label}: ${formDataVerificationFuneral[i].value}</li>`);
-            }
-            for (let i = lengthVerificationFuneral; i < formDataVerificationFuneral.length; i++) {
-                listVerificationFuneralElement2.append(`<li class="list-group-item">${formDataVerificationFuneral[i].label}: ${formDataVerificationFuneral[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<!-- Poliza de Funeral Suscripcion -->
-<script>
-    function storeValuesSubscriptionPolicyFuneral() {
-        let formDataSubcriptionPolicyFuneral = [];
-        localStorage.removeItem('formDataSubcriptionPolicyFuneral');
-        $('#policy-form-funeral-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubcriptionPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-funeral-subcription input[type=email]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubcriptionPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-funeral-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubcriptionPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-funeral-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubcriptionPolicyFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-funeral-subcription #tomador_asegurado_poliza').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubcriptionPolicyFuneral.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubcriptionPolicyFuneral", JSON.stringify(formDataSubcriptionPolicyFuneral));
-    }
-    function getSubscriptionPolicyFuneral() {
-        if(localStorage.formDataSubcriptionPolicyFuneral !== undefined){
-            const formDataSubcriptionPolicyFuneral = JSON.parse(localStorage.formDataSubcriptionPolicyFuneral);
-            for (var i = 0; i < formDataSubcriptionPolicyFuneral.length; i++) {
-                $(`#policy-form-funeral-subcription [name=${formDataSubcriptionPolicyFuneral[i].name}]`).val(formDataSubcriptionPolicyFuneral[i].value);
-                if ((formDataSubcriptionPolicyFuneral[i].name === 'tomador_asegurado_poliza') && (formDataSubcriptionPolicyFuneral[i].value === true)) {
-                    $('#policy-form-funeral-subcription #tomador_asegurado_poliza').prop('checked', formDataSubcriptionPolicyFuneral[i].value);
-                }
-                if ((formDataSubcriptionPolicyFuneral[i].name === 'tipo_canal_poliza') && (formDataSubcriptionPolicyFuneral[i].value === 'AGENTE PROPIO')) {
-                    $('#policy-form-funeral-subcription #searchList').css('display', 'block');
-                }
-            }
-        }
-    }
-    function getSubscriptionPolicyFuneralList() {
-        if(localStorage.formDataSubcriptionPolicyFuneral !== undefined){
-            const formDataSubscriptionPolicyFuneral = JSON.parse(localStorage.formDataSubcriptionPolicyFuneral);
-            const lengthSubscriptionPolicyFuneral = Math.trunc(formDataSubscriptionPolicyFuneral.length / 2);
-            const listSubcriptionFuneralElement1 = $("#list-funeral-subcription-policy1");
-            const listSubcriptionFuneralElement2 = $("#list-funeral-subcription-policy2");
-            for (let i = 0; i < lengthSubscriptionPolicyFuneral; i++) {
-                listSubcriptionFuneralElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyFuneral[i].label}: ${formDataSubscriptionPolicyFuneral[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionPolicyFuneral; i < formDataSubscriptionPolicyFuneral.length; i++) {
-                listSubcriptionFuneralElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyFuneral[i].label}: ${formDataSubscriptionPolicyFuneral[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionExtraFuneral() {
-        let formDataSubscriptionExtraFuneral = [];
-        localStorage.removeItem('formDataSubscriptionExtraFuneral');
-        let recoveredData = localStorage.getItem("formDataSubscriptionExtraFuneralCompleted");
-        $('#extra-form-funeral-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-funeral-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-funeral-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataSubscriptionExtraFuneral", JSON.stringify(formDataSubscriptionExtraFuneral));
-        if(recoveredData == null){
-            localStorage.setItem("formDataSubscriptionExtraFuneralCompleted", JSON.stringify(formDataSubscriptionExtraFuneral));
-        } else {
-            let data = JSON.parse(recoveredData)
-            $('#extra-form-funeral-subcription input[type=text]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-                });
-            $('#extra-form-funeral-subcription input[type=date]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            $('#extra-form-funeral-subcription select').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            localStorage.setItem('formDataSubscriptionExtraFuneralCompleted', JSON.stringify(data))
-        }
-    }
-    function getSubscriptionExtraFuneral() {
-        if(localStorage.formDataSubscriptionExtraFuneral !== undefined){
-            const  formDataSubscriptionExtraFuneral = JSON.parse(localStorage.formDataSubscriptionExtraFuneral);
-            for (var i = 0; i < formDataSubscriptionExtraFuneral.length; i++) {
-                $(`#extra-form-funeral-subcription [name=${formDataSubscriptionExtraFuneral[i].name}]`).val(formDataSubscriptionExtraFuneral[i].value);
-            }
-        }
-    }
-    function getSubscriptionExtraFuneralList() {
-        if(localStorage.formDataSubscriptionExtraFuneralCompleted !== undefined){
-            const formDataSubscriptionExtraFuneralCompleted = JSON.parse(localStorage.formDataSubscriptionExtraFuneralCompleted);
-            const lengthSubscriptionExtraFuneral = Math.trunc(formDataSubscriptionExtraFuneralCompleted.length / 2);
-            const listSubscriptionExtraFuneralElement1 = $("#list-funeral-subcription-extra1");
-            const listSubscriptionExtraFuneralElement2 = $("#list-funeral-subcription-extra2");
-            for (let i = 0; i < lengthSubscriptionExtraFuneral; i++) {
-                listSubscriptionExtraFuneralElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneralCompleted[i].label}: ${formDataSubscriptionExtraFuneralCompleted[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionExtraFuneral; i < formDataSubscriptionExtraFuneralCompleted.length; i++) {
-                listSubscriptionExtraFuneralElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraFuneralCompleted[i].label}: ${formDataSubscriptionExtraFuneralCompleted[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionReceiptFuneral() {
-        let formDataSubscriptionReceiptFuneral = [];
-        localStorage.removeItem('formDataSubscriptionReceiptFuneral');
-        $('#receipt-form-funeral-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-funeral-subcription input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-funeral-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-funeral-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptFuneral.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-funeral-subcription #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptFuneral.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubscriptionReceiptFuneral", JSON.stringify(formDataSubscriptionReceiptFuneral));
-    }
-    function getSubscriptionReceiptFuneral() {
-        if(localStorage.formDataSubscriptionReceiptFuneral !== undefined){
-            const formDataSubscriptionReceiptFuneral = JSON.parse(localStorage.formDataSubscriptionReceiptFuneral);
-            for (var i = 0; i < formDataSubscriptionReceiptFuneral.length; i++) {
-                $(`#receipt-form-funeral-subcription [name=${formDataSubscriptionReceiptFuneral[i].name}]`).val(formDataSubscriptionReceiptFuneral[i].value);
-                if ((formDataSubscriptionReceiptFuneral[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptFuneral[i].value === true)) {
-                    $('#receipt-form-funeral-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptFuneral[i].value);
-                    $('#receipt-form-funeral-subcription #active-select-1').css('display', 'inline');
-                    $('#receipt-form-funeral-subcription #active-select-2').css('display', 'inline');
-                }
-            }
-        }
-    }
-    function getSubscriptionReceiptFuneralList() {
-        if(localStorage.formDataSubscriptionReceiptFuneral !== undefined){
-            const formDataSubscriptionReceiptFuneral = JSON.parse(localStorage.formDataSubscriptionReceiptFuneral);
-            const lengthSubscriptionReceiptFuneral = Math.trunc(formDataSubscriptionReceiptFuneral.length / 2);
-            const listSubscriptionReceiptFuneralElement1 = $("#list-funeral-subcription-receipt1");
-            const listSubscriptionReceiptFuneralElement2 = $("#list-funeral-subcription-receipt2");
-            for (let i = 0; i < lengthSubscriptionReceiptFuneral; i++) {
-                listSubscriptionReceiptFuneralElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptFuneral[i].label}: ${formDataSubscriptionReceiptFuneral[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionReceiptFuneral; i < formDataSubscriptionReceiptFuneral.length; i++) {
-                listSubscriptionReceiptFuneralElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptFuneral[i].label}: ${formDataSubscriptionReceiptFuneral[i].value}</li>`);
             }
         }
     }
@@ -2491,11 +1147,20 @@
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyLife.push({ label: labelName, name: this.name, value: this.value });
         });
+        $('#policy-form-life input[type=number]').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            formDataPolicyLife.push({ label: labelName, name: this.name, value: this.value });
+        });
         $('#policy-form-life select').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             formDataPolicyLife.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#policy-form-life #tomador_asegurado_poliza').each(function(){
+            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            let markedCheck = $(this).prop('checked');
+            formDataPolicyLife.push({ label: labelName, name: this.name, value: markedCheck });
+        });
+        $('#policy-form-life #fraccionamiento_boolean_poliza').each(function(){
             const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
             let markedCheck = $(this).prop('checked');
             formDataPolicyLife.push({ label: labelName, name: this.name, value: markedCheck });
@@ -2509,6 +1174,10 @@
                 $(`#policy-form-life [name=${formDataPolicyLife[i].name}]`).val(formDataPolicyLife[i].value);
                 if ((formDataPolicyLife[i].name === 'tomador_asegurado_poliza') && (formDataPolicyLife[i].value === true)) {
                     $('#policy-form-life #tomador_asegurado_poliza').prop('checked', formDataPolicyLife[i].value);
+                }
+                if ((formDataPolicyLife[i].name === 'fraccionamiento_boolean_poliza') && (formDataPolicyLife[i].value === true)) {
+                    $('#policy-form-life #fraccionamiento_boolean_poliza').prop('checked', formDataPolicyLife[i].value);
+                    $('#policy-form-life #active-select-1').css('display', 'inline');
                 }
                 if ((formDataPolicyLife[i].name === 'tipo_canal_poliza') && (formDataPolicyLife[i].value === 'AGENTE PROPIO')) {
                     $('#policy-form-life #searchList').css('display', 'block');
@@ -2598,25 +1267,20 @@
         let formDataReceiptLife = [];
         localStorage.removeItem('formDataReceiptLife');
         $('#receipt-form-life input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptLife.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-life input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptLife.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-life input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptLife.push({ label: labelName, name: this.name, value: this.value });
         });
         $('#receipt-form-life select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
+            const labelName = $(this).closest('.col-sm-8').siblings('.col-form-label').text();
             formDataReceiptLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-life #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataReceiptLife.push({ label: labelName, name: this.name, value: markedCheck });
         });
         localStorage.setItem("formDataReceiptLife", JSON.stringify(formDataReceiptLife));
     }
@@ -2625,11 +1289,6 @@
             const formDataReceiptLife = JSON.parse(localStorage.formDataReceiptLife);
             for (var i = 0; i < formDataReceiptLife.length; i++) {
                 $(`#receipt-form-life [name=${formDataReceiptLife[i].name}]`).val(formDataReceiptLife[i].value);
-                if ((formDataReceiptLife[i].name === 'fraccionamiento_boolean_recibo') && (formDataReceiptLife[i].value === true)) {
-                    $('#receipt-form-life #fraccionamiento_boolean_recibo').prop('checked', formDataReceiptLife[i].value);
-                    $('#receipt-form-life #active-select-1').css('display', 'inline');
-                    $('#receipt-form-life #active-select-2').css('display', 'inline');
-                }
             }
         }
     }
@@ -2650,253 +1309,6 @@
 </script>
 
 <script>
-    function storeValuesCommissionLife() {
-        let formCommissionLife = [];
-        localStorage.removeItem('formCommissionLife');
-        $('#commission-form-life input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formCommissionLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formCommissionLife", JSON.stringify(formCommissionLife));
-    }
-    function getCommissionLife() {
-        if(localStorage.formCommissionLife !== undefined){
-            const formCommissionLife = JSON.parse(localStorage.formCommissionLife);
-            for (var i = 0; i < formCommissionLife.length; i++) {
-                $(`#commission-form-life [name=${formCommissionLife[i].name}]`).val(formCommissionLife[i].value);
-            }
-        }
-    }
-    function getCommissionLifeList() {
-        if(localStorage.formCommissionLife !== undefined){
-            const formDataCommissionLife = JSON.parse(localStorage.formCommissionLife);
-            const lengthCommissionLife = Math.trunc(formDataCommissionLife.length / 2);
-            const listCommissionLifeElement1 = $("#list-life-commission1");
-            const listCommissionLifeElement2 = $("#list-life-commission2");
-            for (let i = 0; i < lengthCommissionLife; i++) {
-                listCommissionLifeElement1.append(`<li class="list-group-item">${formDataCommissionLife[i].label}: ${formDataCommissionLife[i].value}</li>`);
-            }
-            for (let i = lengthCommissionLife; i < formDataCommissionLife.length; i++) {
-                listCommissionLifeElement2.append(`<li class="list-group-item">${formDataCommissionLife[i].label}: ${formDataCommissionLife[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesVerificationLife() {
-        let formDataVerificationLife = [];
-        localStorage.removeItem('formDataVerificationLife');
-        $('#verification-form-life input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#verification-form-life select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataVerificationLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataVerificationLife", JSON.stringify(formDataVerificationLife));
-    }
-    function getVerificationLife() {
-        if(localStorage.formDataVerificationLife !== undefined){
-            const formDataVerificationLife = JSON.parse(localStorage.formDataVerificationLife);
-            for (var i = 0; i < formDataVerificationLife.length; i++) {
-                $(`#verification-form-life [name=${formDataVerificationLife[i].name}]`).val(formDataVerificationLife[i].value);
-            }
-        }
-    }
-    function getVerificationLifeList() {
-        if(localStorage.formDataVerificationLife !== undefined){
-            const formDataVerificationLife = JSON.parse(localStorage.formDataVerificationLife);
-            const lengthVerificationLife = Math.trunc(formDataVerificationLife.length / 2);
-            const listVerificationLifeElement1 = $("#list-life-verification1");
-            const listVerificationLifeElement2 = $("#list-life-verification2");
-            for (let i = 0; i < lengthVerificationLife; i++) {
-                listVerificationLifeElement1.append(`<li class="list-group-item">${formDataVerificationLife[i].label}: ${formDataVerificationLife[i].value}</li>`);
-            }
-            for (let i = lengthVerificationLife; i < formDataVerificationLife.length; i++) {
-                listVerificationLifeElement2.append(`<li class="list-group-item">${formDataVerificationLife[i].label}: ${formDataVerificationLife[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<!-- Poliza de Vida Suscripcion -->
-<script>
-    function storeValuesSubscriptionPolicyLife() {
-        let formDataSubscriptionPolicyLife = [];
-        localStorage.removeItem('formDataSubscriptionPolicyLife');
-        $('#policy-form-life-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionPolicyLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-life-subcription input[type=email]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionPolicyLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-life-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionPolicyLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-life-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionPolicyLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#policy-form-life-subcription #tomador_asegurado_poliza').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubscriptionPolicyLife.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubscriptionPolicyLife", JSON.stringify(formDataSubscriptionPolicyLife));
-    }
-    function getSubscriptionPolicyLife() {
-        if(localStorage.formDataSubscriptionPolicyLife !== undefined){
-            const formDataSubscriptionPolicyLife = JSON.parse(localStorage.formDataSubscriptionPolicyLife);
-            for (var i = 0; i < formDataSubscriptionPolicyLife.length; i++) {
-                $(`#policy-form-life-subcription [name=${formDataSubscriptionPolicyLife[i].name}]`).val(formDataSubscriptionPolicyLife[i].value);
-                if ((formDataSubscriptionPolicyLife[i].name === 'tomador_asegurado_poliza') && (formDataSubscriptionPolicyLife[i].value === true)) {
-                    $('#policy-form-life-subcription #tomador_asegurado_poliza').prop('checked', formDataSubscriptionPolicyLife[i].value);
-                }
-                if ((formDataSubscriptionPolicyLife[i].name === 'tipo_canal_poliza') && (formDataSubscriptionPolicyLife[i].value === 'AGENTE PROPIO')) {
-                    $('#policy-form-life-subcription #searchList').css('display', 'block');
-                }
-            }
-        }
-    }
-    function getSubscriptionPolicyLifeList() {
-        if(localStorage.formDataSubscriptionPolicyLife !== undefined){
-            const formDataSubscriptionPolicyLife = JSON.parse(localStorage.formDataSubscriptionPolicyLife);
-            const lengthSubscriptionPolicyLife = Math.trunc(formDataSubscriptionPolicyLife.length / 2);
-            const listSubscriptionLifeElement1 = $("#list-life-subcription-policy1");
-            const listSubscriptionLifeElement2 = $("#list-life-subcription-policy2");
-            for (let i = 0; i < lengthSubscriptionPolicyLife; i++) {
-                listSubscriptionLifeElement1.append(`<li class="list-group-item">${formDataSubscriptionPolicyLife[i].label}: ${formDataSubscriptionPolicyLife[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionPolicyLife; i < formDataSubscriptionPolicyLife.length; i++) {
-                listSubscriptionLifeElement2.append(`<li class="list-group-item">${formDataSubscriptionPolicyLife[i].label}: ${formDataSubscriptionPolicyLife[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionExtraLife() {
-        let formDataSubscriptionExtraLife = [];
-        localStorage.removeItem('formDataSubscriptionExtraLife');
-        let recoveredData = localStorage.getItem("formDataSubscriptionExtraLifeCompleted");
-        $('#extra-form-life-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-life-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#extra-form-life-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionExtraLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        localStorage.setItem("formDataSubscriptionExtraLife", JSON.stringify(formDataSubscriptionExtraLife));
-        if(recoveredData == null){
-            localStorage.setItem("formDataSubscriptionExtraLifeCompleted", JSON.stringify(formDataSubscriptionExtraLife));
-        } else {
-            let data = JSON.parse(recoveredData)
-            $('#extra-form-life-subcription input[type=text]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            $('#extra-form-life-subcription input[type=date]').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            $('#extra-form-life-subcription select').each(function(){
-                const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-                data.push({ label: labelName, name: this.name, value: this.value });
-            });
-            localStorage.setItem('formDataSubscriptionExtraLifeCompleted', JSON.stringify(data))
-        }
-    }
-    function getSubscriptionExtraLife() {
-        if(localStorage.formDataSubscriptionExtraLife !== undefined){
-            const formDataSubscriptionExtraLife = JSON.parse(localStorage.formDataSubscriptionExtraLife);
-            for (var i = 0; i < formDataSubscriptionExtraLife.length; i++) {
-                $(`#extra-form-life-subcription [name=${formDataSubscriptionExtraLife[i].name}]`).val(formDataSubscriptionExtraLife[i].value);
-            }
-        }
-    }
-    function getSubscriptionExtraLifeList() {
-        if(localStorage.formDataSubscriptionExtraLifeCompleted !== undefined){
-            const formDataSubscriptionExtraLifeCompleted = JSON.parse(localStorage.formDataSubscriptionExtraLifeCompleted);
-            const lengthSubscriptionExtraLife = Math.trunc(formDataSubscriptionExtraLifeCompleted.length / 2);
-            const listSubscriptionExtraLifeElement1 = $("#list-life-subcription-extra1");
-            const listSubscriptionExtraLifeElement2 = $("#list-life-subcription-extra2");
-            for (let i = 0; i < lengthSubscriptionExtraLife; i++) {
-                listSubscriptionExtraLifeElement1.append(`<li class="list-group-item">${formDataSubscriptionExtraLifeCompleted[i].label}: ${formDataSubscriptionExtraLifeCompleted[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionExtraLife; i < formDataSubscriptionExtraLifeCompleted.length; i++) {
-                listSubscriptionExtraLifeElement2.append(`<li class="list-group-item">${formDataSubscriptionExtraLifeCompleted[i].label}: ${formDataSubscriptionExtraLifeCompleted[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
-    function storeValuesSubscriptionReceiptLife() {
-        let formDataSubscriptionReceiptLife = [];
-        localStorage.removeItem('formDataSubscriptionReceiptLife');
-        $('#receipt-form-life-subcription input[type=text]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-life-subcription input[type=number]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-life-subcription input[type=date]').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-life-subcription select').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            formDataSubscriptionReceiptLife.push({ label: labelName, name: this.name, value: this.value });
-        });
-        $('#receipt-form-life-subcription #fraccionamiento_boolean_recibo').each(function(){
-            const labelName = $(this).closest('.col-sm-9').siblings('.col-form-label').text();
-            let markedCheck = $(this).prop('checked');
-            formDataSubscriptionReceiptLife.push({ label: labelName, name: this.name, value: markedCheck });
-        });
-        localStorage.setItem("formDataSubscriptionReceiptLife", JSON.stringify(formDataSubscriptionReceiptLife));
-    }
-    function getSubscriptionReceiptLife() {
-        if(localStorage.formDataSubscriptionReceiptLife !== undefined){
-            const formDataSubscriptionReceiptLife = JSON.parse(localStorage.formDataSubscriptionReceiptLife);
-            for (var i = 0; i < formDataSubscriptionReceiptLife.length; i++) {
-                $(`#receipt-form-life-subcription [name=${formDataSubscriptionReceiptLife[i].name}]`).val(formDataSubscriptionReceiptLife[i].value);
-                if ((formDataSubscriptionReceiptLife[i].name === 'fraccionamiento_boolean_recibo') && (formDataSubscriptionReceiptLife[i].value === true)) {
-                    $('#receipt-form-life-subcription #fraccionamiento_boolean_recibo').prop('checked', formDataSubscriptionReceiptLife[i].value);
-                    $('#receipt-form-life-subcription #active-select-1').css('display', 'inline');
-                    $('#receipt-form-life-subcription #active-select-2').css('display', 'inline');
-                }
-            }
-        }
-    }
-    function getSubscriptionReceiptLifeList() {
-        if(localStorage.formDataSubscriptionReceiptLife !== undefined){
-            const formDataSubscriptionReceiptLife = JSON.parse(localStorage.formDataSubscriptionReceiptLife);
-            const lengthSubscriptionReceiptLife = Math.trunc(formDataSubscriptionReceiptLife.length / 2);
-            const listSubscriptionReceiptLifeElement1 = $("#list-life-subcription-receipt1");
-            const listSubscriptionReceiptLifeElement2 = $("#list-life-subcription-receipt2");
-            for (let i = 0; i < lengthSubscriptionReceiptLife; i++) {
-                listSubscriptionReceiptLifeElement1.append(`<li class="list-group-item">${formDataSubscriptionReceiptLife[i].label}: ${formDataSubscriptionReceiptLife[i].value}</li>`);
-            }
-            for (let i = lengthSubscriptionReceiptLife; i < formDataSubscriptionReceiptLife.length; i++) {
-                listSubscriptionReceiptLifeElement2.append(`<li class="list-group-item">${formDataSubscriptionReceiptLife[i].label}: ${formDataSubscriptionReceiptLife[i].value}</li>`);
-            }
-        }
-    }
-</script>
-
-<script>
     $(document).ready(function () {
         // Poliza Salud
         $("#btn_health_policy").on('click', function (event) {
@@ -2907,12 +1319,6 @@
         });
         $("#btn_health_receipt").on('click', function (event) {
             storeValuesReceiptHealth();
-        });
-        $("#btn_health_commission").on('click', function (event) {
-            storeValuesCommissionHealth();
-        });
-        $("#btn_health_verification").on('click', function (event) {
-            storeValuesVerificationHealth();
         });
 
         $("#btn_health_list").on('click', function (event) {
@@ -2925,32 +1331,6 @@
         getExtraHealthList();
         getReceiptHealth();
         getReceiptHealthList();
-        getCommissionHealth();
-        getCommissionHealthList();
-        getVerificationHealth();
-        getVerificationHealthList();
-
-        // Poliza Salud Suscripcion
-        $("#btn_health_policy_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyHealth();
-        });
-        $("#btn_health_extra_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraHealth();
-        });
-        $("#btn_health_receipt_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptHealth();
-        });
-
-        $("#btn_health_subcription_list").on('click', function (event) {
-            localStorage.clear();
-        });
-
-        getSubscriptionPolicyHealth();
-        getSubscriptionPolicyHealthList();
-        getSubscriptionExtraHealth();
-        getSubscriptionExtraHealthList();
-        getSubscriptionReceiptHealth();
-        getSubscriptionReceiptHealthList();
 
         // Poliza Vehiculo
         $("#btn_vehicle_policy").on('click', function (event) {
@@ -2961,12 +1341,6 @@
         });
         $("#btn_vehicle_receipt").on('click', function (event) {
             storeValuesReceiptVehicle();
-        });
-        $("#btn_vehicle_commission").on('click', function (event) {
-            storeValuesCommissionVehicle();
-        });
-        $("#btn_vehicle_verification").on('click', function (event) {
-            storeValuesVerificationVehicle();
         });
 
         $("#btn_vehicle_list").on('click', function (event) {
@@ -2979,32 +1353,6 @@
         getExtraVehicleList();
         getReceiptVehicle();
         getReceiptVehicleList();
-        getCommissionVehicle();
-        getCommissionVehicleList();
-        getVerificationVehicle();
-        getVerificationVehicleList();
-
-        // Poliza Vehiculo Suscripcion
-        $("#btn_vehicle_policy_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyVehicle();
-        });
-        $("#btn_vehicle_extra_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraVehicle();
-        });
-        $("#btn_vehicle_receipt_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptVehicle();
-        });
-
-        $("#btn_vehicle_subcription_list").on('click', function (event) {
-            localStorage.clear();
-        });
-
-        getSubscriptionPolicyVehicle();
-        getSubscriptionPolicyVehicleList();
-        getSubscriptionExtraVehicle();
-        getSubscriptionExtraVehicleList();
-        getSubscriptionReceiptVehicle();
-        getSubscriptionReceiptVehicleList();
 
         // Poliza Funeral
         $("#btn_funeral_policy").on('click', function (event) {
@@ -3015,12 +1363,6 @@
         });
         $("#btn_funeral_receipt").on('click', function (event) {
             storeValuesReceiptFuneral();
-        });
-        $("#btn_funeral_commission").on('click', function (event) {
-            storeValuesCommissionFuneral();
-        });
-        $("#btn_funeral_verification").on('click', function (event) {
-            storeValuesVerificationFuneral();
         });
 
         $("#btn_funeral_list").on('click', function (event) {
@@ -3033,32 +1375,6 @@
         getExtraFuneralList();
         getReceiptFuneral();
         getReceiptFuneralList();
-        getCommissionFuneral();
-        getCommissionFuneralList();
-        getVerificationFuneral();
-        getVerificationFuneralList();
-
-        // Poliza Funeral Suscripcion
-        $("#btn_funeral_policy_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyFuneral();
-        });
-        $("#btn_funeral_extra_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraFuneral();
-        });
-        $("#btn_funeral_receipt_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptFuneral();
-        });
-
-        $("#btn_funeral_subcription_list").on('click', function (event) {
-            localStorage.clear();
-        });
-
-        getSubscriptionPolicyFuneral();
-        getSubscriptionPolicyFuneralList();
-        getSubscriptionExtraFuneral();
-        getSubscriptionExtraFuneralList();
-        getSubscriptionReceiptFuneral();
-        getSubscriptionReceiptFuneralList();
 
         // Poliza Vida
         $("#btn_life_policy").on('click', function (event) {
@@ -3069,12 +1385,6 @@
         });
         $("#btn_life_receipt").on('click', function (event) {
             storeValuesReceiptLife();
-        });
-        $("#btn_life_commission").on('click', function (event) {
-            storeValuesCommissionLife();
-        });
-        $("#btn_life_verification").on('click', function (event) {
-            storeValuesVerificationLife();
         });
 
         $("#btn_life_list").on('click', function (event) {
@@ -3087,35 +1397,13 @@
         getExtraLifeList();
         getReceiptLife();
         getReceiptLifeList();
-        getCommissionLife();
-        getCommissionLifeList();
-        getVerificationLife();
-        getVerificationLifeList();
-
-        // Poliza Vida Suscripcion
-        $("#btn_life_policy_subcription").on('click', function (event) {
-            storeValuesSubscriptionPolicyLife();
-        });
-        $("#btn_life_extra_subcription").on('click', function (event) {
-            storeValuesSubscriptionExtraLife();
-        });
-        $("#btn_life_receipt_subcription").on('click', function (event) {
-            storeValuesSubscriptionReceiptLife();
-        });
-
-        $("#btn_life_subcription_list").on('click', function (event) {
-            localStorage.clear();
-        });
-
-        getSubscriptionPolicyLife();
-        getSubscriptionPolicyLifeList();
-        getSubscriptionExtraLife();
-        getSubscriptionExtraLifeList();
-        getSubscriptionReceiptLife();
-        getSubscriptionReceiptLifeList();
 
         if ($('#tipo_canal_poliza').val() === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
+        }
+
+        if ($('#fraccionamiento_boolean_poliza').prop('checked') === true) {
+            document.getElementById("active-select-1").style.display = "inline";
         }
 
         if (($('#select_box').val() === 'V') || ($('#select_box').val() === 'E')) {
@@ -3223,8 +1511,7 @@
 <script>
     window.addEventListener("load", function() {
         document.getElementById("radioContainer").addEventListener("click", function() {
-            document.getElementById("active-select-1").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
-            document.getElementById("active-select-2").style.display = document.getElementById("fraccionamiento_boolean_recibo").checked ? "inline" : "none";
+            document.getElementById("active-select-1").style.display = document.getElementById("fraccionamiento_boolean_poliza").checked ? "inline" : "none";
         });
     });
 </script>
@@ -3431,312 +1718,146 @@
     }   
 </script>
 
-<% if (policy.length !== 0) { %>
+<script>
+    function premiumCalculationDate() {
+        var getSelectValue = document.getElementById("tipo_fraccionamiento_poliza").value;
+        var checkboxDivision = document.getElementById("fraccionamiento_boolean_poliza").checked;
+        if (getSelectValue === 'MENSUAL') {
+            document.getElementById("numero_pago_poliza").value = '';
+        } else if (getSelectValue === 'BIMESTRAL') {
+            document.getElementById("numero_pago_poliza").value = 6;
+        } else if (getSelectValue === 'TRIMESTRAL') {
+            document.getElementById("numero_pago_poliza").value = 4;
+        } else if (getSelectValue === 'SEMESTRAL') {
+            document.getElementById("numero_pago_poliza").value = 2;
+        }  else if (getSelectValue === 'ANUAL') {
+            document.getElementById("numero_pago_poliza").value = 1;
+        }
+        if (checkboxDivision === false) {
+            document.getElementById("numero_pago_poliza").value = 0;
+            document.getElementById("tipo_fraccionamiento_poliza").value = '';
+        }
+    }
+</script>
+
+<script>
+    function premiumCalculation() {
+        let netPremium = document.getElementById("prima_neta_poliza").value;
+        let coinType = document.getElementById("tipo_moneda_poliza").value;
+        netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+        if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+            netPremium = netPremium.replaceAll(".", "");
+            netPremium = netPremium.replace(",", ".");
+            netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+        } else if (netPremium.indexOf(',') !== -1) {
+            netPremium = netPremium.replace(",", ".");
+            netPremium = parseFloat(netPremium);
+        } else if (netPremium.indexOf('.') !== -1) {
+            netPremium = netPremium.replaceAll(".", ",");
+            netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+        }
+        let igtf = Number(netPremium) * 0.03;
+        let totalPremium = Number(netPremium) + Number(igtf);
+        igtf = igtf.toFixed(2);
+        totalPremium = totalPremium.toFixed(2);
+        if (coinType === 'BOLÍVAR') {
+            const cleaveIgtf = new Cleave("#igtf_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: 'Bs ',
+            });
+            cleaveIgtf.setRawValue(igtf);
+            const cleaveTotalPremium = new Cleave("#prima_total_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: 'Bs ',
+            });
+            cleaveTotalPremium.setRawValue(totalPremium);
+        } else if (coinType === 'DÓLAR') {
+            const cleaveIgtf = new Cleave("#igtf_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '$ ',
+            });
+            cleaveIgtf.setRawValue(igtf);
+            const cleaveTotalPremium = new Cleave("#prima_total_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '$ ',
+            });
+            cleaveTotalPremium.setRawValue(totalPremium);
+        } else if (coinType === 'EUROS') {
+            const cleaveIgtf = new Cleave("#igtf_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '€ ',
+            });
+            cleaveIgtf.setRawValue(igtf);
+            const cleaveTotalPremium = new Cleave("#prima_total_poliza", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '€ ',
+            });
+            cleaveTotalPremium.setRawValue(totalPremium);
+        }
+    }
+</script>
+
+<% if (typeof(policy) !== 'undefined') { %>
     <script>
         var policy = <%- JSON.stringify(policy) %>;
-        function premiumCalculationDate() {
-            var getSelectValue = document.getElementById("tipo_fraccionamiento_recibo").value;
-            var checkboxDivision = document.getElementById("fraccionamiento_boolean_recibo").checked;
-            if (getSelectValue === 'MENSUAL') {
-                $(document).ready(function () {
-                    $('#tipo_fraccionamiento_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(1, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_pago_recibo').val(fecha);
-                    });
-                });
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(1, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-                var numberMonthly = document.getElementById("numero_pago_recibo").value;
-                if ((numberMonthly === '') || (numberMonthly === '0')) {
-                    numberMonthly = 1;
-                }
-                var premiumMonthly = policy[0].prima_anual_poliza / numberMonthly;
-                premiumMonthly = String(premiumMonthly);
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(premiumMonthly);
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(premiumMonthly);
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(premiumMonthly);
-                }
-            } else if (getSelectValue === 'BIMESTRAL') {
-                $(document).ready(function () {
-                    $('#tipo_fraccionamiento_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(2, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_pago_recibo').val(fecha);
-                    });
-                });
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(2, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-                var premiumBimonthly = policy[0].prima_anual_poliza / 6;
-                premiumBimonthly = String(premiumBimonthly);
-                document.getElementById("numero_pago_recibo").value = 6;
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(premiumBimonthly);
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(premiumBimonthly);
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(premiumBimonthly);
-                }
-            } else if (getSelectValue === 'TRIMESTRAL') {
-                $(document).ready(function () {
-                    $('#tipo_fraccionamiento_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(3, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_pago_recibo').val(fecha);
-                    });
-                });
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(3, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-                var premiumQuarterly = policy[0].prima_anual_poliza / 4;
-                premiumQuarterly = String(premiumQuarterly);
-                document.getElementById("numero_pago_recibo").value = 4;
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(premiumQuarterly);
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(premiumQuarterly);
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(premiumQuarterly);
-                }
-            } else if (getSelectValue === 'SEMESTRAL') {
-                $(document).ready(function () {
-                    $('#tipo_fraccionamiento_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(6, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_pago_recibo').val(fecha);
-                    });
-                });
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(6, 'months');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-                var premiumBiannual = policy[0].prima_anual_poliza / 2;
-                premiumBiannual = String(premiumBiannual);
-                document.getElementById("numero_pago_recibo").value = 2;
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(premiumBiannual);
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(premiumBiannual);
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(premiumBiannual);
-                }
-            }  else if (getSelectValue === 'ANUAL') {
-                $(document).ready(function () {
-                    $('#tipo_fraccionamiento_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(1, 'years');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_pago_recibo').val(fecha);
-                    });
-                });
-                $(document).ready(function () {
-                    $('#fecha_desde_recibo').change(function () {
-                        var extraer = $('#fecha_desde_recibo').val();
-                        extraer = extraer.split('-');
-                        year = parseInt(extraer[0]);
-                        month = parseInt(extraer[1]) - 1;
-                        day = parseInt(extraer[2]);
-                        var fecha = moment([year, month, day]).add(1, 'years');
-                        fecha = fecha.toISOString().substring(0, 10);
-                        $('#fecha_hasta_recibo').val(fecha);
-                    });
-                });
-                var annualPremium = policy[0].prima_anual_poliza / 1;
-                annualPremium = String(annualPremium);
-                document.getElementById("numero_pago_recibo").value = 1;
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(annualPremium);
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(annualPremium);
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(annualPremium);
-                }
-            }
-            if (checkboxDivision === false) {
-                if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: 'Bs ',
-                    });
-                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
-                } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '$ ',
-                    });
-                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
-                } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
-                    let cleave = new Cleave("#monto_prima_recibo", {
-                        numeral: true,
-                        numeralDecimalMark: ',',
-                        delimiter: '.',
-                        prefix: '€ ',
-                    });
-                    cleave.setRawValue(String(policy[0].prima_anual_poliza));
-                }
-                document.getElementById("numero_pago_recibo").value = 0;
-                document.getElementById("tipo_fraccionamiento_recibo").value = '';
-                document.getElementById("fecha_pago_recibo").value = '';
-                document.getElementById("fecha_desde_recibo").value = '';
-                document.getElementById("fecha_hasta_recibo").value = '';
+        function dateAutomation() {
+            if (policy.tipo_fraccionamiento_poliza === 'MENSUAL') {
+                var extraer = $('#fecha_desde_recibo').val();
+                extraer = extraer.split('-');
+                year = parseInt(extraer[0]);
+                month = parseInt(extraer[1]) - 1;
+                day = parseInt(extraer[2]);
+                var fecha = moment([year, month, day]).add(1, 'months');
+                fecha = fecha.toISOString().substring(0, 10);
+                $('#fecha_hasta_recibo').val(fecha);
+            } else if (policy.tipo_fraccionamiento_poliza === 'BIMESTRAL') {
+                var extraer = $('#fecha_desde_recibo').val();
+                extraer = extraer.split('-');
+                year = parseInt(extraer[0]);
+                month = parseInt(extraer[1]) - 1;
+                day = parseInt(extraer[2]);
+                var fecha = moment([year, month, day]).add(2, 'months');
+                fecha = fecha.toISOString().substring(0, 10);
+                $('#fecha_hasta_recibo').val(fecha);
+            } else if (policy.tipo_fraccionamiento_poliza === 'TRIMESTRAL') {
+                var extraer = $('#fecha_desde_recibo').val();
+                extraer = extraer.split('-');
+                year = parseInt(extraer[0]);
+                month = parseInt(extraer[1]) - 1;
+                day = parseInt(extraer[2]);
+                var fecha = moment([year, month, day]).add(3, 'months');
+                fecha = fecha.toISOString().substring(0, 10);
+                $('#fecha_hasta_recibo').val(fecha);
+            } else if (policy.tipo_fraccionamiento_poliza === 'SEMESTRAL') {
+                var extraer = $('#fecha_desde_recibo').val();
+                extraer = extraer.split('-');
+                year = parseInt(extraer[0]);
+                month = parseInt(extraer[1]) - 1;
+                day = parseInt(extraer[2]);
+                var fecha = moment([year, month, day]).add(6, 'months');
+                fecha = fecha.toISOString().substring(0, 10);
+                $('#fecha_hasta_recibo').val(fecha);
+            }  else if (policy.tipo_fraccionamiento_poliza === 'ANUAL') {
+                var extraer = $('#fecha_desde_recibo').val();
+                extraer = extraer.split('-');
+                year = parseInt(extraer[0]);
+                month = parseInt(extraer[1]) - 1;
+                day = parseInt(extraer[2]);
+                var fecha = moment([year, month, day]).add(1, 'years');
+                fecha = fecha.toISOString().substring(0, 10);
+                $('#fecha_hasta_recibo').val(fecha);
             }
         }
     </script>
@@ -3744,7 +1865,70 @@
     <script>
         var policy = <%- JSON.stringify(policy) %>;
         window.onload = function() {
-            if (policy[0].tipo_moneda_poliza === 'BOLÍVAR') {
+            let netPremium = document.getElementById("prima_neta_recibo").value;
+            netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+                netPremium = netPremium.replaceAll(".", "");
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            } else if (netPremium.indexOf(',') !== -1) {
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium);
+            } else if (netPremium.indexOf('.') !== -1) {
+                netPremium = netPremium.replaceAll(".", ",");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            }
+            let igtf = Number(netPremium) * 0.03;
+            let totalPremium = Number(netPremium) + Number(igtf);
+            igtf = igtf.toFixed(2);
+            totalPremium = totalPremium.toFixed(2);
+            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_recibo", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            }
+            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -3753,7 +1937,7 @@
                         prefix: 'Bs ',
                     });
                 });
-            } else if (policy[0].tipo_moneda_poliza === 'DÓLAR') {
+            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,
@@ -3762,7 +1946,7 @@
                         prefix: '$ ',
                     });
                 });
-            } else if (policy[0].tipo_moneda_poliza === 'EUROS') {
+            } else if (policy.tipo_moneda_poliza === 'EUROS') {
                 $('.currency_format_number').toArray().forEach(function(field) {
                     new Cleave(field, {
                         numeral: true,

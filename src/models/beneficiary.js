@@ -141,9 +141,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Beneficiario 
-                                SET nombre_beneficiario=?, apellido_beneficiario=?, cedula_beneficiario=?, fec_nac_beneficiario=?, parentesco_beneficiario=?  
+                                SET nombre_beneficiario=?, apellido_beneficiario=?, cedula_beneficiario=?, tipo_cedula_beneficiario=?, fec_nac_beneficiario=?, parentesco_beneficiario=?  
                                 WHERE id_beneficiario=?`, 
-                [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario, beneficiary.id_beneficiario],
+                [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, beneficiary.tipo_cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario, beneficiary.id_beneficiario],
                 (error, rows) => {
                     connection.release();
                     if (error) {

@@ -9,7 +9,7 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_poliza, numero_poliza, tipo_individual_poliza, nombre_tomador_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza 
+                connection.query(`SELECT id_poliza, numero_poliza, tipo_individual_poliza, nombre_tomador_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza 
                                 FROM Poliza 
                                 WHERE deshabilitar_poliza=0`,
                 (error, rows) => {
@@ -72,7 +72,7 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_poliza, numero_poliza, prima_anual_poliza, tipo_moneda_poliza 
+                connection.query(`SELECT *
                                 FROM Poliza 
                                 WHERE deshabilitar_poliza=0
                                 ORDER BY id_poliza DESC
@@ -1254,16 +1254,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postVehiclePolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postVehiclePolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, tipo_producto_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.tipo_producto_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, tipo_producto_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, policy.tipo_producto_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1275,16 +1275,16 @@ module.exports = {
             });
         });
     },
-    postHealthPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postHealthPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, montoCobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_cobertura_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, maternidad_poliza, plazo_espera_poliza, detalle_cliente_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, cobertura, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, fechaDetalleCliente],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_cobertura_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, maternidad_poliza, plazo_espera_poliza, detalle_cliente_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, montoCobertura, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, fechaDetalleCliente, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1296,16 +1296,16 @@ module.exports = {
             });
         });
     },
-    postPatrimonialPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postPatrimonialPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1317,16 +1317,16 @@ module.exports = {
             });
         });
     },
-    postBailPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postBailPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1338,16 +1338,16 @@ module.exports = {
             });
         });
     },
-    postAnotherBranchPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postAnotherBranchPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, tasa_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1359,16 +1359,16 @@ module.exports = {
             });
         });
     },
-    postFuneralPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postFuneralPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1380,16 +1380,16 @@ module.exports = {
             });
         });
     },
-    postLifePolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postLifePolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1401,16 +1401,16 @@ module.exports = {
             });
         });
     },
-    postAPPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postAPPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_ramo_poliza, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza,  montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1422,16 +1422,16 @@ module.exports = {
             });
         });
     },
-    postTravelPolicyForm: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    postTravelPolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_anual_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza],
+                connection.query(`INSERT INTO Poliza (numero_poliza, tomador_asegurado_poliza, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_poliza, correo_tomador, tipo_individual_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza, tipo_canal_poliza, suma_asegurada_poliza, deducible_poliza, grupo_poliza, fraccionamiento_boolean_poliza, tipo_fraccionamiento_poliza, numero_pago_poliza)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1444,7 +1444,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateHealthPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, cobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateHealthPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, montoCobertura, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1452,9 +1452,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_cobertura_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, maternidad_poliza=?, plazo_espera_poliza=?, detalle_cliente_poliza=? 
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_cobertura_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, maternidad_poliza=?, plazo_espera_poliza=?, detalle_cliente_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=? 
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, cobertura, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, fechaDetalleCliente, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, montoCobertura, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, policy.maternidad_poliza, policy.plazo_espera_poliza, fechaDetalleCliente, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1466,7 +1466,7 @@ module.exports = {
             });
         });
     },
-    updateVehiclePolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateVehiclePolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1474,9 +1474,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, tipo_producto_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, tipo_producto_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.tipo_producto_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, policy.tipo_producto_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1488,7 +1488,7 @@ module.exports = {
             });
         });
     },
-    updatePatrimonialPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updatePatrimonialPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1496,9 +1496,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1510,7 +1510,7 @@ module.exports = {
             });
         });
     },
-    updateBailPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateBailPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1518,9 +1518,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1532,7 +1532,7 @@ module.exports = {
             });
         });
     },
-    updateAnotherBranchPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateAnotherBranchPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1540,9 +1540,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, tasa_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, policy.tasa_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1554,7 +1554,7 @@ module.exports = {
             });
         });
     },
-    updateFuneralPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateFuneralPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1562,9 +1562,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1576,7 +1576,7 @@ module.exports = {
             });
         });
     },
-    updateLifePolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateLifePolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1584,9 +1584,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=? 
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1598,7 +1598,7 @@ module.exports = {
             });
         });
     },
-    updateAPPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateAPPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1606,9 +1606,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_ramo_poliza=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, policy.tipo_ramo_poliza, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza,  montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -1620,7 +1620,7 @@ module.exports = {
             });
         });
     },
-    updateTravelPolicy: (tomadorAsegurado, montoPrimaAnual, deducible, sumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
+    updateTravelPolicy: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -1628,9 +1628,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Poliza 
-                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_anual_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?
+                                SET numero_poliza=?, tomador_asegurado_poliza=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_poliza=?, correo_tomador=?, tipo_individual_poliza=?, fecha_desde_poliza=?, fecha_hasta_poliza=?, tipo_moneda_poliza=?, prima_neta_poliza=?, igtf_poliza=?, prima_total_poliza=?, estatus_poliza=?, tipo_canal_poliza=?, suma_asegurada_poliza=?, deducible_poliza=?, grupo_poliza=?, fraccionamiento_boolean_poliza=?, tipo_fraccionamiento_poliza=?, numero_pago_poliza=?
                                 WHERE id_poliza=?`, 
-                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaAnual, estatusPoliza, policy.tipo_canal_poliza, sumaAsegurada, deducible, policy.grupo_poliza, policy.id_poliza],
+                [policy.numero_poliza, tomadorAsegurado, policy.tipo_id_rif_tomador, policy.id_rif_tomador, policy.nombre_tomador_poliza, policy.correo_tomador, tipoIndividualPoliza, fechaPolizaDesde, fechaPolizaHasta, policy.tipo_moneda_poliza, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, policy.tipo_canal_poliza, montoSumaAsegurada, montoDeducible, policy.grupo_poliza, fraccionamientoBoolean, policy.tipo_fraccionamiento_poliza, policy.numero_pago_poliza, policy.id_poliza],
                 (error, rows) => {
                     connection.release();
                     if (error) {

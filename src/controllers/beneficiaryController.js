@@ -1,3 +1,4 @@
+// Models
 const beneficiaryModel = require('../models/beneficiary');
 const policyModel = require('../models/policy');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
@@ -10,348 +11,229 @@ const insurerModel = require('../models/insurer');
 const ownAgentModel = require('../models/own_agent');
 const receiptModel = require('../models/receipt');
 const executiveModel = require('../models/executive');
+const policyOwnAgentModel = require('../models/policy_own_agent');
+// Serializers
+const convertNumberToString = require('../serializers/convertNumberToString');
+
 const xlsx = require('xlsx');
 
 module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postHealthBeneficiaryForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsBeneficiaries = [];
-        let resultReceipt = await receiptModel.getReceiptLast();
-        let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
-        let porcentajeAgentePropio = 0;
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            if (resultNaturalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            if (resultLegalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
-            let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
         } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
-        let comisionRecibo = 0;
-        if (resultReceipt.length !== 0) {
-            comisionRecibo = resultReceipt[0].monto_comision_recibo;
-            if (comisionRecibo.toString().includes('.') === true) {
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-            }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
-            let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
-            let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
-            let policy = await policyModel.getPolicyLast();
-            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
+            const fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+            const beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-health-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-health-policy');
-            }
+            res.redirect('/sistema/add-health-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('healthPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-health-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    ownAgent: resultOwnAgent[0],
-                    receipt: resultReceipt[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    porcentajeAgentePropio: porcentajeAgentePropio,
-                    comisionRecibo: comisionRecibo,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionHealthPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-health-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('healthPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-health-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postFuneralBeneficiaryForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsBeneficiaries = [];
-        let resultReceipt = await receiptModel.getReceiptLast();
-        let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
-        let porcentajeAgentePropio = 0;
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            if (resultNaturalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            if (resultLegalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
-            let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
         } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
-        let comisionRecibo = 0;
-        if (resultReceipt.length !== 0) {
-            comisionRecibo = resultReceipt[0].monto_comision_recibo;
-            if (comisionRecibo.toString().includes('.') === true) {
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-            }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
-            let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
-            let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
-            let policy = await policyModel.getPolicyLast();
-            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
+            const fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+            const beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-funeral-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-funeral-policy');
-            }
+            res.redirect('/sistema/add-funeral-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('funeralPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-funeral-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    ownAgent: resultOwnAgent[0],
-                    receipt: resultReceipt[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    porcentajeAgentePropio: porcentajeAgentePropio,
-                    comisionRecibo: comisionRecibo,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionFuneralPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-funeral-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('funeralPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-funeral-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postLifeBeneficiaryForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultPolicy = await policyModel.getPolicyLast();
-        let resultsPolicies = await policyModel.getPolicies();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
-        let resultOwnAgent = [];
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         let resultsBeneficiaries = [];
-        let resultReceipt = await receiptModel.getReceiptLast();
-        let polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
-        let porcentajeAgentePropio = 0;
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
-            let resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
-            if (resultNaturalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultNaturalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
-        } else {
-            let resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
-            if (resultLegalInsured[0].agente_propio_id !== null) {
-                resultOwnAgent = await ownAgentModel.getOwnAgent(resultLegalInsured[0].agente_propio_id);
-                porcentajeAgentePropio = resultOwnAgent[0].porcentaje_agente_propio;
-                porcentajeAgentePropio = porcentajeAgentePropio.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            }
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
-            let resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        let primaPoliza = resultPolicy[0].prima_anual_poliza;
-        if (primaPoliza.toString().includes('.') === true) {
-            primaPoliza = primaPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
         } else {
-            primaPoliza = String(primaPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
-        let comisionRecibo = 0;
-        if (resultReceipt.length !== 0) {
-            comisionRecibo = resultReceipt[0].monto_comision_recibo;
-            if (comisionRecibo.toString().includes('.') === true) {
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-            }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
-            let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
-            let beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
-            let policy = await policyModel.getPolicyLast();
-            let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy[0].id_poliza);
+            const fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+            const beneficiary = await beneficiaryModel.postBeneficiaryForm(fechaNacBeneficiario, req.body);
             await polInsInsurerBenefModel.postPolInsuInsuredBenef(policyInsurerInsured[0].id_paa, beneficiary.insertId);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-life-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-life-policy');
-            }
+            res.redirect('/sistema/add-life-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('lifePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-life-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    ownAgent: resultOwnAgent[0],
-                    receipt: resultReceipt[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    porcentajeAgentePropio: porcentajeAgentePropio,
-                    comisionRecibo: comisionRecibo,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionLifePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-life-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    data: resultsBeneficiaries,
-                    policy: resultPolicy[0],
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaPoliza: primaPoliza,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('lifePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-life-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postHealthBeneficiaryCollectiveForm: async (req, res) => {
@@ -602,13 +484,13 @@ module.exports = {
         }
     },
     putPolicyBeneficiary: async (req, res, next) => {
-        let valoresAceptados = /^[0-9]+$/;
-        let idBeneficiary = req.params.id;
+        const valoresAceptados = /^[0-9]+$/;
+        const idBeneficiary = req.params.id;
         if (idBeneficiary.match(valoresAceptados)) {
-            let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
-            let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
-            let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
-            let resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+            const fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+            const resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
+            const resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
             res.render('editPolicyBeneficiary', {
                 beneficiary: resultBeneficiary[0],
                 fechaNacBeneficiario: fechaNacBeneficiario,
@@ -662,13 +544,13 @@ module.exports = {
         }
     },
     updatePolicyBeneficiary: async (req, res) => {
-        let idBeneficiary = req.body.id_beneficiario;
-        let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
-        let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
-        let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
-        let resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
+        const idBeneficiary = req.body.id_beneficiario;
+        const resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+        const fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+        const resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
+        const resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
         try {
-            let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+            const fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
             await beneficiaryModel.updatePolicyBeneficiary(fechaNacBeneficiario, req.body);
             res.render('editPolicyBeneficiary', {
                 alert: true,
@@ -704,44 +586,44 @@ module.exports = {
     },
 /*               DELETE                  */
     disableBeneficiary: async (req, res) => {
-        let disableCIIB = 1;
-        let disableBeneficiary = 1;
-        let resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(req.params.id);
-        let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
+        const disableCIIB = 1;
+        const disableBeneficiary = 1;
+        const resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(req.params.id);
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
         await colInsInsurerBenefModel.disableColInsuInsuredBenefId(req.params.id, disableCIIB);
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
         res.redirect(`/sistema/collectives-detail/${resultCII[0].colectivo_id}`);
     },
     disablePolicyBeneficiary: async (req, res) => {
-        let disablePIIB = 1;
-        let disableBeneficiary = 1;
-        let resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(req.params.id);
-        let resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
+        const disablePIIB = 1;
+        const disableBeneficiary = 1;
+        const resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(req.params.id);
+        const resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
         await polInsInsurerBenefModel.disablePolInsuInsuredBenefId(req.params.id, disablePIIB);
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
         res.redirect(`/sistema/policies-detail/${resultPII[0].poliza_id}`);
     },
     disableHealthBeneficiary: async (req, res) => {
-        let disablePIIB = 1;
-        let disableBeneficiary = 1;
+        const disablePIIB = 1;
+        const disableBeneficiary = 1;
         await polInsInsurerBenefModel.disablePolInsuInsuredBenefId(req.params.id, disablePIIB);
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
         res.redirect('/sistema/add-health-policy');
     },
     disableFuneralBeneficiary: async (req, res) => {
-        let disablePIIB = 1;
-        let disableBeneficiary = 1;
+        const disablePIIB = 1;
+        const disableBeneficiary = 1;
         await polInsInsurerBenefModel.disablePolInsuInsuredBenefId(req.params.id, disablePIIB);
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);
         res.redirect('/sistema/add-funeral-policy');
     },
     disableLifeBeneficiary: async (req, res) => {
-        let disablePIIB = 1;
-        let disableBeneficiary = 1;
+        const disablePIIB = 1;
+        const disableBeneficiary = 1;
         await polInsInsurerBenefModel.disablePolInsuInsuredBenefId(req.params.id, disablePIIB);
         await beneficiaryModel.updateDisableBeneficiary(req.params.id, req.body);
         await beneficiaryModel.disableBeneficiary(req.params.id, disableBeneficiary);

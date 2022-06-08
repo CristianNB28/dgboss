@@ -25,48 +25,7 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postPolInsuInsuredVehi: async (vehicleId) => {
-        let policyId = await new Promise((resolve, reject) => {
-            db.getConnection((err, connection) => {
-                if(err) { 
-                    console.log(err); 
-                    return; 
-                }
-                connection.query(`SELECT id_poliza 
-                                FROM Poliza 
-                                WHERE deshabilitar_poliza=0
-                                ORDER BY id_poliza DESC
-                                LIMIT 1;`,
-                (error, rows) => {
-                    connection.release();
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(rows);
-                });
-            });
-        });
-        let paaId = await new Promise((resolve, reject) => {
-            db.getConnection((err, connection) => {
-                if(err) { 
-                    console.log(err); 
-                    return; 
-                }
-                connection.query(`SELECT id_paa 
-                                FROM Poliza_Aseguradora_Asegurado 
-                                WHERE poliza_id=? AND deshabilitar_paa=0`,
-                [policyId[0].id_poliza],
-                (error, rows) => {
-                    connection.release();
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-                    resolve(rows);
-                });
-            });
-        });
+    postPolInsuInsuredVehi: async (paaId, vehicleId) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -75,7 +34,7 @@ module.exports = {
                 }
                 connection.query(`INSERT INTO Pol_Aseg_Asegurado_Vehi (paa_id, vehiculo_id) 
                                 VALUES (?, ?)`, 
-                [paaId[0].id_paa, vehicleId],
+                [paaId, vehicleId],
                 (error, rows) => {
                     connection.release();
                     if (error) {

@@ -31,15 +31,16 @@
                         >
                         <thead>
                         <tr>
-                            <th>Pólizas</th>
+                            <th>Póliza No</th>
                             <th>Tipo Individual</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
                             <th>Fecha hasta</th>
                             <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
+                            <th>Prima Neta</th>
+                            <th>IGTF</th>
+                            <th>Prima Total</th>
                             <th>Detalle</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
@@ -50,15 +51,16 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Pólizas</th>
+                            <th>Póliza No</th>
                             <th>Tipo Individual</th>
                             <th>Tomador</th>
                             <th>Aseguradora</th>
                             <th>Fecha desde</th>
                             <th>Fecha hasta</th>
                             <th>Moneda</th>
-                            <th>Prima</th>
-                            <th>Estatus</th>
+                            <th>Prima Neta</th>
+                            <th>IGTF</th>
+                            <th>Prima Total</th>
                             <th>Detalle</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
@@ -145,8 +147,9 @@ $(document).ready(function(){
             {"data": "fecha_desde_poliza"},
             {"data": "fecha_hasta_poliza"},
             {"data": "tipo_moneda_poliza"},
-            {"data": "prima_anual_poliza"},
-            {"data": "estatus_poliza"},
+            {"data": "prima_neta_poliza"},
+            {"data": "igtf_poliza"},
+            {"data": "prima_total_poliza"},
             {
                 "data": "",
                 "render": (data, type, row) => {

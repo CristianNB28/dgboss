@@ -1,3 +1,4 @@
+// Models
 const receiptModel = require('../models/receipt');
 const collectiveModel = require('../models/collective');
 const policyModel = require('../models/policy');
@@ -5,8 +6,14 @@ const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const ownAgentModel = require('../models/own_agent');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
+const policyOwnAgentModel = require('../models/policy_own_agent');
+const polInsInsurerBenefModel = require('../models/pol_insu_insured_benef');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const executiveModel = require('../models/executive');
+const beneficiaryModel = require('../models/beneficiary');
+// Serializers
+const convertStringToNumber = require('../serializers/convertStringToNumber');
+const convertNumberToString = require('../serializers/convertNumberToString');
 
 module.exports = {
 /*                  GET                  */
@@ -86,939 +93,771 @@ module.exports = {
     },
 /*                 POST                  */
     postVehicleReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-vehicle-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-vehicle-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-vehicle-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('vehiclePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-vehicle-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionVehiclePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-vehicle-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('vehiclePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-vehicle-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postHealthReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsBeneficiaries = [];
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+        for (const beneficiary of polInsInsuredBef) {
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-health-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-health-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-health-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('healthPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-health-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionHealthPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-health-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('healthPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-health-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postPatrimonialReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-patrimonial-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-patrimonial-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-patrimonial-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('patrimonialPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-patrimonial-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionPatrimonialPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-patrimonial-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('patrimonialPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-patrimonial-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postBailReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-bail-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-bail-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-bail-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('bailPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-bail-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionBailPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-bail-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('bailPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-bail-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postAnotherBranchReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-another-branch-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-another-branch-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-another-branch-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('anotherBranchPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-another-branch-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionAnotherBranchPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-another-branch-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('anotherBranchPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-another-branch-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postFuneralReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsBeneficiaries = [];
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+        for (const beneficiary of polInsInsuredBef) {
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-funeral-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-funeral-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-funeral-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('funeralPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-funeral-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionFuneralPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-funeral-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('funeralPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-funeral-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postLifeReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultsBeneficiaries = [];
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
+        for (const beneficiary of polInsInsuredBef) {
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
+            resultsBeneficiaries.push(resultBeneficiary[0]);
+        }
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-life-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-life-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-life-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('lifePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-life-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionLifePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-life-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('lifePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-life-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                data: resultsBeneficiaries,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postAPReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-ap-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-ap-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-ap-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('apPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-ap-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionApPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-ap-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('apPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-ap-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postTravelReceiptForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsPolicies = await policyModel.getPolicies();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let fraccionamiento = req.body.fraccionamiento_boolean_recibo ? 1 : 0;
-            let montoPrimaRecibo = req.body.monto_prima_recibo;
-            let montoComisionAsociado = req.body.monto_comision_recibo;
-            let fechaDesdeRecibo = null;
-            let fechaHastaRecibo = null;
-            let fechaPagoRecibo = null;
-            montoPrimaRecibo = montoPrimaRecibo.replace(/[Bs$€]/g, '').replace(' ', '');
-            montoComisionAsociado = montoComisionAsociado.replace(/[Bs$€]/g, '').replace(' ', '');
-            if (req.body.fecha_pago_recibo !== '') {
-                fechaPagoRecibo = new Date(req.body.fecha_pago_recibo);
-            }
-            if (req.body.fecha_desde_recibo !== '') {
-                fechaDesdeRecibo = new Date(req.body.fecha_desde_recibo);
-            }
-            if (req.body.fecha_hasta_recibo !== '') {
-                fechaHastaRecibo = new Date(req.body.fecha_hasta_recibo);
-            }
-            if ((montoPrimaRecibo.indexOf(',') !== -1) && (montoPrimaRecibo.indexOf('.') !== -1)) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            } else if (montoPrimaRecibo.indexOf(',') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(",", ".");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo);
-            } else if (montoPrimaRecibo.indexOf('.') !== -1) {
-                montoPrimaRecibo = montoPrimaRecibo.replace(".", ",");
-                montoPrimaRecibo = parseFloat(montoPrimaRecibo.replace(/,/g,''));
-            }
-            if ((montoComisionAsociado.indexOf(',') !== -1) && (montoComisionAsociado.indexOf('.') !== -1)) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            } else if (montoComisionAsociado.indexOf(',') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(",", ".");
-                montoComisionAsociado = parseFloat(montoComisionAsociado);
-            } else if (montoComisionAsociado.indexOf('.') !== -1) {
-                montoComisionAsociado = montoComisionAsociado.replace(".", ",");
-                montoComisionAsociado = parseFloat(montoComisionAsociado.replace(/,/g,''));
-            }
-            let idPolicy = await policyModel.getPolicyLast();
-            let resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(idPolicy[0].id_poliza);
-            let receipt = await receiptModel.postReceiptForm(fraccionamiento, montoPrimaRecibo, montoComisionAsociado, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, req.body);
-            if (resultPII[0].asegurado_per_jur_id === null) {
-                await receiptInsuredModel.postReceiptNaturalInsured(resultPII[0].asegurado_per_nat_id, receipt.insertId);
-            } else {
-                await receiptInsuredModel.postReceiptLegalInsured(resultPII[0].asegurado_per_jur_id, receipt.insertId);
-            }
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-travel-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-travel-policy');
-            }
+            let {
+                prima_neta_recibo: montoPrimaNeta,
+                igtf_recibo: montoIgtf,
+                prima_total_recibo: montoPrimaTotal,
+                monto_comision_recibo: montoComision,
+                fecha_desde_recibo: fechaDesdeRecibo,
+                fecha_hasta_recibo: fechaHastaRecibo,
+                fecha_pago_recibo: fechaPagoRecibo,
+            } = req.body; 
+            montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoPrimaNeta = convertStringToNumber(montoPrimaNeta);
+            montoIgtf = convertStringToNumber(montoIgtf);
+            montoPrimaTotal = convertStringToNumber(montoPrimaTotal);
+            montoComision = convertStringToNumber(montoComision);
+            fechaPagoRecibo = new Date(fechaPagoRecibo);
+            fechaDesdeRecibo = new Date(fechaDesdeRecibo);
+            fechaHastaRecibo = new Date(fechaHastaRecibo);
+            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            res.redirect('/sistema/add-travel-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('travelPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-travel-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    ownAgents: resultsOwnAgents,
-                    executives: resultsExecutives,
-                    receipts: resultsReceipts,
-                    policies: resultsPolicies,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionTravelPolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-travel-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('travelPolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-travel-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postHealthReceiptCollectiveForm: async (req, res) => {

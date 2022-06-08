@@ -1,3 +1,4 @@
+// Models
 const vehicleModel = require('../models/vehicle');
 const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 const collectiveModel = require('../models/collective');
@@ -9,94 +10,98 @@ const receiptModel = require('../models/receipt');
 const executiveModel = require('../models/executive');
 const ownAgentModel = require('../models/own_agent');
 const policyModel = require('../models/policy');
+const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
+const policyOwnAgentModel = require('../models/policy_own_agent');
+// Serializers
+const convertStringToNumber = require('../serializers/convertStringToNumber');
+const convertNumberToString = require('../serializers/convertNumberToString');
+
 const xlsx = require('xlsx');
 
 module.exports = {
 /*                  GET                  */
 /*                 POST                  */
     postVehicleForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsPolicies = await policyModel.getPoliciesNumbers();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultPolicy = await policyModel.getPolicyLast();
+        const resultsPolicies = await policyModel.getPoliciesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
+        let nameRazonInsured = ''; 
+        const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+        if (resultPolicyOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
+        }
+        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
+        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else {
+            const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+            primaNetaPoliza = primaNetaPoliza / resultPolicy[0].numero_pago_poliza;
+            primaNetaPoliza = primaNetaPoliza.toFixed(2);
+            primaNetaPoliza = Number(primaNetaPoliza);
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        } else {
+            primaNetaPoliza = convertNumberToString(primaNetaPoliza);
+        }
         try {
-            let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-            let gradoBlindaje;
-            let montoBlindaje;
-            let yearVehicle = new Date(req.body.year_vehiculo);
+            let {
+                blindaje_boolean_vehiculo: blindaje,
+                year_vehiculo: yearVehicle,
+                grado_blindaje_vehiculo: gradoBlindaje,
+                monto_blindaje_vehiculo: montoBlindaje,
+            } = req.body;
+            blindaje = blindaje ? 1 : 0;
+            yearVehicle = new Date(yearVehicle);
             yearVehicle = yearVehicle.getUTCFullYear();
-            if (req.body.grado_blindaje_vehiculo === '') {
+            if (gradoBlindaje === '') {
                 gradoBlindaje = 0;
             } else {
-                gradoBlindaje = parseInt(req.body.grado_blindaje_vehiculo)
+                gradoBlindaje = parseInt(gradoBlindaje);
             }
-            if (req.body.monto_blindaje_vehiculo === '') {
+            if (montoBlindaje === '') {
                 montoBlindaje = 0;
             } else {
-                montoBlindaje = req.body.monto_blindaje_vehiculo;
-                if ((montoBlindaje.indexOf(',') !== -1) && (montoBlindaje.indexOf('.') !== -1)) {
-                    montoBlindaje = montoBlindaje.replace(",", ".");
-                    montoBlindaje = montoBlindaje.replace(".", ",");
-                    montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
-                } else if (montoBlindaje.indexOf(',') !== -1) {
-                    montoBlindaje = montoBlindaje.replace(",", ".");
-                    montoBlindaje = parseFloat(montoBlindaje);
-                } else if (montoBlindaje.indexOf('.') !== -1) {
-                    montoBlindaje = montoBlindaje.replace(".", ",");
-                    montoBlindaje = parseFloat(montoBlindaje.replace(/,/g,''));
-                }
+                montoBlindaje = convertStringToNumber(montoBlindaje);
             }
-            let vehicle = await vehicleModel.postVehicleForm(blindaje, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
-            await polInsuInsuredVehiModel.postPolInsuInsuredVehi(vehicle.insertId);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.redirect('/sistema/add-vehicle-policy');
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.redirect('/sistema/add-subscription-vehicle-policy');
-            }
+            const vehicle = await vehicleModel.postVehicleForm(blindaje, gradoBlindaje, montoBlindaje, yearVehicle, req.body);
+            await polInsuInsuredVehiModel.postPolInsuInsuredVehi(policyInsurerInsured[0].id_paa, vehicle.insertId);
+            res.redirect('/sistema/add-vehicle-policy');
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('vehiclePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-vehicle-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionVehiclePolicyForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-vehicle-policy',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    policies: resultsPolicies,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('vehiclePolicyForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-vehicle-policy',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                policy: resultPolicy[0],
+                policies: resultsPolicies,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaPoliza,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postVehicleCollectiveForm: async (req, res) => {

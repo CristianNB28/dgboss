@@ -1,5 +1,9 @@
+// Models
 const userModel = require('../models/user');
 const executiveModel = require('../models/executive');
+// Serializers
+const separateNameSurname = require('../serializers/separateNameSurname');
+
 const bcrypt = require('bcryptjs');
 
 module.exports = {
@@ -30,16 +34,8 @@ module.exports = {
             } = req.body;
             if (passwordUser === passwordConfirm) {
                 const passwordHash = await bcrypt.hash(passwordUser, 8);
-                let nombresEjecutivo;
-                let apellidosEjecutivo;
-                if (nameUser.split(" ").length === 2) {
-                    nombresEjecutivo = nameUser.split(' ', 1).join(' ');
-                    apellidosEjecutivo = nameUser.split(' ').slice(1,2).join(' ');
-                } else {
-                    nombresEjecutivo = nameUser.split(' ', 2).join(' ');
-                    apellidosEjecutivo = nameUser.split(' ').slice(2,4).join(' ');
-                }
-                const idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+                const nombresCompletoEjecutivo = separateNameSurname(nameUser);
+                const idEjecutivo = await executiveModel.getExecutiveId(nombresCompletoEjecutivo.names, nombresCompletoEjecutivo.surnames);
                 await userModel.postUserForm(passwordHash, idEjecutivo[0].id_ejecutivo, req.body);
                 res.render('userForm', {
                     alert: true,
@@ -111,16 +107,8 @@ module.exports = {
         const resultUser = await userModel.getUser(idUser);
         const resultExecutives = await executiveModel.getExecutives();
         try {
-            let nombresEjecutivo;
-            let apellidosEjecutivo;
-            if (nameUser.split(" ").length === 2) {
-                nombresEjecutivo = nameUser.split(' ', 1).join(' ');
-                apellidosEjecutivo = nameUser.split(' ').slice(1,2).join(' ');
-            } else {
-                nombresEjecutivo = nameUser.split(' ', 2).join(' ');
-                apellidosEjecutivo = nameUser.split(' ').slice(2,4).join(' ');
-            }
-            const idEjecutivo = await executiveModel.getExecutiveId(nombresEjecutivo, apellidosEjecutivo);
+            const nombresCompletoEjecutivo = separateNameSurname(nameUser);
+            const idEjecutivo = await executiveModel.getExecutiveId(nombresCompletoEjecutivo.names, nombresCompletoEjecutivo.surnames);
             if (passwordUser !== resultUser[0].password_usuario) {
                 const newPassword = await bcrypt.hash(passwordUser, 8);
                 await userModel.updateUser(newPassword, idEjecutivo[0].id_ejecutivo, req.body);

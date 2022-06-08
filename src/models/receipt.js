@@ -134,42 +134,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postReceiptForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, receipt) => {
-        let policyId = await new Promise((resolve, reject) => {
-            db.query(`SELECT id_poliza 
-                    FROM Poliza 
-                    WHERE deshabilitar_poliza=0
-                    ORDER BY id_poliza DESC
-                    LIMIT 1;`, 
-            (error, rows) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(rows);
-            });
-        });
-        return new Promise((resolve, reject) => {
-            db.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, poliza_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-            [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, policyId[0].id_poliza], 
-            (error, rows) => {
-                if (error) {
-                    reject(error)
-                }
-                resolve(rows);
-            });
-        });
-    },
-    postReceiptPolicyForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, receipt) => {
+    postReceiptPolicyForm: async (montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, policyId, receipt) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, poliza_id)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, policyId[0].id_poliza],
+                connection.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, prima_neta_recibo, igtf_recibo, prima_total_recibo, fecha_pago_recibo, metodo_pago_recibo, monto_comision_recibo, poliza_id)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, montoPrimaNeta, montoIgtf, montoPrimaTotal, fechaPagoRecibo, receipt.metodo_pago_recibo, montoComision, policyId],
                 (error, rows) => {
                     connection.release();
                     if (error) {
