@@ -10,7 +10,7 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_colectivo, numero_colectivo, nombre_tomador_colectivo, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo 
+                connection.query(`SELECT * 
                                 FROM Colectivo 
                                 WHERE deshabilitar_colectivo=0`,
                 (error, rows) => {
@@ -73,7 +73,7 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_colectivo, numero_colectivo, prima_anual_colectivo, tipo_moneda_colectivo 
+                connection.query(`SELECT * 
                                 FROM Colectivo 
                                 WHERE deshabilitar_colectivo=0
                                 ORDER BY id_colectivo DESC
@@ -199,16 +199,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postCollectiveHealthForm: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
+    postCollectiveHealthForm: (fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoCoberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Colectivo (numero_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, cobertura_suma_asegurada_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, maternidad_colectivo, plazo_espera_colectivo, detalle_cliente_colectivo)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente],
+                connection.query(`INSERT INTO Colectivo (numero_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_neta_colectivo, igtf_colectivo, prima_total_colectivo, estatus_colectivo, cobertura_suma_asegurada_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, maternidad_colectivo, plazo_espera_colectivo, detalle_cliente_colectivo, fraccionamiento_boolean_colectivo, tipo_fraccionamiento_colectivo, numero_pago_colectivo)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, montoCoberturaSumaAsegurada, collective.tipo_canal_colectivo, montoDeducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente, fraccionamientoBoolean, collective.tipo_fraccionamiento_colectivo, collective.numero_pago_colectivo],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -220,16 +220,16 @@ module.exports = {
             });
         });
     },
-    postCollectiveForm: (tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+    postCollectiveForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Colectivo (numero_colectivo, tomador_asegurado_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_anual_colectivo, estatus_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo],
+                connection.query(`INSERT INTO Colectivo (numero_colectivo, tomador_asegurado_colectivo, tipo_id_rif_tomador, id_rif_tomador, nombre_tomador_colectivo, correo_tomador, tipo_colectivo, fecha_desde_colectivo, fecha_hasta_colectivo, tipo_moneda_colectivo, prima_neta_colectivo, igtf_colectivo, prima_total_colectivo, estatus_colectivo, tipo_canal_colectivo, deducible_colectivo, grupo_colectivo, fraccionamiento_boolean_colectivo, tipo_fraccionamiento_colectivo, numero_pago_colectivo)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, collective.tipo_canal_colectivo, montoDeducible, collective.grupo_colectivo, fraccionamientoBoolean, collective.tipo_fraccionamiento_colectivo, collective.numero_pago_colectivo],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -242,7 +242,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateCollectiveHealth: (montoPrimaAnual, deducible, coberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
+    updateCollectiveHealth: (fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoCoberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -250,9 +250,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Colectivo 
-                                SET numero_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_anual_colectivo=?, estatus_colectivo=?, cobertura_suma_asegurada_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?, maternidad_colectivo=?, plazo_espera_colectivo=?, detalle_cliente_colectivo=? 
+                                SET numero_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_neta_colectivo=?, igtf_colectivo=?, prima_total_colectivo=?, estatus_colectivo=?, cobertura_suma_asegurada_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?, maternidad_colectivo=?, plazo_espera_colectivo=?, detalle_cliente_colectivo=?, fraccionamiento_boolean_colectivo=?, tipo_fraccionamiento_colectivo=?, numero_pago_colectivo=? 
                                 WHERE id_colectivo=?`, 
-                [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, coberturaSumaAsegurada, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente, collective.id_colectivo],
+                [collective.numero_colectivo, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, montoCoberturaSumaAsegurada, collective.tipo_canal_colectivo, montoDeducible, collective.grupo_colectivo, collective.maternidad_colectivo, collective.plazo_espera_colectivo, fechaDetalleCliente, fraccionamientoBoolean, collective.tipo_fraccionamiento_colectivo, collective.numero_pago_colectivo, collective.id_colectivo],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -264,7 +264,7 @@ module.exports = {
             });
         });
     },
-    updateCollective: (tomadorAsegurado, montoPrimaAnual, deducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
+    updateCollective: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, fechaPolizaDesde, fechaPolizaHasta, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -272,9 +272,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Colectivo 
-                                SET numero_colectivo=?, tomador_asegurado_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_anual_colectivo=?, estatus_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?
+                                SET numero_colectivo=?, tomador_asegurado_colectivo=?, tipo_id_rif_tomador=?, id_rif_tomador=?, nombre_tomador_colectivo=?, correo_tomador=?, tipo_colectivo=?, fecha_desde_colectivo=?, fecha_hasta_colectivo=?, tipo_moneda_colectivo=?, prima_neta_colectivo=?, igtf_colectivo=?, prima_total_colectivo=?, estatus_colectivo=?, tipo_canal_colectivo=?, deducible_colectivo=?, grupo_colectivo=?, fraccionamiento_boolean_colectivo=?, tipo_fraccionamiento_colectivo=?, numero_pago_colectivo=?
                                 WHERE id_colectivo=?`, 
-                [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaAnual, estatusPoliza, collective.tipo_canal_colectivo, deducible, collective.grupo_colectivo, collective.id_colectivo],
+                [collective.numero_colectivo, tomadorAsegurado, collective.tipo_id_rif_tomador, collective.id_rif_tomador, collective.nombre_tomador_colectivo, collective.correo_tomador, tipoColectivo, fechaPolizaDesde, fechaPolizaHasta, collective.tipo_moneda_colectivo, montoPrimaNeta, montoIgtf, montoPrimaTotal, estatusPoliza, collective.tipo_canal_colectivo, montoDeducible, collective.grupo_colectivo, fraccionamientoBoolean, collective.tipo_fraccionamiento_colectivo, collective.numero_pago_colectivo, collective.id_colectivo],
                 (error, rows) => {
                     connection.release();
                     if (error) {

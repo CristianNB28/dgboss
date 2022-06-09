@@ -136,22 +136,16 @@ router.get('/policies-detail/:id', requireAuth, policyController.getPoliciesDeta
 // Rutas de Colectivos
 router.get('/add-health-collective', requireAuth, collectiveController.getHealthCollectiveForm);
 router.get('/list-health-collective', requireAuth, collectiveController.getHealthCollectiveList);
-router.get('/add-subscription-health-collective', requireAuth, collectiveController.getSubscriptionHealthCollectiveForm);
-router.get('/list-subscription-health-collective', requireAuth, collectiveController.getSubscriptionHealthCollectiveList);
 router.post('/add-health-collective', requireAuth, collectiveController.postHealthCollectiveForm);
 router.post('/add-health-beneficiary-collective', requireAuth, upload.single('excel'), beneficiaryController.postHealthBeneficiaryCollectiveForm);
 router.post('/add-health-receipt-collective', requireAuth, receiptController.postHealthReceiptCollectiveForm);
 router.get('/add-vehicle-collective', requireAuth, collectiveController.getVehicleCollectiveForm);
 router.get('/list-vehicle-collective', requireAuth, collectiveController.getVehicleCollectiveList);
-router.get('/add-subscription-vehicle-collective', requireAuth, collectiveController.getSubscriptionVehicleCollectiveForm);
-router.get('/list-subscription-vehicle-collective', requireAuth, collectiveController.getSubscriptionVehicleCollectiveList);
 router.post('/add-vehicle-collective', requireAuth, collectiveController.postVehicleCollectiveForm);
 router.post('/add-transportation', requireAuth, upload.single('excelAuto'), vehicleController.postVehicleCollectiveForm);
 router.post('/add-vehicle-receipt-collective', requireAuth, receiptController.postVehicleReceiptCollectiveForm);
 router.get('/add-risk-diverse-collective', requireAuth, collectiveController.getRiskDiverseCollectiveForm);
 router.get('/list-risk-diverse-collective', requireAuth, collectiveController.getRiskDiverseCollectiveList);
-router.get('/add-subscription-risk-diverse-collective', requireAuth, collectiveController.getSubscriptionRiskDiverseCollectiveForm);
-router.get('/list-subscription-risk-diverse-collective', requireAuth, collectiveController.getSubscriptionRiskDiverseCollectiveList);
 router.post('/add-risk-diverse-collective', requireAuth, collectiveController.postRiskDiverseCollectiveForm);
 router.post('/add-point-sale', requireAuth, upload.single('excelPuntoVenta'), riskDiverseController.postRiskDiverseForm);
 router.post('/add-risk-receipt-collective', requireAuth, receiptController.postRiskDiverseReceiptCollectiveForm);
@@ -241,6 +235,9 @@ router.post('/email-receipt-funeral', requireAuth, emailController.postEmailRece
 router.post('/email-receipt-life', requireAuth, emailController.postEmailReceiptPolicyLife);
 router.post('/email-receipt-ap', requireAuth, emailController.postEmailReceiptPolicyAp);
 router.post('/email-receipt-travel', requireAuth, emailController.postEmailReceiptPolicyTravel);
+router.post('/email-receipt-collective-health', requireAuth, emailController.postEmailReceiptCollectiveHealth);
+router.post('/email-receipt-collective-vehicle', requireAuth, emailController.postEmailReceiptCollectiveVehicle);
+router.post('/email-receipt-risk-diverse', requireAuth, emailController.postEmailReceiptCollectiveRiskDiverse);
 // Pagina error 404
 router.get('*', indexController.get404);
 

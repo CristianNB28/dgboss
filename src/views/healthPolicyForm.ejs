@@ -631,7 +631,7 @@
                             <form id="receipt-form-health" action="/sistema/add-health-receipt" method="POST">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <% if (typeof(policy) !== 'undefined') { %>
+                                        <% if (Object.keys(policy).length !== 0) { %>
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-4 col-form-label">Número Póliza</label>
                                                     <div class="col-sm-8">
@@ -750,7 +750,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <% if (typeof(policy) !== 'undefined') { %>
+                                        <% if (Object.keys(policy).length !== 0) { %>
                                             <div class="form-group">
                                                 <div class="form-group row"><label class="col-sm-4 col-form-label">Prima Neta</label>
                                                     <div class="col-sm-8">

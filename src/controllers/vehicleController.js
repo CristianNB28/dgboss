@@ -4,6 +4,7 @@ const polInsuInsuredVehiModel = require('../models/pol_insu_insured_vehi');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const colInsInsurerVehiModel = require('../models/col_insu_insured_vehi');
+const collectiveOwnAgentModel = require('../models/collective_own_agent');
 const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const receiptModel = require('../models/receipt');
@@ -105,13 +106,38 @@ module.exports = {
         }
     },
     postVehicleCollectiveForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultsCollective = await collectiveModel.getCollectives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaColectivo = resultCollective[0].prima_neta_colectivo;
+        let nameRazonInsured = '';
+        const resultcollectiveOwnAgent = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultCollective[0].id_colectivo);
+        if (resultcollectiveOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultcollectiveOwnAgent[0].agente_propio_id);
+        }
+        const collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
+        const resultInsurer = await insurerModel.getInsurer(collectiveInsurerInsured[0].aseguradora_id);
+        if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id !== null)) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else if ((collectiveInsurerInsured[0].asegurado_per_jur_id !== null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
+            const resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultCollective[0].fraccionamiento_boolean_colectivo === 1) {
+            primaNetaColectivo = primaNetaColectivo / resultCollective[0].numero_pago_colectivo;
+            primaNetaColectivo = primaNetaColectivo.toFixed(2);
+            primaNetaColectivo = Number(primaNetaColectivo);
+            primaNetaColectivo = convertNumberToString(primaNetaColectivo);
+        } else if (resultCollective[0].fraccionamiento_boolean_colectivo === 0) {
+            primaNetaColectivo = convertNumberToString(primaNetaColectivo);
+        }
         try {
             const urlFile = req.file.path;
             const fileExtension =
@@ -127,9 +153,8 @@ module.exports = {
                 const workbookSheets = workbook.SheetNames;
                 const sheet = workbookSheets[0];
                 const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-                let temparray, chunk = dataExcel.length;
                 const temparrayVehicle = [];
-                let idCollective = await collectiveModel.getCollectiveLast();
+                let temparray, chunk = dataExcel.length;
                 temparray = dataExcel.slice(0, 0 + chunk).map(data => {
                     data['Año'] = data['Año'].toString();
                     data['Año'] = new Date(data['Año']);
@@ -140,17 +165,7 @@ module.exports = {
                         data['Blindaje( si o no)'] = 0;
                     }
                     data['Suma Asegurada'] = String(data['Suma Asegurada']);
-                    if ((data['Suma Asegurada'].indexOf(',') !== -1) && (data['Suma Asegurada'].indexOf('.') !== -1)) {
-                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(",", ".");
-                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(".", ",");
-                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada'].replace(/,/g,''));
-                    } else if (data['Suma Asegurada'].indexOf(',') !== -1) {
-                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(",", ".");
-                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada']);
-                    } else if (data['Suma Asegurada'].indexOf('.') !== -1) {
-                        data['Suma Asegurada'] = data['Suma Asegurada'].replace(".", ",");
-                        data['Suma Asegurada'] = parseFloat(data['Suma Asegurada'].replace(/,/g,''));
-                    }
+                    data['Suma Asegurada'] = convertStringToNumber(data['Suma Asegurada']);
                     data['Suma Asegurada'] = data['Suma Asegurada'].toFixed(2);
                     return [
                             data['Número de certificado'], 
@@ -173,86 +188,62 @@ module.exports = {
                             data['Estatus (Emisión, renovación, inclusión)']
                         ]
                 });
-                let vehicle = await vehicleModel.postVehicleCollectiveForm(temparray);
-                let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+                const vehicle = await vehicleModel.postVehicleCollectiveForm(temparray);
+                const collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
                 for (let index = 0; index < temparray.length; index++) {
                     let vehicleId = vehicle.insertId + index;
                     temparrayVehicle.push([collectiveInsurerInsured[0].id_caa, vehicleId]);
                 }
                 await colInsInsurerVehiModel.postColInsuInsuredVehi(temparrayVehicle);
-                if (req.cookies.rol === 'ADMINISTRATIVO') {
-                    res.redirect('/sistema/add-vehicle-collective');
-                } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                    res.redirect('/sistema/add-subscription-vehicle-collective');
-                }
+                res.redirect('/sistema/add-vehicle-collective');
             } else {
                 throw new SyntaxError("Ingrese archivo de extensión .csv");
             }
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('vehicleCollectiveForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-vehicle-collective',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    collectives: resultsCollective,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionVehicleCollectiveForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-vehicle-collective',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    collectives: resultsCollective,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('vehicleCollectiveForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-vehicle-collective',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collective: resultCollective[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaColectivo,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
 /*                  PUT                  */
     putVehicle: async (req, res, next) => {
-        let valoresAceptados = /^[0-9]+$/;
-        let idVehicle = req.params.id;
+        const valoresAceptados = /^[0-9]+$/;
+        const idVehicle = req.params.id;
         if (idVehicle.match(valoresAceptados)) {
-            let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-            let resultVehicle = await vehicleModel.getVehicle(idVehicle);
-            let resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(idVehicle);
-            let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
+            const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+            const resultVehicle = await vehicleModel.getVehicle(idVehicle);
+            const resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(idVehicle);
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
             let sumaAsegurada = resultVehicle[0].suma_asegurada_vehiculo;
             let capacidadCarga = resultVehicle[0].capacidad_carga;
-            if (sumaAsegurada.toString().includes('.') === true) {
-                sumaAsegurada = sumaAsegurada.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                sumaAsegurada = String(sumaAsegurada).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-            }
-            capacidadCarga = String(capacidadCarga).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
+            sumaAsegurada = convertNumberToString(sumaAsegurada);
+            capacidadCarga = convertNumberToString(capacidadCarga);
             res.render('editVehicle', {
+                sumaAsegurada,
+                capacidadCarga,
                 vehicle: resultVehicle[0],
                 idCollective: resultCII[0],
-                sumaAsegurada: sumaAsegurada,
-                capacidadCarga: capacidadCarga,
                 naturalInsureds: resultsNaturalInsureds,
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -262,35 +253,70 @@ module.exports = {
         }
     },
     updateVehicle: async (req, res) => {
-        let blindaje = req.body.blindaje_boolean_vehiculo ? 1 : 0;
-        let capacidadCarga = req.body.capacidad_carga;
-        let sumaAsegurada = req.body.suma_asegurada_vehiculo;
-        if (capacidadCarga.indexOf('.') !== -1) {
-            capacidadCarga = capacidadCarga.replace(".", ",");
-            capacidadCarga = parseFloat(capacidadCarga.replace(/,/g,''));
+        const idVehicle = req.body.id_vehiculo;
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultVehicle = await vehicleModel.getVehicle(idVehicle);
+        const resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(idVehicle);
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
+        let sumaAsegurada = resultVehicle[0].suma_asegurada_vehiculo;
+        let capacidadCarga = resultVehicle[0].capacidad_carga;
+        sumaAsegurada = convertNumberToString(sumaAsegurada);
+        capacidadCarga = convertNumberToString(capacidadCarga);
+        try {
+            let {
+                blindaje_boolean_vehiculo: blindaje,
+                capacidad_carga: capacidadCarga,
+                suma_asegurada_vehiculo: sumaAsegurada,
+                year_vehiculo: yearVehicle
+            } = req.body;
+            blindaje = blindaje ? 1 : 0;
+            capacidadCarga = convertStringToNumber(capacidadCarga);
+            sumaAsegurada = convertStringToNumber(sumaAsegurada);
+            yearVehicle = new Date(yearVehicle);
+            yearVehicle = yearVehicle.getUTCFullYear();
+            await vehicleModel.updateVehicle(blindaje, capacidadCarga, sumaAsegurada, yearVehicle, req.body);
+            res.render('editVehicle', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se actualizaron los datos exitosamente',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/edit-vehicle/${idVehicle}`,
+                sumaAsegurada,
+                capacidadCarga,
+                vehicle: resultVehicle[0],
+                idCollective: resultCII[0],
+                naturalInsureds: resultsNaturalInsureds,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('editVehicle', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/edit-vehicle/${idVehicle}`,
+                sumaAsegurada,
+                capacidadCarga,
+                vehicle: resultVehicle[0],
+                idCollective: resultCII[0],
+                naturalInsureds: resultsNaturalInsureds,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
-        if ((sumaAsegurada.indexOf(',') !== -1) && (sumaAsegurada.indexOf('.') !== -1)) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        } else if (sumaAsegurada.indexOf(',') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(",", ".");
-            sumaAsegurada = parseFloat(sumaAsegurada);
-        } else if (sumaAsegurada.indexOf('.') !== -1) {
-            sumaAsegurada = sumaAsegurada.replace(".", ",");
-            sumaAsegurada = parseFloat(sumaAsegurada.replace(/,/g,''));
-        }
-        let yearVehicle = new Date(req.body.year_vehiculo);
-        yearVehicle = yearVehicle.getUTCFullYear();
-        await vehicleModel.updateVehicle(blindaje, capacidadCarga, sumaAsegurada, yearVehicle, req.body);
-        res.redirect(`/sistema/edit-vehicle/${req.body.id_vehiculo}`);
     },
 /*               DELETE                  */
     disableVehicle: async (req, res) => {
-        let disableCIIV = 1;
-        let disableVehicle = 1;
-        let resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(req.params.id);
-        let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
+        const disableCIIV = 1;
+        const disableVehicle = 1;
+        const resultCIIV = await colInsInsurerVehiModel.getColInsuInsuredVehiId(req.params.id);
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIV[0].caa_id);
         await colInsInsurerVehiModel.disableColInsuInsuredVehiId(req.params.id, disableCIIV);
         await vehicleModel.updateDisableVehicle(req.params.id, req.body);
         await vehicleModel.disableVehicle(req.params.id, disableVehicle);

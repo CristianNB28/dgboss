@@ -33,7 +33,7 @@
                                                 type="text"
                                                 name="numero_colectivo"
                                                 id="numero_colectivo"
-                                                value="<%= collective[0].numero_colectivo %>"
+                                                value="<%= collective.numero_colectivo %>"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -46,7 +46,7 @@
                                             <div class="numeral-selector selector">
                                                 <div class="select-box-wrapper">
                                                     <select name="tipo_id_rif_tomador" id="select_box">
-                                                        <option value="<%= collective[0].tipo_id_rif_tomador %>"><%= collective[0].tipo_id_rif_tomador %></option>
+                                                        <option value="<%= collective.tipo_id_rif_tomador %>"><%= collective.tipo_id_rif_tomador %></option>
                                                         <option value="V">V</option>
                                                         <option value="E">E</option>
                                                         <option value="J">J</option>
@@ -61,7 +61,7 @@
                                                 name="id_rif_tomador"
                                                 id="id_rif_tomador"
                                                 onkeyup="pasarNombreTomador2();"
-                                                value="<%= collective[0].id_rif_tomador %>" 
+                                                value="<%= collective.id_rif_tomador %>" 
                                                 class="form-control input-numeral"
                                                 required
                                             >
@@ -74,7 +74,7 @@
                                                 type="text"
                                                 name="nombre_tomador_colectivo"
                                                 id="nombre_tomador_colectivo"
-                                                value="<%= collective[0].nombre_tomador_colectivo %>"
+                                                value="<%= collective.nombre_tomador_colectivo %>"
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
@@ -88,7 +88,7 @@
                                                 type="email"
                                                 name="correo_tomador"
                                                 id="correo_tomador"
-                                                value="<%= collective[0].correo_tomador %>"
+                                                value="<%= collective.correo_tomador %>"
                                                 class="form-control"
                                                 required
                                             >
@@ -103,7 +103,7 @@
                                                             name="tomador_asegurado_colectivo" 
                                                             id="tomador_asegurado_colectivo" 
                                                             onclick="pasarNombreTomador();"
-                                                            <%= collective[0].tomador_asegurado_colectivo === 1 ? 'checked': '' %>
+                                                            <%= collective.tomador_asegurado_colectivo === 1 ? 'checked': '' %>
                                                         > 
                                                         ¿Asegurado mismo tomador?</label></div>
                                         </div>
@@ -255,12 +255,7 @@
                                             >
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="ibox">
-                                <div class="form-control">
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Deducible</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -268,20 +263,25 @@
                                                 name="deducible_colectivo"
                                                 id="deducible_colectivo"
                                                 placeholder="Deducible *" 
-                                                value="<%= deducible %>"
+                                                value="<%= montoDeducible %>"
                                                 class="form-control currency_format"
                                                 required
                                             >
                                         </div>
                                     </div>
-                                    <div class="hr-line-dashed"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Grupo</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
                                                 name="grupo_colectivo"
                                                 id="grupo_colectivo"
-                                                value="<%= collective[0].grupo_colectivo %>" 
+                                                value="<%= collective.grupo_colectivo %>" 
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                             >
@@ -291,7 +291,7 @@
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Moneda</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_moneda_colectivo" id="tipo_moneda_colectivo" onchange="currencySignChange()" required>
-                                                <option value="<%= collective[0].tipo_moneda_colectivo %>"><%= collective[0].tipo_moneda_colectivo %></option>
+                                                <option value="<%= collective.tipo_moneda_colectivo %>"><%= collective.tipo_moneda_colectivo %></option>
                                                 <option value="BOLÍVAR">BOLÍVAR</option>
                                                 <option value="DÓLAR">DÓLAR</option>
                                                 <option value="EUROS">EUROS</option>
@@ -299,23 +299,95 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima Anual</label>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Prima Neta</label>
                                         <div class="col-sm-9">
                                             <input 
                                                 type="text"
-                                                name="prima_anual_colectivo"
-                                                id="prima_anual_colectivo"
-                                                value="<%= primaAnual %>"
+                                                name="prima_neta_colectivo"
+                                                id="prima_neta_colectivo"
+                                                value="<%= montoPrimaNeta %>" 
+                                                class="form-control currency_format"
+                                                onkeyup="premiumCalculation()"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">IGTF</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="igtf_colectivo"
+                                                id="igtf_colectivo"
+                                                value="<%= montoIgtf %>" 
                                                 class="form-control currency_format"
                                                 required
                                             >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Total Prima</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="prima_total_colectivo"
+                                                id="prima_total_colectivo"
+                                                value="<%= montoPrimaTotal %>" 
+                                                class="form-control currency_format"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row" id="radioContainer">
+                                        <label class="col-sm-3 col-form-label">Fraccionamiento</label>
+                                        <div class="col-sm-9">
+                                            <div>
+                                                <label><input 
+                                                            type="checkbox" 
+                                                            name="fraccionamiento_boolean_colectivo" 
+                                                            id="fraccionamiento_boolean_colectivo"
+                                                            onclick="premiumCalculationDate()"
+                                                            <%= collective.fraccionamiento_boolean_colectivo === 1 ? 'checked': '' %> 
+                                                        >  
+                                                        ¿Aplica Fraccionamiento?
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="active-select-1">
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="tipo_fraccionamiento_colectivo" id="tipo_fraccionamiento_colectivo" onchange="premiumCalculationDate()">
+                                                    <option value="<%= collective.tipo_fraccionamiento_colectivo %>"><%= collective.tipo_fraccionamiento_colectivo %></option>
+                                                    <option value="MENSUAL">MENSUAL</option>
+                                                    <option value="BIMESTRAL">BIMESTRAL</option>
+                                                    <option value="TRIMESTRAL">TRIMESTRAL</option>
+                                                    <option value="SEMESTRAL">SEMESTRAL</option>
+                                                    <option value="ANUAL">ANUAL</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número de Pagos</label>
+                                            <div class="col-sm-9">
+                                                <input 
+                                                    type="number"
+                                                    step="0.01"
+                                                    name="numero_pago_colectivo"
+                                                    id="numero_pago_colectivo"
+                                                    value="<%= collective.numero_pago_colectivo %>" 
+                                                    class="form-control"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Canal</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_canal_colectivo" id="tipo_canal_colectivo" onchange="showList()" required>
-                                                <option value="<%= collective[0].tipo_canal_colectivo %>"><%= collective[0].tipo_canal_colectivo %></option>
+                                                <option value="<%= collective.tipo_canal_colectivo %>"><%= collective.tipo_canal_colectivo %></option>
                                                 <option value="REDES SOCIALES">REDES SOCIALES</option>
                                                 <option value="PÁGINA WEB">PÁGINA WEB</option>
                                                 <option value="ÁREA BY ATINA">ÁREA BY ATINA</option>
@@ -411,7 +483,7 @@
                                 type="hidden" 
                                 name="id_colectivo"
                                 id="id_colectivo"
-                                value="<%= collective[0].id_colectivo %>"
+                                value="<%= collective.id_colectivo %>"
                                 class="form-control"
                             >
                         </div>

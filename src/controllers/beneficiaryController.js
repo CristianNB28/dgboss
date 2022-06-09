@@ -7,6 +7,7 @@ const insuredModel = require('../models/insured');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const colInsInsurerBenefModel = require('../models/col_insu_insured_benef');
+const collectiveOwnAgentModel = require('../models/collective_own_agent');
 const insurerModel = require('../models/insurer');
 const ownAgentModel = require('../models/own_agent');
 const receiptModel = require('../models/receipt');
@@ -237,29 +238,37 @@ module.exports = {
         }
     },
     postHealthBeneficiaryCollectiveForm: async (req, res) => {
-        let resultsInsurers = await insurerModel.getInsurers();
-        let resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
-        let resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        let resultCollective = await collectiveModel.getCollectiveLast();
-        let resultReceipt = await receiptModel.getReceiptLast();
-        let resultsCollective = await collectiveModel.getCollectives();
-        let resultsReceipts = await receiptModel.getReceipts();
-        let resultsExecutives = await executiveModel.getExecutives();
-        let resultsOwnAgents = await ownAgentModel.getOwnAgents();
-        let primaColectivo = resultCollective[0].prima_anual_colectivo;
-        if (primaColectivo.toString().includes('.') === true) {
-            primaColectivo = primaColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-        } else {
-            primaColectivo = String(primaColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
+        const resultsLegalInsureds = await insuredModel.getLegalInsureds();
+        const resultCollective = await collectiveModel.getCollectiveLast();
+        const resultsCollective = await collectiveModel.getCollectivesNumbers();
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultOwnAgent = [];
+        let primaNetaColectivo = resultCollective[0].prima_neta_colectivo;
+        let nameRazonInsured = '';
+        const resultcollectiveOwnAgent = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultCollective[0].id_colectivo);
+        if (resultcollectiveOwnAgent.length !== 0) {
+            resultOwnAgent = await ownAgentModel.getOwnAgent(resultcollectiveOwnAgent[0].agente_propio_id);
         }
-        let comisionRecibo = 0;
-        if (resultReceipt.length !== 0) {
-            comisionRecibo = resultReceipt[0].monto_comision_recibo;
-            if (comisionRecibo.toString().includes('.') === true) {
-                comisionRecibo = comisionRecibo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                comisionRecibo = String(comisionRecibo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-            }
+        const collectiveInsurerInsured = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
+        const resultInsurer = await insurerModel.getInsurer(collectiveInsurerInsured[0].aseguradora_id);
+        if ((collectiveInsurerInsured[0].asegurado_per_jur_id === null) && (collectiveInsurerInsured[0].asegurado_per_nat_id !== null)) {
+            const resultNaturalInsured = await insuredModel.getNaturalInsured(collectiveInsurerInsured[0].asegurado_per_nat_id);
+            nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+        } else if ((collectiveInsurerInsured[0].asegurado_per_jur_id !== null) && (collectiveInsurerInsured[0].asegurado_per_nat_id === null)) {
+            const resultLegalInsured = await insuredModel.getLegalInsured(collectiveInsurerInsured[0].asegurado_per_jur_id);
+            nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+        }
+        if (resultCollective[0].fraccionamiento_boolean_colectivo === 1) {
+            primaNetaColectivo = primaNetaColectivo / resultCollective[0].numero_pago_colectivo;
+            primaNetaColectivo = primaNetaColectivo.toFixed(2);
+            primaNetaColectivo = Number(primaNetaColectivo);
+            primaNetaColectivo = convertNumberToString(primaNetaColectivo);
+        } else if (resultCollective[0].fraccionamiento_boolean_colectivo === 0) {
+            primaNetaColectivo = convertNumberToString(primaNetaColectivo);
         }
         try {
             const urlFile = req.file.path;
@@ -276,7 +285,6 @@ module.exports = {
                 const workbookSheets = workbook.SheetNames;
                 const sheet = workbookSheets[0];
                 const dataExcel = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
-                let idCollective = await collectiveModel.getCollectiveLast();
                 let i, j;
                 let countHolder = 0;
                 let countCaa = 0;
@@ -343,13 +351,12 @@ module.exports = {
                             ];
                         }
                     });
-                    for (let index = 0; index < cedulaBenefiario.length; index++) {
-                        const elementCedula = cedulaBenefiario[index];
+                    cedulaBenefiario.forEach(elementCedula => {
                         if (elementCedula !== undefined) {
                             cedulaBenef = elementCedula[2];
                             idOwnAgent = null;
-                            let dateString = String(elementCedula[4]);
-                            let datePieces = dateString.split("/");
+                            const dateString = String(elementCedula[4]);
+                            const datePieces = dateString.split("/");
                             birthday = new Date(datePieces[2], (datePieces[1] - 1), datePieces[0]);
                             nombrePerNat = elementCedula[0];
                             apellidoPerNat = elementCedula[1];
@@ -365,8 +372,8 @@ module.exports = {
                             };
                             temparrayNaturalInsured.push(objectNaturalInsured);
                         }
-                    }
-                    let cedulaBeneficiary = cedulaBenef;
+                    });
+                    const cedulaBeneficiary = cedulaBenef;
                     let idNaturalInsured = [];
                     if (typeof(cedulaBeneficiary) === 'number') {
                         const exp = /(\d)(?=(\d{3})+(?!\d))/g;
@@ -380,22 +387,22 @@ module.exports = {
                     }
                     if (idNaturalInsured.length !== 0) {
                         if (countHolder >= 2) {
-                            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-                            await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(idNaturalInsured[0].id_asegurado_per_nat, collectiveInsurerInsured[0].aseguradora_id, idCollective[0].id_colectivo);
+                            const collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
+                            await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(idNaturalInsured[0].id_asegurado_per_nat, collectiveInsurerInsured[0].aseguradora_id, resultCollective[0].id_colectivo);
                         } else {
-                            await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, idCollective[0].id_colectivo);
+                            await collectiveInsurerInsuredModel.updateCollectiveInsured(idNaturalInsured[0].id_asegurado_per_nat, resultCollective[0].id_colectivo);
                         }
                     } else {
                         let naturalInsured = await insuredModel.postNaturalInsuredForm(birthday, idOwnAgent, nombrePerNat, apellidoPerNat, temparrayNaturalInsured[0]);
                         if (countHolder >= 2) {
-                            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
-                            await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(naturalInsured.insertId, collectiveInsurerInsured[0].aseguradora_id, idCollective[0].id_colectivo);
+                            let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
+                            await collectiveInsurerInsuredModel.postCollecInsuNaturalInsu(naturalInsured.insertId, collectiveInsurerInsured[0].aseguradora_id, resultCollective[0].id_colectivo);
                         } else {
-                            await collectiveInsurerInsuredModel.updateCollectiveInsured(naturalInsured.insertId, idCollective[0].id_colectivo);
+                            await collectiveInsurerInsuredModel.updateCollectiveInsured(naturalInsured.insertId, resultCollective[0].id_colectivo);
                         }
                     }
-                    let beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(temparray);
-                    let collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(idCollective[0].id_colectivo);
+                    const beneficiary = await beneficiaryModel.postExtensiveBeneficiaryForm(temparray);
+                    const collectiveInsurerInsured =  await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultCollective[0].id_colectivo);
                     for (let index = 0; index < temparray.length; index++) {
                         let beneficiaryId = beneficiary.insertId + index;
                         temparrayBeneficiary.push([collectiveInsurerInsured[countCaa].id_caa, beneficiaryId]);
@@ -405,76 +412,49 @@ module.exports = {
                         countCaa++;
                     }
                 }
-                if (req.cookies.rol === 'ADMINISTRATIVO') {
-                    res.redirect('/sistema/add-health-collective');
-                } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                    res.redirect('/sistema/add-subscription-health-collective');
-                }
+                res.redirect('/sistema/add-health-collective');
             } else {
                 throw new SyntaxError("Ingrese archivo de extensión .csv");
             }
         } catch (error) {
             console.log(error);
-            if (req.cookies.rol === 'ADMINISTRATIVO') {
-                res.render('healthCollectiveForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-health-collective',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    collective: resultCollective[0],
-                    receipt: resultReceipt[0],
-                    collectives: resultsCollective,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaColectivo: primaColectivo,
-                    comisionRecibo: comisionRecibo,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            } else if (req.cookies.rol === 'SUSCRIPCIÓN') {
-                res.render('subscriptionHealthCollectiveForm', {
-                    alert: true,
-                    alertTitle: 'Error',
-                    alertMessage: error.message,
-                    alertIcon: 'error',
-                    showConfirmButton: true,
-                    timer: 1500,
-                    ruta: 'sistema/add-subscription-health-collective',
-                    insurers: resultsInsurers,
-                    naturalInsureds: resultsNaturalInsureds,
-                    legalInsureds: resultsLegalInsureds,
-                    collective: resultCollective[0],
-                    receipt: resultReceipt[0],
-                    collectives: resultsCollective,
-                    receipts: resultsReceipts,
-                    executives: resultsExecutives,
-                    ownAgents: resultsOwnAgents,
-                    primaColectivo: primaColectivo,
-                    name: req.session.name,
-                    cookieRol: req.cookies.rol
-                });
-            }
+            res.render('healthCollectiveForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/add-health-collective',
+                insurers: resultsInsurers,
+                naturalInsureds: resultsNaturalInsureds,
+                legalInsureds: resultsLegalInsureds,
+                collective: resultCollective[0],
+                collectives: resultsCollective,
+                receipts: resultsReceipts,
+                executives: resultsExecutives,
+                ownAgents: resultsOwnAgents,
+                insurer: resultInsurer[0],
+                ownAgent: resultOwnAgent[0],
+                primaNetaColectivo,
+                nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
 /*                  PUT                  */
     putBeneficiary: async (req, res, next) => {
-        let valoresAceptados = /^[0-9]+$/;
-        let idBeneficiary = req.params.id;
+        const valoresAceptados = /^[0-9]+$/;
+        const idBeneficiary = req.params.id;
         if (idBeneficiary.match(valoresAceptados)) {
-            let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
-            let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
-            let resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(idBeneficiary);
-            let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
+            const resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+            const fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+            const resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(idBeneficiary);
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
             res.render('editBeneficiary', {
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idCollective: resultCII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -492,8 +472,8 @@ module.exports = {
             const resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenefId(idBeneficiary);
             const resultPII = await policyInsurerInsuredModel.getPolicyId(resultPIIB[0].paa_id);
             res.render('editPolicyBeneficiary', {
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idPolicy: resultPII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -503,13 +483,13 @@ module.exports = {
         }
     },
     updateBeneficiary: async (req, res) => {
-        let idBeneficiary = req.body.id_beneficiario;
-        let resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
-        let fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
-        let resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(idBeneficiary);
-        let resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
+        const idBeneficiary = req.body.id_beneficiario;
+        const resultBeneficiary = await beneficiaryModel.getBeneficiary(idBeneficiary);
+        const fechaNacBeneficiario = resultBeneficiary[0].fec_nac_beneficiario.toISOString().substring(0, 10);
+        const resultCIIB = await colInsInsurerBenefModel.getColInsuInsuredBenefId(idBeneficiary);
+        const resultCII = await collectiveInsurerInsuredModel.getCollectiveId(resultCIIB[0].caa_id);
         try {
-            let fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
+            const fechaNacBeneficiario = new Date(req.body.fec_nac_beneficiario);
             await beneficiaryModel.updateBeneficiary(fechaNacBeneficiario, req.body);
             res.render('editBeneficiary', {
                 alert: true,
@@ -519,8 +499,8 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: `sistema/edit-beneficiary/${idBeneficiary}`,
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idCollective: resultCII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -535,8 +515,8 @@ module.exports = {
                 showConfirmButton: true,
                 timer: 1500,
                 ruta: `sistema/edit-beneficiary/${idBeneficiary}`,
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idCollective: resultCII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -560,8 +540,8 @@ module.exports = {
                 showConfirmButton: false,
                 timer: 1500,
                 ruta: `sistema/edit-policy-beneficiary/${idBeneficiary}`,
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idPolicy: resultPII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol
@@ -576,8 +556,8 @@ module.exports = {
                 showConfirmButton: true,
                 timer: 1500,
                 ruta: `sistema/edit-policy-beneficiary/${idBeneficiary}`,
+                fechaNacBeneficiario,
                 beneficiary: resultBeneficiary[0],
-                fechaNacBeneficiario: fechaNacBeneficiario,
                 idPolicy: resultPII[0],
                 name: req.session.name,
                 cookieRol: req.cookies.rol

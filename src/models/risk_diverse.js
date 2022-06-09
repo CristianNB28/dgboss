@@ -55,8 +55,8 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Riesgo_Diverso 
-                SET nom_razon_riesgo_diverso=?, cedula_riesgo_diverso=?, rif_riesgo_diverso=?, direccion_riesgo_diverso=?, telefono_riesgo_diverso=?, correo_riesgo_diverso=?, suma_asegurada_riesgo_diverso=?, modelo_riesgo_diverso=?, serial_riesgo_diverso=?, tipo_movimiento_riesgo_diverso=?    
-                WHERE id_riesgo_diverso=?`, 
+                                SET nom_razon_riesgo_diverso=?, cedula_riesgo_diverso=?, rif_riesgo_diverso=?, direccion_riesgo_diverso=?, telefono_riesgo_diverso=?, correo_riesgo_diverso=?, suma_asegurada_riesgo_diverso=?, modelo_riesgo_diverso=?, serial_riesgo_diverso=?, tipo_movimiento_riesgo_diverso=?    
+                                WHERE id_riesgo_diverso=?`, 
                 [riskDiverse.nom_razon_riesgo_diverso, riskDiverse.cedula_riesgo_diverso, riskDiverse.rif_riesgo_diverso, riskDiverse.direccion_riesgo_diverso, riskDiverse.telefono_riesgo_diverso, riskDiverse.correo_riesgo_diverso, sumaAsegurada, riskDiverse.modelo_riesgo_diverso, riskDiverse.serial_riesgo_diverso, riskDiverse.tipo_movimiento_riesgo_diverso, riskDiverse.id_riesgo_diverso],
                 (error, rows) => {
                     connection.release();

@@ -119,9 +119,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Beneficiario 
-                                SET nombre_beneficiario=?, apellido_beneficiario=?, cedula_beneficiario=?, fec_nac_beneficiario=?, parentesco_beneficiario=?, direccion_beneficiario=?, telefono_beneficiario=?, correo_beneficiario=?, banco_beneficiario=?, tipo_cuenta_beneficiario=?, nro_cuenta_beneficiario=?, tipo_movimiento_beneficiario=?   
+                                SET nombre_beneficiario=?, apellido_beneficiario=?, cedula_beneficiario=?, tipo_cedula_beneficiario=?, fec_nac_beneficiario=?, parentesco_beneficiario=?, direccion_beneficiario=?, telefono_beneficiario=?, correo_beneficiario=?, banco_beneficiario=?, tipo_cuenta_beneficiario=?, nro_cuenta_beneficiario=?, tipo_movimiento_beneficiario=?   
                                 WHERE id_beneficiario=?`, 
-                [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario, beneficiary.direccion_beneficiario, beneficiary.telefono_beneficiario, beneficiary.correo_beneficiario, beneficiary.banco_beneficiario, beneficiary.tipo_cuenta_beneficiario, beneficiary.nro_cuenta_beneficiario, beneficiary.tipo_movimiento_beneficiario, beneficiary.id_beneficiario],
+                [beneficiary.nombre_beneficiario, beneficiary.apellido_beneficiario, beneficiary.cedula_beneficiario, beneficiary.tipo_cedula_beneficiario, fechaNacBeneficiario, beneficiary.parentesco_beneficiario, beneficiary.direccion_beneficiario, beneficiary.telefono_beneficiario, beneficiary.correo_beneficiario, beneficiary.banco_beneficiario, beneficiary.tipo_cuenta_beneficiario, beneficiary.nro_cuenta_beneficiario, beneficiary.tipo_movimiento_beneficiario, beneficiary.id_beneficiario],
                 (error, rows) => {
                     connection.release();
                     if (error) {

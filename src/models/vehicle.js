@@ -76,9 +76,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Vehiculo 
-                                SET numero_placa=?, year_vehiculo=?, marca_vehiculo=?, modelo_vehiculo=?, version_vehiculo=?, tipo_transmision_vehiculo=?, blindaje_boolean_vehiculo=?, tipo_vehiculo=?, color_vehiculo=?, serial_motor=?, serial_carroceria=?, capacidad_carga=?, cedula_conductor_vehiculo=?, nombre_conductor_vehiculo=?, suma_asegurada_vehiculo=?, tipo_movimiento_vehiculo=?    
+                                SET numero_placa=?, year_vehiculo=?, marca_vehiculo=?, modelo_vehiculo=?, version_vehiculo=?, tipo_transmision_vehiculo=?, blindaje_boolean_vehiculo=?, tipo_vehiculo=?, color_vehiculo=?, serial_motor=?, serial_carroceria=?, capacidad_carga=?, cedula_conductor_vehiculo=?, tipo_cedula_vehiculo=?, nombre_conductor_vehiculo=?, suma_asegurada_vehiculo=?, tipo_movimiento_vehiculo=?    
                                 WHERE id_vehiculo=?`, 
-                [vehicle.numero_placa, yearVehicle, vehicle.marca_vehiculo, vehicle.modelo_vehiculo, vehicle.version_vehiculo, vehicle.tipo_transmision_vehiculo, blindaje, vehicle.tipo_vehiculo, vehicle.color_vehiculo, vehicle.serial_motor, vehicle.serial_carroceria, capacidadCarga, vehicle.cedula_conductor_vehiculo, vehicle.nombre_conductor_vehiculo, sumaAsegurada, vehicle.tipo_movimiento_beneficiario, vehicle.id_vehiculo],
+                [vehicle.numero_placa, yearVehicle, vehicle.marca_vehiculo, vehicle.modelo_vehiculo, vehicle.version_vehiculo, vehicle.tipo_transmision_vehiculo, blindaje, vehicle.tipo_vehiculo, vehicle.color_vehiculo, vehicle.serial_motor, vehicle.serial_carroceria, capacidadCarga, vehicle.cedula_conductor_vehiculo, vehicle.tipo_cedula_vehiculo, vehicle.nombre_conductor_vehiculo, sumaAsegurada, vehicle.tipo_movimiento_beneficiario, vehicle.id_vehiculo],
                 (error, rows) => {
                     connection.release();
                     if (error) {

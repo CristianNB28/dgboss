@@ -128,7 +128,7 @@ CREATE TABLE Beneficiario(
 CREATE TABLE Colectivo(
     id_colectivo INT PRIMARY KEY AUTO_INCREMENT,
     numero_colectivo VARCHAR(255) NOT NULL,
-    tomador_asegurado_colectivo BOOLEAN NOT NULL,
+    tomador_asegurado_colectivo BOOLEAN,
     tipo_id_rif_tomador CHAR(5) NOT NULL,
     id_rif_tomador VARCHAR(255) NOT NULL,
     nombre_tomador_colectivo VARCHAR(255) NOT NULL,

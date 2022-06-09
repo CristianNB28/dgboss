@@ -155,16 +155,16 @@ module.exports = {
             });
         });
     },
-    postReceiptCollectiveForm: async (fraccionamiento, montoPrimaRecibo, montoComisionRecibo, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, collectiveId, receipt) => {
+    postReceiptCollectiveForm: async (montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, collectiveId, receipt) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, fraccionamiento_boolean_recibo, tipo_fraccionamiento_recibo, metodo_pago_recibo, monto_prima_recibo, monto_comision_recibo, numero_pago_recibo, fecha_pago_recibo, colectivo_id)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, fraccionamiento, receipt.tipo_fraccionamiento_recibo, receipt.metodo_pago_recibo, montoPrimaRecibo, montoComisionRecibo, receipt.numero_pago_recibo, fechaPagoRecibo, collectiveId[0].id_colectivo],
+                connection.query(`INSERT INTO Recibo (numero_recibo, tipo_recibo, fecha_desde_recibo, fecha_hasta_recibo, prima_neta_recibo, igtf_recibo, prima_total_recibo, fecha_pago_recibo, metodo_pago_recibo, monto_comision_recibo, colectivo_id)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [receipt.numero_recibo, receipt.tipo_recibo, fechaDesdeRecibo, fechaHastaRecibo, montoPrimaNeta, montoIgtf, montoPrimaTotal, fechaPagoRecibo, receipt.metodo_pago_recibo, montoComision, collectiveId],
                 (error, rows) => {
                     connection.release();
                     if (error) {

@@ -23,12 +23,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('vehiclePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -104,12 +105,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('healthPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -192,12 +194,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('patrimonialPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -273,12 +276,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('bailPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -354,12 +358,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('anotherBranchPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -436,12 +441,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('funeralPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -524,12 +530,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('lifePolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -612,12 +619,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('apPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -693,12 +701,13 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
         if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
             res.render('travelPolicyForm', {
                 insurers: resultsInsurers,
                 naturalInsureds: resultsNaturalInsureds,
@@ -771,13 +780,13 @@ module.exports = {
         });
     },
     getPolicies: async (req, res) => {
-        let resultsPolicies =  await policyModel.getPolicies();
-        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
+        const resultsPolicies =  await policyModel.getPolicies();
+        const resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
         for (let index = 0; index < resultsPII.length; index++) {
-            let elementPII = resultsPII[index];
-            let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
+            const elementPII = resultsPII[index];
+            const resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
             for (let index = 0; index < resultsPolicies.length; index++) {
-                let elementPolicy = resultsPolicies[index];
+                const elementPolicy = resultsPolicies[index];
                 if ((index < elementPII.id_paa) && (typeof(elementPolicy.fecha_desde_poliza) !== 'string')) {
                     elementPolicy.prima_neta_poliza = convertNumberToString(elementPolicy.prima_neta_poliza);
                     elementPolicy.igtf_poliza = convertNumberToString(elementPolicy.igtf_poliza);
@@ -826,11 +835,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -838,12 +850,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -852,7 +867,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -944,11 +959,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultsBeneficiaries = [];
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
@@ -957,17 +975,20 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
         const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
             const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -976,7 +997,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1078,11 +1099,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -1090,12 +1114,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1104,7 +1131,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1196,11 +1223,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -1208,12 +1238,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1222,7 +1255,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1314,11 +1347,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -1326,12 +1362,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1340,7 +1379,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1432,11 +1471,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultsBeneficiaries = [];
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
@@ -1445,17 +1487,20 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
         const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
             const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1464,7 +1509,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1557,11 +1602,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultsBeneficiaries = [];
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
@@ -1570,17 +1618,20 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
         const polInsInsuredBef = await polInsInsurerBenefModel.getPolInsuInsuredBenef(policyInsurerInsured[0].id_paa);
         for (const beneficiary of polInsInsuredBef) {
             const resultBeneficiary = await beneficiaryModel.getBeneficiary(beneficiary.beneficiario_id);
             resultsBeneficiaries.push(resultBeneficiary[0]);
         }
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1589,7 +1640,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1682,11 +1733,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -1694,12 +1748,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1708,7 +1765,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {
@@ -1800,11 +1857,14 @@ module.exports = {
         const resultsInsurers = await insurerModel.getInsurers();
         const resultsNaturalInsureds = await insuredModel.getNaturalInsureds();
         const resultsLegalInsureds = await insuredModel.getLegalInsureds();
-        const resultPolicy = await policyModel.getPolicyLast();
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultsExecutives = await executiveModel.getExecutives();
         const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        let resultPolicy = await policyModel.getPolicyLast();
+        if (resultPolicy.length === 0) {
+            resultPolicy = [{}];
+        }
         let resultOwnAgent = [];
         let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
         let nameRazonInsured = ''; 
@@ -1812,12 +1872,15 @@ module.exports = {
         if (resultPolicyOwnAgent.length !== 0) {
             resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
         }
-        const policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        let policyInsurerInsured = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultPolicy[0].id_poliza);
+        if (policyInsurerInsured.length === 0) {
+            policyInsurerInsured = [{}];
+        }
         const resultInsurer = await insurerModel.getInsurer(policyInsurerInsured[0].aseguradora_id);
-        if (policyInsurerInsured[0].asegurado_per_jur_id === null) {
+        if ((policyInsurerInsured[0].asegurado_per_jur_id === null) && (policyInsurerInsured[0].asegurado_per_nat_id !== null)) {
             const resultNaturalInsured = await insuredModel.getNaturalInsured(policyInsurerInsured[0].asegurado_per_nat_id);
             nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
-        } else {
+        } else if ((policyInsurerInsured[0].asegurado_per_jur_id !== null) && (policyInsurerInsured[0].asegurado_per_nat_id === null)) {
             const resultLegalInsured = await insuredModel.getLegalInsured(policyInsurerInsured[0].asegurado_per_jur_id);
             nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
         }
@@ -1826,7 +1889,7 @@ module.exports = {
             primaNetaPoliza = primaNetaPoliza.toFixed(2);
             primaNetaPoliza = Number(primaNetaPoliza);
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
-        } else {
+        } else if (resultPolicy[0].fraccionamiento_boolean_poliza === 0) {
             primaNetaPoliza = convertNumberToString(primaNetaPoliza);
         }
         try {

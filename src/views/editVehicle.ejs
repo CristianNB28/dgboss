@@ -55,88 +55,6 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Versión</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="version_vehiculo"
-                                                id="version_vehiculo"
-                                                value="<%= vehicle.version_vehiculo %>" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Serial Carrocería</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="serial_carroceria"
-                                                id="serial_carroceria"
-                                                value="<%= vehicle.serial_carroceria %>" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="cedula_conductor_vehiculo"
-                                                id="cedula_conductor_vehiculo"
-                                                value="<%= vehicle.cedula_conductor_vehiculo %>"
-                                                onkeyup="pasarNombreAseguradoConductor();"  
-                                                class="form-control cedula"
-                                                required
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="color_vehiculo"
-                                                id="color_vehiculo"
-                                                value="<%= vehicle.color_vehiculo %>" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
-                                        <div class="col-sm-9">
-                                            <input 
-                                                type="text"
-                                                name="capacidad_carga"
-                                                id="capacidad_carga"
-                                                value="<%= capacidadCarga %>" 
-                                                class="form-control number_format"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Transmisión</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" name="tipo_transmision_vehiculo" required>
-                                                <option value="<%= vehicle.tipo_transmision_vehiculo %>"><%= vehicle.tipo_transmision_vehiculo %></option>
-                                                <option value="AUTOMÁTICO">AUTOMÁTICO</option>
-                                                <option value="SINCRÓNICO">SINCRÓNICO</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="ibox">
-                                <div class="form-control">
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Año</label>
                                         <div class="col-sm-9">
                                             <input 
@@ -166,6 +84,33 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Versión</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="version_vehiculo"
+                                                id="version_vehiculo"
+                                                value="<%= vehicle.version_vehiculo %>" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Color</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="color_vehiculo"
+                                                id="color_vehiculo"
+                                                value="<%= vehicle.color_vehiculo %>" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Tipo Vehículo</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" name="tipo_vehiculo" required>
@@ -174,7 +119,64 @@
                                                 <option value="AUTOMÓVIL">AUTOMÓVIL</option>
                                                 <option value="CAMIÓN">CAMIÓN</option>
                                                 <option value="AUTOBÚS">AUTOBÚS</option>
+                                                <option value="PICKUP">PICKUP</option>
+                                                <option value="RÚSTICO">RÚSTICO</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Transmisión</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="tipo_transmision_vehiculo" required>
+                                                <option value="<%= vehicle.tipo_transmision_vehiculo %>"><%= vehicle.tipo_transmision_vehiculo %></option>
+                                                <option value="AUTOMÁTICO">AUTOMÁTICO</option>
+                                                <option value="SINCRÓNICO">SINCRÓNICO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox">
+                                <div class="form-control">
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Carga</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="capacidad_carga"
+                                                id="capacidad_carga"
+                                                value="<%= capacidadCarga %>" 
+                                                class="form-control input-cedula"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
+                                            <div class="col-sm-9">
+                                                <div><label><input 
+                                                                type="checkbox" 
+                                                                name="blindaje_boolean_vehiculo" 
+                                                                id="blindaje_boolean_vehiculo"
+                                                                <%= vehicle.blindaje_boolean_vehiculo === 1 ? 'checked': '' %>
+                                                            > 
+                                                            ¿Tiene Blindaje?</label></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Serial Carrocería</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                type="text"
+                                                name="serial_carroceria"
+                                                id="serial_carroceria"
+                                                value="<%= vehicle.serial_carroceria %>" 
+                                                class="form-control"
+                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                required
+                                            >
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -188,6 +190,28 @@
                                                 class="form-control"
                                                 oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
                                                 required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row"><label class="col-sm-3 col-form-label">Cédula</label>
+                                        <div class="col-sm-9 field">
+                                            <div class="numeral-selector selector">
+                                                <div class="select-box-wrapper">
+                                                    <select name="tipo_cedula_vehiculo" id="select_box3">
+                                                        <option value="<%= vehicle.tipo_cedula_vehiculo %>"><%= vehicle.tipo_cedula_vehiculo %></option>
+                                                        <option value="V">V</option>
+                                                        <option value="E">E</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <input 
+                                                type="text"
+                                                name="cedula_conductor_vehiculo"
+                                                id="cedula_conductor_vehiculo"
+                                                value="<%= vehicle.cedula_conductor_vehiculo %>"
+                                                onkeyup="pasarNombreAseguradoConductor();" 
+                                                class="form-control input-numeral-cedula"
                                             >
                                         </div>
                                     </div>
@@ -212,7 +236,7 @@
                                                 name="suma_asegurada_vehiculo"
                                                 id="suma_asegurada_vehiculo"
                                                 value="<%= sumaAsegurada %>" 
-                                                class="form-control number_format"
+                                                class="form-control input-cedula"
                                                 required
                                             >
                                         </div>
@@ -227,20 +251,6 @@
                                                 <option value="INCLUSIÓN">INCLUSIÓN</option>
                                                 <option value="EXCLUSIÓN">EXCLUSIÓN</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Blindaje</label>
-                                            <div class="col-sm-9">
-                                                <div><label><input 
-                                                                type="checkbox" 
-                                                                name="blindaje_boolean_vehiculo" 
-                                                                id="blindaje_boolean_vehiculo"
-                                                                <%= vehicle.blindaje_boolean_vehiculo === 1 ? 'checked': '' %>
-                                                            > 
-                                                            ¿Tiene Blindaje?</label></div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

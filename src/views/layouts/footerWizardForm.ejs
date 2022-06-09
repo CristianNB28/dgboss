@@ -1646,7 +1646,7 @@
 </script>
 
 
-<% if (typeof(policy) !== 'undefined') { %>
+<% if (Object.keys(policy).length !== 0) { %>
     <script>
         var policy = <%- JSON.stringify(policy) %>;
         function dateAutomation() {
