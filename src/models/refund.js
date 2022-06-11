@@ -46,16 +46,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postRefundForm: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, refund) => {
+    postRefundForm: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, idPolicy, idCollective, refund) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, observacion_reembolso, tipo_moneda_reembolso, estatus_reembolso, numero_siniestro_reembolso, asegurado_beneficiario_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId],
+                connection.query(`INSERT INTO Reembolso (patologia_reembolso, fecha_ocurrencia_reembolso, fecha_notificacion_reembolso, monto_reclamo_reembolso, monto_pagado_reembolso, observacion_reembolso, tipo_moneda_reembolso, estatus_reembolso, numero_siniestro_reembolso, asegurado_beneficiario_id, poliza_id, colectivo_id) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, idPolicy, idCollective],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -68,7 +68,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateRefund: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, refund) => {
+    updateRefund: async (montoReclamoReembolso, montoPagadoReembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, insuredBeneficiaryId, idPolicy, idCollective, refund) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -76,9 +76,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Reembolso 
-                                SET patologia_reembolso=?, fecha_ocurrencia_reembolso=?, fecha_notificacion_reembolso=?, monto_reclamo_reembolso=?, monto_pagado_reembolso=?, observacion_reembolso=?, tipo_moneda_reembolso=?, estatus_reembolso=?, numero_siniestro_reembolso=?, asegurado_beneficiario_id=? 
+                                SET patologia_reembolso=?, fecha_ocurrencia_reembolso=?, fecha_notificacion_reembolso=?, monto_reclamo_reembolso=?, monto_pagado_reembolso=?, observacion_reembolso=?, tipo_moneda_reembolso=?, estatus_reembolso=?, numero_siniestro_reembolso=?, asegurado_beneficiario_id=?, poliza_id=?, colectivo_id=? 
                                 WHERE id_reembolso=?`, 
-                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, refund.id_reembolso],
+                [refund.patologia_reembolso, fechaOcurrenciaReembolso, fechaNotificacionReembolso, montoReclamoReembolso, montoPagadoReembolso, refund.observacion_reembolso, refund.tipo_moneda_reclamo, refund.estatus, refund.numero_siniestro_reembolso, insuredBeneficiaryId, idPolicy, idCollective, refund.id_reembolso],
                 (error, rows) => {
                     connection.release();
                     if (error) {

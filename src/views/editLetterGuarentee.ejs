@@ -259,6 +259,52 @@
                                             >
                                         </div>
                                     </div>
+                                    <% if (numeroPoliza !== '') { %>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="numero_poliza" onmousedown="if(this.options.length>2)this.size=2" onchange="this.size=0" onblur="this.size=0">
+                                                    <option value="<%= numeroPoliza %>"><%= numeroPoliza %></option>
+                                                    <% policies.forEach((policy) => { %>
+                                                        <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
+                                                    <% }); %>
+                                                    <% collectives.forEach((collective) => { %>
+                                                        <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    <% } else if (numeroColectivo !== '') { %>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="numero_poliza" onmousedown="if(this.options.length>2)this.size=2" onchange="this.size=0" onblur="this.size=0">
+                                                    <option value="<%= numeroColectivo %>"><%= numeroColectivo %></option>
+                                                    <% policies.forEach((policy) => { %>
+                                                        <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
+                                                    <% }); %>
+                                                    <% collectives.forEach((collective) => { %>
+                                                        <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-3 col-form-label">Número Póliza</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="numero_poliza" onmousedown="if(this.options.length>2)this.size=2" onchange="this.size=0" onblur="this.size=0">
+                                                    <option value="">Seleccione</option>
+                                                    <% policies.forEach((policy) => { %>
+                                                        <option value="<%= policy.numero_poliza %>"><%= policy.numero_poliza %></option>
+                                                    <% }); %>
+                                                    <% collectives.forEach((collective) => { %>
+                                                        <option value="<%= collective.numero_colectivo %>"><%= collective.numero_colectivo %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    <% } %>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group row"><label class="col-sm-3 col-form-label">Estatus</label>
                                         <div class="col-sm-9">

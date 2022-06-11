@@ -24,6 +24,28 @@ module.exports = {
             });
         });
     },
+    getCollectiveReceipts: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT * 
+                                FROM Colectivo c
+                                INNER JOIN Recibo r ON c.id_colectivo = r.colectivo_id
+                                WHERE c.deshabilitar_colectivo=0 AND r.deshabilitar_recibo=0`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
     getCollectivesNumbers: () => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {

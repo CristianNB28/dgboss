@@ -46,16 +46,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postLetterGuaranteeForm: async (montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, insuredBeneficiaryId, letterGuarantee) => {
+    postLetterGuaranteeForm: async (montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, insuredBeneficiaryId, idPolicy, idCollective, letterGuarantee) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_reclamado_carta_aval, monto_pagado_carta_aval, observacion_carta_aval, tipo_moneda_carta_aval, estatus_carta_aval, numero_siniestro_carta_aval, asegurado_beneficiario_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoReclamoCartaAval, montoPagadoCartaAval, letterGuarantee.observacion_carta_aval, letterGuarantee.tipo_moneda_reclamo, letterGuarantee.estatus, letterGuarantee.numero_siniestro_carta_aval, insuredBeneficiaryId],
+                connection.query(`INSERT INTO Carta_Aval (patologia_carta_aval, clinica_carta_aval, fecha_ocurrencia_carta_aval, fecha_notificacion_carta_aval, monto_reclamado_carta_aval, monto_pagado_carta_aval, observacion_carta_aval, tipo_moneda_carta_aval, estatus_carta_aval, numero_siniestro_carta_aval, asegurado_beneficiario_id, poliza_id, colectivo_id) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoReclamoCartaAval, montoPagadoCartaAval, letterGuarantee.observacion_carta_aval, letterGuarantee.tipo_moneda_reclamo, letterGuarantee.estatus, letterGuarantee.numero_siniestro_carta_aval, insuredBeneficiaryId, idPolicy, idCollective],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -68,7 +68,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateLetterGuarantee: async (montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, insuredBeneficiaryId, letterGuarantee) => {
+    updateLetterGuarantee: async (montoReclamoCartaAval, montoPagadoCartaAval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, insuredBeneficiaryId, idPolicy, idCollective, letterGuarantee) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -76,9 +76,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Carta_Aval 
-                                SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_reclamado_carta_aval=?, monto_pagado_carta_aval=?, observacion_carta_aval=?, tipo_moneda_carta_aval=?, estatus_carta_aval=?, numero_siniestro_carta_aval=?, asegurado_beneficiario_id=?
+                                SET patologia_carta_aval=?, clinica_carta_aval=?, fecha_ocurrencia_carta_aval=?, fecha_notificacion_carta_aval=?, monto_reclamado_carta_aval=?, monto_pagado_carta_aval=?, observacion_carta_aval=?, tipo_moneda_carta_aval=?, estatus_carta_aval=?, numero_siniestro_carta_aval=?, asegurado_beneficiario_id=?, poliza_id=?, colectivo_id=?
                                 WHERE id_carta_aval=?`, 
-                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoReclamoCartaAval, montoPagadoCartaAval, letterGuarantee.observacion_carta_aval, letterGuarantee.tipo_moneda_reclamo, letterGuarantee.estatus, letterGuarantee.numero_siniestro_carta_aval, insuredBeneficiaryId, letterGuarantee.id_carta_aval],
+                [letterGuarantee.patologia_carta_aval, letterGuarantee.clinica_carta_aval, fechaOcurrenciaCartaAval, fechaNotificacionCartaAval, montoReclamoCartaAval, montoPagadoCartaAval, letterGuarantee.observacion_carta_aval, letterGuarantee.tipo_moneda_reclamo, letterGuarantee.estatus, letterGuarantee.numero_siniestro_carta_aval, insuredBeneficiaryId, idPolicy, idCollective, letterGuarantee.id_carta_aval],
                 (error, rows) => {
                     connection.release();
                     if (error) {

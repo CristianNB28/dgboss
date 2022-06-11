@@ -9,7 +9,7 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_caa, aseguradora_id, asegurado_per_nat_id, asegurado_per_jur_id 
+                connection.query(`SELECT * 
                                 FROM Colectivo_Aseguradora_Asegurado 
                                 WHERE colectivo_id=?`, 
                 [idCollective],

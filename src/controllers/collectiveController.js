@@ -1479,6 +1479,7 @@ module.exports = {
     disableCollective: async (req, res) => {
         const disableCollective = 1;
         const disableCollectiveInsurerInsured = 1;
+        const disableReceiptCollective = 1;
         const disableCIIB = 1;
         const disableCIIV = 1;
         const disableCIIRD = 1;
@@ -1487,6 +1488,7 @@ module.exports = {
         await collectiveModel.updateDisableCollective(req.params.id, req.body);
         await collectiveModel.disableCollective(req.params.id, disableCollective);
         await collectiveOwnAgentModel.disableCollectiveOwnAgent(req.params.id, disableCAP);
+        await receiptModel.disableReceiptCollective(req.params.id, disableReceiptCollective);
         const disableCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(req.params.id);
         const resultCIIB = await colInsInsurerBenef.getColInsuInsuredBenef(disableCII[0].id_caa);
         const resultCIIV = await colInsInsurerVehi.getColInsuInsuredVehi(disableCII[0].id_caa);

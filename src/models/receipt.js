@@ -23,14 +23,14 @@ module.exports = {
             });
         });
     },
-    getReceiptCommissionPolicy: (policyId) => {
+    getReceiptPolicy: (policyId) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT monto_comision_recibo
+                connection.query(`SELECT *
                                 FROM Recibo 
                                 WHERE poliza_id=? AND deshabilitar_recibo=0`, 
                 [policyId],
@@ -45,14 +45,14 @@ module.exports = {
             });
         });
     },
-    getReceiptCommissionCollective: (collectiveId) => {
+    getReceiptCollective: (collectiveId) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT monto_comision_recibo
+                connection.query(`SELECT *
                                 FROM Recibo 
                                 WHERE colectivo_id=? AND deshabilitar_recibo=0`, 
                 [collectiveId],
@@ -255,6 +255,50 @@ module.exports = {
                                 SET deshabilitar_recibo=? 
                                 WHERE id_recibo=?`, 
                 [disableReceipt, id],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    disableReceiptPolicy: (idPolicy, disableReceiptPolicy) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
+                }
+                connection.query(`UPDATE Recibo 
+                                SET deshabilitar_recibo=? 
+                                WHERE poliza_id=?`, 
+                [disableReceiptPolicy, idPolicy],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    disableReceiptCollective: (idCollective, disableReceiptCollective) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err);
+                    return; 
+                }
+                connection.query(`UPDATE Recibo 
+                                SET deshabilitar_recibo=? 
+                                WHERE colectivo_id=?`, 
+                [disableReceiptCollective, idCollective],
                 (error, rows) => {
                     connection.release();
                     if (error) {

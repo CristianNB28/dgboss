@@ -42,16 +42,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postAMPForm: async (montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, insuredBeneficiaryId, amp) => {
+    postAMPForm: async (montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, insuredBeneficiaryId, idPolicy, idCollective, amp) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado_amp, observacion_amp, tipo_moneda_amp, estatus_amp, numero_siniestro_amp, asegurado_beneficiario_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_reclamo, amp.estatus, amp.numero_siniestro_amp, insuredBeneficiaryId],
+                connection.query(`INSERT INTO AMP (patologia_amp, clinica_amp, fecha_ocurrencia_amp, fecha_notificacion_amp, monto_reclamado_amp, monto_pagado_amp, observacion_amp, tipo_moneda_amp, estatus_amp, numero_siniestro_amp, asegurado_beneficiario_id, poliza_id, colectivo_id) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_reclamo, amp.estatus, amp.numero_siniestro_amp, insuredBeneficiaryId, idPolicy, idCollective],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -64,7 +64,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateAMP: async (montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, insuredBeneficiaryId, amp) => {
+    updateAMP: async (montoReclamoAMP, montoPagadoAMP, fechaOcurrenciaAMP, fechaNotificacionAMP, insuredBeneficiaryId, idPolicy, idCollective, amp) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -72,9 +72,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE AMP 
-                                SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado_amp=?, observacion_amp=?, tipo_moneda_amp=?, estatus_amp=?, numero_siniestro_amp=?, asegurado_beneficiario_id=?
+                                SET patologia_amp=?, clinica_amp=?, fecha_ocurrencia_amp=?, fecha_notificacion_amp=?, monto_reclamado_amp=?, monto_pagado_amp=?, observacion_amp=?, tipo_moneda_amp=?, estatus_amp=?, numero_siniestro_amp=?, asegurado_beneficiario_id=?, poliza_id=?, colectivo_id=?
                                 WHERE id_amp=?`, 
-                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_reclamo, amp.estatus, amp.numero_siniestro_amp, insuredBeneficiaryId, amp.id_amp],
+                [amp.patologia_amp, amp.clinica_amp, fechaOcurrenciaAMP, fechaNotificacionAMP, montoReclamoAMP, montoPagadoAMP, amp.observacion_amp, amp.tipo_moneda_reclamo, amp.estatus, amp.numero_siniestro_amp, insuredBeneficiaryId, idPolicy, idCollective, amp.id_amp],
                 (error, rows) => {
                     connection.release();
                     if (error) {

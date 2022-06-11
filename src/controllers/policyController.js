@@ -4391,6 +4391,7 @@ module.exports = {
     disablePolicy: async (req, res) => {
         const disablePolicy = 1;
         const disablePolicyInsurerInsured = 1;
+        const disableReceiptPolicy = 1;
         const disablePIIB = 1;
         const disablePIIV = 1;
         const disablePIIE = 1;
@@ -4398,6 +4399,7 @@ module.exports = {
         await policyModel.updateDisablePolicy(req.params.id, req.body);
         await policyModel.disablePolicy(req.params.id, disablePolicy);
         await policyOwnAgentModel.disablePolicyOwnAgent(req.params.id, disablePAP);
+        await receiptModel.disableReceiptPolicy(req.params.id, disableReceiptPolicy);
         const disablePII = await policyInsurerInsuredModel.getPolicyInsurerInsured(req.params.id);
         const resultPIIB = await polInsInsurerBenefModel.getPolInsuInsuredBenef(disablePII[0].id_paa);
         const resultPIIV = await polInsuInsuredVehiModel.getPolInsuInsuredVehi(disablePII[0].id_paa);

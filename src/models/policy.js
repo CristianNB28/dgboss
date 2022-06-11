@@ -9,9 +9,31 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT id_poliza, numero_poliza, tipo_individual_poliza, nombre_tomador_poliza, fecha_desde_poliza, fecha_hasta_poliza, tipo_moneda_poliza, prima_neta_poliza, igtf_poliza, prima_total_poliza, estatus_poliza 
+                connection.query(`SELECT * 
                                 FROM Poliza 
                                 WHERE deshabilitar_poliza=0`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getPoliciesReceipts: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT * 
+                                FROM Poliza p
+                                INNER JOIN Recibo r ON p.id_poliza = r.poliza_id
+                                WHERE p.deshabilitar_poliza=0 AND r.deshabilitar_recibo=0`,
                 (error, rows) => {
                     connection.release();
                     if (error) {

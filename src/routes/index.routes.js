@@ -216,8 +216,6 @@ router.post('/remove-risk-diverse/:id', requireAuth, riskDiverseController.disab
 router.get('/edit-risk-diverse/:id', requireAuth, riskDiverseController.putRiskDiverse);
 router.post('/update-risk-diverse', requireAuth, riskDiverseController.updateRiskDiverse);
 // Rutas de Recibos
-router.get('/add-receipt', requireAuth, receiptController.getReceiptForm);
-router.post('/add-receipt', requireAuth, receiptController.postReceiptForm);
 router.get('/receipts', requireAuth, receiptController.getReceipts);
 router.post('/remove-receipt/:id', requireAuth, receiptController.disableReceipt);
 router.get('/edit-receipt/:id', requireAuth, receiptController.putReceipt);

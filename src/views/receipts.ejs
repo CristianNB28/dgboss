@@ -31,13 +31,15 @@
                         >
                         <thead>
                         <tr>
-                            <th>Número</th>
-                            <th>Tipo</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Método Pago</th>
-                            <th>Prima</th>
-                            <th>Comisión</th>
+                            <th>Número Póliza</th>
+                            <th>Cédula/Rif Tomador</th>
+                            <th>Nombre/Razón Tomador</th>
+                            <th>Cédula/Rif Asegurado</th>
+                            <th>Nombre/Razón Asegurado</th>
+                            <th>Número Recibo</th>
+                            <th>Tipo Recibo</th>
+                            <th>Fecha Desde</th>
+                            <th>Fecha Hasta</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -47,13 +49,15 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>Número</th>
-                            <th>Tipo</th>
-                            <th>Fecha desde</th>
-                            <th>Fecha hasta</th>
-                            <th>Método Pago</th>
-                            <th>Prima</th>
-                            <th>Comisión</th>
+                            <th>Número Póliza</th>
+                            <th>Cédula/Rif Tomador</th>
+                            <th>Nombre/Razón Tomador</th>
+                            <th>Cédula/Rif Asegurado</th>
+                            <th>Nombre/Razón Asegurado</th>
+                            <th>Número Recibo</th>
+                            <th>Tipo Recibo</th>
+                            <th>Fecha Desde</th>
+                            <th>Fecha Hasta</th>
                             <th>Editar</th>
                             <th>Deshabilitar</th>
                         </tr>
@@ -132,13 +136,15 @@ $(document).ready(function(){
         processing: true,
         serverSide: false,
         columns: [
+            {"data": "numero_poliza"},
+            {"data": "cedula_rif_tomador"},
+            {"data": "nombre_completo_razon_social_tomador"},
+            {"data": "cedula_rif_asegurado"},
+            {"data": "nombre_completo_razon_social_asegurado"},
             {"data": "numero_recibo"},
             {"data": "tipo_recibo"},
             {"data": "fecha_desde_recibo"},
             {"data": "fecha_hasta_recibo"},
-            {"data": "metodo_pago_recibo"},
-            {"data": "monto_prima_recibo"},
-            {"data": "monto_comision_recibo"},
             {
                 "data": "",
                 "render": (data, type, row) => {

@@ -46,16 +46,16 @@ module.exports = {
         });
     },
 /*                  POST                 */
-    postEmergencyForm: async (montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, insuredBeneficiaryId, emergency) => {
+    postEmergencyForm: async (montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, insuredBeneficiaryId, idPolicy, idCollective, emergency) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, numero_siniestro_emergencia, asegurado_beneficiario_id) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_reclamo, emergency.estatus, emergency.numero_siniestro_emergencia, insuredBeneficiaryId],
+                connection.query(`INSERT INTO Emergencia (patologia_emergencia, clinica_emergencia, fecha_ocurrencia_emergencia, fecha_notificacion_emergencia, monto_reclamado_emergencia, monto_pagado_emergencia, observacion_emergencia, tipo_moneda_emergencia, estatus_emergencia, numero_siniestro_emergencia, asegurado_beneficiario_id, poliza_id, colectivo_id) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_reclamo, emergency.estatus, emergency.numero_siniestro_emergencia, insuredBeneficiaryId, idPolicy, idCollective],
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -68,7 +68,7 @@ module.exports = {
         });
     },
 /*                  PUT                  */
-    updateEmergency: async (montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, insuredBeneficiaryId, emergency) => {
+    updateEmergency: async (montoReclamoEmergencia, montoPagadoEmergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, insuredBeneficiaryId, idPolicy, idCollective, emergency) => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
@@ -76,9 +76,9 @@ module.exports = {
                     return; 
                 }
                 connection.query(`UPDATE Emergencia 
-                                SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, numero_siniestro_emergencia=?, asegurado_beneficiario_id=?
+                                SET patologia_emergencia=?, clinica_emergencia=?, fecha_ocurrencia_emergencia=?, fecha_notificacion_emergencia=?, monto_reclamado_emergencia=?, monto_pagado_emergencia=?, observacion_emergencia=?, tipo_moneda_emergencia=?, estatus_emergencia=?, numero_siniestro_emergencia=?, asegurado_beneficiario_id=?, poliza_id=?, colectivo_id=?
                                 WHERE id_emergencia=?`, 
-                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_reclamo, emergency.estatus, emergency.numero_siniestro_emergencia, insuredBeneficiaryId, emergency.id_emergencia],
+                [emergency.patologia_emergencia, emergency.clinica_emergencia, fechaOcurrenciaEmergencia, fechaNotificacionEmergencia, montoReclamoEmergencia, montoPagadoEmergencia, emergency.observacion_emergencia, emergency.tipo_moneda_reclamo, emergency.estatus, emergency.numero_siniestro_emergencia, insuredBeneficiaryId, idPolicy, idCollective, emergency.id_emergencia],
                 (error, rows) => {
                     connection.release();
                     if (error) {
