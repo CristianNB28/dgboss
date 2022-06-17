@@ -75,7 +75,7 @@ module.exports = {
                 }
                 connection.query(`SELECT *
                                 FROM Colectivo 
-                                WHERE id_colectivo=?`, 
+                                WHERE id_colectivo=? AND deshabilitar_colectivo=0`, 
                 [idCollective],
                 (error, rows) => {
                     connection.release();

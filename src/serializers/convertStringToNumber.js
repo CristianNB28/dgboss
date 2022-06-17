@@ -9,6 +9,8 @@ const convertStringToNumber = (numberAmount) => {
     } else if (numberAmount.indexOf('.') !== -1) {
         numberAmount = numberAmount.replaceAll(".", ",");
         numberAmount = parseFloat(numberAmount.replaceAll(/,/g,''));
+    } else if ((numberAmount.indexOf(',') === -1) && (numberAmount.indexOf('.') === -1)) {
+        numberAmount = parseFloat(numberAmount);
     }
     return numberAmount;
 };

@@ -12,6 +12,7 @@ const collectiveInsurerInsuredModel = require('../models/collective_insurer_insu
 const collectiveOwnAgentModel = require('../models/collective_own_agent');
 const executiveModel = require('../models/executive');
 const beneficiaryModel = require('../models/beneficiary');
+const divisionModel = require('../models/division');
 // Serializers
 const convertStringToNumber = require('../serializers/convertStringToNumber');
 const convertNumberToString = require('../serializers/convertNumberToString');
@@ -172,7 +173,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -184,7 +186,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-vehicle-policy');
         } catch (error) {
             console.log(error);
@@ -261,7 +287,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -273,7 +300,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-health-policy');
         } catch (error) {
             console.log(error);
@@ -345,7 +396,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -357,7 +409,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-patrimonial-policy');
         } catch (error) {
             console.log(error);
@@ -428,7 +504,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -440,7 +517,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-bail-policy');
         } catch (error) {
             console.log(error);
@@ -511,7 +612,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -523,7 +625,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-another-branch-policy');
         } catch (error) {
             console.log(error);
@@ -600,7 +726,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -612,7 +739,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-funeral-policy');
         } catch (error) {
             console.log(error);
@@ -690,7 +841,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -702,7 +854,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-life-policy');
         } catch (error) {
             console.log(error);
@@ -774,7 +950,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -786,7 +963,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-ap-policy');
         } catch (error) {
             console.log(error);
@@ -857,7 +1058,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -869,7 +1071,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            const receipt = await receiptModel.postReceiptPolicyForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultPolicy[0].id_poliza, req.body);
+            if (resultPolicy[0].fraccionamiento_boolean_poliza === 1) {
+                for (let index = 0; index < resultPolicy[0].numero_pago_poliza; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-travel-policy');
         } catch (error) {
             console.log(error);
@@ -940,7 +1166,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -952,7 +1179,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            const receipt = await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            if (resultCollective[0].fraccionamiento_boolean_colectivo === 1) {
+                for (let index = 0; index < resultCollective[0].numero_pago_colectivo; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-health-collective');
         } catch (error) {
             console.log(error);
@@ -1023,7 +1274,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1035,7 +1287,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            const receipt = await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            if (resultCollective[0].fraccionamiento_boolean_colectivo === 1) {
+                for (let index = 0; index < resultCollective[0].numero_pago_colectivo; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-vehicle-collective');
         } catch (error) {
             console.log(error);
@@ -1106,7 +1382,8 @@ module.exports = {
                 fecha_desde_recibo: fechaDesdeRecibo,
                 fecha_hasta_recibo: fechaHastaRecibo,
                 fecha_pago_recibo: fechaPagoRecibo,
-            } = req.body; 
+            } = req.body;
+            const temparrayDivision = [];
             montoPrimaNeta = montoPrimaNeta.replace(/[Bs$€]/g, '').replace(' ', '');
             montoIgtf = montoIgtf.replace(/[Bs$€]/g, '').replace(' ', '');
             montoPrimaTotal = montoPrimaTotal.replace(/[Bs$€]/g, '').replace(' ', '');
@@ -1118,7 +1395,31 @@ module.exports = {
             fechaPagoRecibo = new Date(fechaPagoRecibo);
             fechaDesdeRecibo = new Date(fechaDesdeRecibo);
             fechaHastaRecibo = new Date(fechaHastaRecibo);
-            await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            const receipt = await receiptModel.postReceiptCollectiveForm(montoPrimaNeta, montoIgtf, montoPrimaTotal, montoComision, fechaDesdeRecibo, fechaHastaRecibo, fechaPagoRecibo, resultCollective[0].id_colectivo, req.body);
+            if (resultCollective[0].fraccionamiento_boolean_colectivo === 1) {
+                for (let index = 0; index < resultCollective[0].numero_pago_colectivo; index++) {
+                    temparrayDivision.push([
+                        fechaDesdeRecibo,
+                        fechaHastaRecibo,
+                        montoPrimaNeta, 
+                        montoIgtf, 
+                        montoPrimaTotal,
+                        montoComision,
+                        receipt.insertId
+                    ]);
+                }
+            } else {
+                temparrayDivision.push([
+                    fechaDesdeRecibo,
+                    fechaHastaRecibo,
+                    montoPrimaNeta, 
+                    montoIgtf, 
+                    montoPrimaTotal,
+                    montoComision,
+                    receipt.insertId
+                ]);
+            }
+            await divisionModel.postDivisionForm(temparrayDivision);
             res.redirect('/sistema/add-risk-diverse-collective');
         } catch (error) {
             console.log(error);
@@ -1533,8 +1834,10 @@ module.exports = {
 /*               DELETE                  */
     disableReceipt: async (req, res) => {
         const disableReceipt = 1;
+        const disableReceiptDivision = 1;
+        await divisionModel.disableReceiptDivision(req.params.id, disableReceiptDivision);
         await receiptModel.updateDisableReceipt(req.params.id, req.body);
         await receiptModel.disableReceipt(req.params.id, disableReceipt); 
         res.redirect('/sistema/receipts');
-    } 
+    }
 }

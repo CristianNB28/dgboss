@@ -8,13 +8,17 @@ const ownAgentModel = require('../models/own_agent');
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const policyOwnAgentModel = require('../models/policy_own_agent');
 const polInsInsurerBenefModel = require('../models/pol_insu_insured_benef');
+const polInsuInsuredExecModel = require('../models/pol_insu_insured_executive');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const collectiveOwnAgentModel = require('../models/collective_own_agent');
+const colInsuInsuredExecModel = require('../models/col_insu_insured_executive');
 const executiveModel = require('../models/executive');
 const beneficiaryModel = require('../models/beneficiary');
 const userModel = require('../models/user');
+const divisionModel = require('../models/division');
 // Serializers
 const convertNumberToString = require('../serializers/convertNumberToString');
+const convertStringToCurrency = require('../serializers/convertStringToCurrency');
 
 const transporter = require('../../config/mailer');
 
@@ -1280,6 +1284,167 @@ module.exports = {
                 ownAgent: resultOwnAgent[0],
                 primaNetaColectivo,
                 nameRazonInsured,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    postEmailReceiptDivision: async (req, res) => {
+        const idDivision = req.body.id_fraccionamiento;
+        const resultDivision = await divisionModel.getDivision(idDivision);
+        const resultReceipt = await receiptModel.getReceipt(resultDivision[0].recibo_id);
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const percentajeExecutives = resultsExecutives.filter(executives => {
+            const condicionalGerente = ((executives.cargo_ejecutivo === 'GERENTE') && (executives.departamento_cargo_ejecutivo === 'TÉCNICO'));
+            const condicionalReclamos = ((executives.cargo_ejecutivo === 'COORDINADOR') && (executives.departamento_cargo_ejecutivo === 'SINIESTRO'));
+            const condicionalAdministracion = ((executives.cargo_ejecutivo === 'COORDINADOR') && (executives.departamento_cargo_ejecutivo === 'ADMINISTRACIÓN'));
+            return (condicionalGerente || condicionalReclamos || condicionalAdministracion);
+        });
+        const percentajeExecutivesPolicy = [];
+        let resultCollective = [];
+        let resultPolicy = [];
+        let resultOwnAgent = [];
+        let resultInsurer = [];
+        let nameRazonInsured = '';
+        if (resultReceipt[0].poliza_id !== null) {
+            const resultPoa = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+            if (resultPoa.length !== 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPoa[0].agente_propio_id);
+            }
+            if ((resultPII[0].asegurado_per_jur_id === null) && (resultPII[0].asegurado_per_nat_id !== null)) {
+                const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+            } else if ((resultPII[0].asegurado_per_jur_id !== null) && (resultPII[0].asegurado_per_nat_id === null)) {
+                const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+            }
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
+                resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
+                percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
+            }
+            resultDivision.forEach(division => {
+                division.fecha_desde_fraccionamiento = division.fecha_desde_fraccionamiento.toISOString().substring(0, 10);
+                division.fecha_hasta_fraccionamiento = division.fecha_hasta_fraccionamiento.toISOString().substring(0, 10);
+                division.prima_neta_fraccionamiento = convertNumberToString(division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertNumberToString(division.monto_comision_fraccionamiento);
+                division.prima_neta_fraccionamiento = convertStringToCurrency(resultPolicy[0].tipo_moneda_poliza, division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertStringToCurrency(resultPolicy[0].tipo_moneda_poliza, division.monto_comision_fraccionamiento);
+                if (division.fecha_pago_fraccionamiento !== null) {
+                    division.fecha_pago_fraccionamiento = division.fecha_pago_fraccionamiento.toISOString().substring(0, 10);
+                }
+            });
+            resultOwnAgent.forEach(ownAgent => {
+                ownAgent.porcentaje_agente_propio = convertNumberToString(ownAgent.porcentaje_agente_propio);
+                ownAgent.porcentaje_agente_propio = `${ownAgent.porcentaje_agente_propio}%`;
+            });
+        } else if (resultReceipt[0].colectivo_id !== null) {
+            const resultCoa = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+            const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+            resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+            resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+            if (resultCoa[0].length !== 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultCoa[0].agente_propio_id);
+            }
+            if ((resultCII[0].asegurado_per_jur_id === null) && (resultCII[0].asegurado_per_nat_id !== null)) {
+                const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+            } else if ((resultCII[0].asegurado_per_jur_id !== null) && (resultCII[0].asegurado_per_nat_id === null)) {
+                const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
+            }
+            for (const resultCIIE of resultsCIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
+                resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
+                percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
+            }
+            resultDivision.forEach(division => {
+                division.fecha_desde_fraccionamiento = division.fecha_desde_fraccionamiento.toISOString().substring(0, 10);
+                division.fecha_hasta_fraccionamiento = division.fecha_hasta_fraccionamiento.toISOString().substring(0, 10);
+                division.prima_neta_fraccionamiento = convertNumberToString(division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertNumberToString(division.monto_comision_fraccionamiento);
+                division.prima_neta_fraccionamiento = convertStringToCurrency(resultCollective[0].tipo_moneda_colectivo, division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertStringToCurrency(resultCollective[0].tipo_moneda_colectivo, division.monto_comision_fraccionamiento);
+                if (division.fecha_pago_fraccionamiento !== null) {
+                    division.fecha_pago_fraccionamiento = division.fecha_pago_fraccionamiento.toISOString().substring(0, 10);
+                }
+            });
+            resultOwnAgent.forEach(ownAgent => {
+                ownAgent.porcentaje_agente_propio = convertNumberToString(ownAgent.porcentaje_agente_propio);
+                ownAgent.porcentaje_agente_propio = `${ownAgent.porcentaje_agente_propio}%`;
+            });
+        }
+        percentajeExecutives.forEach(percentaje => {
+            percentaje.porcentaje_ejecutivo = convertNumberToString(percentaje.porcentaje_ejecutivo);
+            percentaje.porcentaje_ejecutivo = `${percentaje.porcentaje_ejecutivo}%`;
+        });
+        try {
+            const resultsUsers = await userModel.getUsers();
+            resultsUsers.forEach(async user => {
+                if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
+                    (user.cargo_usuario === 'GERENTE TÉCNICO') || 
+                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                {
+                    await transporter.sendMail({
+                        from: process.env.EMAIL_USER,
+                        to: `${user.correo_usuario}`,
+                        subject: "Notificación",
+                        html: `
+                        <div> 
+                            <p>Saludos,</p> 
+                            <p>Este correo es para notificar que tiene una comisión en tránsito</p> 
+                        </div> 
+                        `,
+                    });
+                }
+            });
+            res.render('divisionAdminForm', {
+                alert: true,
+                alertTitle: 'Exitoso',
+                alertMessage: 'Se ha enviado el correo',
+                alertIcon: 'success',
+                showConfirmButton: false,
+                timer: 1500,
+                ruta: `sistema/division/${idDivision}`,
+                nameRazonInsured,
+                percentajeExecutives,
+                percentajeExecutivesPolicy,
+                division: resultDivision[0],
+                collective: resultCollective[0],
+                policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
+                insurer: resultInsurer[0],
+                receipts: resultsReceipts,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('divisionAdminForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/division/${idDivision}`,
+                nameRazonInsured,
+                percentajeExecutives,
+                percentajeExecutivesPolicy,
+                division: resultDivision[0],
+                collective: resultCollective[0],
+                policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
+                insurer: resultInsurer[0],
+                receipts: resultsReceipts,
                 name: req.session.name,
                 cookieRol: req.cookies.rol
             });

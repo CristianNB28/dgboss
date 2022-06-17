@@ -1,1523 +1,232 @@
-const commissionModel = require('../models/commission');
+// Models
+const distributionModel = require('../models/distribution');
+const divisionModel = require('../models/division');
+const receiptModel = require('../models/receipt');
 const collectiveModel = require('../models/collective');
+const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
+const collectiveOwnAgentModel = require('../models/collective_own_agent');
+const colInsuInsuredExecModel = require('../models/col_insu_insured_executive');
+const policyModel = require('../models/policy');
+const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
+const policyOwnAgentModel = require('../models/policy_own_agent');
+const polInsuInsuredExecModel = require('../models/pol_insu_insured_executive');
+const ownAgentModel = require('../models/own_agent');
+const insurerModel = require('../models/insurer');
+const insuredModel = require('../models/insured');
+const executiveModel = require('../models/executive');
+// Serializers
+const convertStringToNumber = require('../serializers/convertStringToNumber');
+const convertNumberToString = require('../serializers/convertNumberToString');
+const convertStringToCurrency = require('../serializers/convertStringToCurrency');
 
 module.exports = {
 /*                  GET                  */
 /*                 POST                  */
-    postVehicleCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+    postDistributionForm: async (req, res) => {
+        const idDivision = req.body.id_fraccionamiento;
+        const resultDivision = await divisionModel.getDivision(idDivision);
+        const resultReceipt = await receiptModel.getReceipt(resultDivision[0].recibo_id);
+        const resultsReceipts = await receiptModel.getReceipts();
+        const resultsExecutives = await executiveModel.getExecutives();
+        const percentajeExecutives = resultsExecutives.filter(executives => {
+            const condicionalGerente = ((executives.cargo_ejecutivo === 'GERENTE') && (executives.departamento_cargo_ejecutivo === 'TÉCNICO'));
+            const condicionalReclamos = ((executives.cargo_ejecutivo === 'COORDINADOR') && (executives.departamento_cargo_ejecutivo === 'SINIESTRO'));
+            const condicionalAdministracion = ((executives.cargo_ejecutivo === 'COORDINADOR') && (executives.departamento_cargo_ejecutivo === 'ADMINISTRACIÓN'));
+            return (condicionalGerente || condicionalReclamos || condicionalAdministracion);
+        });
+        const percentajeExecutivesPolicy = [];
+        let resultCollective = [];
+        let resultPolicy = [];
+        let resultOwnAgent = [];
+        let resultInsurer = [];
+        let nameRazonInsured = '';
+        if (resultReceipt[0].poliza_id !== null) {
+            const resultPoa = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+            const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+            const resultsPIIE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(resultPII[0].id_paa);
+            resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+            resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+            if (resultPoa.length !== 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultPoa[0].agente_propio_id);
             }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-vehicle-policy');
-    },
-    postHealthCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+            if ((resultPII[0].asegurado_per_jur_id === null) && (resultPII[0].asegurado_per_nat_id !== null)) {
+                const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+            } else if ((resultPII[0].asegurado_per_jur_id !== null) && (resultPII[0].asegurado_per_nat_id === null)) {
+                const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
             }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-health-policy');
-    },
-    postPatrimonialCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+            for (const resultPIIE of resultsPIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
+                resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
+                percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
             }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-patrimonial-policy');
-    },
-    postBailCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+            resultDivision.forEach(division => {
+                division.fecha_desde_fraccionamiento = division.fecha_desde_fraccionamiento.toISOString().substring(0, 10);
+                division.fecha_hasta_fraccionamiento = division.fecha_hasta_fraccionamiento.toISOString().substring(0, 10);
+                division.prima_neta_fraccionamiento = convertNumberToString(division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertNumberToString(division.monto_comision_fraccionamiento);
+                division.prima_neta_fraccionamiento = convertStringToCurrency(resultPolicy[0].tipo_moneda_poliza, division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertStringToCurrency(resultPolicy[0].tipo_moneda_poliza, division.monto_comision_fraccionamiento);
+                if (division.fecha_pago_fraccionamiento !== null) {
+                    division.fecha_pago_fraccionamiento = division.fecha_pago_fraccionamiento.toISOString().substring(0, 10);
+                }
+            });
+            resultOwnAgent.forEach(ownAgent => {
+                ownAgent.porcentaje_agente_propio = convertNumberToString(ownAgent.porcentaje_agente_propio);
+                ownAgent.porcentaje_agente_propio = `${ownAgent.porcentaje_agente_propio}%`;
+            });
+        } else if (resultReceipt[0].colectivo_id !== null) {
+            const resultCoa = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+            const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+            const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
+            resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+            resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+            if (resultCoa[0].length !== 0) {
+                resultOwnAgent = await ownAgentModel.getOwnAgent(resultCoa[0].agente_propio_id);
             }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-bail-policy');
-    },
-    postAnotherBranchCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+            if ((resultCII[0].asegurado_per_jur_id === null) && (resultCII[0].asegurado_per_nat_id !== null)) {
+                const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                nameRazonInsured = `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`;
+            } else if ((resultCII[0].asegurado_per_jur_id !== null) && (resultCII[0].asegurado_per_nat_id === null)) {
+                const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                nameRazonInsured = resultLegalInsured[0].razon_social_per_jur;
             }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-another-branch-policy');
-    },
-    postFuneralCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
+            for (const resultCIIE of resultsCIIE) {
+                const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
+                resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
+                percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
             }
+            resultDivision.forEach(division => {
+                division.fecha_desde_fraccionamiento = division.fecha_desde_fraccionamiento.toISOString().substring(0, 10);
+                division.fecha_hasta_fraccionamiento = division.fecha_hasta_fraccionamiento.toISOString().substring(0, 10);
+                division.prima_neta_fraccionamiento = convertNumberToString(division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertNumberToString(division.monto_comision_fraccionamiento);
+                division.prima_neta_fraccionamiento = convertStringToCurrency(resultCollective[0].tipo_moneda_colectivo, division.prima_neta_fraccionamiento);
+                division.monto_comision_fraccionamiento = convertStringToCurrency(resultCollective[0].tipo_moneda_colectivo, division.monto_comision_fraccionamiento);
+                if (division.fecha_pago_fraccionamiento !== null) {
+                    division.fecha_pago_fraccionamiento = division.fecha_pago_fraccionamiento.toISOString().substring(0, 10);
+                }
+            });
+            resultOwnAgent.forEach(ownAgent => {
+                ownAgent.porcentaje_agente_propio = convertNumberToString(ownAgent.porcentaje_agente_propio);
+                ownAgent.porcentaje_agente_propio = `${ownAgent.porcentaje_agente_propio}%`;
+            });
         }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
+        percentajeExecutives.forEach(percentaje => {
+            percentaje.porcentaje_ejecutivo = convertNumberToString(percentaje.porcentaje_ejecutivo);
+            percentaje.porcentaje_ejecutivo = `${percentaje.porcentaje_ejecutivo}%`;
+        });
+        try {
+            let { 
+                monto_comision_distribucion: montoComision,
+                monto_bonificacion_distribucion: montoBonificacion,
+                monto_comision_bonificacion: montoComisionBonificacion,
+                total_comision_distribuir: totalComision,
+                porcentaje_bonificacion_distribucion: porcentajeBonificacion,
+                porcentaje_islr_distribucion: porcentajeIslr,
+                porcentaje_agente_distribucion: porcentajeAgentePropio,
+                caso_especial_distribucion: porcentajeCasoEspecial,
+                porcentaje_atina_distribucion: porcentajeAtina,
+                porcentaje_fundatina_distribucion: porcentajeFundatina,
+                porcentaje_director_distribucion: porcentajeDirector,
+                porcentaje_socio_distribucion: porcentajeSocio,
+                porcentaje_gerente_distribucion: porcentajeGerente,
+                porcentaje_coordinador_suscripcion: porcentajeCoordinadorSuscripcion,
+                porcentaje_coordinador_reclamo: porcentajeCoordinadorReclamo,
+                porcentaje_coordinador_administracion: porcentajeCoordinadorAdministracion,
+                porcentaje_ejecutivo_suscripcion: porcentajeEjecutivoSuscripcion,
+                porcentaje_ejecutivo_reclamo: porcentajeEjecutivoReclamo,
+                porcentaje_ejecutivo_cobranza: porcentajeEjecutivoCobranza
+            } = req.body;
+            const reciboDistribucion = 1;
+            montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoBonificacion = montoBonificacion.replace(/[Bs$€]/g, '').replace(' ', '');
+            montoComisionBonificacion = montoComisionBonificacion.replace(/[Bs$€]/g, '').replace(' ', '');
+            totalComision = totalComision.replace(/[Bs$€]/g, '').replace(' ', '');
+            porcentajeBonificacion = porcentajeBonificacion.replace(/[%]/g, '').replace(' ', '');
+            porcentajeIslr = porcentajeIslr.replace(/[%]/g, '').replace(' ', '');
+            porcentajeAgentePropio = porcentajeAgentePropio.replace(/[%]/g, '').replace(' ', '');
+            porcentajeCasoEspecial = porcentajeCasoEspecial.replace(/[%]/g, '').replace(' ', '');
+            porcentajeAtina = porcentajeAtina.replace(/[%]/g, '').replace(' ', '');
+            porcentajeFundatina = porcentajeFundatina.replace(/[%]/g, '').replace(' ', '');
+            porcentajeDirector = porcentajeDirector.replace(/[%]/g, '').replace(' ', '');
+            porcentajeSocio = porcentajeSocio.replace(/[%]/g, '').replace(' ', '');
+            porcentajeGerente = porcentajeGerente.replace(/[%]/g, '').replace(' ', '');
+            porcentajeCoordinadorSuscripcion = porcentajeCoordinadorSuscripcion.replace(/[%]/g, '').replace(' ', '');
+            porcentajeCoordinadorReclamo = porcentajeCoordinadorReclamo.replace(/[%]/g, '').replace(' ', '');
+            porcentajeCoordinadorAdministracion = porcentajeCoordinadorAdministracion.replace(/[%]/g, '').replace(' ', '');
+            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
+            porcentajeEjecutivoReclamo = porcentajeEjecutivoReclamo.replace(/[%]/g, '').replace(' ', '');
+            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
+            montoComision = convertStringToNumber(montoComision);
+            montoBonificacion = convertStringToNumber(montoBonificacion);
+            montoComisionBonificacion = convertStringToNumber(montoComisionBonificacion);
+            totalComision = convertStringToNumber(totalComision);
+            porcentajeBonificacion = convertStringToNumber(porcentajeBonificacion);
+            porcentajeIslr = convertStringToNumber(porcentajeIslr);
+            porcentajeAgentePropio = convertStringToNumber(porcentajeAgentePropio);
+            porcentajeCasoEspecial = convertStringToNumber(porcentajeCasoEspecial);
+            porcentajeAtina = convertStringToNumber(porcentajeAtina);
+            porcentajeFundatina = convertStringToNumber(porcentajeFundatina);
+            porcentajeDirector = convertStringToNumber(porcentajeDirector);
+            porcentajeSocio = convertStringToNumber(porcentajeSocio);
+            porcentajeGerente = convertStringToNumber(porcentajeGerente);
+            porcentajeCoordinadorSuscripcion = convertStringToNumber(porcentajeCoordinadorSuscripcion);
+            porcentajeCoordinadorReclamo = convertStringToNumber(porcentajeCoordinadorReclamo);
+            porcentajeCoordinadorAdministracion = convertStringToNumber(porcentajeCoordinadorAdministracion);
+            porcentajeEjecutivoSuscripcion = convertStringToNumber(porcentajeEjecutivoSuscripcion);
+            porcentajeEjecutivoReclamo = convertStringToNumber(porcentajeEjecutivoReclamo);
+            porcentajeEjecutivoCobranza = convertStringToNumber(porcentajeEjecutivoCobranza);
+            await distributionModel.postDistributionForm(
+                montoComision, 
+                montoBonificacion, 
+                montoComisionBonificacion, 
+                totalComision, 
+                porcentajeBonificacion, 
+                porcentajeIslr, 
+                porcentajeAgentePropio, 
+                porcentajeCasoEspecial, 
+                porcentajeAtina, 
+                porcentajeFundatina,
+                porcentajeDirector,
+                porcentajeSocio,
+                porcentajeGerente,
+                porcentajeCoordinadorSuscripcion,
+                porcentajeCoordinadorReclamo,
+                porcentajeCoordinadorAdministracion,
+                porcentajeEjecutivoSuscripcion,
+                porcentajeEjecutivoReclamo,
+                porcentajeEjecutivoCobranza,
+                idDivision
+            );
+            await divisionModel.updateReceiptDivision(idDivision, reciboDistribucion);
+            res.redirect(`/sistema/subdivisions/${resultDivision[0].recibo_id}`);
+        } catch (error) {
+            console.log(error);
+            res.render('divisionAdminForm', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: `sistema/division/${idDivision}`,
+                nameRazonInsured,
+                percentajeExecutives,
+                percentajeExecutivesPolicy,
+                division: resultDivision[0],
+                collective: resultCollective[0],
+                policy: resultPolicy[0],
+                ownAgent: resultOwnAgent[0],
+                insurer: resultInsurer[0],
+                receipts: resultsReceipts,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-funeral-policy');
-    },
-    postLifeCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-life-policy');
-    },
-    postAPCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-ap-policy');
-    },
-    postTravelCommissionForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision);
-        res.redirect('/sistema/add-travel-policy');
-    },
-    postHealthCommissionCollectiveForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        let idCollective = await collectiveModel.getCollectiveLast();
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
-        res.redirect('/sistema/add-health-collective');
-    },
-    postVehicleCommissionCollectiveForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        let idCollective = await collectiveModel.getCollectiveLast();
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
-        res.redirect('/sistema/add-vehicle-collective');
-    },
-    postRiskDiverseCommissionCollectiveForm: async (req, res) => {
-        let porcentajeAgenteComision = parseFloat(req.body.porcentaje_agente_comision);
-        let casoEspecialComision = req.body.caso_especial_comision;
-        let porcentajeEjecutivoSuscripcion = req.body.porcentaje_ejecutivo_suscripcion;
-        let porcentajeEjecutivoSiniestro = req.body.porcentaje_ejecutivo_siniestro;
-        let porcentajeEjecutivoCobranza = req.body.porcentaje_ejecutivo_cobranza;
-        let porcentajeFundatinaComision = req.body.porcentaje_fundatina_comision;
-        let porcentajeDirectorComision = req.body.porcentaje_director_comision;
-        let porcentajeSocioComision = req.body.porcentaje_socio_comision;
-        let porcentajeAtinaComision = req.body.porcentaje_atina_comision;
-        let montoComision = req.body.monto_comision_comision;
-        casoEspecialComision = casoEspecialComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(/[%]/g, '').replace(' ', '');
-        porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(/[%]/g, '').replace(' ', '');
-        porcentajeFundatinaComision = porcentajeFundatinaComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeDirectorComision = porcentajeDirectorComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeSocioComision = porcentajeSocioComision.replace(/[%]/g, '').replace(' ', '');
-        porcentajeAtinaComision = porcentajeAtinaComision.replace(/[%]/g, '').replace(' ', '');
-        montoComision = montoComision.replace(/[Bs$€]/g, '').replace(' ', '');
-        let idCollective = await collectiveModel.getCollectiveLast();
-        if ((porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) && (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSuscripcion.indexOf(',') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(",", ".");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion);
-        } else if (porcentajeEjecutivoSuscripcion.indexOf('.') !== -1) {
-            porcentajeEjecutivoSuscripcion = porcentajeEjecutivoSuscripcion.replace(".", ",");
-            porcentajeEjecutivoSuscripcion = parseFloat(porcentajeEjecutivoSuscripcion.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoSiniestro.indexOf(',') !== -1) && (porcentajeEjecutivoSiniestro.indexOf('.') !== -1)) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        } else if (porcentajeEjecutivoSiniestro.indexOf(',') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(",", ".");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro);
-        } else if (porcentajeEjecutivoSiniestro.indexOf('.') !== -1) {
-            porcentajeEjecutivoSiniestro = porcentajeEjecutivoSiniestro.replace(".", ",");
-            porcentajeEjecutivoSiniestro = parseFloat(porcentajeEjecutivoSiniestro.replace(/,/g,''));
-        }
-        if ((porcentajeEjecutivoCobranza.indexOf(',') !== -1) && (porcentajeEjecutivoCobranza.indexOf('.') !== -1)) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        } else if (porcentajeEjecutivoCobranza.indexOf(',') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(",", ".");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza);
-        } else if (porcentajeEjecutivoCobranza.indexOf('.') !== -1) {
-            porcentajeEjecutivoCobranza = porcentajeEjecutivoCobranza.replace(".", ",");
-            porcentajeEjecutivoCobranza = parseFloat(porcentajeEjecutivoCobranza.replace(/,/g,''));
-        }
-        if ((porcentajeFundatinaComision.indexOf(',') !== -1) && (porcentajeFundatinaComision.indexOf('.') !== -1)) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        } else if (porcentajeFundatinaComision.indexOf(',') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(",", ".");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision);
-        } else if (porcentajeFundatinaComision.indexOf('.') !== -1) {
-            porcentajeFundatinaComision = porcentajeFundatinaComision.replace(".", ",");
-            porcentajeFundatinaComision = parseFloat(porcentajeFundatinaComision.replace(/,/g,''));
-        }
-        if ((porcentajeDirectorComision.indexOf(',') !== -1) && (porcentajeDirectorComision.indexOf('.') !== -1)) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        } else if (porcentajeDirectorComision.indexOf(',') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(",", ".");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision);
-        } else if (porcentajeDirectorComision.indexOf('.') !== -1) {
-            porcentajeDirectorComision = porcentajeDirectorComision.replace(".", ",");
-            porcentajeDirectorComision = parseFloat(porcentajeDirectorComision.replace(/,/g,''));
-        }
-        if ((porcentajeSocioComision.indexOf(',') !== -1) && (porcentajeSocioComision.indexOf('.') !== -1)) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        } else if (porcentajeSocioComision.indexOf(',') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(",", ".");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision);
-        } else if (porcentajeSocioComision.indexOf('.') !== -1) {
-            porcentajeSocioComision = porcentajeSocioComision.replace(".", ",");
-            porcentajeSocioComision = parseFloat(porcentajeSocioComision.replace(/,/g,''));
-        }
-        if ((porcentajeAtinaComision.indexOf(',') !== -1) && (porcentajeAtinaComision.indexOf('.') !== -1)) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        } else if (porcentajeAtinaComision.indexOf(',') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(",", ".");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision);
-        } else if (porcentajeAtinaComision.indexOf('.') !== -1) {
-            porcentajeAtinaComision = porcentajeAtinaComision.replace(".", ",");
-            porcentajeAtinaComision = parseFloat(porcentajeAtinaComision.replace(/,/g,''));
-        }
-        if (casoEspecialComision === '') {
-            casoEspecialComision = 0;
-        } else {
-            if ((casoEspecialComision.indexOf(',') !== -1) && (casoEspecialComision.indexOf('.') !== -1)) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            } else if (casoEspecialComision.indexOf(',') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(",", ".");
-                casoEspecialComision = parseFloat(casoEspecialComision);
-            } else if (casoEspecialComision.indexOf('.') !== -1) {
-                casoEspecialComision = casoEspecialComision.replace(".", ",");
-                casoEspecialComision = parseFloat(casoEspecialComision.replace(/,/g,''));
-            }
-        }
-        if ((montoComision.indexOf(',') !== -1) && (montoComision.indexOf('.') !== -1)) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        } else if (montoComision.indexOf(',') !== -1) {
-            montoComision = montoComision.replace(",", ".");
-            montoComision = parseFloat(montoComision);
-        } else if (montoComision.indexOf('.') !== -1) {
-            montoComision = montoComision.replace(".", ",");
-            montoComision = parseFloat(montoComision.replace(/,/g,''));
-        }
-        await commissionModel.postCommissionCollectiveForm(porcentajeAgenteComision, casoEspecialComision, porcentajeEjecutivoSuscripcion, porcentajeEjecutivoSiniestro, porcentajeEjecutivoCobranza, porcentajeFundatinaComision, porcentajeDirectorComision, porcentajeSocioComision, porcentajeAtinaComision, montoComision, idCollective);
-        res.redirect('/sistema/add-risk-diverse-collective');
     },
 /*                  PUT                  */
 /*               DELETE                  */

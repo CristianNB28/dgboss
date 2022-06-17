@@ -1,9 +1,13 @@
+// Models
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
+// Serializers
+const convertNumberToString = require('../serializers/convertNumberToString');
+const convertStringToCurrency = require('../serializers/convertStringToCurrency');
 
 module.exports = {
 /*                  GET                  */
@@ -151,7 +155,7 @@ module.exports = {
                     'fecha_desde_poliza': item.fecha_desde_colectivo,
                     'fecha_hasta_poliza': item.fecha_hasta_colectivo,
                     'tipo_moneda_poliza': item.tipo_moneda_colectivo,
-                    'prima_anual_poliza': item.prima_anual_colectivo,
+                    'prima_neta_poliza': item.prima_neta_colectivo,
                     'estatus_poliza': item.estatus_colectivo
                 }
                 return Object.assign({}, objectCII, arrayCIINew[i]);
@@ -159,19 +163,8 @@ module.exports = {
             const policyCollective = policyII.concat(collectiveII);
             const data = policyCollective.filter(policyCollective => filters.every(filterPolicy => filterPolicy(policyCollective)));
             data.forEach(item => {
-                let primaPoliza = item.prima_anual_poliza;
-                if (primaPoliza.toString().includes('.') === true) {
-                    item.prima_anual_poliza = item.prima_anual_poliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                } else {
-                    item.prima_anual_poliza = String(item.prima_anual_poliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                }
-                if (item.tipo_moneda_poliza === 'BOLÍVAR') {
-                    item.prima_anual_poliza = `Bs ${item.prima_anual_poliza}`;
-                } else if (item.tipo_moneda_poliza === 'DÓLAR') {
-                    item.prima_anual_poliza = `$ ${item.prima_anual_poliza}`;
-                } else if (item.tipo_moneda_poliza === 'EUROS') {
-                    item.prima_anual_poliza = `€ ${item.prima_anual_poliza}`;
-                }
+                item.prima_neta_poliza = convertNumberToString(item.prima_neta_poliza);
+                item.prima_neta_poliza = convertStringToCurrency(item.tipo_moneda_poliza , item.prima_neta_poliza);
                 item.fecha_desde_poliza = item.fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"); 
                 item.fecha_hasta_poliza = item.fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1");
             });

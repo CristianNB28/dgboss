@@ -1,0 +1,1278 @@
+        </br>
+        </br>
+        </br>
+        <div class="footer">
+            
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="/js/jquery-3.1.1.min.js"></script>
+<script src="/js/jquery-2.1.1.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Flot -->
+<script src="/js/plugins/flot/jquery.flot.js"></script>
+<script src="/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="/js/plugins/flot/jquery.flot.pie.js"></script>
+
+<!-- Peity -->
+<script src="/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/js/demo/peity-demo.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<!-- GITTER -->
+<script src="/js/plugins/gritter/jquery.gritter.min.js"></script>
+
+<!-- Sparkline -->
+<script src="/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- Sparkline demo data  -->
+<script src="/js/demo/sparkline-demo.js"></script>
+
+<!-- ChartJS-->
+<script src="/js/plugins/chartJs/Chart.min.js"></script>
+
+<!-- Toastr -->
+<script src="/js/plugins/toastr/toastr.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/js/inspinia.js"></script>
+<script src="/js/plugins/pace/pace.min.js"></script>
+
+<!-- Steps -->
+<script src="/js/plugins/steps/jquery.steps.min.js"></script>
+
+<!-- Jquery Validate -->
+<script src="/js/plugins/validate/jquery.validate.min.js"></script>
+
+<script src="/js/plugins/jquery.cookie/jquery.cookie.js"></script>
+
+<!-- DataTables -->
+<script src="/js/plugins/dataTables/datatables.min.js"></script>
+<script src="/js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="/js/moment.js"></script>
+
+<script src="/js/cleave-js/cleave.min.js"></script>
+
+<script>
+    var receipts = <%- JSON.stringify(receipts) %>;
+    $.extend($.validator.messages, {
+        required: "Este campo es obligatorio",
+        remote: "Por favor, rellena este campo",
+        email: "Por favor, escribe una dirección de correo válida",
+        url: "Por favor, escribe una URL válida",
+        date: "Por favor, escribe una fecha válida",
+        dateISO: "Por favor, escribe una fecha (ISO) válida",
+        number: "Por favor, escribe un número entero válido",
+        digits: "Por favor, escribe sólo dígitos",
+        creditcard: "Por favor, escribe un número de tarjeta válido",
+        equalTo: "Por favor, escribe el mismo valor de nuevo",
+        accept: "Por favor, escribe un valor con una extensión aceptada",
+        maxlength: $.validator.format("Por favor, no escribas más de {0} caracteres"),
+        minlength: $.validator.format("Por favor, no escribas menos de {0} caracteres"),
+        rangelength: $.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres"),
+        range: $.validator.format("Por favor, escribe un valor entre {0} y {1}"),
+        max: $.validator.format("Por favor, escribe un valor menor o igual a {0}"),
+        min: $.validator.format("Por favor, escribe un valor mayor o igual a {0}"),
+        step: $.validator.format("Por favor, escribe un múltiplo de {0}")
+    });
+    function esRepetidoNumRecibo(value, element, param) {
+        let numberReceipt = document.getElementById("numero_recibo").value
+        const even = (receipt) => receipt.numero_recibo === numberReceipt;
+        if (receipts.some(even) === true) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $.validator.addMethod("esrepetidonumrecibo", esRepetidoNumRecibo, "Se repite el número de recibo");
+    $(document).ready(function(){
+        $("#wizard").steps();
+        $("#form-division-admin").steps({
+            headerTag: "h1",
+            bodyTag: "fieldset",
+            titleTemplate:"<span class='text'></span> #title#",
+            saveState: true,
+            labels: {
+                cancel: "Cancelar",
+                current: "current step:",
+                pagination: "Pagination",
+                finish: "Cerrar",
+                next: "Siguiente",
+                previous: "Anterior",
+                loading: "Cargando ..."
+            },
+            onStepChanging: (event, currentIndex, newIndex) => {
+                if (currentIndex > newIndex)
+                {
+                    return true;
+                }
+                if (newIndex === 2)
+                {
+                    return false;
+                }
+                if (newIndex === 1) {
+                    return true;
+                }
+            },
+            onFinishing:(event, currentIndex) => {
+                return true;
+            },
+            onFinished: (a) => {
+                $('#form-division-admin .steps a:eq(0)').click();
+                $('#form-division-admin').hide();
+            }
+        });
+        $().ready(function () {
+            $("#division-receipt-admin").validate({
+                rules: {
+                    numero_recibo: {
+                        esrepetidonumrecibo: true
+                    }
+                }
+            });
+        });
+        $().ready(function () {
+            $("#division-form-distribucion").validate();
+        });
+        $("#division-form-distribucion").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
+    });
+</script>
+
+<% if(typeof alert != 'undefined') { %>
+    <script>
+        Swal.fire({
+            title: '<%= alertTitle %>',
+            text: '<%= alertMessage %>',
+            icon: '<%= alertIcon %>',
+            showConfirmButton: <%= showConfirmButton %>,
+            timer: <%= timer %>
+        }).then(()=>{
+            window.location='/<%= ruta %>'
+        })
+    </script>
+<% } %>
+
+<script>
+    function confirmFunction() {
+        Swal.fire({
+            title: "Confirmar Accion",
+            icon: 'warning',
+            text: "Seguro que esta información es correcta? SI/NO",
+            showCancelButton: true,
+            confirmButtonText: "SI",
+            cancelButtonText: "NO"
+
+        }).then((result) => {
+            if (result.value) {
+                $('#division-form-distribucion').submit();
+                $('#form-division-admin .steps a:eq(0)').click();
+                $('#form-division-admin').hide();
+            }
+        });
+    }
+</script>
+
+<script>
+    function percentageCalculation() { 
+        let agentPercentage = document.getElementById("porcentaje_agente_distribucion").value;
+        let specialPercentage = document.getElementById("caso_especial_distribucion").value;
+        let fundatinaPercentage = document.getElementById("porcentaje_fundatina_distribucion").value;
+        let principalPercentage = document.getElementById("porcentaje_director_distribucion").value;
+        let partnerPercentage = document.getElementById("porcentaje_socio_distribucion").value;
+        let managerPercentage = document.getElementById("porcentaje_gerente_distribucion").value;
+        let subscriptionCoordinatorPercentage = document.getElementById("porcentaje_coordinador_suscripcion").value;
+        let claimCoordinatorPercentage = document.getElementById("porcentaje_coordinador_reclamo").value;
+        let adminCoordinatorPercentage = document.getElementById("porcentaje_coordinador_administracion").value;
+        let executiveSubscriptionPercentage = document.getElementById("porcentaje_ejecutivo_suscripcion").value;
+        let claimExecutivePercentage = document.getElementById("porcentaje_ejecutivo_reclamo").value;
+        let collectionExecutivePercentage = document.getElementById("porcentaje_ejecutivo_cobranza").value;
+        agentPercentage = agentPercentage.replace(/[%]/g, '').replace(' ', '');
+        specialPercentage = specialPercentage.replace(/[%]/g, '').replace(' ', '');
+        fundatinaPercentage = fundatinaPercentage.replace(/[%]/g, '').replace(' ', '');
+        principalPercentage = principalPercentage.replace(/[%]/g, '').replace(' ', '');
+        partnerPercentage = partnerPercentage.replace(/[%]/g, '').replace(' ', '');
+        managerPercentage = managerPercentage.replace(/[%]/g, '').replace(' ', '');
+        subscriptionCoordinatorPercentage = subscriptionCoordinatorPercentage.replace(/[%]/g, '').replace(' ', '');
+        claimCoordinatorPercentage = claimCoordinatorPercentage.replace(/[%]/g, '').replace(' ', '');
+        adminCoordinatorPercentage = adminCoordinatorPercentage.replace(/[%]/g, '').replace(' ', '');
+        executiveSubscriptionPercentage = executiveSubscriptionPercentage.replace(/[%]/g, '').replace(' ', '');
+        claimExecutivePercentage = claimExecutivePercentage.replace(/[%]/g, '').replace(' ', '');
+        collectionExecutivePercentage = collectionExecutivePercentage.replace(/[%]/g, '').replace(' ', '');
+
+        if (specialPercentage === '') {
+            specialPercentage = 0;
+        } else {
+            if ((specialPercentage.indexOf(',') !== -1) && (specialPercentage.indexOf('.') !== -1)) {
+                specialPercentage = specialPercentage.replaceAll(".", "");
+                specialPercentage = specialPercentage.replace(",", ".");
+                specialPercentage = parseFloat(specialPercentage.replaceAll(/,/g,''));
+            } else if (specialPercentage.indexOf(',') !== -1) {
+                specialPercentage = specialPercentage.replace(",", ".");
+                specialPercentage = parseFloat(specialPercentage);
+            } else if (specialPercentage.indexOf('.') !== -1) {
+                specialPercentage = specialPercentage.replaceAll(".", ",");
+                specialPercentage = parseFloat(specialPercentage.replaceAll(/,/g,''));
+            } else if ((specialPercentage.indexOf(',') === -1) && (specialPercentage.indexOf('.') === -1)) {
+                specialPercentage = parseFloat(specialPercentage);
+            }
+        }
+        if ((agentPercentage.indexOf(',') !== -1) && (agentPercentage.indexOf('.') !== -1)) {
+            agentPercentage = agentPercentage.replaceAll(".", "");
+            agentPercentage = agentPercentage.replace(",", ".");
+            agentPercentage = parseFloat(agentPercentage.replaceAll(/,/g,''));
+        } else if (agentPercentage.indexOf(',') !== -1) {
+            agentPercentage = agentPercentage.replace(",", ".");
+            agentPercentage = parseFloat(agentPercentage);
+        } else if (agentPercentage.indexOf('.') !== -1) {
+            agentPercentage = agentPercentage.replaceAll(".", ",");
+            agentPercentage = parseFloat(agentPercentage.replaceAll(/,/g,''));
+        } else if ((agentPercentage.indexOf(',') === -1) && (agentPercentage.indexOf('.') === -1)) {
+            agentPercentage = parseFloat(agentPercentage);
+        }
+        if ((fundatinaPercentage.indexOf(',') !== -1) && (fundatinaPercentage.indexOf('.') !== -1)) {
+            fundatinaPercentage = fundatinaPercentage.replaceAll(".", "");
+            fundatinaPercentage = fundatinaPercentage.replace(",", ".");
+            fundatinaPercentage = parseFloat(fundatinaPercentage.replaceAll(/,/g,''));
+        } else if (fundatinaPercentage.indexOf(',') !== -1) {
+            fundatinaPercentage = fundatinaPercentage.replace(",", ".");
+            fundatinaPercentage = parseFloat(fundatinaPercentage);
+        } else if (fundatinaPercentage.indexOf('.') !== -1) {
+            fundatinaPercentage = fundatinaPercentage.replaceAll(".", ",");
+            fundatinaPercentage = parseFloat(fundatinaPercentage.replaceAll(/,/g,''));
+        } else if ((fundatinaPercentage.indexOf(',') === -1) && (fundatinaPercentage.indexOf('.') === -1)) {
+            fundatinaPercentage = parseFloat(fundatinaPercentage);
+        } 
+        if ((principalPercentage.indexOf(',') !== -1) && (principalPercentage.indexOf('.') !== -1)) {
+            principalPercentage = principalPercentage.replaceAll(".", "");
+            principalPercentage = principalPercentage.replace(",", ".");
+            principalPercentage = parseFloat(principalPercentage.replaceAll(/,/g,''));
+        } else if (principalPercentage.indexOf(',') !== -1) {
+            principalPercentage = principalPercentage.replace(",", ".");
+            principalPercentage = parseFloat(principalPercentage);
+        } else if (principalPercentage.indexOf('.') !== -1) {
+            principalPercentage = principalPercentage.replaceAll(".", ",");
+            principalPercentage = parseFloat(principalPercentage.replaceAll(/,/g,''));
+        } else if ((principalPercentage.indexOf(',') === -1) && (principalPercentage.indexOf('.') === -1)) {
+            principalPercentage = parseFloat(principalPercentage);
+        }
+        if ((partnerPercentage.indexOf(',') !== -1) && (partnerPercentage.indexOf('.') !== -1)) {
+            partnerPercentage = partnerPercentage.replaceAll(".", "");
+            partnerPercentage = partnerPercentage.replace(",", ".");
+            partnerPercentage = parseFloat(partnerPercentage.replaceAll(/,/g,''));
+        } else if (partnerPercentage.indexOf(',') !== -1) {
+            partnerPercentage = partnerPercentage.replace(",", ".");
+            partnerPercentage = parseFloat(partnerPercentage);
+        } else if (partnerPercentage.indexOf('.') !== -1) {
+            partnerPercentage = partnerPercentage.replaceAll(".", ",");
+            partnerPercentage = parseFloat(partnerPercentage.replaceAll(/,/g,''));
+        } else if ((partnerPercentage.indexOf(',') === -1) && (partnerPercentage.indexOf('.') === -1)) {
+            partnerPercentage = parseFloat(partnerPercentage);
+        }
+        if ((managerPercentage.indexOf(',') !== -1) && (managerPercentage.indexOf('.') !== -1)) {
+            managerPercentage = managerPercentage.replaceAll(".", "");
+            managerPercentage = managerPercentage.replace(",", ".");
+            managerPercentage = parseFloat(managerPercentage.replaceAll(/,/g,''));
+        } else if (managerPercentage.indexOf(',') !== -1) {
+            managerPercentage = managerPercentage.replace(",", ".");
+            managerPercentage = parseFloat(managerPercentage);
+        } else if (managerPercentage.indexOf('.') !== -1) {
+            managerPercentage = managerPercentage.replaceAll(".", ",");
+            managerPercentage = parseFloat(managerPercentage.replaceAll(/,/g,''));
+        } else if ((managerPercentage.indexOf(',') === -1) && (managerPercentage.indexOf('.') === -1)) {
+            managerPercentage = parseFloat(managerPercentage);
+        }
+        if ((subscriptionCoordinatorPercentage.indexOf(',') !== -1) && (subscriptionCoordinatorPercentage.indexOf('.') !== -1)) {
+            subscriptionCoordinatorPercentage = subscriptionCoordinatorPercentage.replaceAll(".", "");
+            subscriptionCoordinatorPercentage = subscriptionCoordinatorPercentage.replace(",", ".");
+            subscriptionCoordinatorPercentage = parseFloat(subscriptionCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if (subscriptionCoordinatorPercentage.indexOf(',') !== -1) {
+            subscriptionCoordinatorPercentage = subscriptionCoordinatorPercentage.replace(",", ".");
+            subscriptionCoordinatorPercentage = parseFloat(subscriptionCoordinatorPercentage);
+        } else if (subscriptionCoordinatorPercentage.indexOf('.') !== -1) {
+            subscriptionCoordinatorPercentage = subscriptionCoordinatorPercentage.replaceAll(".", ",");
+            subscriptionCoordinatorPercentage = parseFloat(subscriptionCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if ((subscriptionCoordinatorPercentage.indexOf(',') === -1) && (subscriptionCoordinatorPercentage.indexOf('.') === -1)) {
+            subscriptionCoordinatorPercentage = parseFloat(subscriptionCoordinatorPercentage);
+        }
+        if ((claimCoordinatorPercentage.indexOf(',') !== -1) && (claimCoordinatorPercentage.indexOf('.') !== -1)) {
+            claimCoordinatorPercentage = claimCoordinatorPercentage.replaceAll(".", "");
+            claimCoordinatorPercentage = claimCoordinatorPercentage.replace(",", ".");
+            claimCoordinatorPercentage = parseFloat(claimCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if (claimCoordinatorPercentage.indexOf(',') !== -1) {
+            claimCoordinatorPercentage = claimCoordinatorPercentage.replace(",", ".");
+            claimCoordinatorPercentage = parseFloat(claimCoordinatorPercentage);
+        } else if (claimCoordinatorPercentage.indexOf('.') !== -1) {
+            claimCoordinatorPercentage = claimCoordinatorPercentage.replaceAll(".", ",");
+            claimCoordinatorPercentage = parseFloat(claimCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if ((claimCoordinatorPercentage.indexOf(',') === -1) && (claimCoordinatorPercentage.indexOf('.') === -1)) {
+            claimCoordinatorPercentage = parseFloat(claimCoordinatorPercentage);
+        }
+        if ((adminCoordinatorPercentage.indexOf(',') !== -1) && (adminCoordinatorPercentage.indexOf('.') !== -1)) {
+            adminCoordinatorPercentage = adminCoordinatorPercentage.replaceAll(".", "");
+            adminCoordinatorPercentage = adminCoordinatorPercentage.replace(",", ".");
+            adminCoordinatorPercentage = parseFloat(adminCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if (adminCoordinatorPercentage.indexOf(',') !== -1) {
+            adminCoordinatorPercentage = adminCoordinatorPercentage.replace(",", ".");
+            adminCoordinatorPercentage = parseFloat(adminCoordinatorPercentage);
+        } else if (adminCoordinatorPercentage.indexOf('.') !== -1) {
+            adminCoordinatorPercentage = adminCoordinatorPercentage.replaceAll(".", ",");
+            adminCoordinatorPercentage = parseFloat(adminCoordinatorPercentage.replaceAll(/,/g,''));
+        } else if ((adminCoordinatorPercentage.indexOf(',') === -1) && (adminCoordinatorPercentage.indexOf('.') === -1)) {
+            adminCoordinatorPercentage = parseFloat(adminCoordinatorPercentage);
+        }
+        if ((executiveSubscriptionPercentage.indexOf(',') !== -1) && (executiveSubscriptionPercentage.indexOf('.') !== -1)) {
+            executiveSubscriptionPercentage = executiveSubscriptionPercentage.replaceAll(".", "");
+            executiveSubscriptionPercentage = executiveSubscriptionPercentage.replace(",", ".");
+            executiveSubscriptionPercentage = parseFloat(executiveSubscriptionPercentage.replaceAll(/,/g,''));
+        } else if (executiveSubscriptionPercentage.indexOf(',') !== -1) {
+            executiveSubscriptionPercentage = executiveSubscriptionPercentage.replace(",", ".");
+            executiveSubscriptionPercentage = parseFloat(executiveSubscriptionPercentage);
+        } else if (executiveSubscriptionPercentage.indexOf('.') !== -1) {
+            executiveSubscriptionPercentage = executiveSubscriptionPercentage.replaceAll(".", ",");
+            executiveSubscriptionPercentage = parseFloat(executiveSubscriptionPercentage.replaceAll(/,/g,''));
+        } else if ((executiveSubscriptionPercentage.indexOf(',') === -1) && (executiveSubscriptionPercentage.indexOf('.') === -1)) {
+            executiveSubscriptionPercentage = parseFloat(executiveSubscriptionPercentage);
+        }
+        if ((claimExecutivePercentage.indexOf(',') !== -1) && (claimExecutivePercentage.indexOf('.') !== -1)) {
+            claimExecutivePercentage = claimExecutivePercentage.replaceAll(".", "");
+            claimExecutivePercentage = claimExecutivePercentage.replace(",", ".");
+            claimExecutivePercentage = parseFloat(claimExecutivePercentage.replaceAll(/,/g,''));
+        } else if (claimExecutivePercentage.indexOf(',') !== -1) {
+            claimExecutivePercentage = claimExecutivePercentage.replace(",", ".");
+            claimExecutivePercentage = parseFloat(claimExecutivePercentage);
+        } else if (claimExecutivePercentage.indexOf('.') !== -1) {
+            claimExecutivePercentage = claimExecutivePercentage.replaceAll(".", ",");
+            claimExecutivePercentage = parseFloat(claimExecutivePercentage.replaceAll(/,/g,''));
+        } else if ((claimExecutivePercentage.indexOf(',') === -1) && (claimExecutivePercentage.indexOf('.') === -1)) {
+            claimExecutivePercentage = parseFloat(claimExecutivePercentage);
+        }
+        if ((collectionExecutivePercentage.indexOf(',') !== -1) && (collectionExecutivePercentage.indexOf('.') !== -1)) {
+            collectionExecutivePercentage = collectionExecutivePercentage.replaceAll(".", "");
+            collectionExecutivePercentage = collectionExecutivePercentage.replace(",", ".");
+            collectionExecutivePercentage = parseFloat(collectionExecutivePercentage.replaceAll(/,/g,''));
+        } else if (collectionExecutivePercentage.indexOf(',') !== -1) {
+            collectionExecutivePercentage = collectionExecutivePercentage.replace(",", ".");
+            collectionExecutivePercentage = parseFloat(collectionExecutivePercentage);
+        } else if (collectionExecutivePercentage.indexOf('.') !== -1) {
+            collectionExecutivePercentage = collectionExecutivePercentage.replaceAll(".", ",");
+            collectionExecutivePercentage = parseFloat(collectionExecutivePercentage.replaceAll(/,/g,''));
+        } else if ((collectionExecutivePercentage.indexOf(',') === -1) && (collectionExecutivePercentage.indexOf('.') === -1)) {
+            collectionExecutivePercentage = parseFloat(collectionExecutivePercentage);
+        }
+
+        let totalPercentage = agentPercentage + specialPercentage + fundatinaPercentage + principalPercentage + partnerPercentage + managerPercentage + subscriptionCoordinatorPercentage + claimCoordinatorPercentage + adminCoordinatorPercentage + executiveSubscriptionPercentage + claimExecutivePercentage + collectionExecutivePercentage;
+        let atinaPercentage = 100 - (totalPercentage);
+        let verificationFactorPercentage = atinaPercentage + totalPercentage;
+        atinaPercentage = atinaPercentage.toFixed(2);
+        verificationFactorPercentage = verificationFactorPercentage.toFixed(2);
+        const cleaveAtinaPercentage = new Cleave("#porcentaje_atina_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaveAtinaPercentage.setRawValue(atinaPercentage);
+        const cleaveVerificationFactorPercentage = new Cleave("#factor_verificacion_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaveVerificationFactorPercentage.setRawValue(verificationFactorPercentage);
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('.porcentaje_tasa').toArray().forEach(function(field) {
+            new Cleave(field, {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });
+        });
+    });
+</script>
+
+<% if (typeof(collective) !== 'undefined') { %>
+    <script>
+        var division = <%- JSON.stringify(division) %>;
+        var collective = <%- JSON.stringify(collective) %>;
+        function bonusAmountCalculation() {
+            const coinType = collective.tipo_moneda_colectivo;
+            let fractionationNetPremium = division.prima_neta_fraccionamiento;
+            let fractionationCommission = division.monto_comision_fraccionamiento;
+            let percentageBonus = document.getElementById("porcentaje_bonificacion_distribucion").value;
+            let bonusAmount = document.getElementById("monto_bonificacion_distribucion").value;
+            fractionationNetPremium = fractionationNetPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            fractionationCommission = fractionationCommission.replace(/[Bs$€]/g, '').replace(' ', '');
+            percentageBonus = percentageBonus.replace(/[%]/g, '').replace(' ', '');
+            if ((fractionationNetPremium.indexOf(',') !== -1) && (fractionationNetPremium.indexOf('.') !== -1)) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", "");
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if (fractionationNetPremium.indexOf(',') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            } else if (fractionationNetPremium.indexOf('.') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", ",");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if ((fractionationNetPremium.indexOf(',') === -1) && (fractionationNetPremium.indexOf('.') === -1)) {
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            }
+            if ((fractionationCommission.indexOf(',') !== -1) && (fractionationCommission.indexOf('.') !== -1)) {
+                fractionationCommission = fractionationCommission.replaceAll(".", "");
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if (fractionationCommission.indexOf(',') !== -1) {
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission);
+            } else if (fractionationCommission.indexOf('.') !== -1) {
+                fractionationCommission = fractionationCommission.replaceAll(".", ",");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if ((fractionationCommission.indexOf(',') === -1) && (fractionationCommission.indexOf('.') === -1)) {
+                fractionationCommission = parseFloat(fractionationCommission);
+            }
+            if ((percentageBonus.indexOf(',') !== -1) && (percentageBonus.indexOf('.') !== -1)) {
+                percentageBonus = percentageBonus.replaceAll(".", "");
+                percentageBonus = percentageBonus.replace(",", ".");
+                percentageBonus = parseFloat(percentageBonus.replaceAll(/,/g,''));
+            } else if (percentageBonus.indexOf(',') !== -1) {
+                percentageBonus = percentageBonus.replace(",", ".");
+                percentageBonus = parseFloat(percentageBonus);
+            } else if (percentageBonus.indexOf('.') !== -1) {
+                percentageBonus = percentageBonus.replaceAll(".", ",");
+                percentageBonus = parseFloat(percentageBonus.replaceAll(/,/g,''));
+            } else if ((percentageBonus.indexOf(',') === -1) && (percentageBonus.indexOf('.') === -1)) {
+                percentageBonus = parseFloat(percentageBonus);
+            }
+            percentageBonus = percentageBonus / 100;
+            bonusAmount = fractionationNetPremium * percentageBonus;
+            const totalSum = fractionationCommission + bonusAmount;
+            if (coinType === 'BOLÍVAR') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'EUROS') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            }
+        }
+    </script>
+
+    <script>
+        var division = <%- JSON.stringify(division) %>;
+        var collective = <%- JSON.stringify(collective) %>;
+        function percentageBonusCalculation() {
+            const coinType = collective.tipo_moneda_colectivo;
+            let fractionationNetPremium = division.prima_neta_fraccionamiento;
+            let fractionationCommission = division.monto_comision_fraccionamiento;
+            let percentageBonus = document.getElementById("porcentaje_bonificacion_distribucion").value;
+            let bonusAmount = document.getElementById("monto_bonificacion_distribucion").value;
+            fractionationNetPremium = fractionationNetPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            fractionationCommission = fractionationCommission.replace(/[Bs$€]/g, '').replace(' ', '');
+            bonusAmount = bonusAmount.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((fractionationNetPremium.indexOf(',') !== -1) && (fractionationNetPremium.indexOf('.') !== -1)) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", "");
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if (fractionationNetPremium.indexOf(',') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            } else if (fractionationNetPremium.indexOf('.') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", ",");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if ((fractionationNetPremium.indexOf(',') === -1) && (fractionationNetPremium.indexOf('.') === -1)) {
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            }
+            if ((fractionationCommission.indexOf(',') !== -1) && (fractionationCommission.indexOf('.') !== -1)) {
+                fractionationCommission = fractionationCommission.replaceAll(".", "");
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if (fractionationCommission.indexOf(',') !== -1) {
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission);
+            } else if (fractionationCommission.indexOf('.') !== -1) {
+                fractionationCommission = fractionationCommission.replaceAll(".", ",");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if ((fractionationCommission.indexOf(',') === -1) && (fractionationCommission.indexOf('.') === -1)) {
+                fractionationCommission = parseFloat(fractionationCommission);
+            }
+            if ((bonusAmount.indexOf(',') !== -1) && (bonusAmount.indexOf('.') !== -1)) {
+                bonusAmount = bonusAmount.replaceAll(".", "");
+                bonusAmount = bonusAmount.replace(",", ".");
+                bonusAmount = parseFloat(bonusAmount.replaceAll(/,/g,''));
+            } else if (bonusAmount.indexOf(',') !== -1) {
+                bonusAmount = bonusAmount.replace(",", ".");
+                bonusAmount = parseFloat(bonusAmount);
+            } else if (bonusAmount.indexOf('.') !== -1) {
+                bonusAmount = bonusAmount.replaceAll(".", ",");
+                bonusAmount = parseFloat(bonusAmount.replaceAll(/,/g,''));
+            } else if ((bonusAmount.indexOf(',') === -1) && (bonusAmount.indexOf('.') === -1)) {
+                bonusAmount = parseFloat(bonusAmount);
+            }
+            percentageBonus = (bonusAmount * 100) / fractionationNetPremium;
+            const totalSum = fractionationCommission + bonusAmount;
+            const cleavePercentageBonus = new Cleave("#porcentaje_bonificacion_distribucion", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });
+            cleavePercentageBonus.setRawValue(percentageBonus);
+            if (coinType === 'BOLÍVAR') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'EUROS') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            }
+        }
+    </script>
+
+    <script>
+        var collective = <%- JSON.stringify(collective) %>;
+        function totalCommissionCalculation() {
+            const coinType = collective.tipo_moneda_colectivo;
+            let bonusCommissionAmount = document.getElementById("monto_comision_bonificacion").value;
+            let percentageIslr = document.getElementById("porcentaje_islr_distribucion").value;
+            bonusCommissionAmount = bonusCommissionAmount.replace(/[Bs$€]/g, '').replace(' ', '');
+            percentageIslr = percentageIslr.replace(/[%]/g, '').replace(' ', '');
+            if ((bonusCommissionAmount.indexOf(',') !== -1) && (bonusCommissionAmount.indexOf('.') !== -1)) {
+                bonusCommissionAmount = bonusCommissionAmount.replaceAll(".", "");
+                bonusCommissionAmount = bonusCommissionAmount.replace(",", ".");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount.replaceAll(/,/g,''));
+            } else if (bonusCommissionAmount.indexOf(',') !== -1) {
+                bonusCommissionAmount = bonusCommissionAmount.replace(",", ".");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount);
+            } else if (bonusCommissionAmount.indexOf('.') !== -1) {
+                bonusCommissionAmount = bonusCommissionAmount.replaceAll(".", ",");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount.replaceAll(/,/g,''));
+            } else if ((bonusCommissionAmount.indexOf(',') === -1) && (bonusCommissionAmount.indexOf('.') === -1)) {
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount);
+            }
+            if ((percentageIslr.indexOf(',') !== -1) && (percentageIslr.indexOf('.') !== -1)) {
+                percentageIslr = percentageIslr.replaceAll(".", "");
+                percentageIslr = percentageIslr.replace(",", ".");
+                percentageIslr = parseFloat(percentageIslr.replaceAll(/,/g,''));
+            } else if (percentageIslr.indexOf(',') !== -1) {
+                percentageIslr = percentageIslr.replace(",", ".");
+                percentageIslr = parseFloat(percentageIslr);
+            } else if (percentageIslr.indexOf('.') !== -1) {
+                percentageIslr = percentageIslr.replaceAll(".", ",");
+                percentageIslr = parseFloat(percentageIslr.replaceAll(/,/g,''));
+            } else if ((percentageIslr.indexOf(',') === -1) && (percentageIslr.indexOf('.') === -1)) {
+                percentageIslr = parseFloat(percentageIslr);
+            }
+            percentageIslr = percentageIslr / 100;
+            const islrAmount = bonusCommissionAmount * percentageIslr;
+            const totalCommission = bonusCommissionAmount - islrAmount;
+            if (coinType === 'BOLÍVAR') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            } else if (coinType === 'EUROS') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            }
+        }
+    </script>
+
+    <script>
+        var collective = <%- JSON.stringify(collective) %>;
+        function premiumCalculation() {
+            let netPremium = document.getElementById("prima_neta_fraccionamiento").value;
+            const coinType = collective.tipo_moneda_colectivo;
+            netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+                netPremium = netPremium.replaceAll(".", "");
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            } else if (netPremium.indexOf(',') !== -1) {
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium);
+            } else if (netPremium.indexOf('.') !== -1) {
+                netPremium = netPremium.replaceAll(".", ",");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            }
+            let igtf = Number(netPremium) * 0.03;
+            let totalPremium = Number(netPremium) + Number(igtf);
+            igtf = igtf.toFixed(2);
+            totalPremium = totalPremium.toFixed(2);
+            if (coinType === 'BOLÍVAR') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            } else if (coinType === 'EUROS') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            }
+        }
+    </script>
+
+    <script>
+        var collective = <%- JSON.stringify(collective) %>;
+        window.onload = function() {
+            let netPremium = document.getElementById("prima_neta_fraccionamiento").value;
+            netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+                netPremium = netPremium.replaceAll(".", "");
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            } else if (netPremium.indexOf(',') !== -1) {
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium);
+            } else if (netPremium.indexOf('.') !== -1) {
+                netPremium = netPremium.replaceAll(".", ",");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            }
+            let igtf = Number(netPremium) * 0.03;
+            let totalPremium = Number(netPremium) + Number(igtf);
+            igtf = igtf.toFixed(2);
+            totalPremium = totalPremium.toFixed(2);
+            if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            }
+            if (collective.tipo_moneda_colectivo === 'BOLÍVAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                });
+            } else if (collective.tipo_moneda_colectivo === 'DÓLAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                });
+            } else if (collective.tipo_moneda_colectivo === 'EUROS') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                });
+            }
+        }   
+    </script>
+<% } else if (typeof(policy) !== 'undefined') { %>
+    <script>
+        var division = <%- JSON.stringify(division) %>;
+        var policy = <%- JSON.stringify(policy) %>;
+        function bonusAmountCalculation() {
+            const coinType = policy.tipo_moneda_poliza;
+            let fractionationNetPremium = division.prima_neta_fraccionamiento;
+            let fractionationCommission = division.monto_comision_fraccionamiento;
+            let percentageBonus = document.getElementById("porcentaje_bonificacion_distribucion").value;
+            let bonusAmount = document.getElementById("monto_bonificacion_distribucion").value;
+            fractionationNetPremium = fractionationNetPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            fractionationCommission = fractionationCommission.replace(/[Bs$€]/g, '').replace(' ', '');
+            percentageBonus = percentageBonus.replace(/[%]/g, '').replace(' ', '');
+            if ((fractionationNetPremium.indexOf(',') !== -1) && (fractionationNetPremium.indexOf('.') !== -1)) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", "");
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if (fractionationNetPremium.indexOf(',') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            } else if (fractionationNetPremium.indexOf('.') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", ",");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if ((fractionationNetPremium.indexOf(',') === -1) && (fractionationNetPremium.indexOf('.') === -1)) {
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            }
+            if ((fractionationCommission.indexOf(',') !== -1) && (fractionationCommission.indexOf('.') !== -1)) {
+                fractionationCommission = fractionationCommission.replaceAll(".", "");
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if (fractionationCommission.indexOf(',') !== -1) {
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission);
+            } else if (fractionationCommission.indexOf('.') !== -1) {
+                fractionationCommission = fractionationCommission.replaceAll(".", ",");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if ((fractionationCommission.indexOf(',') === -1) && (fractionationCommission.indexOf('.') === -1)) {
+                fractionationCommission = parseFloat(fractionationCommission);
+            }
+            if ((percentageBonus.indexOf(',') !== -1) && (percentageBonus.indexOf('.') !== -1)) {
+                percentageBonus = percentageBonus.replaceAll(".", "");
+                percentageBonus = percentageBonus.replace(",", ".");
+                percentageBonus = parseFloat(percentageBonus.replaceAll(/,/g,''));
+            } else if (percentageBonus.indexOf(',') !== -1) {
+                percentageBonus = percentageBonus.replace(",", ".");
+                percentageBonus = parseFloat(percentageBonus);
+            } else if (percentageBonus.indexOf('.') !== -1) {
+                percentageBonus = percentageBonus.replaceAll(".", ",");
+                percentageBonus = parseFloat(percentageBonus.replaceAll(/,/g,''));
+            } else if ((percentageBonus.indexOf(',') === -1) && (percentageBonus.indexOf('.') === -1)) {
+                percentageBonus = parseFloat(percentageBonus);
+            }
+            percentageBonus = percentageBonus / 100;
+            bonusAmount = fractionationNetPremium * percentageBonus;
+            const totalSum = fractionationCommission + bonusAmount;
+            if (coinType === 'BOLÍVAR') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'EUROS') {
+                const cleaveBonus = new Cleave("#monto_bonificacion_distribucion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveBonus.setRawValue(bonusAmount);
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            }
+        }
+    </script>
+
+    <script>
+        var division = <%- JSON.stringify(division) %>;
+        var policy = <%- JSON.stringify(policy) %>;
+        function percentageBonusCalculation() {
+            const coinType = policy.tipo_moneda_poliza;
+            let fractionationNetPremium = division.prima_neta_fraccionamiento;
+            let fractionationCommission = division.monto_comision_fraccionamiento;
+            let percentageBonus = document.getElementById("porcentaje_bonificacion_distribucion").value;
+            let bonusAmount = document.getElementById("monto_bonificacion_distribucion").value;
+            fractionationNetPremium = fractionationNetPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            fractionationCommission = fractionationCommission.replace(/[Bs$€]/g, '').replace(' ', '');
+            bonusAmount = bonusAmount.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((fractionationNetPremium.indexOf(',') !== -1) && (fractionationNetPremium.indexOf('.') !== -1)) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", "");
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if (fractionationNetPremium.indexOf(',') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replace(",", ".");
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            } else if (fractionationNetPremium.indexOf('.') !== -1) {
+                fractionationNetPremium = fractionationNetPremium.replaceAll(".", ",");
+                fractionationNetPremium = parseFloat(fractionationNetPremium.replaceAll(/,/g,''));
+            } else if ((fractionationNetPremium.indexOf(',') === -1) && (fractionationNetPremium.indexOf('.') === -1)) {
+                fractionationNetPremium = parseFloat(fractionationNetPremium);
+            }
+            if ((fractionationCommission.indexOf(',') !== -1) && (fractionationCommission.indexOf('.') !== -1)) {
+                fractionationCommission = fractionationCommission.replaceAll(".", "");
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if (fractionationCommission.indexOf(',') !== -1) {
+                fractionationCommission = fractionationCommission.replace(",", ".");
+                fractionationCommission = parseFloat(fractionationCommission);
+            } else if (fractionationCommission.indexOf('.') !== -1) {
+                fractionationCommission = fractionationCommission.replaceAll(".", ",");
+                fractionationCommission = parseFloat(fractionationCommission.replaceAll(/,/g,''));
+            } else if ((fractionationCommission.indexOf(',') === -1) && (fractionationCommission.indexOf('.') === -1)) {
+                fractionationCommission = parseFloat(fractionationCommission);
+            }
+            if ((bonusAmount.indexOf(',') !== -1) && (bonusAmount.indexOf('.') !== -1)) {
+                bonusAmount = bonusAmount.replaceAll(".", "");
+                bonusAmount = bonusAmount.replace(",", ".");
+                bonusAmount = parseFloat(bonusAmount.replaceAll(/,/g,''));
+            } else if (bonusAmount.indexOf(',') !== -1) {
+                bonusAmount = bonusAmount.replace(",", ".");
+                bonusAmount = parseFloat(bonusAmount);
+            } else if (bonusAmount.indexOf('.') !== -1) {
+                bonusAmount = bonusAmount.replaceAll(".", ",");
+                bonusAmount = parseFloat(bonusAmount.replaceAll(/,/g,''));
+            } else if ((bonusAmount.indexOf(',') === -1) && (bonusAmount.indexOf('.') === -1)) {
+                bonusAmount = parseFloat(bonusAmount);
+            }
+            percentageBonus = (bonusAmount * 100) / fractionationNetPremium;
+            const totalSum = fractionationCommission + bonusAmount;
+            const cleavePercentageBonus = new Cleave("#porcentaje_bonificacion_distribucion", {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });
+            cleavePercentageBonus.setRawValue(percentageBonus);
+            if (coinType === 'BOLÍVAR') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            } else if (coinType === 'EUROS') {
+                const cleaveSum = new Cleave("#monto_comision_bonificacion", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveSum.setRawValue(totalSum);
+            }
+        }
+    </script>
+
+    <script>
+        var policy = <%- JSON.stringify(policy) %>;
+        function totalCommissionCalculation() {
+            const coinType = policy.tipo_moneda_poliza;
+            let bonusCommissionAmount = document.getElementById("monto_comision_bonificacion").value;
+            let percentageIslr = document.getElementById("porcentaje_islr_distribucion").value;
+            bonusCommissionAmount = bonusCommissionAmount.replace(/[Bs$€]/g, '').replace(' ', '');
+            percentageIslr = percentageIslr.replace(/[%]/g, '').replace(' ', '');
+            if ((bonusCommissionAmount.indexOf(',') !== -1) && (bonusCommissionAmount.indexOf('.') !== -1)) {
+                bonusCommissionAmount = bonusCommissionAmount.replaceAll(".", "");
+                bonusCommissionAmount = bonusCommissionAmount.replace(",", ".");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount.replaceAll(/,/g,''));
+            } else if (bonusCommissionAmount.indexOf(',') !== -1) {
+                bonusCommissionAmount = bonusCommissionAmount.replace(",", ".");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount);
+            } else if (bonusCommissionAmount.indexOf('.') !== -1) {
+                bonusCommissionAmount = bonusCommissionAmount.replaceAll(".", ",");
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount.replaceAll(/,/g,''));
+            } else if ((bonusCommissionAmount.indexOf(',') === -1) && (bonusCommissionAmount.indexOf('.') === -1)) {
+                bonusCommissionAmount = parseFloat(bonusCommissionAmount);
+            }
+            if ((percentageIslr.indexOf(',') !== -1) && (percentageIslr.indexOf('.') !== -1)) {
+                percentageIslr = percentageIslr.replaceAll(".", "");
+                percentageIslr = percentageIslr.replace(",", ".");
+                percentageIslr = parseFloat(percentageIslr.replaceAll(/,/g,''));
+            } else if (percentageIslr.indexOf(',') !== -1) {
+                percentageIslr = percentageIslr.replace(",", ".");
+                percentageIslr = parseFloat(percentageIslr);
+            } else if (percentageIslr.indexOf('.') !== -1) {
+                percentageIslr = percentageIslr.replaceAll(".", ",");
+                percentageIslr = parseFloat(percentageIslr.replaceAll(/,/g,''));
+            } else if ((percentageIslr.indexOf(',') === -1) && (percentageIslr.indexOf('.') === -1)) {
+                percentageIslr = parseFloat(percentageIslr);
+            }
+            percentageIslr = percentageIslr / 100;
+            const islrAmount = bonusCommissionAmount * percentageIslr;
+            const totalCommission = bonusCommissionAmount - islrAmount;
+            if (coinType === 'BOLÍVAR') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            } else if (coinType === 'EUROS') {
+                const cleaveTotalCommission = new Cleave("#total_comision_distribuir", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalCommission.setRawValue(totalCommission);
+            }
+        }
+    </script>
+
+    <script>
+        var policy = <%- JSON.stringify(policy) %>;
+        function premiumCalculation() {
+            let netPremium = document.getElementById("prima_neta_fraccionamiento").value;
+            const coinType = policy.tipo_moneda_poliza;
+            netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+                netPremium = netPremium.replaceAll(".", "");
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            } else if (netPremium.indexOf(',') !== -1) {
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium);
+            } else if (netPremium.indexOf('.') !== -1) {
+                netPremium = netPremium.replaceAll(".", ",");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            }
+            let igtf = Number(netPremium) * 0.03;
+            let totalPremium = Number(netPremium) + Number(igtf);
+            igtf = igtf.toFixed(2);
+            totalPremium = totalPremium.toFixed(2);
+            if (coinType === 'BOLÍVAR') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            } else if (coinType === 'DÓLAR') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            } else if (coinType === 'EUROS') {
+                const cleaveIgtf = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveIgtf.setRawValue(igtf);
+                const cleaveTotalPremium = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalPremium.setRawValue(totalPremium);
+            }
+        }
+    </script>
+
+    <script>
+        var policy = <%- JSON.stringify(policy) %>;
+        window.onload = function() {
+            let netPremium = document.getElementById("prima_neta_fraccionamiento").value;
+            netPremium = netPremium.replace(/[Bs$€]/g, '').replace(' ', '');
+            if ((netPremium.indexOf(',') !== -1) && (netPremium.indexOf('.') !== -1)) {
+                netPremium = netPremium.replaceAll(".", "");
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            } else if (netPremium.indexOf(',') !== -1) {
+                netPremium = netPremium.replace(",", ".");
+                netPremium = parseFloat(netPremium);
+            } else if (netPremium.indexOf('.') !== -1) {
+                netPremium = netPremium.replaceAll(".", ",");
+                netPremium = parseFloat(netPremium.replaceAll(/,/g,''));
+            }
+            let igtf = Number(netPremium) * 0.03;
+            let totalPremium = Number(netPremium) + Number(igtf);
+            igtf = igtf.toFixed(2);
+            totalPremium = totalPremium.toFixed(2);
+            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: 'Bs ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '$ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                const cleaveIgtfReceipt = new Cleave("#igtf_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveIgtfReceipt.setRawValue(igtf);
+                const cleaveTotalPremiumReceipt = new Cleave("#prima_total_fraccionamiento", {
+                    numeral: true,
+                    numeralDecimalMark: ',',
+                    delimiter: '.',
+                    prefix: '€ ',
+                });
+                cleaveTotalPremiumReceipt.setRawValue(totalPremium);
+            }
+            if (policy.tipo_moneda_poliza === 'BOLÍVAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: 'Bs ',
+                    });
+                });
+            } else if (policy.tipo_moneda_poliza === 'DÓLAR') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '$ ',
+                    });
+                });
+            } else if (policy.tipo_moneda_poliza === 'EUROS') {
+                $('.currency_format_number').toArray().forEach(function(field) {
+                    new Cleave(field, {
+                        numeral: true,
+                        numeralDecimalMark: ',',
+                        delimiter: '.',
+                        prefix: '€ ',
+                    });
+                });
+            }
+        }   
+    </script>
+<% } %>
+
+</body>
+
+</html>

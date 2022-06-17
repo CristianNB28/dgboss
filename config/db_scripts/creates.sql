@@ -208,6 +208,25 @@ CREATE TABLE Recibo(
     CONSTRAINT FOREIGN KEY fk_recibo_colectivo_id(colectivo_id) REFERENCES Colectivo(id_colectivo)
 );
 
+CREATE TABLE Fraccionamiento(
+    id_fraccionamiento INT PRIMARY KEY AUTO_INCREMENT,
+    numero_fraccionamiento VARCHAR(255),
+    tipo_fraccionamiento VARCHAR(255),
+    fecha_desde_fraccionamiento DATE NOT NULL,
+    fecha_hasta_fraccionamiento DATE NOT NULL, 
+    prima_neta_fraccionamiento DECIMAL(20,4) NOT NULL,
+    igtf_fraccionamiento DECIMAL(20,4) NOT NULL,
+    prima_total_fraccionamiento DECIMAL(20,4) NOT NULL,
+    fecha_pago_fraccionamiento DATE,
+    metodo_pago_fraccionamiento VARCHAR(255),
+    monto_comision_fraccionamiento DECIMAL(20,4) NOT NULL,
+    recibo_distribuicion_fraccionamiento BOOLEAN NOT NULL DEFAULT FALSE,
+    obser_deshabilitar_fraccionamiento VARCHAR(500),
+    deshabilitar_fraccionamiento BOOLEAN NOT NULL DEFAULT FALSE,
+    recibo_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_fraccionamiento_recibo_id(recibo_id) REFERENCES Recibo(id_recibo)
+);
+
 CREATE TABLE Distribucion(
     id_distribucion INT PRIMARY KEY AUTO_INCREMENT,
     monto_comision_distribucion DECIMAL(20,4) NOT NULL,
@@ -230,8 +249,8 @@ CREATE TABLE Distribucion(
     porcentaje_ejecutivo_reclamo DECIMAL(10,4) NOT NULL,
     porcentaje_ejecutivo_cobranza DECIMAL(10,4) NOT NULL,
     deshabilitar_distribucion BOOLEAN NOT NULL DEFAULT FALSE,
-    recibo_id INT NOT NULL,
-    CONSTRAINT FOREIGN KEY fk_distribucion_recibo_id(recibo_id) REFERENCES Recibo(id_recibo)
+    fraccionamiento_id INT NOT NULL,
+    CONSTRAINT FOREIGN KEY fk_distribucion_fraccionamiento_id(fraccionamiento_id) REFERENCES Fraccionamiento(id_fraccionamiento)
 );
 
 CREATE TABLE Asegurado_Persona_Natural(

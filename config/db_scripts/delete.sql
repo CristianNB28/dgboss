@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS Asegurado_Beneficiario;
 DROP TABLE IF EXISTS Asegurado_Persona_Juridica;
 DROP TABLE IF EXISTS Asegurado_Persona_Natural;
 DROP TABLE IF EXISTS Distribucion;
+DROP TABLE IF EXISTS Fraccionamiento;
 DROP TABLE IF EXISTS Recibo;
 DROP TABLE IF EXISTS Usuario;
 DROP TABLE IF EXISTS Riesgo_Diverso;

@@ -74,7 +74,7 @@ module.exports = {
                 }
                 connection.query(`SELECT * 
                                 FROM Poliza 
-                                WHERE id_poliza=?`, 
+                                WHERE id_poliza=? AND deshabilitar_poliza=0`, 
                 [idPolicy],
                 (error, rows) => {
                     connection.release();

@@ -9,7 +9,6 @@ const insuredController = require('../controllers/insuredController');
 const policyController = require('../controllers/policyController');
 const vehicleController = require('../controllers/vehicleController');
 const receiptController = require('../controllers/receiptController');
-//const commissionController = require('../controllers/commissionController');
 const claimController = require('../controllers/claimController');
 const reportController = require('../controllers/reportController');
 const beneficiaryController = require('../controllers/beneficiaryController');
@@ -17,6 +16,8 @@ const collectiveController = require('../controllers/collectiveController');
 const riskDiverseController = require('../controllers/riskDiverseController');
 const renewalController = require('../controllers/renewalController');
 const emailController = require('../controllers/emailController');
+const divisionController = require('../controllers/divisionController');
+const distributionController = require('../controllers/distributionController');
 // Middlewares
 const requireAuth = require('../middlewares/authMiddleware');
 const upload = require('../middlewares/multerMiddleware');
@@ -218,8 +219,13 @@ router.post('/update-risk-diverse', requireAuth, riskDiverseController.updateRis
 // Rutas de Recibos
 router.get('/receipts', requireAuth, receiptController.getReceipts);
 router.post('/remove-receipt/:id', requireAuth, receiptController.disableReceipt);
-router.get('/edit-receipt/:id', requireAuth, receiptController.putReceipt);
-router.post('/update-receipt', requireAuth, receiptController.updateReceipt);
+// Rutas de Fraccionamiento
+router.get('/subdivisions/:id', requireAuth, divisionController.putSubdivisions);
+router.post('/remove-division/:id', requireAuth, divisionController.disableDivision);
+router.get('/division/:id', requireAuth, divisionController.putDivisionAdminForm);
+router.post('/add-division-receipt-admin', requireAuth, divisionController.updateDivisionAdminForm);
+// Rutas de Distribución
+router.post('/add-distribucion-division', requireAuth, distributionController.postDistributionForm);
 // Rutas de Renovaciones
 router.get('/consult-renewal', requireAuth, renewalController.getRenewalConsultation);
 router.post('/consult-renewal', requireAuth, renewalController.postRenewalConsultation);
@@ -236,6 +242,7 @@ router.post('/email-receipt-travel', requireAuth, emailController.postEmailRecei
 router.post('/email-receipt-collective-health', requireAuth, emailController.postEmailReceiptCollectiveHealth);
 router.post('/email-receipt-collective-vehicle', requireAuth, emailController.postEmailReceiptCollectiveVehicle);
 router.post('/email-receipt-risk-diverse', requireAuth, emailController.postEmailReceiptCollectiveRiskDiverse);
+router.post('/email-receipt-division', requireAuth, emailController.postEmailReceiptDivision);
 // Pagina error 404
 router.get('*', indexController.get404);
 
