@@ -164,7 +164,7 @@ module.exports = {
                 const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
                 resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
                 resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
-                if (resultCoa[0].length !== 0) {
+                if (resultCoa.length !== 0) {
                     resultOwnAgent = await ownAgentModel.getOwnAgent(resultCoa[0].agente_propio_id);
                 }
                 if ((resultCII[0].asegurado_per_jur_id === null) && (resultCII[0].asegurado_per_nat_id !== null)) {
@@ -278,7 +278,7 @@ module.exports = {
             const resultsCIIE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(resultCII[0].id_caa);
             resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
             resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
-            if (resultCoa[0].length !== 0) {
+            if (resultCoa.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultCoa[0].agente_propio_id);
             }
             if ((resultCII[0].asegurado_per_jur_id === null) && (resultCII[0].asegurado_per_nat_id !== null)) {

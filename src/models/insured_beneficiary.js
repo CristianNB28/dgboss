@@ -25,6 +25,29 @@ module.exports = {
             });
         });
     },
+    getBeneficiaryNames: (aseguradoBeneficiarioId) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT b.nombre_beneficiario, b.apellido_beneficiario, b.cedula_beneficiario, ab.asegurado_per_nat_id, ab.asegurado_per_jur_id
+                                FROM Asegurado_Beneficiario ab, Beneficiario b
+                                WHERE ab.id_asegurado_beneficiario=? AND ab.desahabilitar_asegurado_beneficiario=0
+                                AND ab.beneficiario_id=b.id_beneficiario`, 
+                [aseguradoBeneficiarioId],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
 /*                  POST                 */
     postAseguradoBeneficiario: async (cedulaAseguradoNatural, rifAseguradoJuridico, beneficiaryId) => {
         let naturalInsuredId = 0;

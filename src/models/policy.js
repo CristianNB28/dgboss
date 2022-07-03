@@ -1275,6 +1275,28 @@ module.exports = {
             });
         });
     },
+    getSumPremiumCounter: (policyType, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT COUNT(id_poliza) AS poliza_contador_tipo, SUM(prima_neta_poliza) AS prima_total
+                                FROM Poliza
+                                WHERE tipo_individual_poliza=? AND tipo_moneda_poliza=? AND deshabilitar_poliza=0`,
+                [policyType, coinType],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
 /*                  POST                 */
     postVehiclePolicyForm: (tomadorAsegurado, fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, tipoIndividualPoliza, estatusPoliza, policy) => {
         return new Promise((resolve, reject) => {

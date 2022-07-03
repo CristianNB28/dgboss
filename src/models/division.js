@@ -46,6 +46,266 @@ module.exports = {
             });
         });
     },
+    getPremiumCollectedSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(prima_neta_fraccionamiento) AS prima_cobrada_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=1`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getPremiumPendingSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(prima_neta_fraccionamiento) AS prima_pendiente_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getPremiumCommissionPendingSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(prima_neta_fraccionamiento) AS prima_pendiente_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NULL`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getCommissionPendingSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(monto_comision_fraccionamiento) AS comision_pendiente_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NULL`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getPremiumCommissionDistributionSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(prima_neta_fraccionamiento) AS prima_distribucion_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NOT NULL`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getCommissionDistributionSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(monto_comision_fraccionamiento) AS comision_distribucion_total
+                                FROM Fraccionamiento
+                                WHERE recibo_id=? AND deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NOT NULL`, 
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getCommissionPaidSum: (idReceipt) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(d.monto_comision_bonificacion) AS comision_bonificacion_total
+                                FROM Fraccionamiento f
+                                INNER JOIN Distribucion d ON f.id_fraccionamiento = d.fraccionamiento_id 
+                                WHERE f.recibo_id=? AND f.deshabilitar_fraccionamiento=0 AND f.recibo_distribuicion_fraccionamiento=1`,
+                [idReceipt],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getDivisions: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT *
+                                FROM Fraccionamiento 
+                                WHERE deshabilitar_fraccionamiento=0`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getFractionationCollected: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT *
+                                FROM Fraccionamiento 
+                                WHERE deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=1`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getFractionationPending: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT *
+                                FROM Fraccionamiento 
+                                WHERE deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getCommissionTransit: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT *
+                                FROM Fraccionamiento 
+                                WHERE deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NULL`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getCommissionDistribution: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT *
+                                FROM Fraccionamiento 
+                                WHERE deshabilitar_fraccionamiento=0 AND recibo_distribuicion_fraccionamiento=0 AND numero_fraccionamiento IS NOT NULL`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
 /*                  POST                 */
     postDivisionForm: (temparrayDivision) => {
         return new Promise((resolve, reject) => {

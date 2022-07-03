@@ -220,6 +220,28 @@ module.exports = {
             });
         });
     },
+    getSumPremiumCounter: (collectiveType, coinType) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT COUNT(id_colectivo) AS colectivo_contador_tipo, SUM(prima_neta_colectivo) AS prima_total
+                                FROM Colectivo
+                                WHERE tipo_colectivo=? AND tipo_moneda_colectivo=? AND deshabilitar_colectivo=0`,
+                [collectiveType, coinType],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
 /*                  POST                 */
     postCollectiveHealthForm: (fraccionamientoBoolean, montoPrimaNeta, montoIgtf, montoPrimaTotal, montoDeducible, montoCoberturaSumaAsegurada, fechaPolizaDesde, fechaPolizaHasta, fechaDetalleCliente, tipoColectivo, estatusPoliza, collective) => {
         return new Promise((resolve, reject) => {

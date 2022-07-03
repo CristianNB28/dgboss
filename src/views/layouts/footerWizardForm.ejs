@@ -1018,7 +1018,7 @@
             for (var i = 0; i < formDataPolicyAp.length; i++) {
                 $(`#policy-form-ap [name=${formDataPolicyAp[i].name}]`).val(formDataPolicyAp[i].value);
                 if ((formDataPolicyAp[i].name === 'tomador_asegurado_poliza') && (formDataPolicyAp[i].value === true)) {
-                    $('#policy-form-ap #tomador_asegurado_poliza').prop('checked', formDataPolicyLife[i].value);
+                    $('#policy-form-ap #tomador_asegurado_poliza').prop('checked', formDataPolicyAp[i].value);
                 }
                 if ((formDataPolicyAp[i].name === 'fraccionamiento_boolean_poliza') && (formDataPolicyAp[i].value === true)) {
                     $('#policy-form-ap #fraccionamiento_boolean_poliza').prop('checked', formDataPolicyAp[i].value);

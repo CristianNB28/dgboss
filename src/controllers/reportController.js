@@ -1,128 +1,33 @@
+// Models
 const policyInsurerInsuredModel = require('../models/policy_insurer_insured');
 const insurerModel = require('../models/insurer');
 const insuredModel = require('../models/insured');
 const policyModel = require('../models/policy');
 const ownAgentModel = require('../models/own_agent');
-const executiveModel = require('../models/executive');
 const receiptModel = require('../models/receipt');
 const collectiveModel = require('../models/collective');
 const collectiveInsurerInsuredModel = require('../models/collective_insurer_insured');
 const policyOwnAgentModel = require('../models/policy_own_agent');
 const collectiveOwnAgentModel = require('../models/collective_own_agent');
-const polInsuInsuredExecModel = require('../models/pol_insu_insured_executive');
-const colInsuInsuredExecModel = require('../models/col_insu_insured_executive');
+const divisionModel = require('../models/division');
+const refundModel = require('../models/refund');
+const letterGuaranteeModel = require('../models/letter_guarentee');
+const emergencyModel = require('../models/emergency');
+const ampModel = require('../models/amp');
+const insuredBeneficiaryModel = require('../models/insured_beneficiary');
+// Serializers
+const convertNumberToString = require('../serializers/convertNumberToString');
+const convertStringToCurrency = require('../serializers/convertStringToCurrency');
 
 module.exports = {
 /*                  GET                  */
     getPremiumsCollected: async (req, res) => {
-        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
-        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
-        let resultPremiumCollection = [];
-        let hash = {};
-        resultsCII = resultsCII.filter(cii => hash[cii.colectivo_id] ? false : hash[cii.colectivo_id] = true);
         try {
-            for (let i = 0; i < resultsPII.length; i++) {
-                let elementPII = resultsPII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
-                let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
-                let primaAnualPoliza = resultPolicy[0].prima_anual_poliza;
-                let ownAgents = [];
-                if (primaAnualPoliza.toString().includes('.') === true) {
-                    primaAnualPoliza = primaAnualPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                } else {
-                    primaAnualPoliza = String(primaAnualPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                }
-                if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    primaAnualPoliza = `Bs ${primaAnualPoliza}`;
-                } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    primaAnualPoliza = `$ ${primaAnualPoliza}`;
-                } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
-                    primaAnualPoliza = `€ ${primaAnualPoliza}`;
-                }
-                let resultsPAP = await policyOwnAgentModel.getPolicyOwnAgent(elementPII.poliza_id);
-                let idsOwnAgents = resultsPAP.map(pap => pap.agente_propio_id).filter(id => id !== null);
-                let premiumCollection = {};
-                if (idsOwnAgents.length === 0) {
-                    premiumCollection = {
-                        ownAgent: '',
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualPoliza
-                    };
-                } else {
-                    for (const idOwnAgent of idsOwnAgents) {
-                        let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                        ownAgents.push(resultOwnAgent);
-                    }
-                    ownAgents = ownAgents.map(ownAgent => {
-                        let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                        return nameOwnAgent;
-                    });
-                    premiumCollection = {
-                        ownAgent: ownAgents,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualPoliza
-                    };
-                } 
-                resultPremiumCollection.push(premiumCollection);
-            }
-            for (let i = 0; i < resultsCII.length; i++) {
-                let elementCII = resultsCII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
-                let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
-                let primaAnualColectivo = resultCollective[0].prima_anual_colectivo;
-                let ownAgents = [];
-                if (primaAnualColectivo.toString().includes('.') === true) {
-                    primaAnualColectivo = primaAnualColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                } else {
-                    primaAnualColectivo = String(primaAnualColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                }
-                if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
-                    primaAnualColectivo = `Bs ${primaAnualColectivo}`;
-                } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
-                    primaAnualColectivo = `$ ${primaAnualColectivo}`;
-                } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
-                    primaAnualColectivo = `€ ${primaAnualColectivo}`;
-                }
-                let resultsCAP = await collectiveOwnAgentModel.getCollectiveOwnAgent(elementCII.colectivo_id);
-                let idsOwnAgents = resultsCAP.map(cap => cap.agente_propio_id).filter(id => id !== null);
-                let premiumCollection = {};
-                if (idsOwnAgents.length === 0) {
-                    premiumCollection = {
-                        ownAgent: '',
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualColectivo
-                    };
-                } else {
-                    for (const idOwnAgent of idsOwnAgents) {
-                        let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                        ownAgents.push(resultOwnAgent);
-                    }
-                    ownAgents = ownAgents.map(ownAgent => {
-                        let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                        return nameOwnAgent;
-                    });
-                    premiumCollection = {
-                        ownAgent: ownAgents,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        premium: primaAnualColectivo
-                    };
-                }
-                resultPremiumCollection.push(premiumCollection);
-            }
-            res.render('premiumsCollected',{
-                data: resultPremiumCollection,
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('premiumsCollected', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -130,369 +35,13 @@ module.exports = {
             console.log(error);
         }
     },
-    getCommissionsCollected: async (req, res) => {
-        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
-        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
-        let resultCommissionCollection = [];
-        let hash = {};
-        resultsCII = resultsCII.filter(cii => hash[cii.colectivo_id] ? false : hash[cii.colectivo_id] = true);
+    getPremiumsPending: async (req, res) => {
         try {
-            for (let i = 0; i < resultsPII.length; i++) {
-                let elementPII = resultsPII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
-                let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
-                let resultReceiptCommission = await receiptModel.getReceiptCommissionPolicy(elementPII.poliza_id);
-                let reciboComisionPoliza = resultReceiptCommission[0].monto_comision_recibo;
-                let ownAgents = [];
-                let executives = [];
-                if (reciboComisionPoliza.toString().includes('.') === true) {
-                    reciboComisionPoliza = reciboComisionPoliza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                } else {
-                    reciboComisionPoliza = String(reciboComisionPoliza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                }
-                if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                    reciboComisionPoliza = `Bs ${reciboComisionPoliza}`;
-                } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
-                    reciboComisionPoliza = `$ ${reciboComisionPoliza}`;
-                } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
-                    reciboComisionPoliza = `€ ${reciboComisionPoliza}`;
-                }
-                let resultsPAP = await policyOwnAgentModel.getPolicyOwnAgent(elementPII.poliza_id);
-                let idsOwnAgents = resultsPAP.map(pap => pap.agente_propio_id).filter(id => id !== null);
-                let resultsPAAE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(elementPII.id_paa);
-                let idsExecutives = resultsPAAE.map(paae => paae.ejecutivo_id).filter(id => id !== null);
-                for (const idExecutive of idsExecutives) {
-                    let resultExecutive = await executiveModel.getExecutive(idExecutive);
-                    executives.push(resultExecutive);
-                }
-                executives = executives.map(executive => {
-                    let nameExecutive = `${executive[0].nombre_ejecutivo} ${executive[0].apellido_ejecutivo}`;
-                    return nameExecutive;
-                });
-                let commissionCollection = {};
-                if (idsOwnAgents.length === 0) {
-                    commissionCollection = {
-                        ownAgent: '',
-                        executive: executives,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionPoliza
-                    };
-                } else {
-                    for (const idOwnAgent of idsOwnAgents) {
-                        let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                        ownAgents.push(resultOwnAgent);
-                    }
-                    ownAgents = ownAgents.map(ownAgent => {
-                        let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                        return nameOwnAgent;
-                    });
-                    commissionCollection = {
-                        ownAgent: ownAgents,
-                        executive: executives,
-                        bouquetType: resultPolicy[0].tipo_individual_poliza,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionPoliza
-                    };
-                }
-                resultCommissionCollection.push(commissionCollection);
-            }
-            for (let i = 0; i < resultsCII.length; i++) {
-                let elementCII = resultsCII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
-                let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
-                let resultReceiptCommission = await receiptModel.getReceiptCommissionCollective(elementCII.colectivo_id);
-                let reciboComisionColectivo = resultReceiptCommission[0].monto_comision_recibo;
-                let ownAgents = [];
-                let executives = [];
-                if (reciboComisionColectivo.toString().includes('.') === true) {
-                    reciboComisionColectivo = reciboComisionColectivo.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                } else {
-                    reciboComisionColectivo = String(reciboComisionColectivo).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                }
-                if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
-                    reciboComisionColectivo = `Bs ${reciboComisionColectivo}`;
-                } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
-                    reciboComisionColectivo = `$ ${reciboComisionColectivo}`;
-                } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
-                    reciboComisionColectivo = `€ ${reciboComisionColectivo}`;
-                }
-                let resultsCAP = await collectiveOwnAgentModel.getCollectiveOwnAgent(elementCII.colectivo_id);
-                let idsOwnAgents = resultsCAP.map(cae => cae.agente_propio_id).filter(id => id !== null);
-                let resultsCAAE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(elementCII.id_caa);
-                let idsExecutives = resultsCAAE.map(caae => caae.ejecutivo_id).filter(id => id !== null);
-                for (const idExecutive of idsExecutives) {
-                    let resultExecutive = await executiveModel.getExecutive(idExecutive);
-                    executives.push(resultExecutive);
-                }
-                executives = executives.map(executive => {
-                    let nameExecutive = `${executive[0].nombre_ejecutivo} ${executive[0].apellido_ejecutivo}`;
-                    return nameExecutive;
-                });
-                let commissionCollection = {};
-                if (idsOwnAgents.length === 0) {
-                    commissionCollection = {
-                        ownAgent: '',
-                        executive: executives,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionColectivo
-                    };
-                } else {
-                    for (const idOwnAgent of idsOwnAgents) {
-                        let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                        ownAgents.push(resultOwnAgent);
-                    }
-                    ownAgents = ownAgents.map(ownAgent => {
-                        let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                        return nameOwnAgent;
-                    });
-                    commissionCollection = {
-                        ownAgent: ownAgents,
-                        executive: executives,
-                        bouquetType: resultCollective[0].tipo_colectivo,
-                        insurer: resultInsurer[0].nombre_aseguradora,
-                        dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                        commission: reciboComisionColectivo
-                    };
-                }
-                resultCommissionCollection.push(commissionCollection);
-            }
-            res.render('commissionsCollected', {
-                data: resultCommissionCollection,
-                name: req.session.name,
-                cookieRol: req.cookies.rol
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    getPolicyClaims: async (req, res) => {
-        let resultNaturalInsured = await insuredModel.getNaturalInsureds();
-        let resultLegalInsured = await insuredModel.getLegalInsureds();
-        let resultPolicyClaims = [];
-        for (let i = 0; i < resultNaturalInsured.length; i++) {
-            let elementNaturalInsured = resultNaturalInsured[i];
-            let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
-            let resultCollectiveId = await collectiveInsurerInsuredModel.getCollectivesIdsNatural(elementNaturalInsured.id_asegurado_per_nat);
-            let totalPremium = 0;
-            let naturalInsured = {};
-            for (let j = 0; j < resultPolicyId.length; j++) {
-                let elementPolicyId = resultPolicyId[j];
-                let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                totalPremium += resultPolicy[0].prima_anual_poliza;
-            }
-            for (let k = 0; k < resultCollectiveId.length; k++) {
-                let elementCollectiveId = resultCollectiveId[k];
-                let resultCollective = await collectiveModel.getCollective(elementCollectiveId.colectivo_id);
-                totalPremium += resultCollective[0].prima_anual_colectivo;
-            }
-            naturalInsured = {
-                insured: elementNaturalInsured.cedula_asegurado_per_nat,
-                totalPremium: totalPremium 
-            }
-            resultPolicyClaims.push(naturalInsured);
-        }
-        for (let i = 0; i < resultLegalInsured.length; i++) {
-            let elementLegalInsured = resultLegalInsured[i];
-            let resultPolicyId = await policyInsurerInsuredModel.getPoliciesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
-            let resultCollectiveId = await collectiveInsurerInsuredModel.getCollectivesIdsLegal(elementLegalInsured.id_asegurado_per_jur);
-            let totalPremium = 0;
-            for (let j = 0; j < resultPolicyId.length; j++) {
-                let elementPolicyId = resultPolicyId[j];
-                let resultPolicy = await policyModel.getPolicy(elementPolicyId.poliza_id);
-                totalPremium += resultPolicy[0].prima_anual_poliza;
-            }
-            for (let k = 0; k < resultCollectiveId.length; k++) {
-                let elementCollectiveId = resultCollectiveId[k];
-                let resultCollective = await collectiveModel.getCollective(elementCollectiveId.colectivo_id);
-                totalPremium += resultCollective[0].prima_anual_colectivo;
-            }
-            let legalInsured = {
-                insured: elementLegalInsured.rif_asegurado_per_jur,
-                totalPremium: totalPremium
-            };
-            resultPolicyClaims.push(legalInsured);
-        }
-        res.render('policyClaims', {
-            resultPolicyClaims: resultPolicyClaims,
-            name: req.session.name,
-            cookieRol: req.cookies.rol
-        });
-    },
-    getGlobalLossRatio: async (req, res) => {
-        let resultPolicy = await policyModel.getPolicies();
-        let resultCollective = await collectiveModel.getCollectives();
-        let totalPremiumPolicy = 0;
-        let totalPremiumCollective = 0;
-        let totalPremium = 0;
-        for (const itemPolicy of resultPolicy) {
-            totalPremiumPolicy += itemPolicy.prima_anual_poliza;
-        }
-        for (const itemCollective of resultCollective) {
-            totalPremiumCollective += itemCollective.prima_anual_colectivo; 
-        }
-        totalPremium = totalPremiumPolicy + totalPremiumCollective; 
-        res.render('globalLossRatio', {
-            totalPremium: totalPremium,
-            name: req.session.name,
-            cookieRol: req.cookies.rol
-        });
-    },
-    getPendingPayments: async (req, res) => {
-        let resultsPII = await policyInsurerInsuredModel.getPoliciesInsurersInsureds();
-        let resultsCII = await collectiveInsurerInsuredModel.getCollectivesInsurersInsureds();
-        let hash = {};
-        resultsCII = resultsCII.filter(cii => hash[cii.colectivo_id] ? false : hash[cii.colectivo_id] = true);
-        let resultPendingPayment = [];
-        try {
-            for (let i = 0; i < resultsPII.length; i++) {
-                let elementPII = resultsPII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementPII.aseguradora_id);
-                let resultPolicy = await policyModel.getPolicy(elementPII.poliza_id);
-                let resultCommission = await commissionModel.getComissionPolicy(elementPII.poliza_id);
-                let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
-                let ownAgents = [];
-                let executives = [];
-                if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
-                    let primaPorcentajeVerificacion = resultVerificationFactor[0].porcentaje_prima_factor_verificacion;
-                    if (primaPorcentajeVerificacion.toString().includes('.') === true) {
-                        primaPorcentajeVerificacion = primaPorcentajeVerificacion.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                    } else {
-                        primaPorcentajeVerificacion = String(primaPorcentajeVerificacion).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                    }
-                    if (resultPolicy[0].tipo_moneda_poliza === 'BOLÍVAR') {
-                        primaPorcentajeVerificacion = `Bs ${primaPorcentajeVerificacion}`;
-                    } else if (resultPolicy[0].tipo_moneda_poliza === 'DÓLAR') {
-                        primaPorcentajeVerificacion = `$ ${primaPorcentajeVerificacion}`;
-                    } else if (resultPolicy[0].tipo_moneda_poliza === 'EUROS') {
-                        primaPorcentajeVerificacion = `€ ${primaPorcentajeVerificacion}`;
-                    }
-                    let resultsPAP = await policyOwnAgentModel.getPolicyOwnAgent(elementPII.poliza_id);
-                    let idsOwnAgents = resultsPAP.map(pap => pap.agente_propio_id).filter(id => id !== null);
-                    let resultsPAAE = await polInsuInsuredExecModel.getPolInsuInsuredExecutive(elementPII.id_paa);
-                    let idsExecutives = resultsPAAE.map(paae => paae.ejecutivo_id).filter(id => id !== null);
-                    for (const idExecutive of idsExecutives) {
-                        let resultExecutive = await executiveModel.getExecutive(idExecutive);
-                        executives.push(resultExecutive);
-                    }
-                    executives = executives.map(executive => {
-                        let nameExecutive = `${executive[0].nombre_ejecutivo} ${executive[0].apellido_ejecutivo}`;
-                        return nameExecutive;
-                    });
-                    let pendingPayment = {};
-                    if (idsOwnAgents.length === 0) {
-                        pendingPayment = {
-                            ownAgent: '',
-                            executive: executives,
-                            taker: resultPolicy[0].nombre_tomador_poliza,
-                            bouquetType: resultPolicy[0].tipo_individual_poliza,
-                            insurer: resultInsurer[0].nombre_aseguradora,
-                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            premium: primaPorcentajeVerificacion
-                        };
-                    } else {
-                        for (const idOwnAgent of idsOwnAgents) {
-                            let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                            ownAgents.push(resultOwnAgent);
-                        }
-                        ownAgents = ownAgents.map(ownAgent => {
-                            let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                            return nameOwnAgent;
-                        });
-                        pendingPayment = {
-                            ownAgent: ownAgents,
-                            executive: executives,
-                            taker: resultPolicy[0].nombre_tomador_poliza,
-                            bouquetType: resultPolicy[0].tipo_individual_poliza,
-                            insurer: resultInsurer[0].nombre_aseguradora,
-                            dateFrom: resultPolicy[0].fecha_desde_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            dateTo: resultPolicy[0].fecha_hasta_poliza.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            premium: primaPorcentajeVerificacion
-                        };
-                    }
-                    resultPendingPayment.push(pendingPayment);
-                }
-            }
-            for (let i = 0; i < resultsCII.length; i++) {
-                let elementCII = resultsCII[i];
-                let resultInsurer = await insurerModel.getInsurer(elementCII.aseguradora_id);
-                let resultCollective = await collectiveModel.getCollective(elementCII.colectivo_id);
-                let resultCommission = await commissionModel.getComissionCollective(elementCII.colectivo_id);
-                let resultVerificationFactor = await verficationFactorModel.getVerificationFactor(resultCommission[0].id_comision);
-                let ownAgents = [];
-                let executives = [];
-                if (resultVerificationFactor[0].estatus_comision_factor_verificacion === 'PENDIENTE') {
-                    let primaPorcentajeVerificacion = resultVerificationFactor[0].porcentaje_prima_factor_verificacion;
-                    if (primaPorcentajeVerificacion.toString().includes('.') === true) {
-                        primaPorcentajeVerificacion = primaPorcentajeVerificacion.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-                    } else {
-                        primaPorcentajeVerificacion = String(primaPorcentajeVerificacion).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
-                    }
-                    if (resultCollective[0].tipo_moneda_colectivo === 'BOLÍVAR') {
-                        primaPorcentajeVerificacion = `Bs ${primaPorcentajeVerificacion}`;
-                    } else if (resultCollective[0].tipo_moneda_colectivo === 'DÓLAR') {
-                        primaPorcentajeVerificacion = `$ ${primaPorcentajeVerificacion}`;
-                    } else if (resultCollective[0].tipo_moneda_colectivo === 'EUROS') {
-                        primaPorcentajeVerificacion = `€ ${primaPorcentajeVerificacion}`;
-                    }
-                    let resultsCAP = await collectiveOwnAgentModel.getCollectiveOwnAgent(elementCII.colectivo_id);
-                    let idsOwnAgents = resultsCAP.map(cae => cae.agente_propio_id).filter(id => id !== null);
-                    let resultsCAAE = await colInsuInsuredExecModel.getColInsuInsuredExecutive(elementCII.id_caa);
-                    let idsExecutives = resultsCAAE.map(caae => caae.ejecutivo_id).filter(id => id !== null);
-                    for (const idExecutive of idsExecutives) {
-                        let resultExecutive = await executiveModel.getExecutive(idExecutive);
-                        executives.push(resultExecutive);
-                    }
-                    executives = executives.map(executive => {
-                        let nameExecutive = `${executive[0].nombre_ejecutivo} ${executive[0].apellido_ejecutivo}`;
-                        return nameExecutive;
-                    });
-                    let pendingPayment = {};
-                    if (idsOwnAgents.length === 0) {
-                        pendingPayment = {
-                            ownAgent: '',
-                            executive: executives,
-                            taker: resultCollective[0].nombre_tomador_colectivo,
-                            bouquetType: resultCollective[0].tipo_colectivo,
-                            insurer: resultInsurer[0].nombre_aseguradora,
-                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            premium: primaPorcentajeVerificacion
-                        };
-                    } else {
-                        for (const idOwnAgent of idsOwnAgents) {
-                            let resultOwnAgent = await ownAgentModel.getOwnAgent(idOwnAgent);
-                            ownAgents.push(resultOwnAgent);
-                        }
-                        ownAgents = ownAgents.map(ownAgent => {
-                            let nameOwnAgent = `${ownAgent[0].nombre_agente_propio} ${ownAgent[0].apellido_agente_propio}`;
-                            return nameOwnAgent;
-                        });
-                        pendingPayment = {
-                            ownAgent: ownAgents,
-                            executive: executives,
-                            taker: resultCollective[0].nombre_tomador_colectivo,
-                            bouquetType: resultCollective[0].tipo_colectivo,
-                            insurer: resultInsurer[0].nombre_aseguradora,
-                            dateFrom: resultCollective[0].fecha_desde_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            dateTo: resultCollective[0].fecha_hasta_colectivo.toISOString().substr(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/g,"$3/$2/$1"),
-                            premium: primaPorcentajeVerificacion
-                        };
-                    }
-                    resultPendingPayment.push(pendingPayment);
-                }
-            }
-            res.render('pendingPayments',{
-                data: resultPendingPayment,
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('premiumsPending', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -500,9 +49,41 @@ module.exports = {
             console.log(error);
         }
     },
-    getPremiumsCollectedDate: async (req, res) => {
+    getCommissionTransit: async (req, res) => {
         try {
-            res.render('premiumsCollectedDate',{
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('commissionTransit', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol 
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getCommissionDistribution: async (req, res) => {
+        try {
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('commissionDistribution', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol 
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getCommissionPaid: async (req, res) => {
+        try {
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('commissionPaid', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -512,7 +93,15 @@ module.exports = {
     },
     getAccidentRate: async (req, res) => {
         try {
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            const resultsPolicies = await policyModel.getPolicies();
+            const resultsCollectives = await collectiveModel.getCollectives();
             res.render('accidentRate',{
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                policies: resultsPolicies,
+                collectives: resultsCollectives,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -522,7 +111,11 @@ module.exports = {
     },
     getPortfolioComposition: async (req, res) => {
         try {
-            res.render('portfolioComposition',{
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('portfolioComposition', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -532,7 +125,11 @@ module.exports = {
     },
     getPersistence: async (req, res) => {
         try {
-            res.render('persistence',{
+            const resultsInsurers = await insurerModel.getInsurers();
+            const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+            res.render('persistence', {
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
                 cookieRol: req.cookies.rol 
             });
@@ -541,289 +138,2215 @@ module.exports = {
         }
     },
 /*                 POST                  */
-    postPremiumsCollectedDate: async (req, res) => {
+    postPremiumsCollected: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let {
-                fecha_inicio: fechaInicio, 
-                fecha_final: fechaFin,
-                tipo_moneda: tipoMoneda
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
             } = req.body;
-            fechaInicio = new Date(fechaInicio);
-            fechaFin = new Date(fechaFin);
-            let data = [];
-            const resultPrimaCobrada = await policyModel.getChargedCounterPremiumDate(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaTotal = resultPrimaCobrada.map(item => item.prima_cobrada_date).reduce((prev, curr) => prev + curr, 0);
-            const resultPrimaDevuelta = await policyModel.getPremiumReturnedCounterDate(fechaInicio, fechaFin, tipoMoneda);
-            let primaDevueltaTotal = resultPrimaDevuelta.map(item => item.prima_devuelta_date).reduce((prev, curr) => prev + curr, 0);
-            const resultPrimaCobradaNeta = await policyModel.getPremiumCollectedNetCounterDate(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaNetaTotal = resultPrimaCobradaNeta.map(item => item.prima_cobrada_neta_date).reduce((prev, curr) => prev + curr, 0);
-            if (primaCobradaTotal.toString().includes('.') === true) {
-                primaCobradaTotal = primaCobradaTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaTotal = String(primaCobradaTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            let hash = {};
+            const filters = [];
+            const resultsDivisions = await divisionModel.getFractionationCollected();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(premiumsCollected => (premiumsCollected.fecha_desde.getTime() >= fechaDesde.getTime()) && (premiumsCollected.fecha_desde.getTime() <= fechaHasta.getTime()));
             }
-            if (primaDevueltaTotal.toString().includes('.') === true) {
-                primaDevueltaTotal = primaDevueltaTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaDevueltaTotal = String(primaDevueltaTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (nombreAseguradora !== '') {
+                filters.push(premiumsCollected => premiumsCollected.nombre_aseguradora === nombreAseguradora);
             }
-            if (primaCobradaNetaTotal.toString().includes('.') === true) {
-                primaCobradaNetaTotal = primaCobradaNetaTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaNetaTotal = String(primaCobradaNetaTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (ramoPoliza !== '') {
+                filters.push(premiumsCollected => premiumsCollected.tipo_individual_poliza === ramoPoliza);
             }
-            if (tipoMoneda === 'BOLÍVAR') {
-                primaCobradaTotal = `Bs ${primaCobradaTotal}`;
-                primaDevueltaTotal = `Bs ${primaDevueltaTotal}`;
-                primaCobradaNetaTotal = `Bs ${primaCobradaNetaTotal}`;
-            } else if (tipoMoneda === 'DÓLAR') {
-                primaCobradaTotal = `$ ${primaCobradaTotal}`;
-                primaDevueltaTotal = `$ ${primaDevueltaTotal}`;
-                primaCobradaNetaTotal = `$ ${primaCobradaNetaTotal}`;
-            } else if (tipoMoneda === 'EUROS') {
-                primaCobradaTotal = `€ ${primaCobradaTotal}`;
-                primaDevueltaTotal = `€ ${primaDevueltaTotal}`;
-                primaCobradaNetaTotal = `€ ${primaCobradaNetaTotal}`;
+            if (nombreAgentePropio !== '') {
+                filters.push(premiumsCollected => premiumsCollected.nombre_agente_propio === nombreAgentePropio);
             }
-            const objectData = {
-                'titulo': 'TOTAL',
-                'prima_cobrada': primaCobradaTotal,
-                'prima_devuelta': primaDevueltaTotal,
-                'prima_cobrada_neta': primaCobradaNetaTotal
+            if (idRifAsegurado !== '') {
+                filters.push(premiumsCollected => premiumsCollected.cedula_rif_asegurado === idRifAsegurado && premiumsCollected.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
             }
-            data.push(objectData);
-            res.render('premiumsCollectedDate',{
+            let data = await Promise.all(
+                resultsDivisions.map(async (division) => {
+                    const resultReceipt = await receiptModel.getReceipt(division.recibo_id);
+                    const premiumNet = await divisionModel.getPremiumCollectedSum(division.recibo_id);
+                    if (resultReceipt[0].poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        } else {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        }
+                    } else if (resultReceipt[0].colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(data => hash[data.numero_poliza] ? false : hash[data.numero_poliza] = true);
+            data = data.filter(premiumsCollected => filters.every(filterPolicy => filterPolicy(premiumsCollected)));
+            const totalPrimaNetaBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalPrimaNetaBolivar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalPrimaNetaDolar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalPrimaNetaEuro,
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza , item.prima_neta);
+            });
+            res.render('premiumsCollected',{
                 data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
-                cookieRol: req.cookies.rol 
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
+            res.render('premiumsCollected', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/premiums-collected',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    postPremiumsPending: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        try {
+            let {
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
+            } = req.body;
+            let hash = {};
+            const filters = [];
+            const resultsDivisions = await divisionModel.getFractionationPending();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(premiumsPending => (premiumsPending.fecha_desde.getTime() >= fechaDesde.getTime()) && (premiumsPending.fecha_desde.getTime() <= fechaHasta.getTime()));
+            }
+            if (nombreAseguradora !== '') {
+                filters.push(premiumsPending => premiumsPending.nombre_aseguradora === nombreAseguradora);
+            }
+            if (ramoPoliza !== '') {
+                filters.push(premiumsPending => premiumsPending.tipo_individual_poliza === ramoPoliza);
+            }
+            if (nombreAgentePropio !== '') {
+                filters.push(premiumsPending => premiumsPending.nombre_agente_propio === nombreAgentePropio);
+            }
+            if (idRifAsegurado !== '') {
+                filters.push(premiumsPending => premiumsPending.cedula_rif_asegurado === idRifAsegurado && premiumsPending.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            let data = await Promise.all(
+                resultsDivisions.map(async (division) => {
+                    const resultReceipt = await receiptModel.getReceipt(division.recibo_id);
+                    const premiumNet = await divisionModel.getPremiumPendingSum(division.recibo_id);
+                    if (resultReceipt[0].poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        } else {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        }
+                    } else if (resultReceipt[0].colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(data => hash[data.numero_poliza] ? false : hash[data.numero_poliza] = true);
+            data = data.filter(premiumsPending => filters.every(filterPolicy => filterPolicy(premiumsPending)));
+            const totalPrimaNetaBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalPrimaNetaBolivar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalPrimaNetaDolar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalPrimaNetaEuro,
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza , item.prima_neta);
+            });
+            res.render('premiumsPending',{
+                data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('premiumsPending', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/premiums-pending',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    postCommissionTransit: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        try {
+            let {
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
+            } = req.body;
+            let hash = {};
+            const filters = [];
+            const resultsDivisions = await divisionModel.getCommissionTransit();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(commissionTransit => (commissionTransit.fecha_desde.getTime() >= fechaDesde.getTime()) && (commissionTransit.fecha_desde.getTime() <= fechaHasta.getTime()));
+            }
+            if (nombreAseguradora !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_aseguradora === nombreAseguradora);
+            }
+            if (ramoPoliza !== '') {
+                filters.push(commissionTransit => commissionTransit.tipo_individual_poliza === ramoPoliza);
+            }
+            if (nombreAgentePropio !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_agente_propio === nombreAgentePropio);
+            }
+            if (idRifAsegurado !== '') {
+                filters.push(commissionTransit => commissionTransit.cedula_rif_asegurado === idRifAsegurado && commissionTransit.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            let data = await Promise.all(
+                resultsDivisions.map(async (division) => {
+                    const resultReceipt = await receiptModel.getReceipt(division.recibo_id);
+                    const premiumNet = await divisionModel.getPremiumCommissionPendingSum(division.recibo_id);
+                    const commissionAmount = await divisionModel.getCommissionPendingSum(division.recibo_id);
+                    if (resultReceipt[0].poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        } else {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        }
+                    } else if (resultReceipt[0].colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_pendiente_total,
+                                    'monto_comision': commissionAmount[0].comision_pendiente_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(data => hash[data.numero_poliza] ? false : hash[data.numero_poliza] = true);
+            data = data.filter(commissionTransit => filters.every(filterPolicy => filterPolicy(commissionTransit)));
+            const totalPrimaNetaBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalPrimaNetaBolivar,
+                'monto_comision': totalComisionBolivar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalPrimaNetaDolar,
+                'monto_comision': totalComisionDolar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalPrimaNetaEuro,
+                'monto_comision': totalComisionEuro,
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza, item.prima_neta);
+                item.monto_comision = Math.round((item.monto_comision + Number.EPSILON) * 100) / 100;
+                item.monto_comision = convertNumberToString(item.monto_comision);
+                item.monto_comision = convertStringToCurrency(item.tipo_moneda_poliza, item.monto_comision);
+            });
+            res.render('commissionTransit',{
+                data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('commissionTransit', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/commission-transits',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    postCommissionDistribution: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        try {
+            let {
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
+            } = req.body;
+            let hash = {};
+            const filters = [];
+            const resultsDivisions = await divisionModel.getCommissionDistribution();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(commissionTransit => (commissionTransit.fecha_desde.getTime() >= fechaDesde.getTime()) && (commissionTransit.fecha_desde.getTime() <= fechaHasta.getTime()));
+            }
+            if (nombreAseguradora !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_aseguradora === nombreAseguradora);
+            }
+            if (ramoPoliza !== '') {
+                filters.push(commissionTransit => commissionTransit.tipo_individual_poliza === ramoPoliza);
+            }
+            if (nombreAgentePropio !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_agente_propio === nombreAgentePropio);
+            }
+            if (idRifAsegurado !== '') {
+                filters.push(commissionTransit => commissionTransit.cedula_rif_asegurado === idRifAsegurado && commissionTransit.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            let data = await Promise.all(
+                resultsDivisions.map(async (division) => {
+                    const resultReceipt = await receiptModel.getReceipt(division.recibo_id);
+                    const premiumNet = await divisionModel.getPremiumCommissionDistributionSum(division.recibo_id);
+                    const commissionAmount = await divisionModel.getCommissionDistributionSum(division.recibo_id);
+                    if (resultReceipt[0].poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        } else {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        }
+                    } else if (resultReceipt[0].colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_distribucion_total,
+                                    'monto_comision': commissionAmount[0].comision_distribucion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(data => hash[data.numero_poliza] ? false : hash[data.numero_poliza] = true);
+            data = data.filter(commissionTransit => filters.every(filterPolicy => filterPolicy(commissionTransit)));
+            const totalPrimaNetaBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalPrimaNetaBolivar,
+                'monto_comision': totalComisionBolivar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalPrimaNetaDolar,
+                'monto_comision': totalComisionDolar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalPrimaNetaEuro,
+                'monto_comision': totalComisionEuro,
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza, item.prima_neta);
+                item.monto_comision = Math.round((item.monto_comision + Number.EPSILON) * 100) / 100;
+                item.monto_comision = convertNumberToString(item.monto_comision);
+                item.monto_comision = convertStringToCurrency(item.tipo_moneda_poliza, item.monto_comision);
+            });
+            res.render('commissionDistribution',{
+                data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('commissionDistribution', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/commission-distribution',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        }
+    },
+    postCommissionPaid: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        try {
+            let {
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
+            } = req.body;
+            let hash = {};
+            const filters = [];
+            const resultsDivisions = await divisionModel.getFractionationCollected();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(commissionTransit => (commissionTransit.fecha_desde.getTime() >= fechaDesde.getTime()) && (commissionTransit.fecha_desde.getTime() <= fechaHasta.getTime()));
+            }
+            if (nombreAseguradora !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_aseguradora === nombreAseguradora);
+            }
+            if (ramoPoliza !== '') {
+                filters.push(commissionTransit => commissionTransit.tipo_individual_poliza === ramoPoliza);
+            }
+            if (nombreAgentePropio !== '') {
+                filters.push(commissionTransit => commissionTransit.nombre_agente_propio === nombreAgentePropio);
+            }
+            if (idRifAsegurado !== '') {
+                filters.push(commissionTransit => commissionTransit.cedula_rif_asegurado === idRifAsegurado && commissionTransit.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            let data = await Promise.all(
+                resultsDivisions.map(async (division) => {
+                    const resultReceipt = await receiptModel.getReceipt(division.recibo_id);
+                    const premiumNet = await divisionModel.getPremiumCollectedSum(division.recibo_id);
+                    const commissionAmount = await divisionModel.getCommissionPaidSum(division.recibo_id);
+                    if (resultReceipt[0].poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(resultReceipt[0].poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(resultReceipt[0].poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(resultReceipt[0].poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        } else {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultPolicy[0].tipo_moneda_poliza,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultPolicy[0].fecha_desde_poliza
+                                }
+                            }
+                        }
+                    } else if (resultReceipt[0].colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(resultReceipt[0].colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultReceipt[0].colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(resultReceipt[0].colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            } else {
+                                return {
+                                    'nombre_agente_propio': 'ATINA',
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_moneda_poliza': resultCollective[0].tipo_moneda_colectivo,
+                                    'prima_neta': premiumNet[0].prima_cobrada_total,
+                                    'monto_comision': commissionAmount[0].comision_bonificacion_total,
+                                    'fecha_desde': resultCollective[0].fecha_desde_colectivo
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(data => hash[data.numero_poliza] ? false : hash[data.numero_poliza] = true);
+            data = data.filter(commissionTransit => filters.every(filterPolicy => filterPolicy(commissionTransit)));
+            const totalPrimaNetaBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const totalPrimaNetaEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalComisionEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.monto_comision).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalPrimaNetaBolivar,
+                'monto_comision': totalComisionBolivar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalPrimaNetaDolar,
+                'monto_comision': totalComisionDolar,
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'numero_poliza': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalPrimaNetaEuro,
+                'monto_comision': totalComisionEuro,
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza, item.prima_neta);
+                item.monto_comision = Math.round((item.monto_comision + Number.EPSILON) * 100) / 100;
+                item.monto_comision = convertNumberToString(item.monto_comision);
+                item.monto_comision = convertStringToCurrency(item.tipo_moneda_poliza, item.monto_comision);
+            });
+            res.render('commissionPaid',{
+                data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
+        } catch (error) {
+            console.log(error);
+            res.render('commissionPaid', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/commission-paid',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postAccidentRate: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
+        const resultsPolicies = await policyModel.getPolicies();
+        const resultsCollectives = await collectiveModel.getCollectives();
         try {
             let {
-                fecha_inicio: fechaInicio, 
-                fecha_final: fechaFin,
-                tipo_moneda: tipoMoneda
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                numero_poliza: numeroPoliza,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado,
+                tipo_siniestro: tipoSiniestro
             } = req.body;
-            fechaInicio = new Date(fechaInicio);
-            fechaFin = new Date(fechaFin);
-            const resultSiniestralidadAuto = await policyModel.getVehicleAccidentRateSum(fechaInicio, fechaFin, tipoMoneda);
-            let siniestralidadAutoTotal = resultSiniestralidadAuto.map(item => item.siniestralidad_vehiculo_suma).reduce((prev, curr) => prev + curr, 0);
-            const resultSiniestralidadSalud = await policyModel.getHealthAccidentRateSum(fechaInicio, fechaFin, tipoMoneda);
-            let siniestralidadSaludTotal = resultSiniestralidadSalud.map(item => item.siniestralidad_salud_suma).reduce((prev, curr) => prev + curr, 0);
-            const resultSiniestralidadPatrimonial = await policyModel.getPatrimonialAccidentRateSum(fechaInicio, fechaFin, tipoMoneda);
-            let siniestralidadPatrimonialTotal = resultSiniestralidadPatrimonial.map(item => item.siniestralidad_patrimonial_suma).reduce((prev, curr) => prev + curr, 0);
-            const resultSiniestralidadFianza = await policyModel.getBailAccidentRateSum(fechaInicio, fechaFin, tipoMoneda);
-            let siniestralidadFianzaTotal = resultSiniestralidadFianza.map(item => item.siniestralidad_fianza_suma).reduce((prev, curr) => prev + curr, 0);
-            if (siniestralidadAutoTotal.toString().includes('.') === true) {
-                siniestralidadAutoTotal = siniestralidadAutoTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                siniestralidadAutoTotal = String(siniestralidadAutoTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            const filters = [];
+            const resultsRefunds = await refundModel.getRefunds();
+            const resultsLettersGuarantee = await letterGuaranteeModel.getLettersGuarantee();
+            const resultsEmergencies = await emergencyModel.getEmergencies();
+            const resultsAMP = await ampModel.getAMP();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(accidentRate => (accidentRate.fecha_desde.getTime() >= fechaDesde.getTime()) && (accidentRate.fecha_desde.getTime() <= fechaHasta.getTime()));
             }
-            if (siniestralidadSaludTotal.toString().includes('.') === true) {
-                siniestralidadSaludTotal = siniestralidadSaludTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                siniestralidadSaludTotal = String(siniestralidadSaludTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (nombreAseguradora !== '') {
+                filters.push(accidentRate => accidentRate.nombre_aseguradora === nombreAseguradora);
             }
-            if (siniestralidadPatrimonialTotal.toString().includes('.') === true) {
-                siniestralidadPatrimonialTotal = siniestralidadPatrimonialTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                siniestralidadPatrimonialTotal = String(siniestralidadPatrimonialTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (numeroPoliza !== '') {
+                filters.push(accidentRate => accidentRate.numero_poliza === numeroPoliza);
             }
-            if (siniestralidadFianzaTotal.toString().includes('.') === true) {
-                siniestralidadFianzaTotal = siniestralidadFianzaTotal.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                siniestralidadFianzaTotal = String(siniestralidadFianzaTotal).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (ramoPoliza !== '') {
+                filters.push(accidentRate => accidentRate.tipo_individual_poliza === ramoPoliza);
             }
-            if (tipoMoneda === 'BOLÍVAR') {
-                siniestralidadAutoTotal = `Bs ${siniestralidadAutoTotal}`;
-                siniestralidadSaludTotal = `Bs ${siniestralidadSaludTotal}`;
-                siniestralidadPatrimonialTotal = `Bs ${siniestralidadPatrimonialTotal}`;
-                siniestralidadFianzaTotal = `Bs ${siniestralidadFianzaTotal}`;
-            } else if (tipoMoneda === 'DÓLAR') {
-                siniestralidadAutoTotal = `$ ${siniestralidadAutoTotal}`;
-                siniestralidadSaludTotal = `$ ${siniestralidadSaludTotal}`;
-                siniestralidadPatrimonialTotal = `$ ${siniestralidadPatrimonialTotal}`;
-                siniestralidadFianzaTotal = `$ ${siniestralidadFianzaTotal}`;
-            } else if (tipoMoneda === 'EUROS') {
-                siniestralidadAutoTotal = `€ ${siniestralidadAutoTotal}`;
-                siniestralidadSaludTotal = `€ ${siniestralidadSaludTotal}`;
-                siniestralidadPatrimonialTotal = `€ ${siniestralidadPatrimonialTotal}`;
-                siniestralidadFianzaTotal = `€ ${siniestralidadFianzaTotal}`;
+            if (nombreAgentePropio !== '') {
+                filters.push(accidentRate => accidentRate.nombre_agente_propio === nombreAgentePropio);
             }
-            const data = [ 
-                {
-                    'tipo_poliza': 'AUTOMÓVIL',
-                    'prima_devengada': siniestralidadAutoTotal
-                },
-                {
-                    'tipo_poliza': 'SALUD',
-                    'prima_devengada': siniestralidadSaludTotal
-                },
-                {
-                    'tipo_poliza': 'PATRIMONIAL',
-                    'prima_devengada': siniestralidadPatrimonialTotal
-                },
-                {
-                    'tipo_poliza': 'FIANZA',
-                    'prima_devengada': siniestralidadFianzaTotal
+            if (idRifAsegurado !== '') {
+                filters.push(accidentRate => accidentRate.cedula_rif_asegurado === idRifAsegurado && accidentRate.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            if (tipoSiniestro !== '') {
+                filters.push(accidentRate => accidentRate.tipo_siniestro === tipoSiniestro);
+            }
+            const arrayRefunds = resultsRefunds.map(refund => {
+                return {
+                    'patologia_siniestro': refund.patologia_reembolso,
+                    'fecha_ocurrencia_siniestro': refund.fecha_ocurrencia_reembolso,
+                    'monto_siniestro': refund.monto_reclamo_reembolso,
+                    'tipo_moneda_siniestro': refund.tipo_moneda_reembolso,
+                    'estatus_siniestro': refund.estatus_reembolso,
+                    'numero_siniestro': refund.numero_siniestro_reembolso,
+                    'asegurado_beneficiario_id': refund.asegurado_beneficiario_id,
+                    'poliza_id': refund.poliza_id,
+                    'colectivo_id': refund.colectivo_id,
+                    'tipo_siniestro': 'REEMBOLSO'
                 }
-            ];
-            res.render('accidentRate',{
+            });
+            const arrayLettersGuarantee = resultsLettersGuarantee.map(letterGuarantee => {
+                return {
+                    'patologia_siniestro': letterGuarantee.patologia_carta_aval,
+                    'fecha_ocurrencia_siniestro': letterGuarantee.fecha_ocurrencia_carta_aval,
+                    'monto_siniestro': letterGuarantee.monto_reclamado_carta_aval,
+                    'tipo_moneda_siniestro': letterGuarantee.tipo_moneda_carta_aval,
+                    'estatus_siniestro': letterGuarantee.estatus_carta_aval,
+                    'numero_siniestro': letterGuarantee.numero_siniestro_carta_aval,
+                    'asegurado_beneficiario_id': letterGuarantee.asegurado_beneficiario_id,
+                    'poliza_id': letterGuarantee.poliza_id,
+                    'colectivo_id': letterGuarantee.colectivo_id,
+                    'tipo_siniestro': 'CARTA AVAL'
+                }
+            });
+            const arrayEmergencies = resultsEmergencies.map(emergency => {
+                return {
+                    'patologia_siniestro': emergency.patologia_emergencia,
+                    'fecha_ocurrencia_siniestro': emergency.fecha_ocurrencia_emergencia,
+                    'monto_siniestro': emergency.monto_reclamado_emergencia,
+                    'tipo_moneda_siniestro': emergency.tipo_moneda_emergencia,
+                    'estatus_siniestro': emergency.estatus_emergencia,
+                    'numero_siniestro': emergency.numero_siniestro_emergencia,
+                    'asegurado_beneficiario_id': emergency.asegurado_beneficiario_id,
+                    'poliza_id': emergency.poliza_id,
+                    'colectivo_id': emergency.colectivo_id,
+                    'tipo_siniestro': 'EMERGENCIA'
+                }
+            });
+            const arrayAMP = resultsAMP.map(amp => {
+                return {
+                    'patologia_siniestro': amp.patologia_amp,
+                    'fecha_ocurrencia_siniestro': amp.fecha_ocurrencia_amp,
+                    'monto_siniestro': amp.monto_reclamado_amp,
+                    'tipo_moneda_siniestro': amp.tipo_moneda_amp,
+                    'estatus_siniestro': amp.estatus_amp,
+                    'numero_siniestro': amp.numero_siniestro_amp,
+                    'asegurado_beneficiario_id': amp.asegurado_beneficiario_id,
+                    'poliza_id': amp.poliza_id,
+                    'colectivo_id': amp.colectivo_id,
+                    'tipo_siniestro': 'AMP'
+                }
+            });
+            const resultsSinister = arrayRefunds.concat(arrayLettersGuarantee, arrayEmergencies, arrayAMP);
+            let data = await Promise.all(
+                resultsSinister.map(async (sinister) => {
+                    const resultInsuredBeneficiary = await insuredBeneficiaryModel.getBeneficiaryNames(sinister.asegurado_beneficiario_id);
+                    if (sinister.poliza_id !== null) { 
+                        const resultPolicy = await policyModel.getPolicy(sinister.poliza_id);
+                        const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(sinister.poliza_id);
+                        const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(sinister.poliza_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultPolicy[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                }
+                            } else {
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultPolicy[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_agente_propio': 'ATINA',
+                                }
+                            }
+                        } else { 
+                            if (resultPOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultPolicy[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                }
+                            } else {
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultPolicy[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultPolicy[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultPolicy[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_individual_poliza': `${resultPolicy[0].tipo_individual_poliza} INDIVIDUAL`,
+                                    'nombre_agente_propio': 'ATINA',
+                                }
+                            }
+                        }
+                    } else if (sinister.colectivo_id !== null) {
+                        const resultCollective = await collectiveModel.getCollective(sinister.colectivo_id);
+                        const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(sinister.colectivo_id);
+                        const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(sinister.colectivo_id);
+                        const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                        const resultNaturalInsured = await insuredModel.getNaturalInsured(resultInsuredBeneficiary[0].asegurado_per_nat_id);
+                        const resultLegalInsured = await insuredModel.getLegalInsured(resultInsuredBeneficiary[0].asegurado_per_jur_id);
+                        if (resultLegalInsured.length === 0) {
+                            if (resultCOA.length !== 0) {
+                                const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultCollective[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                }
+                            } else {
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultCollective[0].numero_colectivo,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultCollective[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_colectivo,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                    'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_agente_propio': 'ATINA',
+                                }
+                            }
+                        } else {
+                            if (resultCOA.length !== 0) {
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultCollective[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultCollective[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                }
+                            } else {
+                                return {
+                                    'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                    'numero_poliza': resultCollective[0].numero_poliza,
+                                    'numero_siniestro': sinister.numero_siniestro,
+                                    'ci_tomador_poliza': resultCollective[0].id_rif_tomador,
+                                    'nombre_tomador_poliza': resultCollective[0].nombre_tomador_poliza,
+                                    'cedula_beneficiario': resultInsuredBeneficiary[0].cedula_beneficiario,
+                                    'nombre_completo_beneficiario': `${resultInsuredBeneficiary[0].nombre_beneficiario} ${resultInsuredBeneficiary[0].apellido_beneficiario}`,
+                                    'patologia_siniestro': sinister.patologia_siniestro,
+                                    'tipo_siniestro': sinister.tipo_siniestro,
+                                    'monto_siniestro': sinister.monto_siniestro,
+                                    'estatus_siniestro': sinister.estatus_siniestro,
+                                    'fecha_desde': sinister.fecha_ocurrencia_siniestro,
+                                    'tipo_moneda_siniestro': sinister.tipo_moneda_siniestro,
+                                    'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                    'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                    'tipo_individual_poliza': `${resultCollective[0].tipo_colectivo} COLECTIVO`,
+                                    'nombre_agente_propio': 'ATINA',
+                                }
+                            }
+                        }
+                    }
+                })
+            );
+            data = data.filter(accidentRate => filters.every(filterSinister => filterSinister(accidentRate)));
+            const totalMontoBolivar = data.filter(item => item.tipo_moneda_siniestro === 'BOLÍVAR').map(item => item.monto_siniestro).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoDolar = data.filter(item => item.tipo_moneda_siniestro === 'DÓLAR').map(item => item.monto_siniestro).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoEuro = data.filter(item => item.tipo_moneda_siniestro === 'EUROS').map(item => item.monto_siniestro).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_aseguradora': '',
+                'numero_poliza': '',
+                'numero_siniestro': '',
+                'ci_tomador_poliza': '',
+                'nombre_tomador_poliza': '',
+                'cedula_beneficiario': '',
+                'nombre_completo_beneficiario': '',
+                'patologia_siniestro': '',
+                'tipo_siniestro': '',
+                'monto_siniestro': totalMontoBolivar,
+                'estatus_siniestro': '',
+                'fecha_desde': '',
+                'tipo_moneda_siniestro': 'BOLÍVAR',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_individual_poliza': '',
+                'nombre_agente_propio': '',
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_aseguradora': '',
+                'numero_poliza': '',
+                'numero_siniestro': '',
+                'ci_tomador_poliza': '',
+                'nombre_tomador_poliza': '',
+                'cedula_beneficiario': '',
+                'nombre_completo_beneficiario': '',
+                'patologia_siniestro': '',
+                'tipo_siniestro': '',
+                'monto_siniestro': totalMontoDolar,
+                'estatus_siniestro': '',
+                'fecha_desde': '',
+                'tipo_moneda_siniestro': 'DÓLAR',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_individual_poliza': '',
+                'nombre_agente_propio': '',
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_aseguradora': '',
+                'numero_poliza': '',
+                'numero_siniestro': '',
+                'ci_tomador_poliza': '',
+                'nombre_tomador_poliza': '',
+                'cedula_beneficiario': '',
+                'nombre_completo_beneficiario': '',
+                'patologia_siniestro': '',
+                'tipo_siniestro': '',
+                'monto_siniestro': totalMontoEuro,
+                'estatus_siniestro': '',
+                'fecha_desde': '',
+                'tipo_moneda_siniestro': 'EUROS',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_individual_poliza': '',
+                'nombre_agente_propio': '',
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.monto_siniestro = Math.round((item.monto_siniestro + Number.EPSILON) * 100) / 100;
+                item.monto_siniestro = convertNumberToString(item.monto_siniestro);
+                item.monto_siniestro = convertStringToCurrency(item.tipo_moneda_siniestro, item.monto_siniestro);
+            });
+            res.render('accidentRate', {
                 data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                policies: resultsPolicies,
+                collectives: resultsCollectives,
                 name: req.session.name,
-                cookieRol: req.cookies.rol 
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
+            res.render('accidentRate', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/accident-rate',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                policies: resultsPolicies,
+                collectives: resultsCollectives,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postPortfolioComposition: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let {
-                fecha_inicio: fechaInicio, 
-                fecha_final: fechaFin,
-                tipo_moneda: tipoMoneda
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
             } = req.body;
-            fechaInicio = new Date(fechaInicio);
-            fechaFin = new Date(fechaFin);
-            const resultPrimaCobradaNetaAuto = await policyModel.getPremiumCollectedNetVehicleSum(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaNetaAuto = resultPrimaCobradaNetaAuto.map(item => item.prima_cobrada_neta_vehiculo_suma).reduce((prev, curr) => prev + curr, 0);
-            const resultPrimaCobradaNetaSalud = await policyModel.getPremiumCollectedNetHealthSum(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaNetaSalud = resultPrimaCobradaNetaSalud.map(item => item.prima_cobrada_neta_salud_suma).reduce((prev, curr) => prev + curr, 0);
-            const resultPrimaCobradaNetaPatrimonial = await policyModel.getPremiumCollectedNetPatrimonialSum(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaNetaPatrimonial = resultPrimaCobradaNetaPatrimonial[0].prima_cobrada_neta_patrimonial_suma;
-            const resultPrimaCobradaNetaFianza = await policyModel.getPremiumCollectedNetBailSum(fechaInicio, fechaFin, tipoMoneda);
-            let primaCobradaNetaFianza = resultPrimaCobradaNetaFianza[0].prima_cobrada_neta_fianza_suma;
-            if (primaCobradaNetaPatrimonial === null) {
-                primaCobradaNetaPatrimonial = 0;
+            let hash = {};
+            const filters = [];
+            const resultsPolicies = await policyModel.getPolicies();
+            const resultsCollectives = await collectiveModel.getCollectives();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(portfolioComposition => (portfolioComposition.fecha_desde.getTime() >= fechaDesde.getTime()) && (portfolioComposition.fecha_desde.getTime() <= fechaHasta.getTime()));
             }
-            if (primaCobradaNetaFianza === null) {
-                primaCobradaNetaFianza = 0;
+            if (nombreAseguradora !== '') {
+                filters.push(portfolioComposition => portfolioComposition.nombre_aseguradora === nombreAseguradora);
             }
-            if (primaCobradaNetaAuto.toString().includes('.') === true) {
-                primaCobradaNetaAuto = primaCobradaNetaAuto.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaNetaAuto = String(primaCobradaNetaAuto).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (ramoPoliza !== '') {
+                filters.push(portfolioComposition => portfolioComposition.tipo_individual_poliza === ramoPoliza);
             }
-            if (primaCobradaNetaSalud.toString().includes('.') === true) {
-                primaCobradaNetaSalud = primaCobradaNetaSalud.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaNetaSalud = String(primaCobradaNetaSalud).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (nombreAgentePropio !== '') {
+                filters.push(portfolioComposition => portfolioComposition.nombre_agente_propio === nombreAgentePropio);
             }
-            if (primaCobradaNetaPatrimonial.toString().includes('.') === true) {
-                primaCobradaNetaPatrimonial = primaCobradaNetaPatrimonial.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaNetaPatrimonial = String(primaCobradaNetaPatrimonial).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            if (idRifAsegurado !== '') {
+                filters.push(portfolioComposition => portfolioComposition.cedula_rif_asegurado === idRifAsegurado && portfolioComposition.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
             }
-            if (primaCobradaNetaFianza.toString().includes('.') === true) {
-                primaCobradaNetaFianza = primaCobradaNetaFianza.toString().replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.');
-            } else {
-                primaCobradaNetaFianza = String(primaCobradaNetaFianza).replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.') + ',00';
+            const arrayPolicies = await Promise.all(
+                resultsPolicies.map(async (policy) => {
+                    const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(policy.id_poliza);
+                    const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy.id_poliza);
+                    const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                    const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                    const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                    const countSumPremium = await policyModel.getSumPremiumCounter(policy.tipo_individual_poliza, policy.tipo_moneda_poliza);
+                    if (resultLegalInsured.length === 0) {
+                        if (resultPOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'cantidad_poliza': countSumPremium[0].poliza_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'cantidad_poliza': countSumPremium[0].poliza_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        }
+                    } else {
+                        if (resultPOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'cantidad_poliza': countSumPremium[0].poliza_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'cantidad_poliza': countSumPremium[0].poliza_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        }
+                    }
+                })
+            );
+            const arrayCollectives = await Promise.all(
+                resultsCollectives.map(async (collective) => {
+                    const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(collective.id_colectivo);
+                    const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(collective.id_colectivo);
+                    const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                    const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                    const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                    const countSumPremium = await collectiveModel.getSumPremiumCounter(collective.tipo_colectivo, collective.tipo_moneda_colectivo);
+                    if (resultLegalInsured.length === 0) {
+                        if (resultCOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'cantidad_poliza': countSumPremium[0].colectivo_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'cantidad_poliza': countSumPremium[0].colectivo_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        }
+                    } else {
+                        if (resultCOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'cantidad_poliza': countSumPremium[0].colectivo_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'cantidad_poliza': countSumPremium[0].colectivo_contador_tipo,
+                                'prima_neta': countSumPremium[0].prima_total,
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        }
+                    }
+                })
+            );
+            let data = arrayPolicies.concat(arrayCollectives);
+            data = data.filter(data => ((hash[data.tipo_individual_poliza]) && (hash[data.tipo_moneda_poliza]) ? false : (hash[data.tipo_individual_poliza] = true) && ((hash[data.tipo_moneda_poliza] = true))));
+            data = data.filter(commissionTransit => filters.every(filterPolicy => filterPolicy(commissionTransit)));
+            const totalCantidadPoliza = data.map(item => item.cantidad_poliza).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            let porcetanjePolizaTotal = (totalCantidadPoliza * 100) / totalCantidadPoliza;
+            const objectTotalPrimaNetaBolivar = {
+                'porcentaje_poliza': porcetanjePolizaTotal.toString(),
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'cantidad_poliza': '',
+                'prima_neta': totalMontoBolivar,
+                'fecha_desde': ''
             }
-            if (tipoMoneda === 'BOLÍVAR') {
-                primaCobradaNetaAuto = `Bs ${primaCobradaNetaAuto}`;
-                primaCobradaNetaSalud = `Bs ${primaCobradaNetaSalud}`;
-                primaCobradaNetaPatrimonial = `Bs ${primaCobradaNetaPatrimonial}`;
-                primaCobradaNetaFianza = `Bs ${primaCobradaNetaFianza}`;
-            } else if (tipoMoneda === 'DÓLAR') {
-                primaCobradaNetaAuto = `$ ${primaCobradaNetaAuto}`;
-                primaCobradaNetaSalud = `$ ${primaCobradaNetaSalud}`;
-                primaCobradaNetaPatrimonial = `$ ${primaCobradaNetaPatrimonial}`;
-                primaCobradaNetaFianza = `$ ${primaCobradaNetaFianza}`;
-            } else if (tipoMoneda === 'EUROS') {
-                primaCobradaNetaAuto = `€ ${primaCobradaNetaAuto}`;
-                primaCobradaNetaSalud = `€ ${primaCobradaNetaSalud}`;
-                primaCobradaNetaPatrimonial = `€ ${primaCobradaNetaPatrimonial}`;
-                primaCobradaNetaFianza = `€ ${primaCobradaNetaFianza}`;
+            const objectTotalPrimaNetaDolar = {
+                'porcentaje_poliza': porcetanjePolizaTotal.toString(),
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'cantidad_poliza': '',
+                'prima_neta': totalMontoDolar,
+                'fecha_desde': ''
             }
-            const data = [ 
-                {
-                    'tipo_poliza': 'AUTOMÓVIL',
-                    'prima_cobrada_neta': primaCobradaNetaAuto
-                },
-                {
-                    'tipo_poliza': 'SALUD',
-                    'prima_cobrada_neta': primaCobradaNetaSalud
-                },
-                {
-                    'tipo_poliza': 'PATRIMONIAL',
-                    'prima_cobrada_neta': primaCobradaNetaPatrimonial
-                },
-                {
-                    'tipo_poliza': 'FIANZA',
-                    'prima_cobrada_neta': primaCobradaNetaFianza
+            const objectTotalPrimaNetaEuro = {
+                'porcentaje_poliza': porcetanjePolizaTotal.toString(),
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'cantidad_poliza': '',
+                'prima_neta': totalMontoEuro,
+                'fecha_desde': ''
+            }
+            data = data.map((item, i) => {
+                let policyPercentage = (item.cantidad_poliza * 100) / totalCantidadPoliza;
+                policyPercentage = policyPercentage.toFixed(2);
+                const objectData = {
+                    'porcentaje_poliza': policyPercentage
                 }
-            ];
+                return Object.assign({}, objectData, data[i]);
+            });
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.porcentaje_poliza = `${item.porcentaje_poliza}%`;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza , item.prima_neta);
+            });
             res.render('portfolioComposition',{
                 data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
-                cookieRol: req.cookies.rol 
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
+            res.render('portfolioComposition', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/portfolio-composition',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
     postPersistence: async (req, res) => {
+        const resultsInsurers = await insurerModel.getInsurers();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         try {
             let {
-                fecha_inicio: fechaInicio, 
-                fecha_final: fechaFin,
-                tipo_moneda: tipoMoneda
+                fecha_desde: fechaDesde,
+                fecha_hasta: fechaHasta,
+                nombre_aseguradora: nombreAseguradora,
+                ramo_poliza: ramoPoliza,
+                nombre_agente_propio: nombreAgentePropio, 
+                tipo_id_rif_asegurado: tipoIdRifAsegurado,
+                id_rif_asegurado: idRifAsegurado
             } = req.body;
-            fechaInicio = new Date(fechaInicio);
-            fechaFin = new Date(fechaFin);
-            const resultPolizaNoRenovadaAuto = await policyModel.getNonRenewedVehiclePolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaNoRenovadaAuto = resultPolizaNoRenovadaAuto.map(item => item.poliza_no_renovada_auto_contador).reduce((prev, curr) => prev + curr, 0);
-            const resultPolizaNoRenovadaSalud = await policyModel.getNonRenewedHealthPolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaNoRenovadaSalud = resultPolizaNoRenovadaSalud.map(item => item.poliza_no_renovada_salud_contador).reduce((prev, curr) => prev + curr, 0);
-            const resultPolizaNoRenovadaPatrimonial = await policyModel.getNonRenewedPatrimonialPolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaNoRenovadaPatrimonial = resultPolizaNoRenovadaPatrimonial[0].poliza_no_renovada_patrimonial_contador;
-            const resultPolizaRenovadaAuto = await policyModel.getRenewedVehiclePolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaRenovadaAuto = resultPolizaRenovadaAuto.map(item => item.poliza_renovada_auto_contador).reduce((prev, curr) => prev + curr, 0);
-            const resultPolizaRenovadaSalud = await policyModel.getRenewedHealthPolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaRenovadaSalud = resultPolizaRenovadaSalud.map(item => item.poliza_renovada_salud_contador).reduce((prev, curr) => prev + curr, 0);
-            const resultPolizaRenovadaPatrimonial = await policyModel.getRenewedPatrimonialPolicyCount(fechaInicio, fechaFin, tipoMoneda);
-            let polizaRenovadaPatrimonial = resultPolizaRenovadaPatrimonial[0].poliza_renovada_patrimonial_contador;
-            if (polizaNoRenovadaPatrimonial === null) {
-                polizaNoRenovadaPatrimonial = 0;
+            const filters = [];
+            const resultsPolicies = await policyModel.getPolicies();
+            const resultsCollectives = await collectiveModel.getCollectives();
+            if (fechaDesde !== '') {
+                fechaDesde = new Date(fechaDesde);
+                fechaHasta = new Date(fechaHasta);
+                filters.push(persistence => (persistence.fecha_desde.getTime() >= fechaDesde.getTime()) && (persistence.fecha_desde.getTime() <= fechaHasta.getTime()));
             }
-            if (polizaRenovadaPatrimonial === null) {
-                polizaRenovadaPatrimonial = 0;
+            if (nombreAseguradora !== '') {
+                filters.push(persistence => persistence.nombre_aseguradora === nombreAseguradora);
             }
-            const totalBaseAuto = polizaNoRenovadaAuto + polizaRenovadaAuto;
-            const totalBaseSalud = polizaNoRenovadaSalud + polizaRenovadaSalud;
-            const totalBasePatrimonial = polizaNoRenovadaPatrimonial + polizaRenovadaPatrimonial;
-            const data = [ 
-                {
-                    'tipo_poliza': 'AUTOMÓVIL',
-                    'poliza_renovada': polizaRenovadaAuto,
-                    'poliza_no_renovada': polizaNoRenovadaAuto,
-                    'total_base': totalBaseAuto
-                },
-                {
-                    'tipo_poliza': 'SALUD',
-                    'poliza_renovada': polizaRenovadaSalud,
-                    'poliza_no_renovada': polizaNoRenovadaSalud,
-                    'total_base': totalBaseSalud
-                },
-                {
-                    'tipo_poliza': 'PATRIMONIAL',
-                    'poliza_renovada': polizaRenovadaPatrimonial,
-                    'poliza_no_renovada': polizaNoRenovadaPatrimonial,
-                    'total_base': totalBasePatrimonial
-                }
-            ];
+            if (ramoPoliza !== '') {
+                filters.push(persistence => persistence.tipo_individual_poliza === ramoPoliza);
+            }
+            if (nombreAgentePropio !== '') {
+                filters.push(persistence => persistence.nombre_agente_propio === nombreAgentePropio);
+            }
+            if (idRifAsegurado !== '') {
+                filters.push(persistence => persistence.cedula_rif_asegurado === idRifAsegurado && persistence.tipo_cedula_rif_asegurado === tipoIdRifAsegurado);
+            }
+            const arrayPolicies = await Promise.all(
+                resultsPolicies.map(async (policy) => {
+                    const resultPOA = await policyOwnAgentModel.getPolicyOwnAgent(policy.id_poliza);
+                    const resultPII = await policyInsurerInsuredModel.getPolicyInsurerInsured(policy.id_poliza);
+                    const resultInsurer = await insurerModel.getInsurer(resultPII[0].aseguradora_id);
+                    const resultNaturalInsured = await insuredModel.getNaturalInsured(resultPII[0].asegurado_per_nat_id);
+                    const resultLegalInsured = await insuredModel.getLegalInsured(resultPII[0].asegurado_per_jur_id);
+                    if (resultLegalInsured.length === 0) {
+                        if (resultPOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'nombre_tomador_poliza': policy.nombre_tomador_poliza,
+                                'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'prima_neta': policy.prima_neta_poliza,
+                                'tipo_poliza': 'INDIVIDUAL',
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'nombre_tomador_poliza': policy.nombre_tomador_poliza,
+                                'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'prima_neta': policy.prima_neta_poliza,
+                                'tipo_poliza': 'INDIVIDUAL',
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        }
+                    } else {
+                        if (resultPOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultPOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'nombre_tomador_poliza': policy.nombre_tomador_poliza,
+                                'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'prima_neta': policy.prima_neta_poliza,
+                                'tipo_poliza': 'INDIVIDUAL',
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${policy.tipo_individual_poliza} INDIVIDUAL`,
+                                'nombre_tomador_poliza': policy.nombre_tomador_poliza,
+                                'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': policy.tipo_moneda_poliza,
+                                'prima_neta': policy.prima_neta_poliza,
+                                'tipo_poliza': 'INDIVIDUAL',
+                                'fecha_desde': policy.fecha_desde_poliza
+                            }
+                        }
+                    }
+                })
+            );
+            const arrayCollectives = await Promise.all(
+                resultsCollectives.map(async (collective) => {
+                    const resultCOA = await collectiveOwnAgentModel.getCollectiveOwnAgent(collective.id_colectivo);
+                    const resultCII = await collectiveInsurerInsuredModel.getCollectiveInsurerInsured(collective.id_colectivo);
+                    const resultInsurer = await insurerModel.getInsurer(resultCII[0].aseguradora_id);
+                    const resultNaturalInsured = await insuredModel.getNaturalInsured(resultCII[0].asegurado_per_nat_id);
+                    const resultLegalInsured = await insuredModel.getLegalInsured(resultCII[0].asegurado_per_jur_id);
+                    if (resultLegalInsured.length === 0) {
+                        if (resultCOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'nombre_tomador_poliza': collective.nombre_tomador_colectivo,
+                                'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'prima_neta': collective.prima_neta_colectivo,
+                                'tipo_poliza': 'COLECTIVO',
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'nombre_tomador_poliza': collective.nombre_tomador_colectivo,
+                                'nombre_completo_razon_social_asegurado': `${resultNaturalInsured[0].nombre_asegurado_per_nat} ${resultNaturalInsured[0].apellido_asegurado_per_nat}`,
+                                'tipo_cedula_rif_asegurado': resultNaturalInsured[0].tipo_cedula_asegurado_per_nat,
+                                'cedula_rif_asegurado': resultNaturalInsured[0].cedula_asegurado_per_nat,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'prima_neta': collective.prima_neta_colectivo,
+                                'tipo_poliza': 'COLECTIVO',
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        }
+                    } else {
+                        if (resultCOA.length !== 0) {
+                            const resultOwnAgent = await ownAgentModel.getOwnAgent(resultCOA[0].agente_propio_id);
+                            return {
+                                'nombre_agente_propio': `${resultOwnAgent[0].nombre_agente_propio} ${resultOwnAgent[0].apellido_agente_propio}`,
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'nombre_tomador_poliza': collective.nombre_tomador_colectivo,
+                                'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'prima_neta': collective.prima_neta_colectivo,
+                                'tipo_poliza': 'COLECTIVO',
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        } else {
+                            return {
+                                'nombre_agente_propio': 'ATINA',
+                                'nombre_aseguradora': resultInsurer[0].nombre_aseguradora,
+                                'tipo_individual_poliza': `${collective.tipo_colectivo} COLECTIVO`,
+                                'nombre_tomador_poliza': collective.nombre_tomador_colectivo,
+                                'nombre_completo_razon_social_asegurado': resultLegalInsured[0].razon_social_per_jur,
+                                'tipo_cedula_rif_asegurado': resultLegalInsured[0].tipo_rif_asegurado_per_jur,
+                                'cedula_rif_asegurado': resultLegalInsured[0].rif_asegurado_per_jur,
+                                'tipo_moneda_poliza': collective.tipo_moneda_colectivo,
+                                'prima_neta': collective.prima_neta_colectivo,
+                                'tipo_poliza': 'COLECTIVO',
+                                'fecha_desde': collective.fecha_desde_colectivo
+                            }
+                        }
+                    }
+                })
+            );
+            let data = arrayPolicies.concat(arrayCollectives);
+            data = data.filter(persistence => filters.every(filterPolicy => filterPolicy(persistence)));
+            const totalMontoBolivar = data.filter(item => item.tipo_moneda_poliza === 'BOLÍVAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoDolar = data.filter(item => item.tipo_moneda_poliza === 'DÓLAR').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const totalMontoEuro = data.filter(item => item.tipo_moneda_poliza === 'EUROS').map(item => item.prima_neta).reduce((prev, curr) => prev + curr, 0);
+            const objectTotalPrimaNetaBolivar = {
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'BOLÍVAR',
+                'prima_neta': totalMontoBolivar,
+                'tipo_poliza': '',
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaDolar = {
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'DÓLAR',
+                'prima_neta': totalMontoDolar,
+                'tipo_poliza': '',
+                'fecha_desde': ''
+            }
+            const objectTotalPrimaNetaEuro = {
+                'nombre_agente_propio': '',
+                'nombre_aseguradora': '',
+                'tipo_individual_poliza': '',
+                'nombre_tomador_poliza': '',
+                'nombre_completo_razon_social_asegurado': '',
+                'tipo_cedula_rif_asegurado': '',
+                'cedula_rif_asegurado': '',
+                'tipo_moneda_poliza': 'EUROS',
+                'prima_neta': totalMontoEuro,
+                'tipo_poliza': '',
+                'fecha_desde': ''
+            }
+            data.push(objectTotalPrimaNetaBolivar, objectTotalPrimaNetaDolar, objectTotalPrimaNetaEuro);
+            data.forEach(item => {
+                item.prima_neta = Math.round((item.prima_neta + Number.EPSILON) * 100) / 100;
+                item.prima_neta = convertNumberToString(item.prima_neta);
+                item.prima_neta = convertStringToCurrency(item.tipo_moneda_poliza , item.prima_neta);
+            });
             res.render('persistence',{
                 data,
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
                 name: req.session.name,
-                cookieRol: req.cookies.rol 
+                cookieRol: req.cookies.rol
             });
         } catch (error) {
             console.log(error);
+            res.render('persistence', {
+                alert: true,
+                alertTitle: 'Error',
+                alertMessage: error.message,
+                alertIcon: 'error',
+                showConfirmButton: true,
+                timer: 1500,
+                ruta: 'sistema/persistence',
+                insurers: resultsInsurers,
+                ownAgents: resultsOwnAgents,
+                name: req.session.name,
+                cookieRol: req.cookies.rol
+            });
         }
     },
 /*                  PUT                  */
