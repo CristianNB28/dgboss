@@ -47,6 +47,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -91,12 +93,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('vehiclePolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -130,6 +134,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -180,12 +186,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('healthPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -218,6 +226,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -262,12 +272,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('patrimonialPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -300,6 +312,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -344,12 +358,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('bailPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -382,6 +398,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -426,12 +444,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('anotherBranchPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -466,6 +486,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -516,12 +538,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('funeralPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -555,6 +579,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -605,12 +631,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('lifePolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -643,6 +671,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -687,12 +717,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('apPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -725,6 +757,8 @@ module.exports = {
             let primaNetaPoliza = resultPolicy[0].prima_neta_poliza;
             let nameRazonInsured = ''; 
             const resultPolicyOwnAgent = await policyOwnAgentModel.getPolicyOwnAgent(resultPolicy[0].id_poliza);
+            resultPolicy[0].fecha_desde_poliza = resultPolicy[0].fecha_desde_poliza.toISOString().substring(0, 10);
+            resultPolicy[0].fecha_hasta_poliza = resultPolicy[0].fecha_hasta_poliza.toISOString().substring(0, 10);
             if (resultPolicyOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultPolicyOwnAgent[0].agente_propio_id);
             }
@@ -769,12 +803,14 @@ module.exports = {
         const resultsPolicies = await policyModel.getPoliciesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
         const resultPolicy = await policyModel.getPolicyLast();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('travelPolicyList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             policy: resultPolicy[0],
             policies: resultsPolicies,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -880,7 +916,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1011,7 +1047,7 @@ module.exports = {
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
                 tipo_cobertura_poliza: montoCobertura,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 detalle_cliente_poliza: fechaDetalleCliente,
@@ -1144,7 +1180,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1268,7 +1304,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1392,7 +1428,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1522,7 +1558,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1653,7 +1689,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1778,7 +1814,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -1902,7 +1938,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -2749,7 +2785,7 @@ module.exports = {
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
                 tipo_cobertura_poliza: montoCobertura,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 detalle_cliente_poliza: fechaDetalleCliente,
@@ -2948,7 +2984,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -3135,7 +3171,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -3322,7 +3358,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -3509,7 +3545,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -3696,7 +3732,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -3883,7 +3919,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -4070,7 +4106,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,
@@ -4257,7 +4293,7 @@ module.exports = {
                 prima_total_poliza: montoPrimaTotal,
                 deducible_poliza: montoDeducible,
                 suma_asegurada_poliza: montoSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_poliza: fechaPolizaDesde,
                 fecha_hasta_poliza: fechaPolizaHasta,
                 id_rif_asegurado: idRifAsegurado,

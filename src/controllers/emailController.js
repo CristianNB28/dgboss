@@ -87,7 +87,7 @@ module.exports = {
             res.render('healthPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -192,7 +192,7 @@ module.exports = {
             res.render('vehiclePolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -295,7 +295,7 @@ module.exports = {
             res.render('patrimonialPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -398,7 +398,7 @@ module.exports = {
             res.render('bailPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -501,7 +501,7 @@ module.exports = {
             res.render('anotherBranchPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -610,7 +610,7 @@ module.exports = {
             res.render('funeralPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -723,7 +723,7 @@ module.exports = {
             res.render('lifePolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -830,7 +830,7 @@ module.exports = {
             res.render('apPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -933,7 +933,7 @@ module.exports = {
             res.render('travelPolicyForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -1036,7 +1036,7 @@ module.exports = {
             res.render('healthCollectiveForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -1139,7 +1139,7 @@ module.exports = {
             res.render('vehicleCollectiveForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -1242,7 +1242,7 @@ module.exports = {
             res.render('riskDiverseCollectiveForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,
@@ -1409,7 +1409,7 @@ module.exports = {
             res.render('divisionAdminForm', {
                 alert: true,
                 alertTitle: 'Exitoso',
-                alertMessage: 'Se ha enviado el correo',
+                alertMessage: 'Recibo pendiente por distribuir',
                 alertIcon: 'success',
                 showConfirmButton: false,
                 timer: 1500,

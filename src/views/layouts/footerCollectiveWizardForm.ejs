@@ -493,10 +493,21 @@
             const listHealthElement1 = $("#list-health-collective1");
             const listHealthElement2 = $("#list-health-collective2");
             for (let i = 0; i < lengthPolicyHealth; i++) {
+                if ((formDataPolicyHealth[i].name === 'fecha_desde_colectivo') || (formDataPolicyHealth[i].name === 'fecha_hasta_colectivo')) {
+                    const arrayDate = formDataPolicyHealth[i].value.split('-');
+                    formDataPolicyHealth[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listHealthElement1.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
             }
             for (let i = lengthPolicyHealth; i < formDataPolicyHealth.length; i++) {
-                listHealthElement2.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+                if (
+                    (formDataPolicyHealth[i].name !== 'tomador_asegurado_colectivo') && 
+                    (formDataPolicyHealth[i].name !== 'fraccionamiento_boolean_colectivo') &&
+                    (formDataPolicyHealth[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyHealth[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    listHealthElement2.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+                }
             }
         }
     }
@@ -571,6 +582,14 @@
                 listReceiptHealthElement1.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
             }
             for (let i = lengthReceiptHealth; i < formDataReceiptHealth.length; i++) {
+                if (
+                    (formDataReceiptHealth[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptHealth[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptHealth[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptHealth[i].value.split('-');
+                    formDataReceiptHealth[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptHealthElement2.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
             }
         }
@@ -639,10 +658,25 @@
             const listVehicleElement1 = $("#list-vehicle-collective1");
             const listVehicleElement2 = $("#list-vehicle-collective2");
             for (let i = 0; i < lengthPolicyVehicle; i++) {
+                if ((formDataPolicyVehicle[i].name === 'fecha_desde_colectivo')) {
+                        const arrayDate = formDataPolicyVehicle[i].value.split('-');
+                        formDataPolicyVehicle[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
                 listVehicleElement1.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
             }
             for (let i = lengthPolicyVehicle; i < formDataPolicyVehicle.length; i++) {
-                listVehicleElement2.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+                if (
+                    (formDataPolicyVehicle[i].name !== 'tomador_asegurado_colectivo') && 
+                    (formDataPolicyVehicle[i].name !== 'fraccionamiento_boolean_colectivo') &&
+                    (formDataPolicyVehicle[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyVehicle[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyVehicle[i].name === 'fecha_hasta_colectivo')) {
+                        const arrayDate = formDataPolicyVehicle[i].value.split('-');
+                        formDataPolicyVehicle[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listVehicleElement2.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+                }
             }
         }
     }
@@ -717,6 +751,14 @@
                 listReceiptVehicleElement1.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
             }
             for (let i = lengthReceiptVehicle; i < formDataReceiptVehicle.length; i++) {
+                if (
+                    (formDataReceiptVehicle[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptVehicle[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptVehicle[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptVehicle[i].value.split('-');
+                    formDataReceiptVehicle[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptVehicleElement2.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
             }
         }
@@ -785,10 +827,25 @@
             const listRiskDiverseElement1 = $("#list-risk-diverse-collective1");
             const listRiskDiverseElement2 = $("#list-risk-diverse-collective2");
             for (let i = 0; i < lengthPolicyRiskDiverse; i++) {
+                if ((formDataPolicyRiskDiverse[i].name === 'fecha_desde_colectivo')) {
+                        const arrayDate = formDataPolicyRiskDiverse[i].value.split('-');
+                        formDataPolicyRiskDiverse[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
                 listRiskDiverseElement1.append(`<li class="list-group-item">${formDataPolicyRiskDiverse[i].label}: ${formDataPolicyRiskDiverse[i].value}</li>`);
             }
             for (let i = lengthPolicyRiskDiverse; i < formDataPolicyRiskDiverse.length; i++) {
-                listRiskDiverseElement2.append(`<li class="list-group-item">${formDataPolicyRiskDiverse[i].label}: ${formDataPolicyRiskDiverse[i].value}</li>`);
+                if (
+                    (formDataPolicyRiskDiverse[i].name !== 'tomador_asegurado_colectivo') && 
+                    (formDataPolicyRiskDiverse[i].name !== 'fraccionamiento_boolean_colectivo') &&
+                    (formDataPolicyRiskDiverse[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyRiskDiverse[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyRiskDiverse[i].name === 'fecha_hasta_colectivo')) {
+                        const arrayDate = formDataPolicyRiskDiverse[i].value.split('-');
+                        formDataPolicyRiskDiverse[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listRiskDiverseElement2.append(`<li class="list-group-item">${formDataPolicyRiskDiverse[i].label}: ${formDataPolicyRiskDiverse[i].value}</li>`);
+                }
             }
         }
     }
@@ -863,6 +920,14 @@
                 listReceiptRiskDiverseElement1.append(`<li class="list-group-item">${formDataReceiptRiskDiverse[i].label}: ${formDataReceiptRiskDiverse[i].value}</li>`);
             }
             for (let i = lengthReceiptRiskDiverse; i < formDataReceiptRiskDiverse.length; i++) {
+                if (
+                    (formDataReceiptRiskDiverse[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptRiskDiverse[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptRiskDiverse[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptRiskDiverse[i].value.split('-');
+                    formDataReceiptRiskDiverse[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptRiskDiverseElement2.append(`<li class="list-group-item">${formDataReceiptRiskDiverse[i].label}: ${formDataReceiptRiskDiverse[i].value}</li>`);
             }
         }
@@ -1199,15 +1264,41 @@
 </script>
 
 <script>
+    var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+    var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
+    var ownAgents = <%- JSON.stringify(ownAgents) %>;
     function showList() {
-        var getSelectValue = document.getElementById("tipo_canal_colectivo").value;
+        const getSelectValue = document.getElementById("tipo_canal_colectivo").value;
         if (getSelectValue === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
+            const selectBox = document.getElementById("select_box2").value;
+            const idRifInsured = document.getElementById("id_rif_asegurado").value;
+            if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
+                legalInsureds.forEach(legalInsured => {
+                    if ((selectBox === legalInsured.tipo_rif_asegurado_per_jur) && (idRifInsured === legalInsured.rif_asegurado_per_jur)) {
+                        ownAgents.forEach(ownAgent => {
+                            if (legalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = `${ownAgent.nombre_agente_propio} ${ownAgent.apellido_agente_propio}`;
+                            }
+                        })
+                    }
+                });
+            } else {
+                naturalInsureds.forEach(naturalInsured => {
+                    if ((selectBox === naturalInsured.tipo_cedula_asegurado_per_nat) && (idRifInsured === naturalInsured.cedula_asegurado_per_nat)) {
+                        ownAgents.forEach(ownAgent => {
+                            if (naturalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = `${ownAgent.nombre_agente_propio} ${ownAgent.apellido_agente_propio}`;
+                            }
+                        })
+                    }
+                });
+            }
         } else {
-            document.getElementById("nombre_agentes_propios").value = '';
+            document.getElementById("nombre_agente_propio").value = '';
             document.getElementById("searchList").style.display = "none";
         }
-    }   
+    }
 </script>
 
 <script>
@@ -1336,58 +1427,6 @@
 </script>
 
 <% if (Object.keys(collective).length !== 0) { %>
-    <script>
-        var collective = <%- JSON.stringify(collective) %>;
-        function dateAutomation() {
-            if (collective.tipo_fraccionamiento_colectivo === 'MENSUAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(1, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (collective.tipo_fraccionamiento_colectivo === 'BIMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(2, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (collective.tipo_fraccionamiento_colectivo === 'TRIMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(3, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (collective.tipo_fraccionamiento_colectivo === 'SEMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(6, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            }  else if (collective.tipo_fraccionamiento_colectivo === 'ANUAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(1, 'years');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            }
-        }
-    </script>
-
     <script>
         var collective = <%- JSON.stringify(collective) %>;
         window.onload = function() {

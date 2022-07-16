@@ -667,10 +667,25 @@
             const listHealthElement1 = $("#list-health-policy1");
             const listHealthElement2 = $("#list-health-policy2");
             for (let i = 0; i < lengthPolicyHealth; i++) {
+                if ((formDataPolicyHealth[i].name === 'fecha_desde_poliza')) {
+                    const arrayDate = formDataPolicyHealth[i].value.split('-');
+                    formDataPolicyHealth[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listHealthElement1.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
             }
             for (let i = lengthPolicyHealth; i < formDataPolicyHealth.length; i++) {
-                listHealthElement2.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+                if (
+                    (formDataPolicyHealth[i].name !== 'tomador_asegurado_poliza') && 
+                    (formDataPolicyHealth[i].name !== 'fraccionamiento_boolean_poliza') &&
+                    (formDataPolicyHealth[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyHealth[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyHealth[i].name === 'fecha_hasta_poliza')) {
+                        const arrayDate = formDataPolicyHealth[i].value.split('-');
+                        formDataPolicyHealth[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listHealthElement2.append(`<li class="list-group-item">${formDataPolicyHealth[i].label}: ${formDataPolicyHealth[i].value}</li>`);
+                }
             }
         }
     }
@@ -728,9 +743,17 @@
             const listExtraHealthElement1 = $("#list-health-extra1");
             const listExtraHealthElement2 = $("#list-health-extra2");
             for (let i = 0; i < lengthExtraHealth; i++) {
+                if ((formDataExtraHealthCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraHealthCompleted[i].value.split('-');
+                    formDataExtraHealthCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraHealthElement1.append(`<li class="list-group-item">${formDataExtraHealthCompleted[i].label}: ${formDataExtraHealthCompleted[i].value}</li>`);
             }
             for (let i = lengthExtraHealth; i < formDataExtraHealthCompleted.length; i++) {
+                if ((formDataExtraHealthCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraHealthCompleted[i].value.split('-');
+                    formDataExtraHealthCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraHealthElement2.append(`<li class="list-group-item">${formDataExtraHealthCompleted[i].label}: ${formDataExtraHealthCompleted[i].value}</li>`);
             }
         }
@@ -777,6 +800,14 @@
                 listReceiptHealthElement1.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
             }
             for (let i = lengthReceiptHealth; i < formDataReceiptHealth.length; i++) {
+                if (
+                    (formDataReceiptHealth[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptHealth[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptHealth[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptHealth[i].value.split('-');
+                    formDataReceiptHealth[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptHealthElement2.append(`<li class="list-group-item">${formDataReceiptHealth[i].label}: ${formDataReceiptHealth[i].value}</li>`);
             }
         }
@@ -848,7 +879,18 @@
                 listVehicleElement1.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
             }
             for (let i = lengthPolicyVehicle; i < formDataPolicyVehicle.length; i++) {
-                listVehicleElement2.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+                if (
+                    (formDataPolicyVehicle[i].name !== 'tomador_asegurado_poliza') && 
+                    (formDataPolicyVehicle[i].name !== 'fraccionamiento_boolean_poliza') &&
+                    (formDataPolicyVehicle[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyVehicle[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyVehicle[i].name === 'fecha_hasta_poliza') || (formDataPolicyVehicle[i].name === 'fecha_desde_poliza')) {
+                        const arrayDate = formDataPolicyVehicle[i].value.split('-');
+                        formDataPolicyVehicle[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listVehicleElement2.append(`<li class="list-group-item">${formDataPolicyVehicle[i].label}: ${formDataPolicyVehicle[i].value}</li>`);
+                }
             }
         }
     }
@@ -946,6 +988,14 @@
                 listReceiptVehicleElement1.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
             }
             for (let i = lengthReceiptVehicle; i < formDataReceiptVehicle.length; i++) {
+                if (
+                    (formDataReceiptVehicle[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptVehicle[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptVehicle[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptVehicle[i].value.split('-');
+                    formDataReceiptVehicle[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptVehicleElement2.append(`<li class="list-group-item">${formDataReceiptVehicle[i].label}: ${formDataReceiptVehicle[i].value}</li>`);
             }
         }
@@ -1017,7 +1067,18 @@
                 listFuneralElement1.append(`<li class="list-group-item">${formDataPolicyFuneral[i].label}: ${formDataPolicyFuneral[i].value}</li>`);
             }
             for (let i = lengthPolicyFuneral; i < formDataPolicyFuneral.length; i++) {
-                listFuneralElement2.append(`<li class="list-group-item">${formDataPolicyFuneral[i].label}: ${formDataPolicyFuneral[i].value}</li>`);
+                if (
+                    (formDataPolicyFuneral[i].name !== 'tomador_asegurado_poliza') && 
+                    (formDataPolicyFuneral[i].name !== 'fraccionamiento_boolean_poliza') &&
+                    (formDataPolicyFuneral[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyFuneral[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyFuneral[i].name === 'fecha_hasta_poliza') || (formDataPolicyFuneral[i].name === 'fecha_desde_poliza')) {
+                        const arrayDate = formDataPolicyFuneral[i].value.split('-');
+                        formDataPolicyFuneral[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listFuneralElement2.append(`<li class="list-group-item">${formDataPolicyFuneral[i].label}: ${formDataPolicyFuneral[i].value}</li>`);
+                }
             }
         }
     }
@@ -1075,9 +1136,17 @@
             const listExtraFuneralElement1 = $("#list-funeral-extra1");
             const listExtraFuneralElement2 = $("#list-funeral-extra2");
             for (let i = 0; i < lengthExtraFuneral; i++) {
+                if ((formDataExtraFuneralCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraFuneralCompleted[i].value.split('-');
+                    formDataExtraFuneralCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraFuneralElement1.append(`<li class="list-group-item">${formDataExtraFuneralCompleted[i].label}: ${formDataExtraFuneralCompleted[i].value}</li>`);
             }
             for (let i = lengthExtraFuneral; i < formDataExtraFuneralCompleted.length; i++) {
+                if ((formDataExtraFuneralCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraFuneralCompleted[i].value.split('-');
+                    formDataExtraFuneralCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraFuneralElement2.append(`<li class="list-group-item">${formDataExtraFuneralCompleted[i].label}: ${formDataExtraFuneralCompleted[i].value}</li>`);
             }
         }
@@ -1124,6 +1193,14 @@
                 listReceiptFuneralElement1.append(`<li class="list-group-item">${formDataReceiptFuneral[i].label}: ${formDataReceiptFuneral[i].value}</li>`);
             }
             for (let i = lengthReceiptFuneral; i < formDataReceiptFuneral.length; i++) {
+                if (
+                    (formDataReceiptFuneral[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptFuneral[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptFuneral[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptFuneral[i].value.split('-');
+                    formDataReceiptFuneral[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptFuneralElement2.append(`<li class="list-group-item">${formDataReceiptFuneral[i].label}: ${formDataReceiptFuneral[i].value}</li>`);
             }
         }
@@ -1195,7 +1272,18 @@
                 listLifeElement1.append(`<li class="list-group-item">${formDataPolicyLife[i].label}: ${formDataPolicyLife[i].value}</li>`);
             }
             for (let i = lengthPolicyLife; i < formDataPolicyLife.length; i++) {
-                listLifeElement2.append(`<li class="list-group-item">${formDataPolicyLife[i].label}: ${formDataPolicyLife[i].value}</li>`);
+                if (
+                    (formDataPolicyLife[i].name !== 'tomador_asegurado_poliza') && 
+                    (formDataPolicyLife[i].name !== 'fraccionamiento_boolean_poliza') &&
+                    (formDataPolicyLife[i].name !== 'tipo_id_rif_tomador') &&
+                    (formDataPolicyLife[i].name !== 'tipo_id_rif_asegurado')
+                ) {
+                    if ((formDataPolicyLife[i].name === 'fecha_hasta_poliza') || (formDataPolicyLife[i].name === 'fecha_desde_poliza')) {
+                        const arrayDate = formDataPolicyLife[i].value.split('-');
+                        formDataPolicyLife[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                    }
+                    listLifeElement2.append(`<li class="list-group-item">${formDataPolicyLife[i].label}: ${formDataPolicyLife[i].value}</li>`);
+                }
             }
         }
     }
@@ -1253,9 +1341,17 @@
             const listExtraLifeElement1 = $("#list-life-extra1");
             const listExtraLifeElement2 = $("#list-life-extra2");
             for (let i = 0; i < lengthExtraLife; i++) {
+                if ((formDataExtraLifeCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraLifeCompleted[i].value.split('-');
+                    formDataExtraLifeCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraLifeElement1.append(`<li class="list-group-item">${formDataExtraLifeCompleted[i].label}: ${formDataExtraLifeCompleted[i].value}</li>`);
             }
             for (let i = lengthExtraLife; i < formDataExtraLifeCompleted.length; i++) {
+                if ((formDataExtraLifeCompleted[i].name === 'fec_nac_beneficiario')) {
+                    const arrayDate = formDataExtraLifeCompleted[i].value.split('-');
+                    formDataExtraLifeCompleted[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listExtraLifeElement2.append(`<li class="list-group-item">${formDataExtraLifeCompleted[i].label}: ${formDataExtraLifeCompleted[i].value}</li>`);
             }
         }
@@ -1302,6 +1398,14 @@
                 listReceiptLifeElement1.append(`<li class="list-group-item">${formDataReceiptLife[i].label}: ${formDataReceiptLife[i].value}</li>`);
             }
             for (let i = lengthReceiptLife; i < formDataReceiptLife.length; i++) {
+                if (
+                    (formDataReceiptLife[i].name === 'fecha_desde_recibo') ||
+                    (formDataReceiptLife[i].name === 'fecha_hasta_recibo') ||
+                    (formDataReceiptLife[i].name === 'fecha_pago_recibo')
+                ) {
+                    const arrayDate = formDataReceiptLife[i].value.split('-');
+                    formDataReceiptLife[i].value = `${arrayDate[2]}/${arrayDate[1]}/${arrayDate[0]}`;
+                }
                 listReceiptLifeElement2.append(`<li class="list-group-item">${formDataReceiptLife[i].label}: ${formDataReceiptLife[i].value}</li>`);
             }
         }
@@ -1673,12 +1777,38 @@
 </script>
 
 <script>
+    var naturalInsureds = <%- JSON.stringify(naturalInsureds) %>;
+    var legalInsureds = <%- JSON.stringify(legalInsureds) %>;
+    var ownAgents = <%- JSON.stringify(ownAgents) %>;
     function showList() {
-        var getSelectValue = document.getElementById("tipo_canal_poliza").value;
+        const getSelectValue = document.getElementById("tipo_canal_poliza").value;
         if (getSelectValue === 'AGENTE PROPIO') {
             document.getElementById("searchList").style.display = "block";
+            const selectBox = document.getElementById("select_box2").value;
+            const idRifInsured = document.getElementById("id_rif_asegurado").value;
+            if ((selectBox === 'J') || (selectBox === 'G') || (selectBox === 'I') || (selectBox === 'F')) {
+                legalInsureds.forEach(legalInsured => {
+                    if ((selectBox === legalInsured.tipo_rif_asegurado_per_jur) && (idRifInsured === legalInsured.rif_asegurado_per_jur)) {
+                        ownAgents.forEach(ownAgent => {
+                            if (legalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = `${ownAgent.nombre_agente_propio} ${ownAgent.apellido_agente_propio}`;
+                            }
+                        })
+                    }
+                });
+            } else {
+                naturalInsureds.forEach(naturalInsured => {
+                    if ((selectBox === naturalInsured.tipo_cedula_asegurado_per_nat) && (idRifInsured === naturalInsured.cedula_asegurado_per_nat)) {
+                        ownAgents.forEach(ownAgent => {
+                            if (naturalInsured.agente_propio_id === ownAgent.id_agente_propio) {
+                                document.getElementById("nombre_agente_propio").value = `${ownAgent.nombre_agente_propio} ${ownAgent.apellido_agente_propio}`;
+                            }
+                        })
+                    }
+                });
+            }
         } else {
-            document.getElementById("nombre_agentes_propios").value = '';
+            document.getElementById("nombre_agente_propio").value = '';
             document.getElementById("searchList").style.display = "none";
         }
     }
@@ -1810,58 +1940,6 @@
 </script>
 
 <% if (Object.keys(policy).length !== 0) { %>
-    <script>
-        var policy = <%- JSON.stringify(policy) %>;
-        function dateAutomation() {
-            if (policy.tipo_fraccionamiento_poliza === 'MENSUAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(1, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (policy.tipo_fraccionamiento_poliza === 'BIMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(2, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (policy.tipo_fraccionamiento_poliza === 'TRIMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(3, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            } else if (policy.tipo_fraccionamiento_poliza === 'SEMESTRAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(6, 'months');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            }  else if (policy.tipo_fraccionamiento_poliza === 'ANUAL') {
-                var extraer = $('#fecha_desde_recibo').val();
-                extraer = extraer.split('-');
-                year = parseInt(extraer[0]);
-                month = parseInt(extraer[1]) - 1;
-                day = parseInt(extraer[2]);
-                var fecha = moment([year, month, day]).add(1, 'years');
-                fecha = fecha.toISOString().substring(0, 10);
-                $('#fecha_hasta_recibo').val(fecha);
-            }
-        }
-    </script>
-
     <script>
         var policy = <%- JSON.stringify(policy) %>;
         window.onload = function() {

@@ -50,6 +50,8 @@ module.exports = {
             let primaNetaColectivo = resultCollective[0].prima_neta_colectivo;
             let nameRazonInsured = '';
             const resultcollectiveOwnAgent = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultCollective[0].id_colectivo);
+            resultCollective[0].fecha_desde_colectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+            resultCollective[0].fecha_hasta_colectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
             if (resultcollectiveOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultcollectiveOwnAgent[0].agente_propio_id);
             }
@@ -94,12 +96,14 @@ module.exports = {
         const resultCollective = await collectiveModel.getCollectiveLast();
         const resultsCollective = await collectiveModel.getCollectivesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('healthCollectiveList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             collective: resultCollective[0],
             collectives: resultsCollective,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -132,6 +136,8 @@ module.exports = {
             let primaNetaColectivo = resultCollective[0].prima_neta_colectivo;
             let nameRazonInsured = '';
             const resultcollectiveOwnAgent = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultCollective[0].id_colectivo);
+            resultCollective[0].fecha_desde_colectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+            resultCollective[0].fecha_hasta_colectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
             if (resultcollectiveOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultcollectiveOwnAgent[0].agente_propio_id);
             }
@@ -176,12 +182,14 @@ module.exports = {
         const resultCollective = await collectiveModel.getCollectiveLast();
         const resultsCollective = await collectiveModel.getCollectivesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('vehicleCollectiveList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             collective: resultCollective[0],
             collectives: resultsCollective,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -214,6 +222,8 @@ module.exports = {
             let primaNetaColectivo = resultCollective[0].prima_neta_colectivo;
             let nameRazonInsured = '';
             const resultcollectiveOwnAgent = await collectiveOwnAgentModel.getCollectiveOwnAgent(resultCollective[0].id_colectivo);
+            resultCollective[0].fecha_desde_colectivo = resultCollective[0].fecha_desde_colectivo.toISOString().substring(0, 10);
+            resultCollective[0].fecha_hasta_colectivo = resultCollective[0].fecha_hasta_colectivo.toISOString().substring(0, 10);
             if (resultcollectiveOwnAgent.length !== 0) {
                 resultOwnAgent = await ownAgentModel.getOwnAgent(resultcollectiveOwnAgent[0].agente_propio_id);
             }
@@ -258,12 +268,14 @@ module.exports = {
         const resultCollective = await collectiveModel.getCollectiveLast();
         const resultsCollective = await collectiveModel.getCollectivesNumbers();
         const resultsReceipts = await receiptModel.getReceipts();
+        const resultsOwnAgents = await ownAgentModel.getOwnAgents();
         res.render('riskDiverseCollectiveList', {
             naturalInsureds: resultsNaturalInsureds,
             legalInsureds: resultsLegalInsureds,
             collective: resultCollective[0],
             collectives: resultsCollective,
             receipts: resultsReceipts,
+            ownAgents: resultsOwnAgents,
             name: req.session.name,
             cookieRol: req.cookies.rol
         });
@@ -398,7 +410,7 @@ module.exports = {
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
                 cobertura_suma_asegurada_colectivo: montoCoberturaSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,
@@ -518,7 +530,7 @@ module.exports = {
                 igtf_colectivo: montoIgtf,
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,
@@ -640,7 +652,7 @@ module.exports = {
                 igtf_colectivo: montoIgtf,
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,
@@ -990,7 +1002,7 @@ module.exports = {
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
                 cobertura_suma_asegurada_colectivo: montoCoberturaSumaAsegurada,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,
@@ -1168,7 +1180,7 @@ module.exports = {
                 igtf_colectivo: montoIgtf,
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,
@@ -1348,7 +1360,7 @@ module.exports = {
                 igtf_colectivo: montoIgtf,
                 prima_total_colectivo: montoPrimaTotal,
                 deducible_colectivo: montoDeducible,
-                nombre_agentes_propios: nombreCompletoAgente,
+                nombre_agente_propio: nombreCompletoAgente,
                 fecha_desde_colectivo: fechaPolizaDesde,
                 fecha_hasta_colectivo: fechaPolizaHasta,
                 detalle_cliente_colectivo: fechaDetalleCliente,

@@ -436,25 +436,28 @@
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group" id="searchList" style="display:none">
                                         <% if (ownAgent === undefined) { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios" id="nombre_agentes_propios">
-                                                        <option value="">Seleccione</option>
-                                                        <% ownAgents.forEach((ownAgent) => { %>
-                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                        <% }); %>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_agente_propio"
+                                                        id="nombre_agente_propio"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    >
                                                 </div>
                                             </div>
                                         <% } else { %>
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios" id="nombre_agentes_propios">
-                                                        <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                        <% ownAgents.forEach((ownAgent) => { %>
-                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                        <% }); %>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_agente_propio"
+                                                        id="nombre_agente_propio"
+                                                        value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    >
                                                 </div>
                                             </div>
                                         <% } %>

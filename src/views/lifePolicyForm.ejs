@@ -361,14 +361,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="searchList" style="display:none">
-                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agentes Propios</label>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label">Agente Propio</label>
                                                 <div class="col-sm-9">
-                                                    <select class="form-control" name="nombre_agentes_propios" id="nombre_agentes_propios">
-                                                        <option value="">Seleccione</option>
-                                                        <% ownAgents.forEach((ownAgent) => { %>
-                                                            <option value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"><%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %></option>
-                                                        <% }); %>
-                                                    </select>
+                                                    <input 
+                                                        type="text"
+                                                        name="nombre_agente_propio"
+                                                        id="nombre_agente_propio"
+                                                        class="form-control"
+                                                        oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -674,33 +675,36 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-4 col-form-label">Vigencia Desde</label>
-                                                <div class="col-sm-8">
-                                                    <input 
-                                                        type="date"
-                                                        name="fecha_desde_recibo"
-                                                        id="fecha_desde_recibo" 
-                                                        class="form-control"
-                                                        onchange="dateAutomation()"
-                                                        required
-                                                    >
+                                        <% if (Object.keys(policy).length !== 0) { %>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-4 col-form-label">Vigencia Desde</label>
+                                                    <div class="col-sm-8">
+                                                        <input 
+                                                            type="date"
+                                                            name="fecha_desde_recibo"
+                                                            id="fecha_desde_recibo" 
+                                                            value="<%= policy.fecha_desde_poliza %>"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-4 col-form-label">Vigencia Hasta</label>
-                                                <div class="col-sm-8">
-                                                    <input 
-                                                        type="date"
-                                                        name="fecha_hasta_recibo"
-                                                        id="fecha_hasta_recibo"
-                                                        class="form-control"
-                                                        required
-                                                    >
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-4 col-form-label">Vigencia Hasta</label>
+                                                    <div class="col-sm-8">
+                                                        <input 
+                                                            type="date"
+                                                            name="fecha_hasta_recibo"
+                                                            id="fecha_hasta_recibo"
+                                                            value="<%= policy.fecha_hasta_poliza %>"
+                                                            class="form-control"
+                                                            required
+                                                        >
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        <% } %>
                                     </div>
                                     <div class="col-lg-6">
                                         <% if (Object.keys(policy).length !== 0) { %>
