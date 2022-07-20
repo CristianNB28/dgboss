@@ -151,15 +151,6 @@
         $().ready(function () {
             $("#division-form-distribucion").validate();
         });
-        $("#division-form-distribucion").on('keyup','.porcentaje_tasa',function(){
-            new Cleave('.porcentaje_tasa', {
-                numeral: true,
-                numeralDecimalMark: ',',
-                delimiter: '.',
-                prefix: '%',
-                tailPrefix: true
-            });    
-        });
     });
 </script>
 
@@ -421,6 +412,82 @@
             });
         });
     });
+</script>
+
+<script>
+    function addZeroesBonificacion() {
+        const num = document.getElementById("porcentaje_bonificacion_distribucion").value;
+        let number = num.replace(/[%]/g, '').replace(' ', '');
+        number = number.replace(/[,]/g, '.');
+        const dec = number.split('.')[1];
+        const len = dec && dec.length > 2 ? dec.length : 2;
+        const numberPercentaje = Number(number).toFixed(len);
+        const cleaverPercentajeBonificacion = new Cleave("#porcentaje_bonificacion_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaverPercentajeBonificacion.setRawValue(numberPercentaje);
+    }
+</script>
+
+<script>
+    function addZeroesIslr() {
+        const num = document.getElementById("porcentaje_islr_distribucion").value;
+        let number = num.replace(/[%]/g, '').replace(' ', '');
+        number = number.replace(/[,]/g, '.');
+        const dec = number.split('.')[1];
+        const len = dec && dec.length > 2 ? dec.length : 2;
+        const numberPercentaje = Number(number).toFixed(len);
+        const cleaverPercentajeIslr = new Cleave("#porcentaje_islr_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaverPercentajeIslr.setRawValue(numberPercentaje);
+    }
+</script>
+
+<script>
+    function addZeroesEspecial() {
+        const num = document.getElementById("caso_especial_distribucion").value;
+        let number = num.replace(/[%]/g, '').replace(' ', '');
+        number = number.replace(/[,]/g, '.');
+        const dec = number.split('.')[1];
+        const len = dec && dec.length > 2 ? dec.length : 2;
+        const numberPercentaje = Number(number).toFixed(len);
+        const cleaverPercentajeEspecial = new Cleave("#caso_especial_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaverPercentajeEspecial.setRawValue(numberPercentaje);
+    }
+</script>
+
+<script>
+    function addZeroesAgente() {
+        const num = document.getElementById("porcentaje_agente_distribucion").value;
+        let number = num.replace(/[%]/g, '').replace(' ', '');
+        number = number.replace(/[,]/g, '.');
+        const dec = number.split('.')[1];
+        const len = dec && dec.length > 2 ? dec.length : 2;
+        const numberPercentaje = Number(number).toFixed(len);
+        const cleaverPercentajeAgente = new Cleave("#porcentaje_agente_distribucion", {
+            numeral: true,
+            numeralDecimalMark: ',',
+            delimiter: '.',
+            prefix: '%',
+            tailPrefix: true
+        });
+        cleaverPercentajeAgente.setRawValue(numberPercentaje);
+    }
 </script>
 
 <% if (typeof(collective) !== 'undefined') { %>

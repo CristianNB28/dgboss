@@ -18,6 +18,7 @@ const executiveModel = require('../models/executive');
 const convertStringToNumber = require('../serializers/convertStringToNumber');
 const convertNumberToString = require('../serializers/convertNumberToString');
 const convertStringToCurrency = require('../serializers/convertStringToCurrency');
+const addZeroes = require('../serializers/addZeroes');
 
 module.exports = {
 /*                  GET                  */
@@ -58,6 +59,8 @@ module.exports = {
             }
             for (const resultPIIE of resultsPIIE) {
                 const resultExecutive = await executiveModel.getExecutive(resultPIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = resultExecutive[0].porcentaje_ejecutivo.toString();
+                resultExecutive[0].porcentaje_ejecutivo = addZeroes(resultExecutive[0].porcentaje_ejecutivo);
                 resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
                 resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
                 percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
@@ -95,6 +98,8 @@ module.exports = {
             }
             for (const resultCIIE of resultsCIIE) {
                 const resultExecutive = await executiveModel.getExecutive(resultCIIE.ejecutivo_id);
+                resultExecutive[0].porcentaje_ejecutivo = resultExecutive[0].porcentaje_ejecutivo.toString();
+                resultExecutive[0].porcentaje_ejecutivo = addZeroes(resultExecutive[0].porcentaje_ejecutivo);
                 resultExecutive[0].porcentaje_ejecutivo = convertNumberToString(resultExecutive[0].porcentaje_ejecutivo);
                 resultExecutive[0].porcentaje_ejecutivo = `${resultExecutive[0].porcentaje_ejecutivo}%`;
                 percentajeExecutivesPolicy.push(resultExecutive[0].porcentaje_ejecutivo);
