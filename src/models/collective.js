@@ -118,9 +118,9 @@ module.exports = {
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT SUM(prima_anual_colectivo) AS primaTotal
+                connection.query(`SELECT SUM(prima_neta_colectivo) AS primaTotalColectivo
                                 FROM Colectivo 
-                                WHERE deshabilitar_colectivo=0`,
+                                WHERE deshabilitar_colectivo=0 AND tipo_moneda_colectivo='DÓLAR'`,
                 (error, rows) => {
                     connection.release();
                     if (error) {
@@ -231,6 +231,90 @@ module.exports = {
                                 FROM Colectivo
                                 WHERE tipo_colectivo=? AND tipo_moneda_colectivo=? AND deshabilitar_colectivo=0`,
                 [collectiveType, coinType],
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getVehicleAccidentSumCollective: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(re.monto_reclamo_reembolso) AS siniestralidadVehiculoColectivo
+                                FROM Colectivo co, Reembolso re
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND re.tipo_moneda_reembolso='DÓLAR' AND 
+                                co.tipo_colectivo='AUTOMÓVIL' AND co.deshabilitar_colectivo=0 AND re.colectivo_id=co.id_colectivo AND
+                                re.deshabilitar_reembolso=0
+                                UNION
+                                SELECT SUM(amp.monto_reclamado_amp) AS siniestralidadVehiculoColectivo
+                                FROM Colectivo co, AMP amp
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND amp.tipo_moneda_amp='DÓLAR' AND 
+                                co.tipo_colectivo='AUTOMÓVIL' AND co.deshabilitar_colectivo=0 AND amp.colectivo_id=co.id_colectivo AND
+                                amp.deshabilitar_amp=0
+                                UNION
+                                SELECT SUM(em.monto_reclamado_emergencia) AS siniestralidadVehiculoColectivo
+                                FROM Colectivo co, Emergencia em
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND em.tipo_moneda_emergencia='DÓLAR' AND 
+                                co.tipo_colectivo='AUTOMÓVIL' AND co.deshabilitar_colectivo=0 AND em.colectivo_id=co.id_colectivo AND
+                                em.deshabilitar_emergencia=0
+                                UNION
+                                SELECT SUM(ca.monto_reclamado_carta_aval) AS siniestralidadVehiculoColectivo
+                                FROM Colectivo co, Carta_Aval ca
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND ca.tipo_moneda_carta_aval='DÓLAR' AND 
+                                co.tipo_colectivo='AUTOMÓVIL' AND co.deshabilitar_colectivo=0 AND ca.colectivo_id=co.id_colectivo AND
+                                ca.deshabilitar_carta_aval=0`, 
+                [startDate, endDate, startDate, endDate, startDate, endDate, startDate, endDate], 
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getHealthAccidentSumCollective: (startDate, endDate) => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(re.monto_reclamo_reembolso) AS siniestralidadSaludColectivo
+                                FROM Colectivo co, Reembolso re
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND re.tipo_moneda_reembolso='DÓLAR' AND 
+                                co.tipo_colectivo='SALUD' AND co.deshabilitar_colectivo=0 AND re.colectivo_id=co.id_colectivo AND
+                                re.deshabilitar_reembolso=0
+                                UNION
+                                SELECT SUM(amp.monto_reclamado_amp) AS siniestralidadSaludColectivo
+                                FROM Colectivo co, AMP amp
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND amp.tipo_moneda_amp='DÓLAR' AND 
+                                co.tipo_colectivo='SALUD' AND co.deshabilitar_colectivo=0 AND amp.colectivo_id=co.id_colectivo AND
+                                amp.deshabilitar_amp=0
+                                UNION
+                                SELECT SUM(em.monto_reclamado_emergencia) AS siniestralidadSaludColectivo
+                                FROM Colectivo co, Emergencia em
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND em.tipo_moneda_emergencia='DÓLAR' AND 
+                                co.tipo_colectivo='SALUD' AND co.deshabilitar_colectivo=0 AND em.colectivo_id=co.id_colectivo AND
+                                em.deshabilitar_emergencia=0
+                                UNION
+                                SELECT SUM(ca.monto_reclamado_carta_aval) AS siniestralidadSaludColectivo
+                                FROM Colectivo co, Carta_Aval ca
+                                WHERE DATE(co.fecha_desde_colectivo) BETWEEN ? AND ? AND ca.tipo_moneda_carta_aval='DÓLAR' AND 
+                                co.tipo_colectivo='SALUD' AND co.deshabilitar_colectivo=0 AND ca.colectivo_id=co.id_colectivo AND
+                                ca.deshabilitar_carta_aval=0`, 
+                [startDate, endDate, startDate, endDate, startDate, endDate, startDate, endDate], 
                 (error, rows) => {
                     connection.release();
                     if (error) {

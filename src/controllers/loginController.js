@@ -71,7 +71,7 @@ module.exports = {
                     alertIcon: 'success',
                     showConfirmButton: false,
                     timer: 1500,
-                    ruta: 'sistema/policies'
+                    ruta: 'sistema'
                 });
             }
         }

@@ -2,16 +2,39 @@ const db = require('../../config/database');
 
 module.exports = {
 /*                  GET                  */
-    getSumReceiptCommissions: () => {
+    getSumReceiptCommissionsPolicy: () => {
         return new Promise((resolve, reject) => {
             db.getConnection((err, connection) => {
                 if(err) { 
                     console.log(err); 
                     return; 
                 }
-                connection.query(`SELECT SUM(monto_comision_recibo) AS comisionTotal
-                                FROM Recibo 
-                                WHERE deshabilitar_recibo=0`,
+                connection.query(`SELECT SUM(re.monto_comision_recibo) AS comisionTotalPoliza
+                                FROM Recibo re, Poliza po
+                                WHERE deshabilitar_recibo=0 AND re.poliza_id=po.id_poliza AND
+                                po.tipo_moneda_poliza='DÓLAR'`,
+                (error, rows) => {
+                    connection.release();
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(rows);
+                });
+            });
+        });
+    },
+    getSumReceiptCommissionsCollective: () => {
+        return new Promise((resolve, reject) => {
+            db.getConnection((err, connection) => {
+                if(err) { 
+                    console.log(err); 
+                    return; 
+                }
+                connection.query(`SELECT SUM(re.monto_comision_recibo) AS comisionTotalColectivo
+                                FROM Recibo re, Colectivo co
+                                WHERE deshabilitar_recibo=0 AND re.colectivo_id=co.id_colectivo AND
+                                co.tipo_moneda_colectivo='DÓLAR'`,
                 (error, rows) => {
                     connection.release();
                     if (error) {

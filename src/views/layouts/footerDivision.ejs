@@ -151,6 +151,15 @@
         $().ready(function () {
             $("#division-form-distribucion").validate();
         });
+        $("#division-form-distribucion").on('keyup','.porcentaje_tasa',function(){
+            new Cleave('.porcentaje_tasa', {
+                numeral: true,
+                numeralDecimalMark: ',',
+                delimiter: '.',
+                prefix: '%',
+                tailPrefix: true
+            });    
+        });
     });
 </script>
 
@@ -177,7 +186,6 @@
             showCancelButton: true,
             confirmButtonText: "SI",
             cancelButtonText: "NO"
-
         }).then((result) => {
             if (result.value) {
                 $('#division-form-distribucion').submit();
