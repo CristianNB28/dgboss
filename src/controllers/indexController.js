@@ -30,17 +30,17 @@ module.exports = {
         let totalCommission = 0;
         if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza + totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumPolicy[0].primaTotalPoliza === null){
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza === null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumCollective[0].primaTotalColectivo === null) {
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo === null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza;
         }
         totalPremium = convertNumberToString(totalPremium);
         if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza + totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionPolicy[0].comisionTotalPoliza === null){
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza === null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionCollective[0].comisionTotalColectivo === null) {
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo === null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza;
         }
         totalCommission = convertNumberToString(totalCommission);
@@ -89,17 +89,17 @@ module.exports = {
         let totalCommission = 0;
         if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza + totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumPolicy[0].primaTotalPoliza === null){
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza === null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumCollective[0].primaTotalColectivo === null) {
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo === null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza;
         }
         totalPremium = convertNumberToString(totalPremium);
         if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza + totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionPolicy[0].comisionTotalPoliza === null){
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza === null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionCollective[0].comisionTotalColectivo === null) {
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo === null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza;
         }
         totalCommission = convertNumberToString(totalCommission);
@@ -190,17 +190,17 @@ module.exports = {
         let totalCommission = 0;
         if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza + totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumPolicy[0].primaTotalPoliza === null){
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza === null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumCollective[0].primaTotalColectivo === null) {
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo === null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza;
         }
         totalPremium = convertNumberToString(totalPremium);
         if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza + totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionPolicy[0].comisionTotalPoliza === null){
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza === null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionCollective[0].comisionTotalColectivo === null) {
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo === null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza;
         }
         totalCommission = convertNumberToString(totalCommission);
@@ -285,17 +285,17 @@ module.exports = {
         let totalCommission = 0;
         if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza + totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumPolicy[0].primaTotalPoliza === null){
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza === null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumCollective[0].primaTotalColectivo === null) {
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo === null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza;
         }
         totalPremium = convertNumberToString(totalPremium);
         if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza + totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionPolicy[0].comisionTotalPoliza === null){
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza === null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionCollective[0].comisionTotalColectivo === null) {
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo === null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza;
         }
         totalCommission = convertNumberToString(totalCommission);
@@ -380,17 +380,17 @@ module.exports = {
         let totalCommission = 0;
         if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza + totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumPolicy[0].primaTotalPoliza === null){
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza === null) && (totalPremiumCollective[0].primaTotalColectivo !== null)) {
             totalPremium = totalPremiumCollective[0].primaTotalColectivo;
-        } else if (totalPremiumCollective[0].primaTotalColectivo === null) {
+        } else if ((totalPremiumPolicy[0].primaTotalPoliza !== null) && (totalPremiumCollective[0].primaTotalColectivo === null)) {
             totalPremium = totalPremiumPolicy[0].primaTotalPoliza;
         }
         totalPremium = convertNumberToString(totalPremium);
         if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza + totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionPolicy[0].comisionTotalPoliza === null){
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza === null) && (totalCommissionCollective[0].comisionTotalColectivo !== null)) {
             totalCommission = totalCommissionCollective[0].comisionTotalColectivo;
-        } else if (totalCommissionCollective[0].comisionTotalColectivo === null) {
+        } else if ((totalCommissionPolicy[0].comisionTotalPoliza !== null) && (totalCommissionCollective[0].comisionTotalColectivo === null)) {
             totalCommission = totalCommissionPolicy[0].comisionTotalPoliza;
         }
         totalCommission = convertNumberToString(totalCommission);
