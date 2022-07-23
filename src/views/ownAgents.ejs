@@ -142,36 +142,50 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-own-agent/${row.id_agente_propio}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'COORDINADOR ADMINISTRACIÓN',
+                                    'GERENTE TÉCNICO'
+                                ].includes(cookieRol) ) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-own-agent/${row.id_agente_propio}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                 }
             },
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-own-agent/${row.id_agente_propio}">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
-                                            <button 
-                                                class="btn btn-danger" 
-                                                type="submit"
-                                                onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
-                                            >
-                                                <i class="fa fa-ban"></i>
-                                            </button>
-                                        </div> 
-                                        <div class="col-sm-6 col-lg-12">
-                                            <textarea 
-                                                name="obser_deshabilitar_agente_propio"
-                                                id="obser_deshabilitar_agente_propio" 
-                                                placeholder="Observaciones de Deshabilitar *" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                            ></textarea>
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'COORDINADOR ADMINISTRACIÓN',
+                                    'GERENTE TÉCNICO'
+                                ].includes(cookieRol) ) { %>
+                                    <form class="form-inline" method="post" action="/sistema/remove-own-agent/${row.id_agente_propio}">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                <button 
+                                                    class="btn btn-danger" 
+                                                    type="submit"
+                                                    onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
+                                                >
+                                                    <i class="fa fa-ban"></i>
+                                                </button>
+                                            </div> 
+                                            <div class="col-sm-6 col-lg-12">
+                                                <textarea 
+                                                    name="obser_deshabilitar_agente_propio"
+                                                    id="obser_deshabilitar_agente_propio" 
+                                                    placeholder="Observaciones de Deshabilitar *" 
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>`;
+                                    </form>
+                                <% } %>`;
                 }
             }
         ],

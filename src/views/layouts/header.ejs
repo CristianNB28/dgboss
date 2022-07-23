@@ -57,24 +57,74 @@
                     <li>
                         <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">Datos</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="/sistema/add-insurer">Agregar Aseguradora</a></li>
-                            <li><a href="/sistema/insurers">Consultar Aseguradoras</a></li>
-                            <li><a href="/sistema/add-own-agent">Agregar Agente Propio</a></li>
-                            <li><a href="/sistema/own-agents">Consultar Agentes Propios</a></li>
-                            <li><a href="/sistema/add-executive">Agregar Ejecutivos</a></li>
-                            <li><a href="/sistema/executives">Consultar Ejecutivos</a></li>
+                            <% if ([
+                                'EJECUTIVO COBRANZAS',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-insurer">Agregar Aseguradora</a></li>
+                            <% } %>
+                                <li><a href="/sistema/insurers">Consultar Aseguradoras</a></li>
+                            <% if ([
+                                'EJECUTIVO COBRANZAS',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-own-agent">Agregar Agente Propio</a></li>
+                            <% } %>
+                            <% if ([
+                                'EJECUTIVO SUSCRIPCIÓN',
+                                'EJECUTIVO SINIESTROS',
+                                'EJECUTIVO COBRANZAS',
+                                'COORDINADOR SINIESTRO',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/own-agents">Consultar Agentes Propios</a></li>
+                            <% } %>
+                            <% if ([
+                                'EJECUTIVO COBRANZAS',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-executive">Agregar Ejecutivos</a></li>
+                            <% } %>
+                            <% if ([
+                                'COORDINADOR SINIESTRO',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/executives">Consultar Ejecutivos</a></li>
+                            <% } %>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Asegurados</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Agregar Asegurado<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/add-natural-insured">Persona Natural</a></li>
-                                    <li><a href="/sistema/add-legal-insured">Persona Jurídica</a></li>
-                                </ul>
-                            </li>
+                            <% if ([
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li>
+                                    <a href="#">Agregar Asegurado<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="/sistema/add-natural-insured">Persona Natural</a></li>
+                                        <li><a href="/sistema/add-legal-insured">Persona Jurídica</a></li>
+                                    </ul>
+                                </li>
+                            <% } %>
                             <li>
                                 <a href="#">Consultar Asegurados<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
@@ -87,102 +137,214 @@
                     <li>
                         <a href="#"><i class="fa fa-window-restore"></i> <span class="nav-label">Pólizas</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Agregar Póliza<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/add-health-policy">Salud</a></li>
-                                    <li><a href="/sistema/add-vehicle-policy">Vehículo</a></li>
-                                    <li><a href="/sistema/add-patrimonial-policy">Patrimonial</a></li>
-                                    <li><a href="/sistema/add-bail-policy">Fianza</a></li>
-                                    <li><a href="/sistema/add-another-branch-policy">Otros Ramos</a></li>
-                                    <li><a href="/sistema/add-funeral-policy">Funerario</a></li>
-                                    <li><a href="/sistema/add-life-policy">Vida</a></li>
-                                    <li><a href="/sistema/add-ap-policy">AP</a></li>
-                                    <li><a href="/sistema/add-travel-policy">Viaje</a></li>
-                                </ul>
-                            </li>
+                            <% if ([
+                                'EJECUTIVO SUSCRIPCIÓN',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li>
+                                    <a href="#">Agregar Póliza<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="/sistema/add-health-policy">Salud</a></li>
+                                        <li><a href="/sistema/add-vehicle-policy">Vehículo</a></li>
+                                        <li><a href="/sistema/add-patrimonial-policy">Patrimonial</a></li>
+                                        <li><a href="/sistema/add-bail-policy">Fianza</a></li>
+                                        <li><a href="/sistema/add-another-branch-policy">Otros Ramos</a></li>
+                                        <li><a href="/sistema/add-funeral-policy">Funerario</a></li>
+                                        <li><a href="/sistema/add-life-policy">Vida</a></li>
+                                        <li><a href="/sistema/add-ap-policy">AP</a></li>
+                                        <li><a href="/sistema/add-travel-policy">Viaje</a></li>
+                                    </ul>
+                                </li>
+                            <% } %>
                             <li><a href="/sistema/policies">Consultar Pólizas</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-group"></i> <span class="nav-label">Colectivo</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Agregar Colectivo<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/add-health-collective">Salud</a></li>
-                                    <li><a href="/sistema/add-vehicle-collective">Vehículo</a></li>
-                                    <li><a href="/sistema/add-risk-diverse-collective">Riesgos Diversos</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="/sistema/collectives">Consultar Colectivos</a></li>
+                            <% if ([
+                                'EJECUTIVO SUSCRIPCIÓN',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li>
+                                    <a href="#">Agregar Colectivo<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="/sistema/add-health-collective">Salud</a></li>
+                                        <li><a href="/sistema/add-vehicle-collective">Vehículo</a></li>
+                                        <li><a href="/sistema/add-risk-diverse-collective">Riesgos Diversos</a></li>
+                                    </ul>
+                                </li>
+                            <% } %>
+                            <% if ([
+                                'EJECUTIVO SUSCRIPCIÓN',
+                                'EJECUTIVO SINIESTROS',
+                                'EJECUTIVO COBRANZAS',
+                                'COORDINADOR SINIESTRO',
+                                'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                'COORDINADOR ADMINISTRACIÓN',
+                                'GERENTE TÉCNICO'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/collectives">Consultar Colectivos</a></li>
+                            <% } %>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="nav-label">Recibo</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="/sistema/receipts">Consultar Recibos</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-refresh"></i> <span class="nav-label">Renovaciones</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="/sistema/consult-renewal">Consultar Renovaciones</a></li>
-                        </ul>
-                    </li>
+                    <% if ([
+                        'EJECUTIVO SUSCRIPCIÓN',
+                        'EJECUTIVO COBRANZAS',
+                        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                        'COORDINADOR ADMINISTRACIÓN',
+                        'GERENTE TÉCNICO',
+                        'ADMINISTRADOR DIRECTOR'
+                    ].includes(cookieRol) ) { %>
+                        <li>
+                            <a href="#"><i class="fa fa-file-text-o"></i> <span class="nav-label">Recibo</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li><a href="/sistema/receipts">Consultar Recibos</a></li>
+                            </ul>
+                        </li>
+                    <% } %>
+                    <% if ([
+                        'EJECUTIVO SUSCRIPCIÓN',
+                        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                        'GERENTE TÉCNICO',
+                        'ADMINISTRADOR DIRECTOR'
+                    ].includes(cookieRol) ) { %>
+                        <li>
+                            <a href="#"><i class="fa fa-refresh"></i> <span class="nav-label">Renovaciones</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li><a href="/sistema/consult-renewal">Consultar Renovaciones</a></li>
+                            </ul>
+                        </li>
+                    <% } %>
                     <li>
                         <a href="#"><i class="fa fa-file-text"></i> <span class="nav-label">Reclamos</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
-                            <li><a href="/sistema/add-refund">Agregar Reembolso</a></li>
+                            <% if ([
+                                'EJECUTIVO SINIESTROS',
+                                'COORDINADOR SINIESTRO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-refund">Agregar Reembolso</a></li>
+                            <% } %>
                             <li><a href="/sistema/refunds">Consultar Reembolsos</a></li>
-                            <li><a href="/sistema/add-letter-guarantee">Agregar Carta Aval</a></li>
+                            <% if ([
+                                'EJECUTIVO SINIESTROS',
+                                'COORDINADOR SINIESTRO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-letter-guarantee">Agregar Carta Aval</a></li>
+                            <% } %>
                             <li><a href="/sistema/letters-guarentee">Consultar Cartas Avales</a></li>
-                            <li><a href="/sistema/add-emergency">Agregar Emergencia</a></li>
+                            <% if ([
+                                'EJECUTIVO SINIESTROS',
+                                'COORDINADOR SINIESTRO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-emergency">Agregar Emergencia</a></li>
+                            <% } %>
                             <li><a href="/sistema/emergencies">Consultar Emergencias</a></li>
-                            <li><a href="/sistema/add-amp">Agregar AMP</a></li>
+                            <% if ([
+                                'EJECUTIVO SINIESTROS',
+                                'COORDINADOR SINIESTRO',
+                                'GERENTE TÉCNICO',
+                                'ADMINISTRADOR DIRECTOR'
+                            ].includes(cookieRol) ) { %>
+                                <li><a href="/sistema/add-amp">Agregar AMP</a></li>
+                            <% } %>
                             <li><a href="/sistema/amp">Consultar AMP</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-clipboard"></i> <span class="nav-label">Reportes</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#">Primas<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/premiums-collected">Primas Cobradas</a></li>
-                                    <li><a href="/sistema/premiums-pending">Primas Pendientes</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Comisiones<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/commission-transits">Comisiones en Transito</a></li>
-                                    <li><a href="/sistema/commission-distribution">Comisiones por Distribución</a></li>
-                                    <li><a href="/sistema/commission-paid">Comisiones Pagadas</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Siniestralidad<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/accident-rate">Consulta de Siniestralidad</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Composición Cartera<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li><a href="/sistema/portfolio-composition">Composición de Cartera</a></li>
-                                    <li><a href="/sistema/persistence">Persistencia</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-user-circle-o"></i> <span class="nav-label">Gestión de Usuarios</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="/sistema/user-management">Agregar Usuario</a></li>
-                            <li><a href="/sistema/users">Consultar Usuarios</a></li>
-                        </ul>
-                    </li>
+                    <% if ([
+                        'COORDINADOR SINIESTRO',
+                        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                        'COORDINADOR ADMINISTRACIÓN',
+                        'GERENTE TÉCNICO',
+                        'ADMINISTRADOR DIRECTOR'
+                    ].includes(cookieRol) ) { %>
+                        <li>
+                            <a href="#"><i class="fa fa-clipboard"></i> <span class="nav-label">Reportes</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <% if ([
+                                    'COORDINADOR ADMINISTRACIÓN',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol) ) { %>
+                                    <li>
+                                        <a href="#">Primas<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li><a href="/sistema/premiums-collected">Primas Cobradas</a></li>
+                                            <li><a href="/sistema/premiums-pending">Primas Pendientes</a></li>
+                                        </ul>
+                                    </li>
+                                <% } %>
+                                <% if ([
+                                    'COORDINADOR ADMINISTRACIÓN',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol) ) { %>
+                                    <li>
+                                        <a href="#">Comisiones<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li><a href="/sistema/commission-transits">Comisiones en Transito</a></li>
+                                            <li><a href="/sistema/commission-distribution">Comisiones por Distribución</a></li>
+                                            <li><a href="/sistema/commission-paid">Comisiones Pagadas</a></li>
+                                        </ul>
+                                    </li>
+                                <% } %>
+                                <li>
+                                    <a href="#">Siniestralidad<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="/sistema/accident-rate">Consulta de Siniestralidad</a></li>
+                                    </ul>
+                                </li>
+                                <% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'COORDINADOR ADMINISTRACIÓN',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol) ) { %>
+                                    <li>
+                                        <a href="#">Composición Cartera<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li><a href="/sistema/portfolio-composition">Composición de Cartera</a></li>
+                                            <li><a href="/sistema/persistence">Persistencia</a></li>
+                                        </ul>
+                                    </li>
+                                <% } %>
+                            </ul>
+                        </li>
+                    <% } %>
+                    <% if ([
+                        'GERENTE TÉCNICO',
+                        'ADMINISTRADOR DIRECTOR'
+                    ].includes(cookieRol) ) { %>
+                        <li>
+                            <a href="#"><i class="fa fa-user-circle-o"></i> <span class="nav-label">Gestión de Usuarios</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <% if ([
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol) ) { %>
+                                    <li><a href="/sistema/user-management">Agregar Usuario</a></li>
+                                <% } %>
+                                <li><a href="/sistema/users">Consultar Usuarios</a></li>
+                            </ul>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
         </nav>

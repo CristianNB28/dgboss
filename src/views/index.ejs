@@ -12,270 +12,339 @@
 
 <div class="row container">
     <div class="col-lg-10">
-        <h3>Prima Totales Ingresadas: <%= totalPremium %> USD</h3>
-        <h3>Comisiones Generadas: <%= totalCommission %> USD</h3>
+        <% if ([
+            'EJECUTIVO COBRANZAS',
+            'COORDINADOR ADMINISTRACIÓN',
+            'GERENTE TÉCNICO',
+            'ADMINISTRADOR DIRECTOR'
+        ].includes(cookieRol)) { %>
+            <h3>Prima Totales Ingresadas: <%= totalPremium %> USD</h3>
+        <% } %>
+        <% if ([
+            'COORDINADOR ADMINISTRACIÓN',
+            'ADMINISTRADOR DIRECTOR'
+        ].includes(cookieRol)) { %>
+            <h3>Comisiones Generadas: <%= totalCommission %> USD</h3>
+        <% } %>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-lg-6">
-        <div class="ibox">
-            <div class="ibox-title">
-                <h4>Siniestralidad DL</h4>
-            </div>
-            <div class="ibox-content">
-                <div class="col-sm-12">
-                    <form method="POST" action="/sistema/graph-accident-rate">
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_inicio"
-                                        id="fecha_inicio"
-                                        class="form-control"
-                                        required
-                                    >
+    <% if ([
+        'COORDINADOR SINIESTRO',
+        'GERENTE TÉCNICO',
+        'ADMINISTRADOR DIRECTOR'
+    ].includes(cookieRol)) { %>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Siniestralidad DL</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="col-sm-12">
+                        <form method="POST" action="/sistema/graph-accident-rate">
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_inicio"
+                                            id="fecha_inicio"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_final"
-                                        id="fecha_final"
-                                        class="form-control"
-                                        required
-                                    >
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_final"
+                                            id="fecha_final"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Consultar</button>
+                            </div>
+                        </form>
+                        <div id="chartSiniestralidad">
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Consultar</button>
-                        </div>
-                    </form>
-                    <div id="chartSiniestralidad">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="ibox">
-            <div class="ibox-title">
-                <h4>Prima cobradas DL</h4>
-            </div>
-            <div class="ibox-content">
-                <div class="col-sm-12">
-                    <form method="POST" action="/sistema/graph-premium-collected">
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_inicio"
-                                        id="fecha_inicio"
-                                        class="form-control"
-                                        required
-                                    >
+    <% } %>
+    <% if ([
+        'EJECUTIVO COBRANZAS',
+        'COORDINADOR ADMINISTRACIÓN',
+        'GERENTE TÉCNICO',
+        'ADMINISTRADOR DIRECTOR'
+    ].includes(cookieRol)) { %>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Prima cobradas DL</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="col-sm-12">
+                        <form method="POST" action="/sistema/graph-premium-collected">
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_inicio"
+                                            id="fecha_inicio"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_final"
-                                        id="fecha_final"
-                                        class="form-control"
-                                        required
-                                    >
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_final"
+                                            id="fecha_final"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Consultar</button>
+                            </div>
+                        </form>
+                        <div id="chartPrimaCobrada">
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Consultar</button>
-                        </div>
-                    </form>
-                    <div id="chartPrimaCobrada">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <% } %>
+    <% if ([
+        'GERENTE TÉCNICO',
+        'ADMINISTRADOR DIRECTOR'
+    ].includes(cookieRol)) { %>
+        <div class="w-100"></div>
+    <% } %>
+    <% if ([
+        'EJECUTIVO COBRANZAS',
+        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+        'COORDINADOR ADMINISTRACIÓN'
+    ].includes(cookieRol)) { %>
+        <div class="w-70"></div>
+    <% } %>
+    <% if ([
+        'EJECUTIVO SUSCRIPCIÓN',
+        'EJECUTIVO SINIESTROS',
+        'COORDINADOR SINIESTRO',
+    ].includes(cookieRol)) { %>
+        <div class="w-40"></div>
+    <% } %>
+    <% if ([
+        'EJECUTIVO SINIESTROS',
+        'EJECUTIVO COBRANZAS',
+        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+        'COORDINADOR ADMINISTRACIÓN',
+        'GERENTE TÉCNICO',
+        'ADMINISTRADOR DIRECTOR'
+    ].includes(cookieRol)) { %>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Composición de cartera DL</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="col-sm-12">
+                        <form method="POST" action="/sistema/graph-portfolio-composition">
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_inicio"
+                                            id="fecha_inicio"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_final"
+                                            id="fecha_final"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Consultar</button>
+                            </div>
+                        </form>
+                        <div id="chartComposicionCartera">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <% if ([
+        'EJECUTIVO SUSCRIPCIÓN',
+        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+        'GERENTE TÉCNICO',
+        'ADMINISTRADOR DIRECTOR'
+    ].includes(cookieRol)) { %>
+        <div class="col">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Persistencia DL</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="col-sm-12">
+                        <form method="POST" action="/sistema/graph-persistence">
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_inicio"
+                                            id="fecha_inicio"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
+                                    <div class="col-sm-9">
+                                        <input 
+                                            type="date"
+                                            name="fecha_final"
+                                            id="fecha_final"
+                                            class="form-control"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Consultar</button>
+                            </div>
+                        </form>
+                        <div id="chartPersistencia">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
 </div>
 
-<div class="row">
-    <div class="col-lg-6">
-        <div class="ibox">
-            <div class="ibox-title">
-                <h4>Composición de cartera DL</h4>
-            </div>
-            <div class="ibox-content">
-                <div class="col-sm-12">
-                    <form method="POST" action="/sistema/graph-portfolio-composition">
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_inicio"
-                                        id="fecha_inicio"
-                                        class="form-control"
-                                        required
-                                    >
-                                </div>
-                            </div>
+<% if ([
+    'EJECUTIVO SUSCRIPCIÓN',
+    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+    'GERENTE TÉCNICO',
+    'ADMINISTRADOR DIRECTOR'
+].includes(cookieRol)) { %>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h4>Número de Pólizas por ramo:</h4>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Tipo de Póliza</th>
+                                    <th>Números de Pólizas</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Salud</td>
+                                    <td><%= healthPolicyCount %></td>
+                                </tr>
+                                <tr>
+                                    <td>Vehículo</td>
+                                    <td><%= autoPolicyCount %></td>
+                                </tr>
+                                <tr>
+                                    <td>Patrimonial</td>
+                                    <td><%= patrimonialPolicyCount.patrimonial %></td>
+                                </tr>
+                                <tr>
+                                    <td>Fianza</td>
+                                    <td><%= bailPolicyCount.bail %></td>
+                                </tr>
+                                <tr>
+                                    <td>Otros Ramos</td>
+                                    <td><%= anotherBranchPolicyCount.anotherBranch %></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_final"
-                                        id="fecha_final"
-                                        class="form-control"
-                                        required
-                                    >
-                                </div>
-                            </div>
+                        <div class="col-lg-6">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Tipo de Póliza</th>
+                                    <th>Números de Pólizas</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Funerario</td>
+                                    <td><%= funeralPolicyCount.funeral %></td>
+                                </tr>
+                                <tr>
+                                    <td>Vida</td>
+                                    <td><%= lifePolicyCount.life %></td>
+                                </tr>
+                                <tr>
+                                    <td>AP</td>
+                                    <td><%= apPolicyCount.ap %></td>
+                                </tr>
+                                <tr>
+                                    <td>Viaje</td>
+                                    <td><%= travelPolicyCount.travel %></td>
+                                </tr>
+                                <tr>
+                                    <td>Riesgos Diversos</td>
+                                    <td><%= riskDiverCollectiveCount.risk %></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Consultar</button>
-                        </div>
-                    </form>
-                    <div id="chartComposicionCartera">
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="ibox">
-            <div class="ibox-title">
-                <h4>Persistencia DL</h4>
-            </div>
-            <div class="ibox-content">
-                <div class="col-sm-12">
-                    <form method="POST" action="/sistema/graph-persistence">
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Desde Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_inicio"
-                                        id="fecha_inicio"
-                                        class="form-control"
-                                        required
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group row"><label class="col-sm-3 col-form-label">Fecha Hasta Inicio Póliza</label>
-                                <div class="col-sm-9">
-                                    <input 
-                                        type="date"
-                                        name="fecha_final"
-                                        id="fecha_final"
-                                        class="form-control"
-                                        required
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Consultar</button>
-                        </div>
-                    </form>
-                    <div id="chartPersistencia">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12">
-        <div class="ibox">
-            <div class="ibox-title">
-                <h4>Número de Pólizas por ramo:</h4>
-            </div>
-            <div class="ibox-content">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Tipo de Póliza</th>
-                                <th>Números de Pólizas</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Salud</td>
-                                <td><%= healthPolicyCount %></td>
-                            </tr>
-                            <tr>
-                                <td>Vehículo</td>
-                                <td><%= autoPolicyCount %></td>
-                            </tr>
-                            <tr>
-                                <td>Patrimonial</td>
-                                <td><%= patrimonialPolicyCount.patrimonial %></td>
-                            </tr>
-                            <tr>
-                                <td>Fianza</td>
-                                <td><%= bailPolicyCount.bail %></td>
-                            </tr>
-                            <tr>
-                                <td>Otros Ramos</td>
-                                <td><%= anotherBranchPolicyCount.anotherBranch %></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-lg-6">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Tipo de Póliza</th>
-                                <th>Números de Pólizas</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Funerario</td>
-                                <td><%= funeralPolicyCount.funeral %></td>
-                            </tr>
-                            <tr>
-                                <td>Vida</td>
-                                <td><%= lifePolicyCount.life %></td>
-                            </tr>
-                            <tr>
-                                <td>AP</td>
-                                <td><%= apPolicyCount.ap %></td>
-                            </tr>
-                            <tr>
-                                <td>Viaje</td>
-                                <td><%= travelPolicyCount.travel %></td>
-                            </tr>
-                            <tr>
-                                <td>Riesgos Diversos</td>
-                                <td><%= riskDiverCollectiveCount.risk %></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<% } %>
 
 </br>
 </br>

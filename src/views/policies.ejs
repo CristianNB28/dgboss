@@ -132,6 +132,7 @@
 <script>
 var lista = <%- JSON.stringify(data) %>;
 var tablaPoliza = null;
+const rol = '<%= cookieRol %>';
 $(document).ready(function(){
     tablaPoliza = $('#tablaPolizas').DataTable({
         pageLength: 25,
@@ -166,69 +167,139 @@ $(document).ready(function(){
                 "data": "",
                 "render": (data, type, row) => {
                     if (row.tipo_individual_poliza === 'SALUD') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-health/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-health/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'AUTOMÓVIL') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-vehicle/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-vehicle/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'PATRIMONIAL') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-patrimonial/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-patrimonial/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'FIANZA') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-bail/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-bail/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'OTROS RAMOS') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-another-branch/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-another-branch/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'FUNERARIO') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-funeral/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-funeral/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'VIDA') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-life/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-life/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'AP') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-ap/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-ap/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     } else if (row.tipo_individual_poliza === 'VIAJE') { 
-                        return `<form class="form-inline" method="get" action="/sistema/edit-policy-travel/${row.id_poliza}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-policy-travel/${row.id_poliza}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                     }
                 }
             },
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-policy/${row.id_poliza}">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
-                                            <button 
-                                                class="btn btn-danger" 
-                                                type="submit"
-                                                onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
-                                            >
-                                                <i class="fa fa-ban"></i>
-                                            </button>
-                                        </div> 
-                                        <div class="col-sm-6 col-lg-12">
-                                            <textarea 
-                                                name="obser_deshabilitar_poliza"
-                                                id="obser_deshabilitar_poliza" 
-                                                placeholder="Observaciones de Deshabilitar *" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                            ></textarea>
+                        return `<% if ([
+                                    'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                                    'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="post" action="/sistema/remove-policy/${row.id_poliza}">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                <button 
+                                                    class="btn btn-danger" 
+                                                    type="submit"
+                                                    onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
+                                                >
+                                                    <i class="fa fa-ban"></i>
+                                                </button>
+                                            </div> 
+                                            <div class="col-sm-6 col-lg-12">
+                                                <textarea 
+                                                    name="obser_deshabilitar_poliza"
+                                                    id="obser_deshabilitar_poliza" 
+                                                    placeholder="Observaciones de Deshabilitar *" 
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>`;
+                                    </form>
+                                <% } %>`;
                 }
             }
         ],

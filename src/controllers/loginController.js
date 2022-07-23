@@ -60,7 +60,7 @@ module.exports = {
                     });
                 }
             } else {
-                res.cookie('cargo', results[0].cargo_usuario, { httpOnly: true, maxAge: maxAge * 1000 });
+                res.cookie('rol', results[0].cargo_usuario, { httpOnly: true, maxAge: maxAge * 1000 });
                 const token = createToken(results[0].id_usuario);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
                 req.session.name = results[0].nombre_apellido_usuario;

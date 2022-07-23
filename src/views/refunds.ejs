@@ -146,36 +146,48 @@ $(document).ready(function(){
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="get" action="/sistema/edit-refund/${row.id_reembolso}">
-                                    <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
-                                </form>`;
+                        return `<% if ([
+                                    'COORDINADOR SINIESTRO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="get" action="/sistema/edit-refund/${row.id_reembolso}">
+                                        <button class="btn btn-warning" type="submit"><i class="fa fa-pencil"></i></button>
+                                    </form>
+                                <% } %>`;
                 }
             },
             {
                 "data": "",
                 "render": (data, type, row) => {
-                        return `<form class="form-inline" method="post" action="/sistema/remove-refund/${row.id_reembolso}">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
-                                            <button 
-                                                class="btn btn-danger" 
-                                                type="submit"
-                                                onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
-                                            >
-                                                <i class="fa fa-ban"></i>
-                                            </button>
-                                        </div> 
-                                        <div class="col-sm-6 col-lg-12">
-                                            <textarea 
-                                                name="obser_deshabilitar_reembolso"
-                                                id="obser_deshabilitar_reembolso" 
-                                                placeholder="Observaciones de Deshabilitar *" 
-                                                class="form-control"
-                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                            ></textarea>
+                        return `<% if ([
+                                    'COORDINADOR SINIESTRO',
+                                    'GERENTE TÉCNICO',
+                                    'ADMINISTRADOR DIRECTOR'
+                                ].includes(cookieRol)) { %>
+                                    <form class="form-inline" method="post" action="/sistema/remove-refund/${row.id_reembolso}">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-12" style="padding-bottom: 10px;">
+                                                <button 
+                                                    class="btn btn-danger" 
+                                                    type="submit"
+                                                    onclick="return confirm('¿Estás seguro de que quieres deshabilitar este registro?');"
+                                                >
+                                                    <i class="fa fa-ban"></i>
+                                                </button>
+                                            </div> 
+                                            <div class="col-sm-6 col-lg-12">
+                                                <textarea 
+                                                    name="obser_deshabilitar_reembolso"
+                                                    id="obser_deshabilitar_reembolso" 
+                                                    placeholder="Observaciones de Deshabilitar *" 
+                                                    class="form-control"
+                                                    oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                ></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>`;
+                                    </form>
+                                <% } %>`;
                 }
             }
         ],

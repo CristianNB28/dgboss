@@ -86,6 +86,11 @@
     width: 50%;
 }
 
+.wizard-subcription > .steps > ul > li
+{
+    width: 100%;
+}
+
 .wizard > .steps > ul > li,
 .wizard > .actions > ul > li
 {

@@ -69,7 +69,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -174,7 +174,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -277,7 +277,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -380,7 +380,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -483,7 +483,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -592,7 +592,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -705,7 +705,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -812,7 +812,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -915,7 +915,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -1018,7 +1018,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -1121,7 +1121,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -1224,7 +1224,7 @@ module.exports = {
             resultsUsers.forEach(async user => {
                 if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,
@@ -1389,9 +1389,10 @@ module.exports = {
         try {
             const resultsUsers = await userModel.getUsers();
             resultsUsers.forEach(async user => {
-                if ((user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
+                if ((user.cargo_usuario === 'EJECUTIVO COBRANZAS') ||
+                    (user.cargo_usuario === 'COORDINADOR ADMINISTRACIÓN') || 
                     (user.cargo_usuario === 'GERENTE TÉCNICO') || 
-                    (user.cargo_usuario === 'ADMINISTRADOR ADMINISTRADOR')) 
+                    (user.cargo_usuario === 'ADMINISTRADOR DIRECTOR')) 
                 {
                     await transporter.sendMail({
                         from: process.env.EMAIL_USER,

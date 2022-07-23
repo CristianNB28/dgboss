@@ -8,6 +8,9 @@ const router = require("./src/routes/index.routes");
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const util = require('util');
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

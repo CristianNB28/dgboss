@@ -26,7 +26,21 @@
                     <h5>Agregar Recibo</h5>
                 </div>
                 <div class="ibox-content">
+                    <% if ([
+                        'EJECUTIVO COBRANZAS',
+                        'COORDINADOR ADMINISTRACIÓN',
+                        'GERENTE TÉCNICO',
+                        'ADMINISTRADOR DIRECTOR'
+                    ].includes(cookieRol)) { %>
                     <div id="form-division-admin" class="wizard-big wizard-patrimonial-subcription">
+                    <% } %>
+                    <% if ([
+                        'EJECUTIVO SUSCRIPCIÓN',
+                        'COORDINADOR SUSCRIPCIÓN INDIVIDUAL',
+                        'COORDINADOR SUSCRIPCIÓN COLECTIVO',
+                    ].includes(cookieRol)) { %>
+                    <div id="form-division" class="wizard-big wizard-subcription">
+                    <% } %>
                         <h1><i class="fa fa-file-text-o"></i> Recibo</h1>
                         <fieldset>
                             <form id="division-receipt-admin" action="/sistema/add-division-receipt-admin" method="POST">
@@ -394,377 +408,384 @@
                                 </div>
                             </form>
                         </fieldset>
-                        <h1><i class="fa fa-usd"></i> Distribución</h1>
-                        <fieldset>
-                            <form id="division-form-distribucion" action="/sistema/add-distribucion-division" method="POST">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
+                        <% if ([
+                            'EJECUTIVO COBRANZAS',
+                            'COORDINADOR ADMINISTRACIÓN',
+                            'GERENTE TÉCNICO',
+                            'ADMINISTRADOR DIRECTOR'
+                        ].includes(cookieRol)) { %>
+                            <h1><i class="fa fa-usd"></i> Distribución</h1>
+                            <fieldset>
+                                <form id="division-form-distribucion" action="/sistema/add-distribucion-division" method="POST">
+                                    <div class="row">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Asociada</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text"
-                                                            name="monto_comision_distribucion"
-                                                            id="monto_comision_distribucion"
-                                                            value="<%= division.monto_comision_fraccionamiento %>" 
-                                                            class="form-control currency_format_number"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">% de bonificación</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="porcentaje_bonificacion_distribucion"
-                                                            id="porcentaje_bonificacion_distribucion"
-                                                            placeholder="Porcentaje de bonificación *" 
-                                                            class="form-control porcentaje_tasa"
-                                                            onkeyup="bonusAmountCalculation()"
-                                                            onblur="addZeroesBonificacion()"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Bonificación</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="monto_bonificacion_distribucion"
-                                                            id="monto_bonificacion_distribucion"
-                                                            placeholder="Bonificación *" 
-                                                            class="form-control currency_format_number"
-                                                            onkeyup="percentageBonusCalculation()"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión + Bonificación</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="monto_comision_bonificacion"
-                                                            id="monto_comision_bonificacion"
-                                                            class="form-control currency_format_number"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">ISLR</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="porcentaje_islr_distribucion"
-                                                            id="porcentaje_islr_distribucion"
-                                                            placeholder="ISLR *" 
-                                                            class="form-control porcentaje_tasa"
-                                                            onkeyup="totalCommissionCalculation()"
-                                                            onblur="addZeroesIslr()"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Total Comisión a distribuir</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="total_comision_distribuir"
-                                                            id="total_comision_distribuir"
-                                                            class="form-control currency_format_number"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <% if (typeof(ownAgent) !== 'undefined') { %>
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Nombre Agente Propio</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text"
-                                                            name="nombre_agente_distribucion"
-                                                            id="nombre_agente_distribucion"
-                                                            value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
-                                                            class="form-control"
-                                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Agente</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text"
-                                                            name="porcentaje_agente_distribucion"
-                                                            id="porcentaje_agente_distribucion"
-                                                            value="<%= ownAgent.porcentaje_agente_propio  %>"
-                                                            class="form-control porcentaje_tasa"
-                                                            onkeyup="percentageCalculation()"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            <% } else { %>
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Nombre Agente Propio</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text"
-                                                            name="nombre_agente_distribucion"
-                                                            id="nombre_agente_distribucion"
-                                                            placeholder="Nombre de Agente Propio"
-                                                            class="form-control"
-                                                            oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Agente</label>
-                                                    <div class="col-sm-7">
-                                                        <input 
-                                                            type="text" 
-                                                            name="porcentaje_agente_distribucion"
-                                                            id="porcentaje_agente_distribucion"
-                                                            value="0"
-                                                            class="form-control porcentaje_tasa"
-                                                            onkeyup="percentageCalculation()"
-                                                            onblur="addZeroesAgente()"
-                                                            required
-                                                        >
-                                                    </div>
-                                                </div>
-                                            <% } %>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Caso Especial</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text" 
-                                                        name="caso_especial_distribucion"
-                                                        id="caso_especial_distribucion"
-                                                        placeholder="Porcentaje Caso Especial" 
-                                                        class="form-control porcentaje_tasa"
-                                                        onkeyup="percentageCalculation()"
-                                                        onblur="addZeroesEspecial()"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Atina</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text" 
-                                                        name="porcentaje_atina_distribucion"
-                                                        id="porcentaje_atina_distribucion"
-                                                        placeholder="Porcentaje Atina *" 
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Fundatina</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text"
-                                                        name="porcentaje_fundatina_distribucion"
-                                                        id="porcentaje_fundatina_distribucion"
-                                                        value="0,35" 
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Operativa Director</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text"
-                                                        name="porcentaje_director_distribucion"
-                                                        id="porcentaje_director_distribucion"
-                                                        value="2,50" 
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Operativa Socio</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text"
-                                                        name="porcentaje_socio_distribucion"
-                                                        id="porcentaje_socio_distribucion"
-                                                        value="2,50" 
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% percentajeExecutives.forEach((executive) => { %>
-                                            <% if (executive.departamento_cargo_ejecutivo === 'TÉCNICO') { %>
                                                 <div class="form-group">
-                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Gerente</label> 
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Asociada</label>
                                                         <div class="col-sm-7">
                                                             <input 
                                                                 type="text"
-                                                                name="porcentaje_gerente_distribucion"
-                                                                id="porcentaje_gerente_distribucion"
-                                                                value="<%= executive.porcentaje_ejecutivo %>"
-                                                                class="form-control porcentaje_tasa"
+                                                                name="monto_comision_distribucion"
+                                                                id="monto_comision_distribucion"
+                                                                value="<%= division.monto_comision_fraccionamiento %>" 
+                                                                class="form-control currency_format_number"
                                                                 required
                                                             >
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <% } %>
-                                        <% }); %>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador Suscripción</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text"
-                                                        name="porcentaje_coordinador_suscripcion"
-                                                        id="porcentaje_coordinador_suscripcion"
-                                                        value="<%= percentajeExecutivesPolicy[0] %>"
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <% percentajeExecutives.forEach((executive) => { %>
-                                            <% if (executive.departamento_cargo_ejecutivo === 'SINIESTRO') { %>
                                                 <div class="form-group">
-                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador Reclamos</label>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">% de bonificación</label>
                                                         <div class="col-sm-7">
                                                             <input 
                                                                 type="text" 
-                                                                name="porcentaje_coordinador_reclamo"
-                                                                id="porcentaje_coordinador_reclamo"
-                                                                value="<%= executive.porcentaje_ejecutivo %>"
+                                                                name="porcentaje_bonificacion_distribucion"
+                                                                id="porcentaje_bonificacion_distribucion"
+                                                                placeholder="Porcentaje de bonificación *" 
                                                                 class="form-control porcentaje_tasa"
+                                                                onkeyup="bonusAmountCalculation()"
+                                                                onblur="addZeroesBonificacion()"
                                                                 required
                                                             >
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <% } else if (executive.departamento_cargo_ejecutivo === 'ADMINISTRACIÓN') { %>
                                                 <div class="form-group">
-                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador de Administración</label>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Bonificación</label>
                                                         <div class="col-sm-7">
                                                             <input 
                                                                 type="text" 
-                                                                name="porcentaje_coordinador_administracion"
-                                                                id="porcentaje_coordinador_administracion"
-                                                                value="<%= executive.porcentaje_ejecutivo %>"
-                                                                class="form-control porcentaje_tasa"
+                                                                name="monto_bonificacion_distribucion"
+                                                                id="monto_bonificacion_distribucion"
+                                                                placeholder="Bonificación *" 
+                                                                class="form-control currency_format_number"
+                                                                onkeyup="percentageBonusCalculation()"
                                                                 required
                                                             >
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <% } %>
-                                        <% }); %>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Suscripción</label>
-                                                <div class="col-sm-7">
+                                                <div class="form-group">
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión + Bonificación</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text" 
+                                                                name="monto_comision_bonificacion"
+                                                                id="monto_comision_bonificacion"
+                                                                class="form-control currency_format_number"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">ISLR</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text" 
+                                                                name="porcentaje_islr_distribucion"
+                                                                id="porcentaje_islr_distribucion"
+                                                                placeholder="ISLR *" 
+                                                                class="form-control porcentaje_tasa"
+                                                                onkeyup="totalCommissionCalculation()"
+                                                                onblur="addZeroesIslr()"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Total Comisión a distribuir</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text" 
+                                                                name="total_comision_distribuir"
+                                                                id="total_comision_distribuir"
+                                                                class="form-control currency_format_number"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% if (typeof(ownAgent) !== 'undefined') { %>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Nombre Agente Propio</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text"
+                                                                name="nombre_agente_distribucion"
+                                                                id="nombre_agente_distribucion"
+                                                                value="<%= ownAgent.nombre_agente_propio %> <%= ownAgent.apellido_agente_propio %>"
+                                                                class="form-control"
+                                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Agente</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text"
+                                                                name="porcentaje_agente_distribucion"
+                                                                id="porcentaje_agente_distribucion"
+                                                                value="<%= ownAgent.porcentaje_agente_propio  %>"
+                                                                class="form-control porcentaje_tasa"
+                                                                onkeyup="percentageCalculation()"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Nombre Agente Propio</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text"
+                                                                name="nombre_agente_distribucion"
+                                                                id="nombre_agente_distribucion"
+                                                                placeholder="Nombre de Agente Propio"
+                                                                class="form-control"
+                                                                oninput="let p=this.selectionStart;this.value=this.value.toUpperCase();this.setSelectionRange(p, p);"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Agente</label>
+                                                        <div class="col-sm-7">
+                                                            <input 
+                                                                type="text" 
+                                                                name="porcentaje_agente_distribucion"
+                                                                id="porcentaje_agente_distribucion"
+                                                                value="0"
+                                                                class="form-control porcentaje_tasa"
+                                                                onkeyup="percentageCalculation()"
+                                                                onblur="addZeroesAgente()"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Caso Especial</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text" 
+                                                            name="caso_especial_distribucion"
+                                                            id="caso_especial_distribucion"
+                                                            placeholder="Porcentaje Caso Especial" 
+                                                            class="form-control porcentaje_tasa"
+                                                            onkeyup="percentageCalculation()"
+                                                            onblur="addZeroesEspecial()"
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Atina</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text" 
+                                                            name="porcentaje_atina_distribucion"
+                                                            id="porcentaje_atina_distribucion"
+                                                            placeholder="Porcentaje Atina *" 
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Fundatina</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text"
+                                                            name="porcentaje_fundatina_distribucion"
+                                                            id="porcentaje_fundatina_distribucion"
+                                                            value="0,35" 
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Operativa Director</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text"
+                                                            name="porcentaje_director_distribucion"
+                                                            id="porcentaje_director_distribucion"
+                                                            value="2,50" 
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Operativa Socio</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text"
+                                                            name="porcentaje_socio_distribucion"
+                                                            id="porcentaje_socio_distribucion"
+                                                            value="2,50" 
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% percentajeExecutives.forEach((executive) => { %>
+                                                <% if (executive.departamento_cargo_ejecutivo === 'TÉCNICO') { %>
+                                                    <div class="form-group">
+                                                        <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Gerente</label> 
+                                                            <div class="col-sm-7">
+                                                                <input 
+                                                                    type="text"
+                                                                    name="porcentaje_gerente_distribucion"
+                                                                    id="porcentaje_gerente_distribucion"
+                                                                    value="<%= executive.porcentaje_ejecutivo %>"
+                                                                    class="form-control porcentaje_tasa"
+                                                                    required
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                            <% }); %>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador Suscripción</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text"
+                                                            name="porcentaje_coordinador_suscripcion"
+                                                            id="porcentaje_coordinador_suscripcion"
+                                                            value="<%= percentajeExecutivesPolicy[0] %>"
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% percentajeExecutives.forEach((executive) => { %>
+                                                <% if (executive.departamento_cargo_ejecutivo === 'SINIESTRO') { %>
+                                                    <div class="form-group">
+                                                        <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador Reclamos</label>
+                                                            <div class="col-sm-7">
+                                                                <input 
+                                                                    type="text" 
+                                                                    name="porcentaje_coordinador_reclamo"
+                                                                    id="porcentaje_coordinador_reclamo"
+                                                                    value="<%= executive.porcentaje_ejecutivo %>"
+                                                                    class="form-control porcentaje_tasa"
+                                                                    required
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <% } else if (executive.departamento_cargo_ejecutivo === 'ADMINISTRACIÓN') { %>
+                                                    <div class="form-group">
+                                                        <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Coordinador de Administración</label>
+                                                            <div class="col-sm-7">
+                                                                <input 
+                                                                    type="text" 
+                                                                    name="porcentaje_coordinador_administracion"
+                                                                    id="porcentaje_coordinador_administracion"
+                                                                    value="<%= executive.porcentaje_ejecutivo %>"
+                                                                    class="form-control porcentaje_tasa"
+                                                                    required
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                            <% }); %>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Suscripción</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text"
+                                                            name="porcentaje_ejecutivo_suscripcion"
+                                                            id="porcentaje_ejecutivo_suscripcion"
+                                                            value="<%= percentajeExecutivesPolicy[1] %>"
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Reclamos</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text" 
+                                                            name="porcentaje_ejecutivo_reclamo"
+                                                            id="porcentaje_ejecutivo_reclamo"
+                                                            value="<%= percentajeExecutivesPolicy[2] %>"
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Cobranzas</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text" 
+                                                            name="porcentaje_ejecutivo_cobranza"
+                                                            id="porcentaje_ejecutivo_cobranza"
+                                                            value="<%= percentajeExecutivesPolicy[3] %>" 
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-group row"><label class="col-sm-5 col-form-label">Factor de Verificación</label>
+                                                    <div class="col-sm-7">
+                                                        <input 
+                                                            type="text" 
+                                                            name="factor_verificacion_distribucion"
+                                                            id="factor_verificacion_distribucion"
+                                                            class="form-control porcentaje_tasa"
+                                                            required
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
+                                                <div class="col-sm-9">
                                                     <input 
-                                                        type="text"
-                                                        name="porcentaje_ejecutivo_suscripcion"
-                                                        id="porcentaje_ejecutivo_suscripcion"
-                                                        value="<%= percentajeExecutivesPolicy[1] %>"
-                                                        class="form-control porcentaje_tasa"
-                                                        required
+                                                        type="hidden" 
+                                                        name="id_fraccionamiento"
+                                                        id="id_fraccionamiento"
+                                                        value="<%= division.id_fraccionamiento %>"
+                                                        class="form-control"
                                                     >
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Reclamos</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text" 
-                                                        name="porcentaje_ejecutivo_reclamo"
-                                                        id="porcentaje_ejecutivo_reclamo"
-                                                        value="<%= percentajeExecutivesPolicy[2] %>"
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Comisión Ejecutivo Cobranzas</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text" 
-                                                        name="porcentaje_ejecutivo_cobranza"
-                                                        id="porcentaje_ejecutivo_cobranza"
-                                                        value="<%= percentajeExecutivesPolicy[3] %>" 
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-group row"><label class="col-sm-5 col-form-label">Factor de Verificación</label>
-                                                <div class="col-sm-7">
-                                                    <input 
-                                                        type="text" 
-                                                        name="factor_verificacion_distribucion"
-                                                        id="factor_verificacion_distribucion"
-                                                        class="form-control porcentaje_tasa"
-                                                        required
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-3 col-form-label"></label>
-                                            <div class="col-sm-9">
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 col-sm-offset-2">
+                                            <div class="card-body d-flex">
                                                 <input 
-                                                    type="hidden" 
-                                                    name="id_fraccionamiento"
-                                                    id="id_fraccionamiento"
-                                                    value="<%= division.id_fraccionamiento %>"
-                                                    class="form-control"
-                                                >
+                                                    type="button"
+                                                    class="btn btn-primary btn-sm ml-auto"
+                                                    id="btn_distribucion_division" 
+                                                    onclick="confirmFunction()" 
+                                                    value="Pagada en Banco" 
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-12 col-sm-offset-2">
-                                        <div class="card-body d-flex">
-                                            <input 
-                                                type="button"
-                                                class="btn btn-primary btn-sm ml-auto"
-                                                id="btn_distribucion_division" 
-                                                onclick="confirmFunction()" 
-                                                value="Pagada en Banco" 
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </fieldset>
+                                </form>
+                            </fieldset>
+                        <% } %>
                     </div>
                 </div>
             </div>
